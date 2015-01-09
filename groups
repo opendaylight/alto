@@ -1,0 +1,6 @@
+# UUID                                  	Group Name
+#
+a82834aab85a7c51aabe9cb54bf8c681060bed36	Non-Interactive alto users
+global:Anonymous-Users                  	Anonymous Users
+global:Registered-Users                 	Registered Users
+ldap:cn=gerrit-alto-committers,ou=Groups,dc=opendaylight,dc=org	ldap/gerrit-alto-committers
