@@ -22,4 +22,15 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>alto-features</module>
     <module>alto-artifacts</module>
   </modules>
+
+  <distributionManagement>
+    <repository>
+      <id>opendaylight-release</id>
+      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.release/</url>
+    </repository>
+    <snapshotRepository>
+      <id>opendaylight-snapshot</id>
+      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
