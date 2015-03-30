@@ -1,0 +1,97 @@
+module alto-provider-impl {
+
+  yang-version 1;
+  
+  namespace "urn:opendaylight:params:xml:ns:yang:controller:config:alto-provider:impl";
+  // TODO: replace with IANA namespace when assigned
+
+  prefix "alto-provider-impl";
+
+  import config {
+    prefix config;
+    revision-date 2013-04-05;
+  }
+  
+  import opendaylight-md-sal-binding {
+    prefix mdsal;
+    revision-date 2013-10-28;
+  }
+
+  import rpc-context { prefix rpcx; revision-date 2013-06-17; }
+
+  organization "ALTO WG";
+  contact "alto@ietf.org";
+
+  description 
+    "This module defines the implementation model for the ALTO services
+     using restconf. Note this is not interop with RFC7285.";
+
+  revision 2014-11-19 {
+    description "Initial version for ODL.";
+  }
+  
+
+
+  // This is the definition of the service implementation as a module identity
+  identity alto-provider-impl {
+    base config:module-type;
+
+    // Specifies the prefix for generated java classes.
+    config:java-name-prefix AltoProvider;
+  }
+
+  // Augments the 'configuration' choice node under modules/module.  
+  augment "/config:modules/config:module/config:configuration" {
+    case alto-provider-impl {
+      when "/config:modules/config:module/config:type = 'alto-provider-impl'";
+
+      container rpc-registry {
+        uses config:service-ref {
+          refine type {
+            mandatory true;
+            config:required-identity mdsal:binding-rpc-registry;
+          }
+        }
+      }
+
+      //wires in the data-broker service 
+      container data-broker {
+        uses config:service-ref {
+          refine type {
+            mandatory false;
+            config:required-identity mdsal:binding-async-data-broker;
+          }
+        }
+      }      
+    }
+  }
+
+  /*dummy*/
+    augment "/config:modules/config:module/config:state" {
+        case alto-provider-impl {
+            when "/config:modules/config:module/config:type = 'alto-provider-impl'";
+            
+            leaf toasts-made {
+                type uint32;
+            }
+            
+            rpcx:rpc-context-instance "clear-toasts-made-rpc";
+        }
+    }
+
+    identity clear-toasts-made-rpc;
+
+    rpc clear-toasts-made  {
+        description
+          "JMX call to clear the toasts-made counter.";
+          
+        input {
+            uses rpcx:rpc-context-ref {
+                refine context-instance {
+                    rpcx:rpc-context-instance clear-toasts-made-rpc;
+                }
+            }
+        }
+    }
+
+}

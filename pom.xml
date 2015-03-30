@@ -16,11 +16,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <maven>3.1.1</maven>
   </prerequisites>
   <modules>
-    <module>alto-api</module>
-    <module>alto-impl</module>
-    <module>alto-karaf</module>
+    <module>alto-model</module>
+    <module>alto-provider</module>
+    <module>alto-northbound</module>
     <module>features</module>
     <module>alto-artifacts</module>
+    <module>alto-karaf</module>
   </modules>
 
   <distributionManagement>
