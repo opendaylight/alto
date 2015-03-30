@@ -13,22 +13,22 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-restconf/${mdsal.version}/xml/features</repository>
-  <feature name='odl-alto-api' version='${project.version}' description='OpenDaylight :: alto :: api '>
+  <feature name='odl-alto-model' version='${project.version}' description='OpenDaylight :: alto :: model '>
     <feature version='${yangtools.version}'>odl-yangtools-models</feature>
-    <bundle>mvn:org.opendaylight.alto/alto-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/alto-model/${project.version}</bundle>
   </feature>
-  <feature name='odl-alto-impl' version='${project.version}' description='OpenDaylight :: alto :: impl '>
+  <feature name='odl-alto-provider' version='${project.version}' description='OpenDaylight :: alto :: provider '>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
-    <feature version='${project.version}'>odl-alto-api</feature>
-    <bundle>mvn:org.opendaylight.alto/alto-impl/${project.version}</bundle>
-    <configfile finalname="alto-impl-default-config.xml">mvn:org.opendaylight.alto/alto-impl/${project.version}/xml/config</configfile>
+    <feature version='${project.version}'>odl-alto-model</feature>
+    <bundle>mvn:org.opendaylight.alto/alto-provider/${project.version}</bundle>
+    <configfile finalname="alto-provider-default-config.xml">mvn:org.opendaylight.alto/alto-provider/${project.version}/xml/config</configfile>
   </feature>
-  <feature name='odl-alto-impl-rest' version='${project.version}' description='OpenDaylight :: alto :: impl :: REST '>
-    <feature version="${project.version}">odl-alto-impl</feature>
+  <feature name='odl-alto-provider-rest' version='${project.version}' description='OpenDaylight :: alto :: provider :: REST '>
+    <feature version="${project.version}">odl-alto-provider</feature>
     <feature version="${mdsal.version}">odl-restconf</feature>
   </feature>
-  <feature name='odl-alto-impl-ui' version='${project.version}' description='OpenDaylight :: alto :: impl :: UI'>
-    <feature version="${project.version}">odl-alto-impl-rest</feature>
+  <feature name='odl-alto-provider-ui' version='${project.version}' description='OpenDaylight :: alto :: provider :: UI'>
+    <feature version="${project.version}">odl-alto-provider-rest</feature>
     <feature version="${mdsal.version}">odl-mdsal-apidocs</feature>
     <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
   </feature>
