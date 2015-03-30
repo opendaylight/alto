@@ -1,0 +1,174 @@
+module alto-service {
+  //alto-service-restconf
+
+  yang-version 1;
+  
+  namespace "urn:opendaylight:alto";
+  // TODO: replace with IANA namespace when assigned
+
+  prefix "alto-restconf";
+
+  import alto-service-types {
+    prefix alto;
+  }
+
+  import alto-service-did {
+    prefix alto-did;
+  }
+
+  organization "ALTO WG";
+  contact "alto@ietf.org";
+
+  description 
+    "This module defines a data model for the ALTO services
+     using restconf. Note this is not interop with RFC7285.";
+
+  revision 2014-11-19 {
+    description "Initial version for ODL.";
+  }
+
+  /************************************
+   * Data Instances                   *
+   ************************************/
+
+  container resources {
+    //presence "Indicates that the alto service is available.";
+
+    leaf teststring {
+      type string;
+      config false;
+    }
+
+    leaf testdatastring {
+      type string;
+    }
+
+    container network-maps {
+      config false;
+      list network-map {
+        key "resource-id";
+        uses alto-did:network-map;
+      }
+    }
+
+/*
+    uses alto-did:alto-resources;
+*/
+  }
+
+  /************************************
+   * RPCs                             *
+   ************************************/
+
+  rpc filtered-network-map-service {
+    input {
+      leaf resource-id {
+        mandatory true;
+        type alto:resource-id;
+      }
+      leaf-list pids {
+        must "current()";
+        type alto:pid-name;
+      }
+      leaf-list address-types {
+        type alto:endpoint-address-type;
+      }
+    }
+    output {
+      container filtered-network-map-service {
+        uses alto-did:network-map;
+      }
+    }
+  }
+
+  rpc filtered-cost-map-service {
+    input {
+      leaf resource-id {
+        mandatory true;
+        type alto:resource-id;
+      }
+      container cost-type {
+        must "current()";
+        uses alto:cost-type;
+      }
+      leaf-list constraints {
+        type alto:constraint;
+      }
+      container pids {
+        leaf-list srcs {
+          type alto:pid-name;
+        }
+        leaf-list dsts {
+          type alto:pid-name;
+        }
+      }
+    }
+    output {
+      container filtered-cost-map-service {
+        uses alto-did:cost-map;
+      }
+    }
+  }
+
+  rpc endpoint-property-service {
+    input {
+      leaf-list properties {
+        type alto:endpoint-property-type;
+        min-elements 1;
+      }
+      leaf-list endpoints {
+        type alto:typed-endpoint-address;
+        min-elements 1;
+      }
+    }
+    output {
+      container endpoint-property-service {
+        uses alto:endpoint-property-map;
+      }
+    }
+  }
+
+  rpc endpoint-cost-service {
+    input {
+      container cost-type {
+        must "current()";
+        uses alto:cost-type;
+      }
+      leaf-list constraints {
+        type alto:constraint;
+      }
+      container endpoints {
+        must "current()";
+        leaf-list srcs {
+          type alto:typed-endpoint-address;
+        }
+        leaf-list dsts {
+          type alto:typed-endpoint-address;
+        }
+      }
+    }
+    output {
+      container endpoint-cost-service {
+        container meta {
+          container cost-type {
+            uses alto:cost-type;
+          }
+        }
+        list endpoint-cost-map {
+          leaf src {
+            type alto:typed-endpoint-address;
+          }
+          key "src";
+          list dst-costs {
+            leaf dst {
+              type alto:typed-endpoint-address;
+            }
+            key "dst";
+            uses alto:alto-cost;
+          }
+        }
+      }
+    }
+  }
+
+}

@@ -19,7 +19,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>alto-api</module>
     <module>alto-impl</module>
     <module>alto-karaf</module>
-    <module>alto-features</module>
+    <module>features</module>
     <module>alto-artifacts</module>
   </modules>
 
