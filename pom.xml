@@ -1,37 +1,217 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Copyright (c) 2015 Yale University and others. All rights reserved.
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License v1.0 which accompanies this distribution,
-and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <groupId>org.opendaylight.alto</groupId>
-  <artifactId>alto-aggregator</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <name>${project.artifactId}</name>
-  <packaging>pom</packaging>
-  <modelVersion>4.0.0</modelVersion>
-  <prerequisites>
-    <maven>3.1.1</maven>
-  </prerequisites>
-  <modules>
-    <module>alto-model</module>
-    <module>alto-provider</module>
-    <module>alto-northbound</module>
-    <module>features</module>
-    <module>alto-artifacts</module>
-    <module>alto-karaf</module>
-  </modules>
+    <modelVersion>4.0.0</modelVersion>
 
-  <distributionManagement>
-    <repository>
-      <id>opendaylight-release</id>
-      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.release/</url>
-    </repository>
-    <snapshotRepository>
-      <id>opendaylight-snapshot</id>
-      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</url>
-    </snapshotRepository>
-  </distributionManagement>
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
+    <parent>
+        <groupId>org.opendaylight.odlparent</groupId>
+        <artifactId>odlparent</artifactId>
+        <version>1.5.0-SNAPSHOT</version>
+        <relativePath></relativePath>
+    </parent>
+
+    <groupId>org.opendaylight.alto</groupId>
+    <artifactId>alto-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>alto</name> <!-- Used by Sonar to set project name -->
+    <packaging>pom</packaging>
+
+    <!--
+    <scm>
+      <connection>scm:git:ssh://git.opendaylight.org:29418/sfc.git</connection>
+      <developerConnection>scm:git:ssh://git.opendaylight.org:29418/sfc.git</developerConnection>
+      <url>https://wiki.opendaylight.org/view/Service_Function_Chaining:Main</url>
+      <tag>HEAD</tag>
+    </scm>
+    -->
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Java Versions -->
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+
+        <!-- Build Plugin Versions -->
+        <maven.release.version>2.4.2</maven.release.version>
+        <maven.resources.version>2.6</maven.resources.version>
+        <maven.helper.version>1.8</maven.helper.version>
+        <maven.dependency.version>2.6</maven.dependency.version>
+        <maven.exec.version>1.3.2</maven.exec.version>
+
+        <ietf.model.version>2010.09.24.7-SNAPSHOT</ietf.model.version>
+        <ietf.yang.types.version>2013.07.15.7-SNAPSHOT</ietf.yang.types.version>
+        <ietf.topology.version>2013.10.21.2-SNAPSHOT</ietf.topology.version>
+        <yang.ext.version>2013.09.07.7-SNAPSHOT</yang.ext.version>
+        <config.version>0.3.0-SNAPSHOT</config.version>
+        <mdsal.version>1.2.0-SNAPSHOT</mdsal.version>
+        <controller.model.version>1.2.0-SNAPSHOT</controller.model.version>
+        <build.helper.version>1.8</build.helper.version>
+        <netconf.parent.version>0.3.0-SNAPSHOT</netconf.parent.version>
+        <config.parent.version>0.3.0-SNAPSHOT</config.parent.version>
+        <jmxGeneratorPath>src/main/yang-gen-config</jmxGeneratorPath>
+        <salGeneratorPath>src/main/yang-gen-sal</salGeneratorPath>
+        <jackson.version>2.3.2</jackson.version>
+        <config.version>0.3.0-SNAPSHOT</config.version>
+
+        <yangtools.version>0.7.0-SNAPSHOT</yangtools.version>
+        <yangtools.binding.version>0.7.0-SNAPSHOT</yangtools.binding.version>
+
+        <lispflowmapping.version>1.2.0-SNAPSHOT</lispflowmapping.version>
+        <ovsdb.southbound.version>1.1.0-SNAPSHOT</ovsdb.southbound.version>
+
+        <!-- Supporting Libraries -->
+        <slf4j.version>1.7.5</slf4j.version>
+        <feature.openflowplugin.version>0.1.0-SNAPSHOT</feature.openflowplugin.version>
+
+        <branding.version>1.1.0-SNAPSHOT</branding.version>
+        <karaf.resources.version>1.5.0-SNAPSHOT</karaf.resources.version>
+        <feature.test.version>1.5.0-SNAPSHOT</feature.test.version>
+        <karaf.empty.version>1.5.0-SNAPSHOT</karaf.empty.version>
+
+        <!-- Test Libraries -->
+        <powermock.version>1.5.6</powermock.version>
+    </properties>
+
+    <distributionManagement>
+        <!-- OpenDayLight Released artifact -->
+        <repository>
+            <id>opendaylight-release</id>
+            <url>http://nexus.opendaylight.org/content/repositories/opendaylight.release</url>
+        </repository>
+        <!-- OpenDayLight Snapshot artifact -->
+        <snapshotRepository>
+            <id>opendaylight-snapshot</id>
+            <url>http://nexus.opendaylight.org/content/repositories/opendaylight.snapshot</url>
+        </snapshotRepository>
+        <!-- Site deployment -->
+        <!-- site>
+             <id>website</id>
+             <url>${sitedeploy}</url>
+             </site -->
+    </distributionManagement>
+
+    <modules>
+        <module>alto-model</module>
+        <module>alto-provider</module>
+        <module>alto-northbound</module>
+        <module>alto-artifacts</module>
+        <module>features</module>
+        <module>alto-karaf</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+              <groupId>org.jacoco</groupId>
+              <artifactId>jacoco-maven-plugin</artifactId>
+              <configuration>
+                <includes>
+                  <include>org.opendaylight.sfc.*</include>
+                </includes>
+              </configuration>
+              <executions>
+                <execution>
+                  <id>pre-test</id>
+                  <goals>
+                    <goal>prepare-agent</goal>
+                  </goals>
+                </execution>
+                <execution>
+                  <id>post-test</id>
+                  <goals>
+                    <goal>report</goal>
+                  </goals>
+                  <phase>test</phase>
+                </execution>
+              </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.version}</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.ops4j.pax.exam</groupId>
+                    <artifactId>maven-paxexam-plugin</artifactId>
+                    <version>1.2.4</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>${jmxGeneratorPath}</directory>
+                                <includes>
+                                    <include>**</include>
+                                </includes>
+                            </fileset>
+                            <fileset>
+                                <directory>${salGeneratorPath}</directory>
+                                <includes>
+                                    <include>**</include>
+                                </includes>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build.helper.version}</version>
+                    <executions>
+                        <execution>
+                            <id>add-source</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>add-source</goal>
+                            </goals>
+                            <configuration>
+                                <sources>
+                                    <source>${jmxGeneratorPath}</source>
+                                    <source>${salGeneratorPath}</source>
+                                </sources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.opendaylight.yangtools</groupId>
+                    <artifactId>yang-maven-plugin</artifactId>
+                    <version>0.7.0-SNAPSHOT</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>${maven.bundle.version}</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <instructions>
+                            <Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
+                        </instructions>
+                        <manifestLocation>${project.build.directory}/META-INF</manifestLocation>
+                    </configuration>
+                </plugin>
+                <plugin>
+                   <groupId>org.jacoco</groupId>
+                   <artifactId>jacoco-maven-plugin</artifactId>
+                   <version>${jacoco.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

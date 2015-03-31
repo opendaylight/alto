@@ -21,7 +21,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version='${project.version}'>odl-alto-model</feature>
     <bundle>mvn:org.opendaylight.alto/alto-provider/${project.version}</bundle>
+    <!-- TODO need to create such a configuration file
     <configfile finalname="alto-provider-default-config.xml">mvn:org.opendaylight.alto/alto-provider/${project.version}/xml/config</configfile>
+    -->
   </feature>
   <feature name='odl-alto-provider-rest' version='${project.version}' description='OpenDaylight :: alto :: provider :: REST '>
     <feature version="${project.version}">odl-alto-provider</feature>

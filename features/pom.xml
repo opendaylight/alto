@@ -7,22 +7,29 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <groupId>org.opendaylight.odlparent</groupId>
-    <artifactId>features-parent</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <groupId>org.opendaylight.alto</groupId>
+    <artifactId>alto-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../</relativePath>
   </parent>
+
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>alto-features</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <modelVersion>4.0.0</modelVersion>
+
   <prerequisites>
     <maven>3.1.1</maven>
   </prerequisites>
+
   <properties>
+    <features.file>features.xml</features.file>
+    <branding.version>${project.version}</branding.version>
+
     <mdsal.version>1.2.0-SNAPSHOT</mdsal.version>
     <yangtools.version>0.7.0-SNAPSHOT</yangtools.version>
   </properties>
+
   <dependencyManagement>
     <dependencies>
       <!-- project specific dependencies -->
@@ -35,6 +42,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.opendaylight.yangtools</groupId>
@@ -59,16 +67,63 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <version>${mdsal.version}</version>
       <type>xml</type>
       <scope>runtime</scope>
+     </dependency>
+     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>alto-model</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>alto-provider</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>alto-model</artifactId>
-      <version>${project.version}</version>
-    </dependency>
   </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>filter</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-artifacts</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attach-artifact</goal>
+            </goals>
+            <configuration>
+              <artifacts>
+                <artifact>
+                  <file>${project.build.directory}/classes/${features.file}</file>
+                  <type>xml</type>
+                  <classifier>features</classifier>
+                </artifact>
+              </artifacts>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+ 
 </project>
