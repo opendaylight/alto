@@ -1,23 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Copyright (c) 2015 Yale University and others.  All rights reserved.
-
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License v1.0 which accompanies this distribution,
-and is available at http://www.eclipse.org/legal/epl-v10.html
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <groupId>org.opendaylight.yangtools</groupId>
-    <artifactId>binding-parent</artifactId>
-    <version>0.7.0-SNAPSHOT</version>
-    <relativePath/>
-  </parent>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.opendaylight.alto</groupId>
+    <artifactId>alto-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>alto-northbound</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.enunciate</groupId>
+        <artifactId>maven-enunciate-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.opendaylight.controller</groupId>
+            <artifactId>sal</artifactId>
+            <version>0.7.1-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${bundle.plugin.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Import-Package>
+              org.codehaus.jettison.json,
+              org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
+              org.apache.commons.logging,
+              com.sun.jersey.spi.container.servlet,
+              org.opendaylight.controller.northbound.commons,
+              org.opendaylight.controller.northbound.commons.exception,
+              org.opendaylight.controller.northbound.commons.utils,
+              org.opendaylight.controller.sal.utils,
+              org.opendaylight.controller.sal.authorization,
+              org.opendaylight.controller.sal.packet.address,
+              javax.ws.rs,
+              javax.ws.rs.core,
+              javax.xml.bind.annotation,
+              javax.xml.bind,
+              org.slf4j,
+              org.apache.catalina.filters,
+              com.fasterxml.jackson.jaxrs.base,
+              com.fasterxml.jackson.jaxrs.json,
+            </Import-Package>
+            <Web-ContextPath>/controller/nb/v2/alto</Web-ContextPath>
+          </instructions>
+          <manifestLocation>${project.basedir}/src/main/resources/META-INF</manifestLocation>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.opendaylight.controller.thirdparty</groupId>
+      <artifactId>com.sun.jersey.jersey-servlet</artifactId>
+      <version>1.17</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>commons.northbound</artifactId>
+      <version>0.4.2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.enunciate</groupId>
+      <artifactId>enunciate-core-annotations</artifactId>
+      <version>${enunciate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.controller.thirdparty</groupId>
+      <artifactId>org.apache.catalina.filters.CorsFilter</artifactId>
+      <version>7.0.42</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jettison</groupId>
+      <artifactId>jettison</artifactId>
+      <version>1.3.7</version>
+    </dependency>
+  </dependencies>
 </project>
+
