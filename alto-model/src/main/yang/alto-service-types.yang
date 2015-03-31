@@ -1,6 +1,6 @@
 module alto-service-types {
   yang-version 1;
-  
+
   namespace "urn:opendaylight:alto-service-types";
   // TODO: replace with IANA namespace when assigned
 
@@ -13,7 +13,7 @@ module alto-service-types {
   organization "ALTO WG";
   contact "alto@ietf.org";
 
-  description 
+  description
     "This module defines the data types and groupings for a semantically
      equivalent data model for the ALTO services defined in RFC7285.";
 
@@ -24,7 +24,7 @@ module alto-service-types {
   revision 2014-10-24 {
     description "Initial version.";
   }
-  
+
   /********************
    * TYPE DEFINITIONS *
    ********************/
@@ -56,11 +56,11 @@ module alto-service-types {
          ]
 
    To handle the proceeding, we need the following definitions:
-      ipv4-address (e.g., 192.0.2.0, already defined in rfc6991), 
-      ipv6-address (already defined in rfc6991), 
-      ipv4-prefix (e.g., 192.0.2.0/24, already defined in rfc6991), 
-      ipv6-prefix (defined in rfc6991), 
-      typed-ipv4-address (e.g., ipv4:192.0.2.1, to be defined below) 
+      ipv4-address (e.g., 192.0.2.0, already defined in rfc6991),
+      ipv6-address (already defined in rfc6991),
+      ipv4-prefix (e.g., 192.0.2.0/24, already defined in rfc6991),
+      ipv6-prefix (defined in rfc6991),
+      typed-ipv4-address (e.g., ipv4:192.0.2.1, to be defined below)
       typed-ipv6-address
       typed-ipv4-prefix-list (e.g., "ipv4": [
            "192.0.2.0/24",
@@ -69,7 +69,7 @@ module alto-service-types {
 
   *******************************************************************/
 
-  /* 
+  /*
      First define typed-ipv4-address and typed-ipv6-address, as used
      by endpoint services.
 
@@ -127,7 +127,7 @@ module alto-service-types {
      } EndpointAddrGroup;
 
      There are two challenges:
- 
+
      1) To specify that AddressType is key, we must use the list type,
      which is the only type that one can specify key. However, the
      current JSON-YANG encoding generates an array, instead of a
@@ -188,7 +188,7 @@ module alto-service-types {
    *   cost-metric,
    *   cost-mode
    *
-   * We group their definitions together below.       
+   * We group their definitions together below.
    **************************************************************/
 
   typedef valid-id-string {
@@ -366,7 +366,7 @@ module alto-service-types {
     }
     description
       "Global endpoint property. RFC7285 Sec. 10.8.2." +
-      "'priv:' for Private Use " + 
+      "'priv:' for Private Use " +
       " length 1..32; ‘.’ is not allowed";
   }
 
@@ -408,7 +408,7 @@ module alto-service-types {
   typedef media-type {
     type union {
       type string {
-        pattern "application/alto\-.*";   
+        pattern "application/alto\-.*";
       }
       type enumeration {
         enum alto-directory; //+json
@@ -576,7 +576,7 @@ module alto-service-types {
       }
       uses endpoint-address-group;
       description
-        "RFC7285 Sec. 11.2.1.6." + 
+        "RFC7285 Sec. 11.2.1.6." +
         " object-map {
             PIDName -> EndpointAddrGroup;
           } NetworkMapData;";
@@ -621,7 +621,7 @@ module alto-service-types {
           " object-map {
               PIDName -> JSONValue;
             } DstCosts;";
-      }         
+      }
       description
         "The list represents the outer part of the cost matrix." +
         "CostMapData. RFC7285 Sec. 11.2.3.6." +

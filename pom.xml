@@ -71,6 +71,7 @@
         <karaf.resources.version>1.5.0-SNAPSHOT</karaf.resources.version>
         <feature.test.version>1.5.0-SNAPSHOT</feature.test.version>
         <karaf.empty.version>1.5.0-SNAPSHOT</karaf.empty.version>
+        <controller.checkstyle.version>0.1.0-SNAPSHOT</controller.checkstyle.version>
 
         <!-- Test Libraries -->
         <powermock.version>1.5.6</powermock.version>
@@ -100,6 +101,7 @@
         <module>alto-northbound</module>
         <module>alto-artifacts</module>
         <module>features</module>
+        <module>commons</module>
         <module>alto-karaf</module>
     </modules>
 

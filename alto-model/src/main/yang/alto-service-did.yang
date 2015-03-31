@@ -1,6 +1,6 @@
 module alto-service-did {
   yang-version 1;
-  
+
   namespace "urn:opendaylight:alto-service-did";
   // TODO: replace with IANA namespace when assigned
 
@@ -13,9 +13,9 @@ module alto-service-did {
   organization "ALTO WG";
   contact "alto@ietf.org";
 
-  description 
-    "This module defines the data instance descriptions (DID) of a 
-     semantically equivalent data model for the ALTO services 
+  description
+    "This module defines the data instance descriptions (DID) of a
+     semantically equivalent data model for the ALTO services
      defined in RFC7285.";
 
   revision 2014-11-01 {

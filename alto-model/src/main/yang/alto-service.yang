@@ -2,7 +2,7 @@ module alto-service {
   //alto-service-restconf
 
   yang-version 1;
-  
+
   namespace "urn:opendaylight:alto";
   // TODO: replace with IANA namespace when assigned
 
@@ -19,7 +19,7 @@ module alto-service {
   organization "ALTO WG";
   contact "alto@ietf.org";
 
-  description 
+  description
     "This module defines a data model for the ALTO services
      using restconf. Note this is not interop with RFC7285.";
 

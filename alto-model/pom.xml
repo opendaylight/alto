@@ -32,13 +32,21 @@
                 </executions>
                 <configuration>
                     <failsOnError>true</failsOnError>
-                    <configLocation>../checkstyle.xml</configLocation>
+                    <configLocation>controller/checkstyle.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <sourceDirectory>${project.basedir}</sourceDirectory>
                     <includes>**\/*.yang</includes>
                     <excludes>**\/target\/,**\/bin\/,**\/third-party,**\/yang-gen-sal</excludes>
                 </configuration>
+
+                <dependencies>
+                  <dependency>
+                    <groupId>org.opendaylight.controller</groupId>
+                    <artifactId>checkstyle</artifactId>
+                    <version>${controller.checkstyle.version}</version>
+                  </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
