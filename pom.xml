@@ -47,6 +47,7 @@
         <ietf.topology.version>2013.10.21.2-SNAPSHOT</ietf.topology.version>
         <yang.ext.version>2013.09.07.7-SNAPSHOT</yang.ext.version>
         <config.version>0.3.0-SNAPSHOT</config.version>
+        <sal.version>0.7.1-SNAPSHOT</sal.version>
         <mdsal.version>1.2.0-SNAPSHOT</mdsal.version>
         <controller.model.version>1.2.0-SNAPSHOT</controller.model.version>
         <build.helper.version>1.8</build.helper.version>
@@ -54,6 +55,9 @@
         <config.parent.version>0.3.0-SNAPSHOT</config.parent.version>
         <jmxGeneratorPath>src/main/yang-gen-config</jmxGeneratorPath>
         <salGeneratorPath>src/main/yang-gen-sal</salGeneratorPath>
+        <jersey.version>1.17</jersey.version>
+        <jersey.servlet.version>1.17</jersey.servlet.version>
+        <jersey.json.version>1.17</jersey.json.version>
         <jackson.version>2.3.2</jackson.version>
         <config.version>0.3.0-SNAPSHOT</config.version>
 
@@ -72,6 +76,8 @@
         <feature.test.version>1.5.0-SNAPSHOT</feature.test.version>
         <karaf.empty.version>1.5.0-SNAPSHOT</karaf.empty.version>
         <controller.checkstyle.version>0.1.0-SNAPSHOT</controller.checkstyle.version>
+        <controller.commons.northbound.version>0.5.0-SNAPSHOT</controller.commons.northbound.version>
+        <corsfilter.version>7.0.42</corsfilter.version>
 
         <!-- Test Libraries -->
         <powermock.version>1.5.6</powermock.version>
@@ -98,11 +104,14 @@
     <modules>
         <module>alto-model</module>
         <module>alto-provider</module>
-        <module>alto-northbound</module>
         <module>alto-artifacts</module>
         <module>features</module>
-        <module>commons</module>
+        <module>alto-commons</module>
+        <module>alto-services</module>
+        <!--
         <module>alto-karaf</module>
+        -->
+        <module>alto-northbound</module>
     </modules>
 
     <build>

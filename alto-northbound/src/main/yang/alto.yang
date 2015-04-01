@@ -1,9 +1,0 @@
-module alto {
-    yang-version 1;
-    namespace "urn:opendaylight:params:xml:ns:yang:alto";
-    prefix "alto";
-
-    revision "2015-01-05" {
-        description "Initial revision of alto model";
-    }
-}

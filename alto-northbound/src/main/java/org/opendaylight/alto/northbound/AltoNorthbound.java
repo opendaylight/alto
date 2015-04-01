@@ -7,12 +7,16 @@
  */
 package org.opendaylight.alto.northbound;
 
-import org.opendaylight.alto.commons.RFC7285MediaType;
+import org.opendaylight.alto.commons.types.RFC7285MediaType;
+import org.opendaylight.alto.services.api.IRDService;
 
-import org.codehaus.jettison.json.JSONObject;
+//import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.NetworkMap;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.IRD;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
@@ -23,27 +27,23 @@ public class AltoNorthbound {
 
     private static final Logger mLogger = LoggerFactory.getLogger(AltoNorthbound.class);
 
-    public class AltoError {
-        public static final String E_SYNTAX = "syntax-error";
-        public static final String E_MISSING_FIELD = "missing-field";
-        public static final String E_INVALID_FIELD_TYPE = "invalid-type";
-        public static final String E_INVALID_FIELD_VALUE = "invalid-value";
-    }
-
     @GET
     @Produces({RFC7285MediaType.ALTO_DIRECTORY, RFC7285MediaType.ALTO_ERROR})
     public Response retrieveIRD() {
-        JSONObject ird = new JSONObject();
+        IRDService fas = new FakeAltoService();
         try {
-            ird.put("test", "ok");
+            IRD ird = fas.getIRD();
+            return Response.ok(ird, RFC7285MediaType.ALTO_DIRECTORY).build();
         } catch (Exception e) {
         }
-        return Response.ok(ird.toString(), RFC7285MediaType.ALTO_ERROR).build();
+        return Response.ok("", RFC7285MediaType.ALTO_ERROR).build();
     }
 
-    @Path("/hello")
+    @Path("/networkmap/{networkmap_id}")
     @GET
-    public Response sayHello() {
-        return Response.ok(new String("hello alto")).build();
+    @Produces({RFC7285MediaType.ALTO_NETWORKMAP, RFC7285MediaType.ALTO_ERROR})
+    public Response retrieveNetworkMap(@PathParam(value = "networkmap_id") String nmap_id) {
+        /* TODO */
+        return Response.ok("", RFC7285MediaType.ALTO_ERROR).build();
     }
 }

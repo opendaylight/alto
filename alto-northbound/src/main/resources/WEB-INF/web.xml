@@ -63,30 +63,6 @@
             <http-method>DELETE</http-method>
             <http-method>HEAD</http-method>
           </web-resource-collection>
-          <auth-constraint>
-            <role-name>System-Admin</role-name>
-            <role-name>Network-Admin</role-name>
-            <role-name>Network-Operator</role-name>
-            <role-name>Container-User</role-name>
-          </auth-constraint>
         </security-constraint>
-
-        <security-role>
-                <role-name>System-Admin</role-name>
-        </security-role>
-        <security-role>
-                <role-name>Network-Admin</role-name>
-        </security-role>
-        <security-role>
-                <role-name>Network-Operator</role-name>
-        </security-role>
-        <security-role>
-                <role-name>Container-User</role-name>
-        </security-role>
-
-        <login-config>
-                <auth-method>BASIC</auth-method>
-                <realm-name>opendaylight</realm-name>
-        </login-config>
 </web-app>
 
