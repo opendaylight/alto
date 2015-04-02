@@ -244,6 +244,7 @@ module alto-service-types {
 
   grouping dependent-vtags {
     list dependent-vtags {
+      key resource-id;
       uses vtag;
       min-elements 1;
     }
