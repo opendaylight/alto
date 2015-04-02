@@ -12,10 +12,6 @@ module alto-service {
     prefix alto;
   }
 
-  import alto-service-did {
-    prefix alto-did;
-  }
-
   organization "ALTO WG";
   contact "alto@ietf.org";
 
@@ -27,6 +23,52 @@ module alto-service {
     description "Initial version for ODL.";
   }
 
+  grouping network-map {
+    leaf resource-id {
+      type alto:resource-id;
+        mandatory true;
+      }
+    leaf tag {
+      type alto:tag-string;
+        mandatory true;
+      }
+    list map {
+      key "pid";
+      leaf pid {
+        type alto:pid-name;
+      }
+      uses alto:endpoint-address-group;
+    }
+  }
+
+  grouping cost-map {
+    leaf resource-id {
+      type alto:resource-id;
+      mandatory true;
+    }
+    leaf tag {
+      type alto:tag-string;
+      mandatory true;
+    }
+    container meta {
+      must "current()";
+      uses alto:cost-map-meta;
+    }
+    list map {
+      leaf src {
+        type alto:pid-name;
+      }
+      key "src";
+      list dst-costs {
+        leaf dst {
+          type alto:pid-name;
+        }
+        key "dst";
+        uses alto:alto-cost;
+      }
+    }
+  }
+
   /************************************
    * Data Instances                   *
    ************************************/
@@ -34,26 +76,30 @@ module alto-service {
   container resources {
     //presence "Indicates that the alto service is available.";
 
-    leaf teststring {
-      type string;
-      config false;
-    }
-
-    leaf testdatastring {
-      type string;
+    container IRD {
+      container meta {
+        uses alto:IRD-meta;
+      }
+      uses alto:IRD-data;
     }
 
     container network-maps {
-      config false;
       list network-map {
         key "resource-id";
-        uses alto-did:network-map;
+        uses network-map;
       }
     }
 
-/*
-    uses alto-did:alto-resources;
-*/
+    container cost-maps {
+      list cost-map {
+        key "resource-id";
+        uses cost-map;
+      }
+    }
+
+    container endpoint-property-map {
+      uses alto:endpoint-property-map;
+    }
   }
 
   /************************************
@@ -76,7 +122,7 @@ module alto-service {
     }
     output {
       container filtered-network-map-service {
-        uses alto-did:network-map;
+        uses network-map;
       }
     }
   }
@@ -105,25 +151,7 @@ module alto-service {
     }
     output {
       container filtered-cost-map-service {
-        uses alto-did:cost-map;
-      }
-    }
-  }
-
-  rpc endpoint-property-service {
-    input {
-      leaf-list properties {
-        type alto:endpoint-property-type;
-        min-elements 1;
-      }
-      leaf-list endpoints {
-        type alto:typed-endpoint-address;
-        min-elements 1;
-      }
-    }
-    output {
-      container endpoint-property-service {
-        uses alto:endpoint-property-map;
+        uses cost-map;
       }
     }
   }
