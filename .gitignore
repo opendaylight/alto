@@ -26,3 +26,5 @@ out/
 maven-eclipse.xml
 .DS_STORE
 .metadata
+*.swp
+**/*.swp

@@ -18,16 +18,29 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto/alto-model/${project.version}</bundle>
   </feature>
 
+  <feature name='odl-alto-jackson-dependency' version='${project.version}' description='Opendaylight :: alto :: jackson_dependency'>
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle> 
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle> 
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle> 
+  </feature>
+
   <feature name='odl-alto-utils' version='${project.version}' description='OpenDaylight :: alto :: utils'>
     <feature version='${project.version}'>odl-alto-model</feature>
+    <feature version='${jackson.version}'>odl-base-jackson</feature>
     <bundle>mvn:org.opendaylight.alto/commons/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto/services.api/${project.version}</bundle>
+  </feature>
+
+  <feature name='odl-alto-extension' version='${project.version}' description='Opendaylight :: alto :: extension'>
+    <feature version='${project.version}'>odl-alto-utils</feature>
+    <bundle>mvn:org.opendaylight.alto/services.ext.fs-map/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-northbound' version='${project.version}' description='Opendaylight :: alto :: northbound'>
     <feature version='${project.version}'>odl-alto-model</feature>
     <feature version='${project.version}'>odl-alto-utils</feature>
     <feature version='${jersey.version}'>odl-base-jersey</feature>
+    <feature version='0.5.0-SNAPSHOT'}>odl-adsal-northbound</feature>
     <feature version='${controller.commons.northbound.version}'>odl-adsal-northbound</feature>
     <bundle>mvn:org.opendaylight.alto/alto-northbound/${project.version}</bundle>
   </feature>

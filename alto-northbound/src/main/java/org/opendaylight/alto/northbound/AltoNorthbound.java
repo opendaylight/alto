@@ -7,7 +7,7 @@
  */
 package org.opendaylight.alto.northbound;
 
-import org.opendaylight.alto.commons.types.RFC7285MediaType;
+import org.opendaylight.alto.commons.types.rfc7285.MediaType;
 import org.opendaylight.alto.services.api.IRDService;
 
 //import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.NetworkMap;
@@ -28,22 +28,22 @@ public class AltoNorthbound {
     private static final Logger mLogger = LoggerFactory.getLogger(AltoNorthbound.class);
 
     @GET
-    @Produces({RFC7285MediaType.ALTO_DIRECTORY, RFC7285MediaType.ALTO_ERROR})
+    @Produces({MediaType.ALTO_DIRECTORY, MediaType.ALTO_ERROR})
     public Response retrieveIRD() {
         IRDService fas = new FakeAltoService();
         try {
             IRD ird = fas.getIRD();
-            return Response.ok(ird, RFC7285MediaType.ALTO_DIRECTORY).build();
+            return Response.ok(ird, MediaType.ALTO_DIRECTORY).build();
         } catch (Exception e) {
         }
-        return Response.ok("", RFC7285MediaType.ALTO_ERROR).build();
+        return Response.ok("", MediaType.ALTO_ERROR).build();
     }
 
     @Path("/networkmap/{networkmap_id}")
     @GET
-    @Produces({RFC7285MediaType.ALTO_NETWORKMAP, RFC7285MediaType.ALTO_ERROR})
+    @Produces({MediaType.ALTO_NETWORKMAP, MediaType.ALTO_ERROR})
     public Response retrieveNetworkMap(@PathParam(value = "networkmap_id") String nmap_id) {
         /* TODO */
-        return Response.ok("", RFC7285MediaType.ALTO_ERROR).build();
+        return Response.ok("", MediaType.ALTO_ERROR).build();
     }
 }

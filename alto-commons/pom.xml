@@ -57,10 +57,14 @@
         <configuration>
           <instructions>
             <Import-Package>
+              com.fasterxml.jackson.annotation,
+              com.fasterxml.jackson.databind,
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
             </Import-Package>
             <Export-Package>
               org.opendaylight.alto.commons.*;
+              org.opendaylight.alto.commons.types.*;
+              org.opendaylight.alto.commons.types.rfc7285.*;
             </Export-Package>
             <Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
           </instructions>
@@ -77,6 +81,23 @@
       <version>${project.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
   </dependencies>
 </project>
 

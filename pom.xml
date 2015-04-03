@@ -107,7 +107,8 @@
         <module>alto-artifacts</module>
         <module>features</module>
         <module>alto-commons</module>
-        <module>alto-services</module>
+        <module>alto-services/api</module>
+        <module>alto-services/ext</module>
         <!--
         <module>alto-karaf</module>
         -->

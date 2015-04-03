@@ -5,9 +5,9 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.alto.commons;
+package org.opendaylight.alto.commons.types.rfc7285;
 
-public class RFC7285MediaType {
+public class MediaType {
 
     /** The media types defined in [RFC7285]
      *

@@ -106,12 +106,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-json</artifactId>
-      <version>${jersey.json.version}</version>
-    </dependency>
-
-    <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>commons.northbound</artifactId>
       <version>${controller.commons.northbound.version}</version>
@@ -127,6 +121,24 @@
       <groupId>org.opendaylight.controller.thirdparty</groupId>
       <artifactId>org.apache.catalina.filters.CorsFilter</artifactId>
       <version>${corsfilter.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
     </dependency>
 
     <dependency>
