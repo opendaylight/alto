@@ -39,7 +39,6 @@
               org.opendaylight.yang.gen.v1.urn.opendaylight.alto.*,
               org.opendaylight.alto.services.api,
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
-              org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101,
               org.apache.commons.logging,
               com.sun.jersey.spi.container.servlet,
               org.opendaylight.controller.northbound.commons,
