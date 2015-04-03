@@ -40,7 +40,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-model</feature>
     <feature version='${project.version}'>odl-alto-utils</feature>
     <feature version='${jersey.version}'>odl-base-jersey</feature>
-    <feature version='0.5.0-SNAPSHOT'}>odl-adsal-northbound</feature>
+    <feature>war</feature>
     <feature version='${controller.commons.northbound.version}'>odl-adsal-northbound</feature>
     <bundle>mvn:org.opendaylight.alto/alto-northbound/${project.version}</bundle>
   </feature>
