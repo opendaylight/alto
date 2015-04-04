@@ -1,24 +1,24 @@
 package org.opendaylight.alto.northbound;
 
 import org.opendaylight.alto.services.api.IRDService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.IRD;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.did.rev141101.alto.resources.IRDBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.ird.MetaBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.cost.types.CostTypes;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.cost.types.CostTypesBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.cost.types.CostTypesKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.CostTypeName;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.CostMode;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.CostMetric;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.ird.data.Resources;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.ird.data.ResourcesKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.ird.data.ResourcesBuilder;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.Uri;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.MediaType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.IRD;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.IRDBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.CostTypeName;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.CostMetric;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.CostMode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.MediaType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.cost.types.CostTypes;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.cost.types.CostTypesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.cost.types.CostTypesKey;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ird.MetaBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ird.data.Resources;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ird.data.ResourcesBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ird.data.ResourcesKey;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 class FakeAltoService implements IRDService {
     @Override
@@ -35,7 +35,6 @@ class FakeAltoService implements IRDService {
 
         cost_types.add(cb.setCostTypeName(name).setCostMetric(metric).setCostMode(mode).setKey(ckey).build());
         irdb.setMeta(mb.setCostTypes(cost_types).build());
-
 
         List<Resources> resources = new ArrayList<Resources>();
         ResourcesBuilder rb = new ResourcesBuilder();

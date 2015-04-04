@@ -9,18 +9,15 @@ package org.opendaylight.alto.northbound;
 
 import org.opendaylight.alto.commons.types.rfc7285.MediaType;
 import org.opendaylight.alto.services.api.IRDService;
-
-//import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.NetworkMap;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101.IRD;
-
-import javax.ws.rs.Path;
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Response;
-
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.IRD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 @Path("/")
 public class AltoNorthbound {

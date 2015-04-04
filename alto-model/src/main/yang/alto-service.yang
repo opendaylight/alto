@@ -19,6 +19,10 @@ module alto-service {
     "This module defines a data model for the ALTO services
      using restconf. Note this is not interop with RFC7285.";
 
+  revision 2015-04-04 {
+    description "Fix IRD";
+  }
+
   revision 2014-11-19 {
     description "Initial version for ODL.";
   }
@@ -77,10 +81,7 @@ module alto-service {
     //presence "Indicates that the alto service is available.";
 
     container IRD {
-      container meta {
-        uses alto:IRD-meta;
-      }
-      uses alto:IRD-data;
+      uses alto:IRD;
     }
 
     container network-maps {

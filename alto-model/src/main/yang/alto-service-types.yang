@@ -17,6 +17,10 @@ module alto-service-types {
     "This module defines the data types and groupings for a semantically
      equivalent data model for the ALTO services defined in RFC7285.";
 
+  revision 2015-04-04 {
+    description "Interop with RFC7285";
+  }
+
   revision 2014-11-01 {
     description "Separate types module";
   }

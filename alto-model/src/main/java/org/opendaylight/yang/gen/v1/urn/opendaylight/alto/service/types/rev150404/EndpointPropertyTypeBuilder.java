@@ -1,4 +1,4 @@
-package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101;
+package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404;
 
 
 /**

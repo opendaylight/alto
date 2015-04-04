@@ -3,7 +3,7 @@ package org.opendaylight.controller.config.yang.config.alto_provider.impl;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.provider.impl.rev141119.OpendaylightAlto;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev141119.AltoServiceService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.AltoServiceService;
 
 public class AltoProviderModule extends org.opendaylight.controller.config.yang.config.alto_provider.impl.AbstractAltoProviderModule {
     public AltoProviderModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier, org.opendaylight.controller.config.api.DependencyResolver dependencyResolver) {

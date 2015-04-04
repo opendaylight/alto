@@ -1,4 +1,4 @@
-package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev141101;
+package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404;
 
 
 /**
@@ -10,9 +10,9 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev1411
  * loss of user code.
  *
  */
-public class MediaTypeBuilder {
+public class CostMetricBuilder {
 
-    public static MediaType getDefaultInstance(java.lang.String defaultValue) {
+    public static CostMetric getDefaultInstance(java.lang.String defaultValue) {
         throw new java.lang.UnsupportedOperationException("Not yet implemented");
     }
 
