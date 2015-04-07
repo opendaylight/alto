@@ -79,13 +79,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>commons</artifactId>
+      <artifactId>alto-commons</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>services.api</artifactId>
+      <artifactId>alto-services</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>alto-provider</artifactId>
       <version>${project.version}</version>
     </dependency>
 

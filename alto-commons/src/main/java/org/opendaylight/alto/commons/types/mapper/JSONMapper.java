@@ -1,8 +1,16 @@
-package org.opendaylight.alto.commons.types.rfc7285;
+package org.opendaylight.alto.commons.types.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import org.opendaylight.alto.commons.types.rfc7285.AltoNetworkMap;
+import org.opendaylight.alto.commons.types.rfc7285.CostMap;
+import org.opendaylight.alto.commons.types.rfc7285.CostType;
+import org.opendaylight.alto.commons.types.rfc7285.Endpoint;
+import org.opendaylight.alto.commons.types.rfc7285.Extensible;
+import org.opendaylight.alto.commons.types.rfc7285.IRD;
+import org.opendaylight.alto.commons.types.rfc7285.VersionTag;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JSONMapper {
 
@@ -50,8 +58,8 @@ public class JSONMapper {
         return mapper.readValue(json, IRD.class);
     }
 
-    public NetworkMap asNetworkMap(String json) throws Exception {
-        return mapper.readValue(json, NetworkMap.class);
+    public AltoNetworkMap asNetworkMap(String json) throws Exception {
+        return mapper.readValue(json, AltoNetworkMap.class);
     }
 
     public VersionTag asVersionTag(String json) throws Exception {

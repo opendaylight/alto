@@ -1,31 +1,31 @@
-package org.opendaylight.alto.services.ext.fsmap;
-
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.FileVisitResult;
-import java.nio.file.PathMatcher;
-import java.nio.file.WatchService;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchEvent;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.ClosedWatchServiceException;
-import java.nio.file.attribute.BasicFileAttributes;
+package org.opendaylight.controller.alto.provider;
 
 import java.io.IOException;
-
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.ClosedWatchServiceException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.ReentrantLock;
 
-import org.opendaylight.alto.commons.types.rfc7285.JSONMapper;
-import org.opendaylight.alto.commons.types.rfc7285.NetworkMap;
+import org.opendaylight.alto.commons.types.mapper.JSONMapper;
+import org.opendaylight.alto.commons.types.rfc7285.AltoNetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.VersionTag;
-
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.network.maps.NetworkMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +41,12 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
     private MapFileLoader loader = null;
     private AtomicBoolean cancelled = new AtomicBoolean(false);
     private HashMap<Path, VersionTag> path_to_id = new HashMap<Path, VersionTag>();
-    private HashMap<VersionTag, NetworkMap> id_to_map = new HashMap<VersionTag, NetworkMap>();
-    private JSONMapper mapper = new JSONMapper();
+    private HashMap<VersionTag, AltoNetworkMap> id_to_map = new HashMap<VersionTag, AltoNetworkMap>();
+    private JSONMapper jsonMapper = new JSONMapper();
 
     public FileSystemNetworkMapGenerator(URI uri) throws Exception {
         source = Paths.get(uri);
-
+        
         FileSystem fs = source.getFileSystem();
         watcher = fs.newWatchService();
         if (watcher == null) {
@@ -54,7 +54,6 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         }
 
         onCreateDir(source);
-
         loader = new MapFileLoader(fs);
         Files.walkFileTree(source, loader);
     }
@@ -144,7 +143,7 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         cleanup();
     }
 
-    public void cleanup() {
+    private void cleanup() {
         lock.lock();
         for (WatchKey key: keys.values()) {
             try {
@@ -164,9 +163,6 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         } catch (Exception e) {
         }
 
-        for (VersionTag vtag: path_to_id.values()) {
-            // TODO remove network map
-        }
         path_to_id.clear();
         id_to_map.clear();
         lock.unlock();
@@ -177,12 +173,10 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         cleanup();
     }
 
-    public void onCreate(Path file) {
-        //TODO
+    private void onCreate(Path file) {
         try {
             String content = new String(Files.readAllBytes(file), StandardCharsets.US_ASCII);
-            NetworkMap map = mapper.asNetworkMap(content);
-
+            AltoNetworkMap map = jsonMapper.asNetworkMap(content);
             VersionTag vtag = map.meta.vtag;
             logger.info("vtag: <" + vtag.rid + ", " + vtag.tag + ">");
             if (id_to_map.get(map.meta.vtag) != null) {
@@ -200,7 +194,7 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         }
     }
 
-    public void onCreateDir(Path dir) {
+    private void onCreateDir(Path dir) {
         try {
             WatchKey key = dir.register(watcher,
                                     StandardWatchEventKinds.ENTRY_CREATE,
@@ -214,7 +208,7 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         }
     }
 
-    public void onDelete(Path file) {
+    private void onDelete(Path file) {
         //TODO
         try {
             VersionTag vtag = path_to_id.get(file);
@@ -229,7 +223,7 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         }
     }
 
-    public void onDeleteDir(Path dir) {
+    private void onDeleteDir(Path dir) {
         // TODO
         try {
             WatchKey key = keys.get(dir);
@@ -245,11 +239,10 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         }
     }
 
-    public void onModify(Path file) {
-        //TODO
-        try {
+    private void onModify(Path file) {
+      try {
             String content = new String(Files.readAllBytes(file), StandardCharsets.US_ASCII);
-            NetworkMap map = mapper.asNetworkMap(content);
+            AltoNetworkMap map = jsonMapper.asNetworkMap(content);
             VersionTag vtag = map.meta.vtag;
             VersionTag old = path_to_id.get(file);
 
@@ -268,9 +261,17 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
         }
     }
 
-    public void onModifyDir(Path dir) {
-        //TODO
+    private void onModifyDir(Path dir) {
         onDeleteDir(dir);
         onModifyDir(dir);
+    }
+
+    public List<NetworkMap> getYangNetworkMaps() {
+        List<AltoNetworkMap> networkMapList = new ArrayList<AltoNetworkMap>(id_to_map.values());
+        List<NetworkMap> list = new ArrayList<NetworkMap>();
+        for (AltoNetworkMap map : networkMapList) {
+          list.add(map.asYangNetworkMap());
+        }
+        return list;
     }
 }

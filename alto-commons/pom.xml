@@ -11,8 +11,12 @@
     <relativePath>..</relativePath>
   </parent>
 
+  <properties>
+    <checkstyle.skip>true</checkstyle.skip>
+  </properties>
+
   <groupId>org.opendaylight.alto</groupId>
-  <artifactId>commons</artifactId>
+  <artifactId>alto-commons</artifactId>
   <packaging>bundle</packaging>
 
   <build>

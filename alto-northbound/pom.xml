@@ -37,7 +37,8 @@
           <instructions>
             <Import-Package>
               org.opendaylight.yang.gen.v1.urn.opendaylight.alto.*,
-              org.opendaylight.alto.services.api,
+              org.opendaylight.alto.services,
+              org.opendaylight.alto.commons.*,
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
               org.apache.commons.logging,
               com.sun.jersey.spi.container.servlet,
@@ -149,13 +150,13 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>commons</artifactId>
+      <artifactId>alto-commons</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>services.api</artifactId>
+      <artifactId>alto-services</artifactId>
       <version>${project.version}</version>
     </dependency>
 
