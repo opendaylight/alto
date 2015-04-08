@@ -1,6 +1,6 @@
-package org.opendaylight.alto.commons.types.mapper;
+package org.opendaylight.alto.commons.types.rfc7285;
 
-import org.opendaylight.alto.commons.types.rfc7285.AltoNetworkMap;
+import org.opendaylight.alto.commons.types.rfc7285.NetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.CostMap;
 import org.opendaylight.alto.commons.types.rfc7285.CostType;
 import org.opendaylight.alto.commons.types.rfc7285.Endpoint;
@@ -58,8 +58,8 @@ public class JSONMapper {
         return mapper.readValue(json, IRD.class);
     }
 
-    public AltoNetworkMap asNetworkMap(String json) throws Exception {
-        return mapper.readValue(json, AltoNetworkMap.class);
+    public NetworkMap asNetworkMap(String json) throws Exception {
+        return mapper.readValue(json, NetworkMap.class);
     }
 
     public VersionTag asVersionTag(String json) throws Exception {

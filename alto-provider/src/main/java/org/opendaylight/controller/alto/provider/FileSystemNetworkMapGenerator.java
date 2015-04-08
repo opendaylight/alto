@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.opendaylight.alto.commons.types.mapper.JSONMapper;
-import org.opendaylight.alto.commons.types.rfc7285.AltoNetworkMap;
-import org.opendaylight.alto.commons.types.rfc7285.VersionTag;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285Type;
+import org.opendaylight.alto.commons.types.model150404.ModelType;
+import org.opendaylight.alto.commons.types.convertor.RFC2ModelConvertor;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.network.maps.NetworkMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +40,10 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
     private HashMap<WatchKey, Path> paths = new HashMap<WatchKey, Path>();
     private MapFileLoader loader = null;
     private AtomicBoolean cancelled = new AtomicBoolean(false);
-    private HashMap<Path, VersionTag> path_to_id = new HashMap<Path, VersionTag>();
-    private HashMap<VersionTag, AltoNetworkMap> id_to_map = new HashMap<VersionTag, AltoNetworkMap>();
-    private JSONMapper jsonMapper = new JSONMapper();
+    private HashMap<Path, RFC7285Type.VersionTag> path_to_id = new HashMap<Path, RFC7285Type.VersionTag>();
+    private HashMap<RFC7285Type.VersionTag, RFC7285Type.NetworkMap> id_to_map = new HashMap<RFC7285Type.VersionTag, RFC7285Type.NetworkMap>();
+    private RFC7285Type.JSONMapper jsonMapper = new RFC7285Type.JSONMapper();
+    private RFC2ModelConvertor convertor = new RFC2ModelConvertor();
 
     public FileSystemNetworkMapGenerator(URI uri) throws Exception {
         source = Paths.get(uri);
@@ -176,16 +177,16 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
     private void onCreate(Path file) {
         try {
             String content = new String(Files.readAllBytes(file), StandardCharsets.US_ASCII);
-            AltoNetworkMap map = jsonMapper.asNetworkMap(content);
-            VersionTag vtag = map.meta.vtag;
+            RFC7285Type.NetworkMap map = (RFC7285Type.NetworkMap)jsonMapper.asNetworkMap(content);
+            RFC7285Type.VersionTag vtag = (RFC7285Type.VersionTag)map.meta.vtag;
             logger.info("vtag: <" + vtag.rid + ", " + vtag.tag + ">");
             if (id_to_map.get(map.meta.vtag) != null) {
                 logger.warn("Version tag already registered: ("
                                 + vtag.rid + ", " + vtag.tag + ")");
                 return;
             }
-            path_to_id.put(file, map.meta.vtag);
-            id_to_map.put(map.meta.vtag, map);
+            path_to_id.put(file, vtag);
+            id_to_map.put(vtag, map);
             logger.info("create successfully: " + file.toString());
             logger.info("current maps: " + id_to_map.size());
         } catch (Exception e) {
@@ -211,7 +212,7 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
     private void onDelete(Path file) {
         //TODO
         try {
-            VersionTag vtag = path_to_id.get(file);
+            RFC7285Type.VersionTag vtag = path_to_id.get(file);
             if (vtag == null)
                 return;
 
@@ -242,9 +243,9 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
     private void onModify(Path file) {
       try {
             String content = new String(Files.readAllBytes(file), StandardCharsets.US_ASCII);
-            AltoNetworkMap map = jsonMapper.asNetworkMap(content);
-            VersionTag vtag = map.meta.vtag;
-            VersionTag old = path_to_id.get(file);
+            RFC7285Type.NetworkMap map = (RFC7285Type.NetworkMap)jsonMapper.asNetworkMap(content);
+            RFC7285Type.VersionTag vtag = (RFC7285Type.VersionTag)map.meta.vtag;
+            RFC7285Type.VersionTag old = path_to_id.get(file);
 
             if (old != null) {
                 if (vtag.rid != old.rid) {
@@ -267,10 +268,10 @@ public class FileSystemNetworkMapGenerator implements Runnable, AutoCloseable {
     }
 
     public List<NetworkMap> getYangNetworkMaps() {
-        List<AltoNetworkMap> networkMapList = new ArrayList<AltoNetworkMap>(id_to_map.values());
+        List<RFC7285Type.NetworkMap> networkMapList = new ArrayList<RFC7285Type.NetworkMap>(id_to_map.values());
         List<NetworkMap> list = new ArrayList<NetworkMap>();
-        for (AltoNetworkMap map : networkMapList) {
-          list.add(map.asYangNetworkMap());
+        for (RFC7285Type.NetworkMap map : networkMapList) {
+            list.add((NetworkMap)convertor.convert(map));
         }
         return list;
     }

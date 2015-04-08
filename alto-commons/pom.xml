@@ -78,7 +78,6 @@
   </build>
 
   <dependencies>
-
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>alto-model</artifactId>
