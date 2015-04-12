@@ -27,11 +27,6 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>alto-commons</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>config-api</artifactId>
       <version>${config.version}</version>
@@ -94,8 +89,9 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Export-Package>org.opendaylight.controller.config.yang.alto_provider,</Export-Package>
+            <Export-Package>org.opendaylight.alto.provider.*;</Export-Package>
             <Import-Package>*</Import-Package>
+            <Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
           </instructions>
         </configuration>
       </plugin>
@@ -136,29 +132,6 @@
                 </generator>
               </codeGenerators>
               <inspectDependencies>true</inspectDependencies>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>attach-artifacts</id>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>${project.build.directory}/classes/${configfile}</file>
-                  <type>xml</type>
-                  <classifier>config</classifier>
-                </artifact>
-              </artifacts>
             </configuration>
           </execution>
         </executions>

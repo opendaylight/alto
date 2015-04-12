@@ -20,6 +20,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <httpclient.version>4.4.1</httpclient.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <checkstyle.skip>true</checkstyle.skip>
@@ -62,7 +63,7 @@
         <ovsdb.southbound.version>1.1.0-SNAPSHOT</ovsdb.southbound.version>
 
         <!-- Supporting Libraries -->
-        <slf4j.version>1.7.5</slf4j.version>
+        <slf4j.version>1.7.2</slf4j.version>
         <feature.openflowplugin.version>0.1.0-SNAPSHOT</feature.openflowplugin.version>
 
         <branding.version>1.1.0-SNAPSHOT</branding.version>
@@ -116,10 +117,12 @@
 
     <modules>
         <module>alto-model</module>
+        <module>alto-config</module>
         <module>alto-provider</module>
         <module>alto-artifacts</module>
         <module>features</module>
         <module>alto-commons</module>
+        <module>alto-manager</module>
         <module>alto-services</module>
         <!--
         <module>alto-karaf</module>
