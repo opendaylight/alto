@@ -13,7 +13,13 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev1504
 public class EndpointAddressTypeBuilder {
 
     public static EndpointAddressType getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+      if ("ipv4".equals(defaultValue)) {
+        return new EndpointAddressType(EndpointAddressType.Enumeration.Ipv4);
+      } else if ("ipv6".equals(defaultValue)) {
+        return new EndpointAddressType(EndpointAddressType.Enumeration.Ipv6);
+      }
+      
+      throw new java.lang.UnsupportedOperationException("Wrong EndpointAddressType");
     }
 
 }
