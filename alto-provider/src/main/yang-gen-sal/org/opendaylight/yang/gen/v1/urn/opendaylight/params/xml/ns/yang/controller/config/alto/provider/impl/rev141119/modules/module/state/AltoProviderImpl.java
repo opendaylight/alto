@@ -10,9 +10,6 @@ import org.opendaylight.yangtools.yang.binding.Augmentable;
  * &lt;br&gt;(Source path: &lt;i&gt;META-INF/yang/alto-provider-impl.yang&lt;/i&gt;):
  * &lt;pre&gt;
  * case alto-provider-impl {
- *     leaf toasts-made {
- *         type uint32;
- *     }
  * }
  * &lt;/pre&gt;
  * The schema path to identify an instance is
@@ -30,7 +27,6 @@ public interface AltoProviderImpl
 
     public static final QName QNAME = org.opendaylight.yangtools.yang.common.QName.cachedReference(org.opendaylight.yangtools.yang.common.QName.create("urn:opendaylight:params:xml:ns:yang:controller:config:alto-provider:impl","2014-11-19","alto-provider-impl"));
 
-    java.lang.Long getToastsMade();
 
 }
 

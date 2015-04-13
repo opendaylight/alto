@@ -13,6 +13,9 @@ public class FormatValidator {
     private static final String VALID_CHARSET_WITH_DOT = VALID_CHARSET + "\\.";
     private static final Pattern VALID_ID_PATTERN_WITH_DOT
                             = Pattern.compile("^["+VALID_CHARSET_WITH_DOT+"]{1,64}$");
+    private static final String VALID_TAG_CHARSET = "!-~";
+    private static final Pattern VALID_TAG_PATTERN 
+                            = Pattern.compile("^["+VALID_TAG_CHARSET+"]{1,64}$}");
 
     public static boolean validId(String id) {
         return VALID_ID_PATTERN.matcher(id).matches();
@@ -44,6 +47,12 @@ public class FormatValidator {
         return validIdWithDots(id);
     }
 
+    /**
+     * RFC 7285 section 10.3
+     * */
+    public static boolean validTag(String tag) {
+        return VALID_TAG_PATTERN.matcher(tag).matches();
+    }
     /**
      * RFC 7285 section 10.8.1
      * */

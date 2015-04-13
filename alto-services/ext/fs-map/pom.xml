@@ -6,17 +6,17 @@
 
   <parent>
     <groupId>org.opendaylight.alto</groupId>
-    <artifactId>alto-parent</artifactId>
+    <artifactId>services.ext</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
-  <groupId>org.opendaylight.alto</groupId>
-  <artifactId>alto-commons</artifactId>
+  <artifactId>services.ext.fs-map</artifactId>
   <packaging>bundle</packaging>
 
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -54,23 +54,23 @@
         <configuration>
           <instructions>
             <Import-Package>
-              com.fasterxml.jackson.annotation,
-              com.fasterxml.jackson.databind,
+              org.opendaylight.alto.commons.types.rfc7285,
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
+              org.slf4j,
             </Import-Package>
             <Export-Package>
-              org.opendaylight.alto.commons.*;
-              org.opendaylight.alto.commons.types.*;
-              org.opendaylight.alto.commons.types.rfc7285.*;
+              org.opendaylight.alto.services.ext.fsmap;
             </Export-Package>
             <Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
           </instructions>
         </configuration>
       </plugin>
+ 
     </plugins>
   </build>
 
   <dependencies>
+
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>alto-model</artifactId>
@@ -78,19 +78,11 @@
     </dependency>
 
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      </dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>commons</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      </dependency>
   </dependencies>
 </project>
 

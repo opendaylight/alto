@@ -28,80 +28,75 @@ import org.slf4j.LoggerFactory;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 
-public class AltoProvider implements AltoServiceService, DataChangeListener,
-  AltoProviderRuntimeMXBean, AutoCloseable {
+public class AltoProvider implements
+            AltoServiceService, DataChangeListener,
+            AltoProviderRuntimeMXBean, AutoCloseable {
 
-  private static final Logger log = LoggerFactory.getLogger(AltoProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(AltoProvider.class);
 
-  public static final InstanceIdentifier<Resources> ALTO_IID = InstanceIdentifier
-      .builder(Resources.class).build();
+    public static final InstanceIdentifier<Resources> ALTO_IID
+                        = InstanceIdentifier.builder(Resources.class).build();
   
-  private DataBroker dataProvider;
-  private final ExecutorService executor;
+    private DataBroker dataProvider;
+    private final ExecutorService executor;
   
-  public AltoProvider() {
-    this.executor = Executors.newFixedThreadPool(1);
-  }
-
-  public void setDataProvider(final DataBroker salDataProvider) {
-    this.dataProvider = salDataProvider;
-    log.info(this.getClass().getName() + " data provider initiated");
-  }
-  
-  @Override
-  public void onDataChanged(
-      final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-    DataObject dataObject = change.getUpdatedSubtree();
-    if (dataObject instanceof Resources) {
-      Resources altoResources = (Resources) dataObject;
-      log.info("onDataChanged - new ALTO config: {}", altoResources);
+    public AltoProvider() {
+        this.executor = Executors.newFixedThreadPool(1);
     }
-  }
 
-  @Override
-  public Future<RpcResult<EndpointCostServiceOutput>> endpointCostService(
-      EndpointCostServiceInput input) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Future<RpcResult<FilteredCostMapServiceOutput>> filteredCostMapService(
-      FilteredCostMapServiceInput input) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Future<RpcResult<FilteredNetworkMapServiceOutput>> filteredNetworkMapService(
-      final FilteredNetworkMapServiceInput input) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Long getToastsMade() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-  @Override
-  public void close() throws ExecutionException, InterruptedException {
-    executor.shutdown();
-    if (dataProvider != null) {
-      WriteTransaction tx = dataProvider.newWriteOnlyTransaction();
-      tx.delete(LogicalDatastoreType.CONFIGURATION, ALTO_IID);
-      Futures.addCallback(tx.submit(), new FutureCallback<Void>() {
-        @Override
-        public void onSuccess(final Void result) {
-          log.debug("Delete ALTO commit result: " + result);
-        }
-
-        @Override
-        public void onFailure(final Throwable t) {
-          log.error("Delete of ALTO failed", t);
-        }
-      });
+    public void setDataProvider(final DataBroker salDataProvider) {
+        this.dataProvider = salDataProvider;
+        log.info(this.getClass().getName() + " data provider initiated");
     }
-  }
+
+    @Override
+    public void onDataChanged(
+            final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
+        DataObject dataObject = change.getUpdatedSubtree();
+        if (dataObject instanceof Resources) {
+            Resources altoResources = (Resources) dataObject;
+            log.info("onDataChanged - new ALTO config: {}", altoResources);
+        }
+    }
+
+    @Override
+    public Future<RpcResult<EndpointCostServiceOutput>> endpointCostService(
+            EndpointCostServiceInput input) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Future<RpcResult<FilteredCostMapServiceOutput>> filteredCostMapService(
+            FilteredCostMapServiceInput input) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Future<RpcResult<FilteredNetworkMapServiceOutput>> filteredNetworkMapService(
+            final FilteredNetworkMapServiceInput input) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void close() throws ExecutionException, InterruptedException {
+        executor.shutdown();
+        if (dataProvider != null) {
+            WriteTransaction tx = dataProvider.newWriteOnlyTransaction();
+            tx.delete(LogicalDatastoreType.CONFIGURATION, ALTO_IID);
+            Futures.addCallback(tx.submit(), new FutureCallback<Void>() {
+                @Override
+                public void onSuccess(final Void result) {
+                    log.debug("Delete ALTO commit result: " + result);
+                }
+
+            @Override
+            public void onFailure(final Throwable t) {
+                log.error("Delete of ALTO failed", t);
+            }
+            });
+        }
+    }
 }

@@ -13,7 +13,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <relativePath>../</relativePath>
   </parent>
 
-  <groupId>org.opendaylight.alto</groupId>
   <artifactId>alto-features</artifactId>
   <name>${project.artifactId}</name>
   <modelVersion>4.0.0</modelVersion>
@@ -57,7 +56,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>features-mdsal</artifactId>
       <classifier>features</classifier>
-      <version>${mdsal.version}</version>
       <type>xml</type>
       <scope>runtime</scope>
     </dependency>
@@ -66,7 +64,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.controller</groupId>
       <artifactId>features-restconf</artifactId>
       <classifier>features</classifier>
-      <version>${mdsal.version}</version>
       <type>xml</type>
       <scope>runtime</scope>
     </dependency>
@@ -85,13 +82,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>alto-services</artifactId>
+      <artifactId>alto-provider</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>alto-provider</artifactId>
+      <artifactId>alto-config</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>alto-config</artifactId>
       <version>${project.version}</version>
     </dependency>
 

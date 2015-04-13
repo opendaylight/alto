@@ -9,9 +9,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>org.opendaylight.alto</groupId>
   <artifactId>alto-northbound</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <build>
@@ -31,13 +29,13 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>${bundle.plugin.version}</version>
         <extensions>true</extensions>
         <configuration>
           <instructions>
             <Import-Package>
               org.opendaylight.yang.gen.v1.urn.opendaylight.alto.*,
-              org.opendaylight.alto.services,
+              org.opendaylight.alto.services.ext.fake,
+              org.opendaylight.alto.services.api.rfc7285,
               org.opendaylight.alto.commons.*,
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
               org.apache.commons.logging,
@@ -67,8 +65,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.version}</version>
-
         <executions>
           <execution>
             <phase>process-sources</phase>
@@ -95,7 +91,6 @@
           </dependency>
         </dependencies>
       </plugin>
-
     </plugins>
   </build>
 
@@ -103,8 +98,7 @@
     <dependency>
       <groupId>org.opendaylight.controller.thirdparty</groupId>
       <artifactId>com.sun.jersey.jersey-servlet</artifactId>
-      <version>${jersey.servlet.version}</version>
-    </dependency>
+      </dependency>
 
     <dependency>
       <groupId>org.opendaylight.controller</groupId>
@@ -115,8 +109,7 @@
     <dependency>
       <groupId>org.codehaus.enunciate</groupId>
       <artifactId>enunciate-core-annotations</artifactId>
-      <version>${enunciate.version}</version>
-    </dependency>
+      </dependency>
 
     <dependency>
       <groupId>org.opendaylight.controller.thirdparty</groupId>
@@ -127,20 +120,17 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
+      </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
+      </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>${jackson.version}</version>
-    </dependency>
+      </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -156,10 +146,15 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>alto-services</artifactId>
+      <artifactId>service-api-rfc7285</artifactId>
       <version>${project.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>services.ext.fake</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
 

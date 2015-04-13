@@ -68,12 +68,6 @@ module alto-provider-impl {
     augment "/config:modules/config:module/config:state" {
         case alto-provider-impl {
             when "/config:modules/config:module/config:type = 'alto-provider-impl'";
-
-            leaf toasts-made {
-                type uint32;
-            }
-
-            rpcx:rpc-context-instance "clear-toasts-made-rpc";
         }
     }
 }

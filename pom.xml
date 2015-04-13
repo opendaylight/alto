@@ -10,7 +10,6 @@
         <groupId>org.opendaylight.odlparent</groupId>
         <artifactId>odlparent</artifactId>
         <version>1.5.0-SNAPSHOT</version>
-        <relativePath/>
     </parent>
 
     <groupId>org.opendaylight.alto</groupId>
@@ -54,7 +53,6 @@
         <jersey.servlet.version>1.17</jersey.servlet.version>
         <jersey.json.version>1.17</jersey.json.version>
         <jackson.version>2.3.2</jackson.version>
-        <config.version>0.3.0-SNAPSHOT</config.version>
 
         <yangtools.version>0.7.0-SNAPSHOT</yangtools.version>
         <yangtools.binding.version>0.7.0-SNAPSHOT</yangtools.binding.version>
@@ -119,14 +117,12 @@
         <module>alto-model</module>
         <module>alto-config</module>
         <module>alto-provider</module>
-        <module>alto-artifacts</module>
         <module>features</module>
         <module>alto-commons</module>
+        <module>alto-services/api</module>
+        <module>alto-services/ext</module>
+        <module>alto-services/provider</module>
         <module>alto-manager</module>
-        <module>alto-services</module>
-        <!--
-        <module>alto-karaf</module>
-        -->
         <module>alto-northbound</module>
     </modules>
 
@@ -135,30 +131,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-              <groupId>org.jacoco</groupId>
-              <artifactId>jacoco-maven-plugin</artifactId>
-              <configuration>
-                <includes>
-                  <include>org.opendaylight.sfc.*</include>
-                </includes>
-              </configuration>
-              <executions>
-                <execution>
-                  <id>pre-test</id>
-                  <goals>
-                    <goal>prepare-agent</goal>
-                  </goals>
-                </execution>
-                <execution>
-                  <id>post-test</id>
-                  <goals>
-                    <goal>report</goal>
-                  </goals>
-                  <phase>test</phase>
-                </execution>
-              </executions>
             </plugin>
         </plugins>
         <pluginManagement>

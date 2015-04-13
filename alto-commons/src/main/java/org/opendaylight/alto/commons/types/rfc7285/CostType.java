@@ -5,14 +5,28 @@ import java.util.Arrays;
 
 public class CostType {
 
-    @JsonProperty("cost-metric")
-    public String metric;
-
     @JsonProperty("cost-mode")
     public String mode;
 
+    @JsonProperty("cost-metric")
+    public String metric;
+
     @JsonProperty("description")
     public String description;
+
+    public CostType() {
+    }
+
+    public CostType(String mode, String metric) {
+        this.mode = mode;
+        this.metric = metric;
+    }
+
+    public CostType(String mode, String metric, String description) {
+        this.mode = mode;
+        this.metric = metric;
+        this.description = description;
+    }
 
     @Override
     public int hashCode() {

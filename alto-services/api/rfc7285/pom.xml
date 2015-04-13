@@ -6,13 +6,13 @@
 
   <parent>
     <groupId>org.opendaylight.alto</groupId>
-    <artifactId>alto-parent</artifactId>
+    <artifactId>services.api</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
+    <relativePath>../</relativePath>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
-  <artifactId>alto-commons</artifactId>
+  <artifactId>service-api-rfc7285</artifactId>
   <packaging>bundle</packaging>
 
   <build>
@@ -20,6 +20,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.version}</version>
+
         <executions>
           <execution>
             <phase>process-sources</phase>
@@ -46,7 +48,7 @@
           </dependency>
         </dependencies>
       </plugin>
-
+        
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
@@ -54,20 +56,18 @@
         <configuration>
           <instructions>
             <Import-Package>
-              com.fasterxml.jackson.annotation,
-              com.fasterxml.jackson.databind,
-              org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
+              org.opendaylight.alto.commons.types.rfc7285,
             </Import-Package>
             <Export-Package>
-              org.opendaylight.alto.commons.*;
-              org.opendaylight.alto.commons.types.*;
-              org.opendaylight.alto.commons.types.rfc7285.*;
+              org.opendaylight.alto.services.api.rfc7285;
             </Export-Package>
             <Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
           </instructions>
         </configuration>
       </plugin>
+ 
     </plugins>
+
   </build>
 
   <dependencies>
@@ -78,19 +78,10 @@
     </dependency>
 
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      </dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>alto-commons</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
 
