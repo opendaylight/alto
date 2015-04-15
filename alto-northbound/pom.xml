@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.opendaylight.alto</groupId>
     <artifactId>alto-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
+    <version>0.1.0-SNAPSHOT</version>
+    <relativePath>../</relativePath>
   </parent>
+
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>alto-northbound</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <build>
@@ -63,39 +61,6 @@
           <manifestLocation>${project.basedir}/src/main/resources/META-INF</manifestLocation>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.version}</version>
-
-        <executions>
-          <execution>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-
-        <configuration>
-          <failsOnError>true</failsOnError>
-          <configLocation>controller/checkstyle.xml</configLocation>
-          <consoleOutput>true</consoleOutput>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-          <sourceDirectory>${project.basedir}</sourceDirectory>
-          <excludes>**\/target\/,**\/bin\/,**\/third-party,**\/yang-gen-sal</excludes>
-        </configuration>
-
-        <dependencies>
-          <dependency>
-            <groupId>org.opendaylight.controller</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${controller.checkstyle.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-
     </plugins>
   </build>
 
@@ -103,7 +68,6 @@
     <dependency>
       <groupId>org.opendaylight.controller.thirdparty</groupId>
       <artifactId>com.sun.jersey.jersey-servlet</artifactId>
-      <version>${jersey.servlet.version}</version>
     </dependency>
 
     <dependency>
@@ -115,7 +79,6 @@
     <dependency>
       <groupId>org.codehaus.enunciate</groupId>
       <artifactId>enunciate-core-annotations</artifactId>
-      <version>${enunciate.version}</version>
     </dependency>
 
     <dependency>
@@ -127,19 +90,16 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>${jackson.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>${jackson.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>${jackson.version}</version>
     </dependency>
 
     <dependency>
@@ -162,4 +122,3 @@
 
   </dependencies>
 </project>
-
