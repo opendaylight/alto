@@ -59,7 +59,7 @@ public class JSONMapper {
     }
 
     public CostMap.Filter asCostMapFilter(String json) throws Exception {
-        return mapper.readValue(json, CostMap.Filter.class); 
+        return mapper.readValue(json, CostMap.Filter.class);
     }
 
     public VersionTag asVersionTag(String json) throws Exception {

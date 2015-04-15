@@ -2,7 +2,6 @@ package org.opendaylight.alto.northbound.exception;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.opendaylight.alto.commons.types.rfc7285.MediaType;
 

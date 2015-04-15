@@ -36,10 +36,10 @@ public class AltoProvider implements
 
     public static final InstanceIdentifier<Resources> ALTO_IID
                         = InstanceIdentifier.builder(Resources.class).build();
-  
+
     private DataBroker dataProvider;
     private final ExecutorService executor;
-  
+
     public AltoProvider() {
         this.executor = Executors.newFixedThreadPool(1);
     }

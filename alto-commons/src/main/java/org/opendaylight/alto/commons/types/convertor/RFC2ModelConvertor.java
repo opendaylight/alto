@@ -10,14 +10,12 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.network.map.MapBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.network.map.MapKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.network.maps.NetworkMapBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.network.maps.NetworkMapKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.EndpointAddressType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.PidName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ResourceId;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.TagString;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.endpoint.address.group.EndpointAddressGroup;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.endpoint.address.group.EndpointAddressGroupBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.endpoint.address.group.EndpointAddressGroupKey;
 
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285Type;
 import org.opendaylight.alto.commons.types.model150404.ModelType;
@@ -65,7 +63,7 @@ public class RFC2ModelConvertor {
             buildAddressGroup(EndpointAddressType.Enumeration.Ipv6, str2IpPrefix(addressGroup.ipv6)),
         };
 
-        return Arrays.asList(result); 
+        return Arrays.asList(result);
     }
 
     private EndpointAddressGroup buildAddressGroup(EndpointAddressType.Enumeration type, List<IpPrefix> prefixes) {

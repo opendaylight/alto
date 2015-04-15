@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class AltoProviderModule extends AbstractAltoProviderModule {
     private static final Logger log = LoggerFactory.getLogger(AltoProviderModule.class);
-  
+
     public AltoProviderModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier, org.opendaylight.controller.config.api.DependencyResolver dependencyResolver) {
         super(identifier, dependencyResolver);
     }
@@ -29,29 +29,29 @@ public class AltoProviderModule extends AbstractAltoProviderModule {
 
     @Override
     public java.lang.AutoCloseable createInstance() {
-		final AltoProvider altoProvider = new AltoProvider();
+        final AltoProvider altoProvider = new AltoProvider();
 
-		DataBroker dataBrokerService = getDataBrokerDependency();
-		altoProvider.setDataProvider(dataBrokerService);
-		
-		final BindingAwareBroker.RpcRegistration<AltoServiceService> rpcRegistration = getRpcRegistryDependency()
+        DataBroker dataBrokerService = getDataBrokerDependency();
+        altoProvider.setDataProvider(dataBrokerService);
+
+        final BindingAwareBroker.RpcRegistration<AltoServiceService> rpcRegistration = getRpcRegistryDependency()
             .addRpcImplementation(AltoServiceService.class, altoProvider);
-		
-		final ListenerRegistration<DataChangeListener> altoDataChangeListenerRegistration =
-		    dataBrokerService.registerDataChangeListener(LogicalDatastoreType.CONFIGURATION, AltoProvider.ALTO_IID, altoProvider, DataChangeScope.SUBTREE);
-		final AltoProviderRuntimeRegistration runtimeReg = getRootRuntimeBeanRegistratorWrapper().register(altoProvider);
-		
-		final class AutoCloseableAlto implements AutoCloseable {
-			@Override
-			public void close() throws Exception {
-			    rpcRegistration.close();
-			    altoDataChangeListenerRegistration.close();
-			    runtimeReg.close();
-			    altoProvider.close();
-			}
-		}
 
-		return new AutoCloseableAlto();
+        final ListenerRegistration<DataChangeListener> altoDataChangeListenerRegistration =
+            dataBrokerService.registerDataChangeListener(LogicalDatastoreType.CONFIGURATION, AltoProvider.ALTO_IID, altoProvider, DataChangeScope.SUBTREE);
+        final AltoProviderRuntimeRegistration runtimeReg = getRootRuntimeBeanRegistratorWrapper().register(altoProvider);
+
+        final class AutoCloseableAlto implements AutoCloseable {
+            @Override
+            public void close() throws Exception {
+                rpcRegistration.close();
+                altoDataChangeListenerRegistration.close();
+                runtimeReg.close();
+                altoProvider.close();
+            }
+        }
+
+        return new AutoCloseableAlto();
     }
 
 }

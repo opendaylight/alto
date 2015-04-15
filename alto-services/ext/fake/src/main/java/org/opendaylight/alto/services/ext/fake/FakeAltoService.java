@@ -13,7 +13,7 @@ public class FakeAltoService implements AltoService {
 
     private JSONMapper mapper = new JSONMapper();
 
-    private static final String NETWORKMAP_JSON = 
+    private static final String NETWORKMAP_JSON =
             "{"
         +       "\"meta\" : {"
         +           "\"vtag\": {"
@@ -43,7 +43,7 @@ public class FakeAltoService implements AltoService {
         +           "}"
         +       "}"
         +   "}";
-    
+
     private static final String DEFAULT_NETWORKMAP_ID = "default-networkmap";
     private static final String DEFAULT_NETWORKMAP_TAG = "3ee2cb7e8d63d9fab71b9b34cbf764436315542e";
     private NetworkMap networkMap = null;
@@ -68,7 +68,7 @@ public class FakeAltoService implements AltoService {
         +           "\"PID3\": { \"PID1\": 20, \"PID2\": 15 }"
         +       "}"
         +   "}";
-    
+
     private static final String DEFAULT_COSTMAP_ID = "default-costmap";
 
     private CostMap costMap = null;
@@ -82,7 +82,7 @@ public class FakeAltoService implements AltoService {
             costMap = null;
         }
     }
-    
+
     public CostMap getCostMap(String id) {
         if (!DEFAULT_COSTMAP_ID.equals(id))
             return null;

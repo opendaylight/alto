@@ -32,16 +32,16 @@ import com.fasterxml.jackson.core.JsonToken;
 
 @Command(scope = "alto", name = "load", description = "Alto Manager")
 public class AltoManager extends OsgiCommandSupport {
-  
+
   private static final Logger log = LoggerFactory.getLogger(AltoManager.class);
   private JsonFactory jsonF = new JsonFactory();
   private HttpClient httpClient;
-  
+
   public AltoManager () {
     httpClient = initiateHttpClient();
     log.info(this.getClass().getName() + " Initiated");
   }
-  
+
   private HttpClient initiateHttpClient() {
     CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
     credentialsProvider.setCredentials(AuthScope.ANY,
@@ -64,13 +64,13 @@ public class AltoManager extends OsgiCommandSupport {
     }
     return null;
   }
-  
+
   private void putResources() throws IOException {
     log.info("Loading Resources From " + path);
     String data = readFromFile(path);
     httpPut(AltoManagerConstants.HOST, data);
   }
-  
+
   private void putNetworkMap() throws IOException {
     log.info("Loading Network Map From " + this.path);
     String data = readFromFile(path);
@@ -83,7 +83,7 @@ public class AltoManager extends OsgiCommandSupport {
     log.info("Url: " + url);
     httpPut(url, data);
   }
-  
+
   private void httpPut(String url, String data) throws IOException {
     HttpPut httpput = new HttpPut(url);
     httpput.setHeader(HTTP.CONTENT_TYPE, AltoManagerConstants.JSON_CONTENT_TYPE);
@@ -96,7 +96,7 @@ public class AltoManager extends OsgiCommandSupport {
     return new String(Files.readAllBytes(Paths.get(path)),
         StandardCharsets.UTF_8);
   }
-  
+
   private void handleResponse(HttpResponse response) throws ParseException, IOException {
     HttpEntity entity = response.getEntity();
     if (entity != null) {
@@ -108,7 +108,7 @@ public class AltoManager extends OsgiCommandSupport {
       }
     }
   }
-  
+
   private String resourceIdFromNetworkMap(String jsonString) throws JsonParseException, IOException {
     JsonParser jParser = jsonF.createParser(jsonString);
     while (jParser.nextToken() != JsonToken.END_OBJECT) {
@@ -118,14 +118,14 @@ public class AltoManager extends OsgiCommandSupport {
         String resourceId = jParser.getText();
         return resourceId;
       }
-    }  
+    }
     return null;
   }
-  
+
   private void postResources(String path) throws IOException {
     log.info("Loading Resources From " + path);
     String content = readFromFile(path);
-     
+
     HttpPost httppost = new HttpPost(AltoManagerConstants.HOST);
     httppost.setHeader(HTTP.CONTENT_TYPE, AltoManagerConstants.JSON_CONTENT_TYPE);
     httppost.setEntity(new StringEntity(content));

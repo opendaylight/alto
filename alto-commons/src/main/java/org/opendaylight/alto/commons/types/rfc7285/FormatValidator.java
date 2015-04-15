@@ -14,7 +14,7 @@ public class FormatValidator {
     private static final Pattern VALID_ID_PATTERN_WITH_DOT
                             = Pattern.compile("^["+VALID_CHARSET_WITH_DOT+"]{1,64}$");
     private static final String VALID_TAG_CHARSET = "!-~";
-    private static final Pattern VALID_TAG_PATTERN 
+    private static final Pattern VALID_TAG_PATTERN
                             = Pattern.compile("^["+VALID_TAG_CHARSET+"]{1,64}$}");
 
     public static boolean validId(String id) {
