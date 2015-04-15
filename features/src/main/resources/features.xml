@@ -45,7 +45,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-extension' version='${project.version}' description='Opendaylight :: alto :: extension'>
-    <feature version='${project.version}'>odl-alto-utils</feature>
+    <feature version='${project.version}'>odl-alto-commons</feature>
     <bundle>mvn:org.opendaylight.alto/services.ext.fs-map/${project.version}</bundle>
   </feature>
 
@@ -70,10 +70,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${jersey.version}'>odl-base-jersey</feature>
     <feature version='${war.version}'>war</feature>
     <feature version='${controller.commons.northbound.version}'>odl-adsal-northbound</feature>
-    <feature version='${project.version}'>odl-alto-utils</feature>
+    <feature version='${project.version}'>odl-alto-commons</feature>
     <bundle>mvn:org.opendaylight.alto/service-api-rfc7285/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto/services.ext.fake/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto/alto-northbound/${project.version}</bundle>
   </feature>
 
+  <feature name='odl-alto-integration-test' version='${project.version}' description='Opendaylight :: alto :: IntegrationTest'>
+    <feature version='${project.version}'>odl-alto-northbound</feature>
+    <feature version='${project.version}'>odl-alto-manager</feature>
+  </feature>
 </features>
