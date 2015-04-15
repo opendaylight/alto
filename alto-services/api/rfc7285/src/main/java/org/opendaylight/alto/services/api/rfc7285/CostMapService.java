@@ -25,5 +25,5 @@ public interface CostMapService {
     public Boolean validateCostMapFilter(String id, CostMap.Filter filter);
 
     public Boolean validateCostMapFilter(VersionTag vtag, CostMap.Filter filter);
- 
+
 }

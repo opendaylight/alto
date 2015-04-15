@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.LinkedHashMap;
 
 public class Endpoint {
-  
+
     public static class AddressGroup extends Extensible {
 
         @JsonIgnore

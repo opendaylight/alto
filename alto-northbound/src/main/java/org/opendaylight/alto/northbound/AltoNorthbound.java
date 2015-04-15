@@ -112,7 +112,7 @@ public class AltoNorthbound {
     @Produces({ MediaType.ALTO_NETWORKMAP, MediaType.ALTO_ERROR })
     public Response retrieveDefaultNetworkMap() throws Exception {
         checkAltoService();
-        
+
         NetworkMap map = altoService.getDefaultNetworkMap();
         if (map == null)
             return fail(Status.NOT_FOUND, null);
@@ -149,7 +149,7 @@ public class AltoNorthbound {
             return fail(Status.NOT_FOUND, vtag);
         return success(map, MediaType.ALTO_NETWORKMAP);
     }
-                                     
+
     @Path("/costmap/{id}")
     @GET
     @Produces({ MediaType.ALTO_COSTMAP, MediaType.ALTO_ERROR})
@@ -239,7 +239,7 @@ public class AltoNorthbound {
             return fail(Status.NOT_FOUND, id);
         return success(map, MediaType.ALTO_NETWORKMAP);
     }
- 
+
     @Path("/filtered/networkmap/{id}/{tag}")
     @POST
     @Consumes({ MediaType.ALTO_NETWORKMAP_FILTER})
@@ -261,7 +261,7 @@ public class AltoNorthbound {
         if (map == null)
             return fail(Status.NOT_FOUND, vtag);
         return success(map, MediaType.ALTO_NETWORKMAP);
-    }   
+    }
 
     @Path("/filtered/costmap/{id}")
     @POST
