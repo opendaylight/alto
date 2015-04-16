@@ -34,7 +34,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-alto-commons' version='${project.version}' description='OpenDaylight :: alto :: utils'>
     <feature version='${project.version}'>odl-alto-model</feature>
     <feature version='${jackson.version}'>odl-base-jackson</feature>
-    <bundle>mvn:org.opendaylight.alto/commons/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/alto-commons/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-provider' version='${project.version}' description='OpenDaylight :: alto :: Provider'>
