@@ -14,7 +14,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <relativePath>../</relativePath>
   </parent>
 
-  <artifactId>alto-features</artifactId>
+  <artifactId>features-alto</artifactId>
   <name>${project.artifactId}</name>
 
   <properties>
@@ -42,6 +42,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <version>${yangtools.version}</version>
       <type>xml</type>
       <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>standard</artifactId>
+      <version>${karaf.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
     </dependency>
 
     <dependency>

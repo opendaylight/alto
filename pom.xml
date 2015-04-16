@@ -45,7 +45,7 @@
     <config.version>0.3.0-SNAPSHOT</config.version>
 
     <sal.version>0.7.1-SNAPSHOT</sal.version>
-    <war.version>3.0.1</war.version>
+    <war.version>${karaf.version}</war.version>
     <mdsal.version>1.2.0-SNAPSHOT</mdsal.version>
     <jmxGeneratorPath>src/main/yang-gen-config</jmxGeneratorPath>
     <salGeneratorPath>src/main/yang-gen-sal</salGeneratorPath>

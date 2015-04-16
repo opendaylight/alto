@@ -68,7 +68,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-northbound' version='${project.version}' description='Opendaylight :: alto :: Northbound'>
     <feature version='${jersey.version}'>odl-base-jersey</feature>
-    <feature version='${war.version}'>war</feature>
+    <feature>war</feature>
     <feature version='${controller.commons.northbound.version}'>odl-adsal-northbound</feature>
     <feature version='${project.version}'>odl-alto-commons</feature>
     <bundle>mvn:org.opendaylight.alto/service-api-rfc7285/${project.version}</bundle>
