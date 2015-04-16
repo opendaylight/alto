@@ -24,6 +24,7 @@
     <module>alto-provider</module>
     <module>features</module>
     <module>alto-commons</module>
+    <module>alto-hosttracker</module>
     <module>alto-manager</module>
     <module>alto-services/api</module>
     <module>alto-services/ext</module>
@@ -39,6 +40,7 @@
 
     <ietf.model.version>2010.09.24.7-SNAPSHOT</ietf.model.version>
     <ietf.yang.types.version>2013.07.15.7-SNAPSHOT</ietf.yang.types.version>
+    <ietf.topology.version>2013.10.21.7-SNAPSHOT</ietf.topology.version>
 
     <!-- used by yangtools, but the name is strange.
          TODO: need more investigation -->
@@ -51,6 +53,7 @@
     <salGeneratorPath>src/main/yang-gen-sal</salGeneratorPath>
 
     <yangtools.version>0.7.0-SNAPSHOT</yangtools.version>
+    <l2switch.version>0.2.0-SNAPSHOT</l2switch.version>
 
     <controller.checkstyle.version> <!-- checkstyle artifact of controller -->
       0.1.0-SNAPSHOT
