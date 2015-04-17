@@ -26,7 +26,7 @@
     <module>alto-commons</module>
     <module>alto-manager</module>
     <module>alto-services/api</module>
-    <module>alto-services/ext</module>
+    <module>alto-extensions</module>
     <!-- <module>alto-karaf</module> -->
     <module>alto-northbound</module>
   </modules>
