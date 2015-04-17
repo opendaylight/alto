@@ -148,5 +148,10 @@
       <artifactId>mockito-all</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.alto-hosttracker</groupId>
+      <artifactId>alto-hosttracker-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

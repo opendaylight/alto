@@ -13,6 +13,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>model</module>
     <module>implementation</module>
     <module>config</module>
   </modules>

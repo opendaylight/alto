@@ -127,6 +127,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
 
     <dependency>
+      <groupId>org.opendaylight.alto.alto-hosttracker</groupId>
+      <artifactId>alto-hosttracker-model</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient-osgi</artifactId>
     </dependency>

@@ -19,6 +19,8 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.CheckedFuture;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150416.DstCosts1;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150416.DstCosts1Builder;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
@@ -46,7 +48,6 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.ne
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.CostMaps;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.CostMapsBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.cost.maps.CostMap;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.cost.maps.CostMapKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.cost.maps.CostMapBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.EndpointPropertyMap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.EndpointPropertyMapBuilder;
@@ -98,6 +99,12 @@ public class AltoHostTrackerImpl implements DataChangeListener {
    */
   private static final String TOPOLOGY_NAME = "flow:1";
 
+  private static final String NMRESOURCEID = "hosttracker-network-map";
+
+  private static final String CMRESOURCEID = "hosttracker-cost-map";
+
+  private static final String EPMRESOURCEID = "hosttracker-endpoint-property-map";
+
   private static final Logger log = LoggerFactory
       .getLogger(AltoHostTrackerImpl.class);
 
@@ -148,13 +155,11 @@ public class AltoHostTrackerImpl implements DataChangeListener {
   }
 
   public void writeDefaultCostMaps() {
-    ResourceId rid = new ResourceId(new ValidIdString("default-cost-map"));
-    InstanceIdentifier<org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.Meta> ALTO_CMS = InstanceIdentifier
+    ResourceId rid = new ResourceId(new ValidIdString(CMRESOURCEID));
+
+    InstanceIdentifier<CostMaps> ALTO_CMS = InstanceIdentifier
         .builder(Resources.class)
-        .child(CostMaps.class)
-        .child(CostMap.class, new CostMapKey(rid))
-        .child(org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.Meta.class)
-        .build();
+        .child(CostMaps.class).build();
 
     TagString tag = new TagString(TagGenerator.getTag(32));
     ValidIdString vis0 = new ValidIdString("pid0");
@@ -167,28 +172,39 @@ public class AltoHostTrackerImpl implements DataChangeListener {
     List<DependentVtags> dvList = new ArrayList<DependentVtags>();
     dvList.add(dv);
     CostType ct = new CostTypeBuilder().setCostMode(CostMode.Numerical)
-        .setCostMetric(new CostMetric("cm")).setDescription("test")
+        .setCostMetric(new CostMetric("hcm")).setDescription("hosttracker cost metric")
         .build();
     org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.Meta meta = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.MetaBuilder()
         .setDependentVtags(dvList).setCostType(ct).build();
 
-    DstCosts dcs = new DstCostsBuilder().setDst(pid0).build();
+    DstCosts1 dcs11 = new DstCosts1Builder().setCostInHosttracker(10).build();
+    DstCosts1 dcs12 = new DstCosts1Builder().setCostInHosttracker(0).build();
+    DstCosts dcs1 = new DstCostsBuilder().setDst(pid1).addAugmentation(DstCosts1.class, dcs12).build();
+    DstCosts dcs2 = new DstCostsBuilder().setDst(pid0).addAugmentation(DstCosts1.class, dcs11).build();
     List<DstCosts> dcsList = new ArrayList<DstCosts>();
-    dcsList.add(dcs);
+    dcsList.add(dcs1);
+    dcsList.add(dcs2);
+
     org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.Map map = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.MapBuilder()
         .setSrc(pid1).setDstCosts(dcsList).build();
+
     List<org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.Map> mapList = new ArrayList<org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.Map>();
+
     mapList.add(map);
 
     CostMap cm = new CostMapBuilder().setResourceId(rid).setTag(tag)
         .setMeta(meta).setMap(mapList).build();
+
     List<CostMap> cmList = new ArrayList<CostMap>();
+
+    cmList.add(cm);
+
     CostMaps cms = new CostMapsBuilder().setCostMap(cmList).build();
 
     final WriteTransaction writeTx = this.dataService
         .newWriteOnlyTransaction();
     try {
-      writeTx.put(LogicalDatastoreType.CONFIGURATION, ALTO_CMS, meta,
+      writeTx.put(LogicalDatastoreType.CONFIGURATION, ALTO_CMS, cms,
           true);
     } catch (Exception e) {
       e.printStackTrace();
@@ -276,7 +292,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
   private List<NetworkMap> loadNetworkMapList() {
     List<NetworkMap> networkMapList = new ArrayList<NetworkMap>();
     ResourceId rid = new ResourceId(
-        new ValidIdString("default-network-map"));
+        new ValidIdString(NMRESOURCEID));
     TagString tag = new TagString(TagGenerator.getTag(32));
     ValidIdString vis = new ValidIdString("pid0");
     PidName pid = new PidName(vis);
@@ -377,7 +393,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
 
       EndpointPropertyType etp1 = new EndpointPropertyType(
           new ResourceSpecificEndpointProperty(
-              "default-endpoint-property-map.pid"));
+              EPMRESOURCEID));
       EndpointPropertyValue epv1 = new EndpointPropertyValue(
           "PID1");
 
@@ -656,7 +672,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
         }
       }
     }
-    mergeNetworkMapForAddressesList(addrsList, "default-network-map",
+    mergeNetworkMapForAddressesList(addrsList, NMRESOURCEID,
         "pid1", "ipv4");
     /*
      * Futures.addCallback(dataFuture, new
@@ -703,7 +719,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
                         HostNode hostNode = node.getAugmentation(HostNode.class);
                         if (hostNode != null) {
                           List<Addresses> addrsList = hostNode.getAddresses();
-                          removeAddressesList(addrsList, "default-network-map", "pid1", "ipv4");
+                          removeAddressesList(addrsList, NMRESOURCEID, "pid1", "ipv4");
                         }
                     }
         }
@@ -718,7 +734,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
             List<Addresses> addrsList = new ArrayList();
             addrsList.add(addrs);
             mergeNetworkMapForAddressesList(addrsList,
-                "default-network-map", "pid1", "ipv4");
+                NMRESOURCEID, "pid1", "ipv4");
             mergeEndpointPropertyMapForAddresses(addrs);
 
           } else if (dataObject instanceof Node) {
@@ -736,7 +752,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
             List<Addresses> addrsList = new ArrayList();
             addrsList.add(addrs);
             mergeNetworkMapForAddressesList(addrsList,
-                "default-network-map", "pid1", "ipv4");
+                NMRESOURCEID, "pid1", "ipv4");
             mergeEndpointPropertyMapForAddresses(addrs);
           } else if (dataObject instanceof Node) {
             log.info("createdData node");

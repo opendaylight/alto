@@ -80,6 +80,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-model</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <bundle>mvn:org.opendaylight.alto.alto-hosttracker/alto-hosttracker-impl/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.alto-hosttracker/alto-hosttracker-model/${project.version}</bundle>
     <configfile finalname="etc/opendaylight/karaf/59-altohosttracker.xml">mvn:org.opendaylight.alto.alto-hosttracker/alto-hosttracker-config/${project.version}/xml/config</configfile>
   </feature>
 

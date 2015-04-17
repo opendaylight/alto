@@ -68,7 +68,6 @@ module alto-service {
           type alto:pid-name;
         }
         key "dst";
-        uses alto:alto-cost;
       }
     }
   }
