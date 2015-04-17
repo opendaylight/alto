@@ -1,29 +1,29 @@
 package org.opendaylight.alto.services.api.rfc7285;
 
-import org.opendaylight.alto.commons.types.rfc7285.CostMap;
-import org.opendaylight.alto.commons.types.rfc7285.VersionTag;
-import org.opendaylight.alto.commons.types.rfc7285.CostType;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostType;
 
 public interface CostMapService {
 
-    public CostMap getCostMap(String id);
+    public RFC7285CostMap getCostMap(String id);
 
-    public CostMap getCostMap(VersionTag vtag);
+    public RFC7285CostMap getCostMap(RFC7285VersionTag vtag);
 
-    public CostMap getCostMap(String id, CostType type);
+    public RFC7285CostMap getCostMap(String id, RFC7285CostType type);
 
-    public CostMap getCostMap(VersionTag vtag, CostType type);
+    public RFC7285CostMap getCostMap(RFC7285VersionTag vtag, RFC7285CostType type);
 
-    public CostMap getCostMap(String id, CostMap.Filter filter);
+    public RFC7285CostMap getCostMap(String id, RFC7285CostMap.Filter filter);
 
-    public CostMap getCostMap(VersionTag vtag, CostMap.Filter filter);
+    public RFC7285CostMap getCostMap(RFC7285VersionTag vtag, RFC7285CostMap.Filter filter);
 
-    public Boolean supportCostType(String id, CostType type);
+    public Boolean supportCostType(String id, RFC7285CostType type);
 
-    public Boolean supportCostType(VersionTag vtag, CostType type);
+    public Boolean supportCostType(RFC7285VersionTag vtag, RFC7285CostType type);
 
-    public Boolean validateCostMapFilter(String id, CostMap.Filter filter);
+    public Boolean validateCostMapFilter(String id, RFC7285CostMap.Filter filter);
 
-    public Boolean validateCostMapFilter(VersionTag vtag, CostMap.Filter filter);
+    public Boolean validateCostMapFilter(RFC7285VersionTag vtag, RFC7285CostMap.Filter filter);
 
 }

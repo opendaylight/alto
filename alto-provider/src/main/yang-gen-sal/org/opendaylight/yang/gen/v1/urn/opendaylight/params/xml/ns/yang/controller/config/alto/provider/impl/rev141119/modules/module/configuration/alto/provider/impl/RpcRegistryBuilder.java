@@ -2,6 +2,7 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.control
 import java.util.Collections;
 import java.util.Map;
 import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yangtools.yang.binding.AugmentationHolder;
 import java.util.HashMap;
 import org.opendaylight.yangtools.concepts.Builder;
 import org.opendaylight.yangtools.yang.binding.Augmentation;
@@ -31,8 +32,12 @@ public class RpcRegistryBuilder implements Builder <org.opendaylight.yang.gen.v1
         this._name = base.getName();
         this._type = base.getType();
         if (base instanceof RpcRegistryImpl) {
-            RpcRegistryImpl _impl = (RpcRegistryImpl) base;
-            this.augmentation = new HashMap<>(_impl.augmentation);
+            RpcRegistryImpl impl = (RpcRegistryImpl) base;
+            this.augmentation = new HashMap<>(impl.augmentation);
+        } else if (base instanceof AugmentationHolder) {
+            @SuppressWarnings("unchecked")
+            AugmentationHolder<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry> casted =(AugmentationHolder<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>) base;
+            this.augmentation = new HashMap<>(casted.augmentations());
         }
     }
 
@@ -117,17 +122,17 @@ public class RpcRegistryBuilder implements Builder <org.opendaylight.yang.gen.v1
         private RpcRegistryImpl(RpcRegistryBuilder base) {
             this._name = base.getName();
             this._type = base.getType();
-                switch (base.augmentation.size()) {
-                case 0:
-                    this.augmentation = Collections.emptyMap();
-                    break;
-                    case 1:
-                        final Map.Entry<java.lang.Class<? extends Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>>, Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>> e = base.augmentation.entrySet().iterator().next();
-                        this.augmentation = Collections.<java.lang.Class<? extends Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>>, Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>>singletonMap(e.getKey(), e.getValue());
-                    break;
-                default :
-                    this.augmentation = new HashMap<>(base.augmentation);
-                }
+            switch (base.augmentation.size()) {
+            case 0:
+                this.augmentation = Collections.emptyMap();
+                break;
+                case 1:
+                    final Map.Entry<java.lang.Class<? extends Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>>, Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>> e = base.augmentation.entrySet().iterator().next();
+                    this.augmentation = Collections.<java.lang.Class<? extends Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>>, Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry>>singletonMap(e.getKey(), e.getValue());
+                break;
+            default :
+                this.augmentation = new HashMap<>(base.augmentation);
+            }
         }
 
         @Override

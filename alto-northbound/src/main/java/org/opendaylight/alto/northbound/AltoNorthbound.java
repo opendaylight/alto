@@ -16,19 +16,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.opendaylight.alto.commons.types.rfc7285.JSONMapper;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285JSONMapper;
 import org.opendaylight.alto.commons.types.rfc7285.FormatValidator;
 import org.opendaylight.alto.commons.types.rfc7285.MediaType;
-import org.opendaylight.alto.commons.types.rfc7285.NetworkMap;
-import org.opendaylight.alto.commons.types.rfc7285.CostType;
-import org.opendaylight.alto.commons.types.rfc7285.IRD;
-import org.opendaylight.alto.commons.types.rfc7285.VersionTag;
-import org.opendaylight.alto.commons.types.rfc7285.CostMap;
-import org.opendaylight.alto.commons.types.rfc7285.Endpoint;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostType;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285IRD;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
 
 import org.opendaylight.alto.services.api.rfc7285.AltoService;
 
-import org.opendaylight.alto.services.ext.fake.FakeAltoService;
+import org.opendaylight.alto.ext.fake.FakeAltoService;
 
 import org.opendaylight.alto.northbound.exception.AltoBasicException;
 import org.opendaylight.alto.northbound.exception.AltoBadFormatException;
@@ -42,7 +42,7 @@ public class AltoNorthbound {
     private static final Logger logger = LoggerFactory.getLogger(AltoNorthbound.class);
 
     private AltoService altoService = new FakeAltoService();
-    private JSONMapper mapper = new JSONMapper();
+    private RFC7285JSONMapper mapper = new RFC7285JSONMapper();
 
     private void checkAltoService() throws Exception {
         if (altoService == null)
@@ -87,7 +87,7 @@ public class AltoNorthbound {
     public Response retrieveIRD() throws Exception {
         checkAltoService();
 
-        IRD ird = altoService.getDefaultIRD();
+        RFC7285IRD ird = altoService.getDefaultIRD();
         if (ird == null)
             return fail(Status.NOT_FOUND, null);
         return success(ird, MediaType.ALTO_DIRECTORY);
@@ -101,7 +101,7 @@ public class AltoNorthbound {
         checkAltoService();
         checkResourceId(id);
 
-        IRD ird = altoService.getIRD(id);
+        RFC7285IRD ird = altoService.getIRD(id);
         if (ird == null)
             return fail(Status.NOT_FOUND, id);
         return success(ird, MediaType.ALTO_DIRECTORY);
@@ -113,7 +113,7 @@ public class AltoNorthbound {
     public Response retrieveDefaultNetworkMap() throws Exception {
         checkAltoService();
 
-        NetworkMap map = altoService.getDefaultNetworkMap();
+        RFC7285NetworkMap map = altoService.getDefaultNetworkMap();
         if (map == null)
             return fail(Status.NOT_FOUND, null);
         return success(map, MediaType.ALTO_NETWORKMAP);
@@ -127,7 +127,7 @@ public class AltoNorthbound {
         checkAltoService();
         checkResourceId(id);
 
-        NetworkMap map = altoService.getNetworkMap(id);
+        RFC7285NetworkMap map = altoService.getNetworkMap(id);
         if (map == null)
             return fail(Status.NOT_FOUND, id);
         return success(map, MediaType.ALTO_NETWORKMAP);
@@ -143,8 +143,8 @@ public class AltoNorthbound {
         checkResourceId(id);
         checkTag(tag);
 
-        VersionTag vtag = new VersionTag(id, tag);
-        NetworkMap map = altoService.getNetworkMap(vtag);
+       RFC7285VersionTag vtag = new RFC7285VersionTag(id, tag);
+        RFC7285NetworkMap map = altoService.getNetworkMap(vtag);
         if (map == null)
             return fail(Status.NOT_FOUND, vtag);
         return success(map, MediaType.ALTO_NETWORKMAP);
@@ -157,7 +157,7 @@ public class AltoNorthbound {
         checkAltoService();
         checkResourceId(id);
 
-        CostMap map = altoService.getCostMap(id);
+        RFC7285CostMap map = altoService.getCostMap(id);
         if (map == null)
             return fail(Status.NOT_FOUND, id);
         return success(map, MediaType.ALTO_COSTMAP);
@@ -173,8 +173,8 @@ public class AltoNorthbound {
         checkResourceId(id);
         checkTag(tag);
 
-        VersionTag vtag = new VersionTag(id, tag);
-        CostMap map = altoService.getCostMap(vtag);
+       RFC7285VersionTag vtag = new RFC7285VersionTag(id, tag);
+        RFC7285CostMap map = altoService.getCostMap(vtag);
         if (map == null)
             return fail(Status.NOT_FOUND, vtag);
         return success(map, MediaType.ALTO_COSTMAP);
@@ -190,10 +190,10 @@ public class AltoNorthbound {
         checkAltoService();
         checkResourceId(id);
 
-        CostType costType = new CostType(mode, metric);
+        RFC7285CostType costType = new RFC7285CostType(mode, metric);
         if (!altoService.supportCostType(id, costType))
             return fail(Status.NOT_FOUND, costType);
-        CostMap map = altoService.getCostMap(id, costType);
+        RFC7285CostMap map = altoService.getCostMap(id, costType);
         if (map == null)
             return fail(Status.NOT_FOUND, id);
         return success(map, MediaType.ALTO_COSTMAP);
@@ -211,11 +211,11 @@ public class AltoNorthbound {
         checkResourceId(id);
         checkTag(tag);
 
-        VersionTag vtag = new VersionTag(id, tag);
-        CostType costType = new CostType(mode, metric);
+       RFC7285VersionTag vtag = new RFC7285VersionTag(id, tag);
+        RFC7285CostType costType = new RFC7285CostType(mode, metric);
         if (!altoService.supportCostType(vtag, costType))
             return fail(Status.NOT_FOUND, costType);
-        CostMap map = altoService.getCostMap(vtag, costType);
+        RFC7285CostMap map = altoService.getCostMap(vtag, costType);
         if (map == null)
             return fail(Status.NOT_FOUND, vtag);
         return success(map, MediaType.ALTO_COSTMAP);
@@ -230,11 +230,11 @@ public class AltoNorthbound {
         checkAltoService();
         checkResourceId(id);
 
-        NetworkMap.Filter filter = mapper.asNetworkMapFilter(filterJSON);
+        RFC7285NetworkMap.Filter filter = mapper.asNetworkMapFilter(filterJSON);
 
         if (!altoService.validateNetworkMapFilter(id, filter))
             return fail(Status.BAD_REQUEST, filter);
-        NetworkMap map = altoService.getNetworkMap(id, filter);
+        RFC7285NetworkMap map = altoService.getNetworkMap(id, filter);
         if (map == null)
             return fail(Status.NOT_FOUND, id);
         return success(map, MediaType.ALTO_NETWORKMAP);
@@ -252,12 +252,12 @@ public class AltoNorthbound {
         checkResourceId(id);
         checkTag(tag);
 
-        VersionTag vtag = new VersionTag(id, tag);
-        NetworkMap.Filter filter = mapper.asNetworkMapFilter(filterJSON);
+       RFC7285VersionTag vtag = new RFC7285VersionTag(id, tag);
+        RFC7285NetworkMap.Filter filter = mapper.asNetworkMapFilter(filterJSON);
         if (!altoService.validateNetworkMapFilter(vtag, filter))
             return fail(Status.BAD_REQUEST, filter);
 
-        NetworkMap map = altoService.getNetworkMap(vtag, filter);
+        RFC7285NetworkMap map = altoService.getNetworkMap(vtag, filter);
         if (map == null)
             return fail(Status.NOT_FOUND, vtag);
         return success(map, MediaType.ALTO_NETWORKMAP);
@@ -272,11 +272,11 @@ public class AltoNorthbound {
         checkAltoService();
         checkResourceId(id);
 
-        CostMap.Filter filter = mapper.asCostMapFilter(filterJSON);
+        RFC7285CostMap.Filter filter = mapper.asCostMapFilter(filterJSON);
         if (!altoService.validateCostMapFilter(id, filter))
             return fail(Status.BAD_REQUEST, filter);
 
-        CostMap map = altoService.getCostMap(id, filter);
+        RFC7285CostMap map = altoService.getCostMap(id, filter);
         if (map == null)
             return fail(Status.NOT_FOUND, id);
         return success(map, MediaType.ALTO_COSTMAP);
@@ -293,12 +293,12 @@ public class AltoNorthbound {
         checkResourceId(id);
         checkTag(tag);
 
-        VersionTag vtag = new VersionTag(id, tag);
-        CostMap.Filter filter = mapper.asCostMapFilter(filterJSON);
+       RFC7285VersionTag vtag = new RFC7285VersionTag(id, tag);
+        RFC7285CostMap.Filter filter = mapper.asCostMapFilter(filterJSON);
         if (!altoService.validateCostMapFilter(vtag, filter))
             return fail(Status.BAD_REQUEST, filter);
 
-        CostMap map = altoService.getCostMap(vtag, filter);
+        RFC7285CostMap map = altoService.getCostMap(vtag, filter);
         if (map == null)
             return fail(Status.NOT_FOUND, vtag);
         return success(map, MediaType.ALTO_COSTMAP);
@@ -314,8 +314,8 @@ public class AltoNorthbound {
         checkAltoService();
         checkResourceId(id);
 
-        Endpoint.PropertyRequest request = mapper.asPropertyRequest(params);
-        Endpoint.PropertyResponse response = altoService.getEndpointProperty(id, request);
+        RFC7285Endpoint.PropertyRequest request = mapper.asPropertyRequest(params);
+        RFC7285Endpoint.PropertyResponse response = altoService.getEndpointProperty(id, request);
         if (response == null)
             return fail(Status.NOT_FOUND, request);
         return success(response, MediaType.ALTO_ENDPOINT_PROP);
@@ -333,9 +333,9 @@ public class AltoNorthbound {
         checkResourceId(id);
         checkTag(tag);
 
-        VersionTag vtag = new VersionTag(id, tag);
-        Endpoint.PropertyRequest request = mapper.asPropertyRequest(params);
-        Endpoint.PropertyResponse response = altoService.getEndpointProperty(vtag, request);
+       RFC7285VersionTag vtag = new RFC7285VersionTag(id, tag);
+        RFC7285Endpoint.PropertyRequest request = mapper.asPropertyRequest(params);
+        RFC7285Endpoint.PropertyResponse response = altoService.getEndpointProperty(vtag, request);
         if (response == null)
             return fail(Status.NOT_FOUND, request);
         return success(response, MediaType.ALTO_ENDPOINT_PROP);
@@ -351,8 +351,8 @@ public class AltoNorthbound {
         checkAltoService();
         checkResourceId(id);
 
-        Endpoint.CostRequest request = mapper.asCostRequest(params);
-        Endpoint.CostResponse response = altoService.getEndpointCost(id, request);
+        RFC7285Endpoint.CostRequest request = mapper.asCostRequest(params);
+        RFC7285Endpoint.CostResponse response = altoService.getEndpointCost(id, request);
         if (response == null)
             return fail(Status.NOT_FOUND, request);
         return success(response, MediaType.ALTO_ENDPOINT_COST);
@@ -370,9 +370,9 @@ public class AltoNorthbound {
         checkResourceId(id);
         checkTag(tag);
 
-        VersionTag vtag = new VersionTag(id, tag);
-        Endpoint.CostRequest request = mapper.asCostRequest(params);
-        Endpoint.CostResponse response = altoService.getEndpointCost(vtag, request);
+        RFC7285VersionTag vtag = new RFC7285VersionTag(id, tag);
+        RFC7285Endpoint.CostRequest request = mapper.asCostRequest(params);
+        RFC7285Endpoint.CostResponse response = altoService.getEndpointCost(vtag, request);
         if (response == null)
             return fail(Status.NOT_FOUND, request);
         return success(response, MediaType.ALTO_ENDPOINT_COST);

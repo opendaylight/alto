@@ -1,11 +1,11 @@
 package org.opendaylight.alto.services.api.rfc7285;
 
-import org.opendaylight.alto.commons.types.rfc7285.IRD;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285IRD;
 
 public interface IRDService {
 
-    public IRD getDefaultIRD();
+    public RFC7285IRD getDefaultIRD();
 
-    public IRD getIRD(String id);
+    public RFC7285IRD getIRD(String id);
 
 }
