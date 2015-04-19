@@ -26,13 +26,14 @@
     <module>alto-commons</module>
     <module>alto-manager</module>
     <module>alto-services/api</module>
-    <module>alto-services/ext</module>
+    <module>alto-extensions</module>
     <!-- <module>alto-karaf</module> -->
     <module>alto-northbound</module>
   </modules>
 
   <properties>
     <karaf.shell.version>2.2.11</karaf.shell.version>
+    <checkstyle.skip>true</checkstyle.skip>
 
     <!-- required by alto command line -->
     <httpclient.version>4.4.1</httpclient.version>
