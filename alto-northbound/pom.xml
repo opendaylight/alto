@@ -34,7 +34,7 @@
           <instructions>
             <Import-Package>
               org.opendaylight.yang.gen.v1.urn.opendaylight.alto.*,
-              org.opendaylight.alto.services.ext.fake,
+              org.opendaylight.alto.ext.fake,
               org.opendaylight.alto.services.api.rfc7285,
               org.opendaylight.alto.commons.*,
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
@@ -111,7 +111,7 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>services.ext.fake</artifactId>
+      <artifactId>alto-fake-extension</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

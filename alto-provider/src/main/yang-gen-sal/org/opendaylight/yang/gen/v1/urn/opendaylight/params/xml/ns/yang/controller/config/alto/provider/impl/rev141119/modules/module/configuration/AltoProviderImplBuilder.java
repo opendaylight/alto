@@ -2,6 +2,7 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.control
 import java.util.Collections;
 import java.util.Map;
 import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yangtools.yang.binding.AugmentationHolder;
 import java.util.HashMap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.RpcRegistry;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.alto.provider.impl.DataBroker;
@@ -29,8 +30,12 @@ public class AltoProviderImplBuilder implements Builder <org.opendaylight.yang.g
         this._dataBroker = base.getDataBroker();
         this._rpcRegistry = base.getRpcRegistry();
         if (base instanceof AltoProviderImplImpl) {
-            AltoProviderImplImpl _impl = (AltoProviderImplImpl) base;
-            this.augmentation = new HashMap<>(_impl.augmentation);
+            AltoProviderImplImpl impl = (AltoProviderImplImpl) base;
+            this.augmentation = new HashMap<>(impl.augmentation);
+        } else if (base instanceof AugmentationHolder) {
+            @SuppressWarnings("unchecked")
+            AugmentationHolder<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl> casted =(AugmentationHolder<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>) base;
+            this.augmentation = new HashMap<>(casted.augmentations());
         }
     }
 
@@ -92,17 +97,17 @@ public class AltoProviderImplBuilder implements Builder <org.opendaylight.yang.g
         private AltoProviderImplImpl(AltoProviderImplBuilder base) {
             this._dataBroker = base.getDataBroker();
             this._rpcRegistry = base.getRpcRegistry();
-                switch (base.augmentation.size()) {
-                case 0:
-                    this.augmentation = Collections.emptyMap();
-                    break;
-                    case 1:
-                        final Map.Entry<java.lang.Class<? extends Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>>, Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>> e = base.augmentation.entrySet().iterator().next();
-                        this.augmentation = Collections.<java.lang.Class<? extends Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>>, Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>>singletonMap(e.getKey(), e.getValue());
-                    break;
-                default :
-                    this.augmentation = new HashMap<>(base.augmentation);
-                }
+            switch (base.augmentation.size()) {
+            case 0:
+                this.augmentation = Collections.emptyMap();
+                break;
+                case 1:
+                    final Map.Entry<java.lang.Class<? extends Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>>, Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>> e = base.augmentation.entrySet().iterator().next();
+                    this.augmentation = Collections.<java.lang.Class<? extends Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>>, Augmentation<org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.controller.config.alto.provider.impl.rev141119.modules.module.configuration.AltoProviderImpl>>singletonMap(e.getKey(), e.getValue());
+                break;
+            default :
+                this.augmentation = new HashMap<>(base.augmentation);
+            }
         }
 
         @Override

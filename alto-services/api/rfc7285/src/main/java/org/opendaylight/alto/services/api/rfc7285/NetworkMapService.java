@@ -1,22 +1,22 @@
 package org.opendaylight.alto.services.api.rfc7285;
 
-import org.opendaylight.alto.commons.types.rfc7285.NetworkMap;
-import org.opendaylight.alto.commons.types.rfc7285.VersionTag;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 
 public interface NetworkMapService {
 
-    public NetworkMap getDefaultNetworkMap();
+    public RFC7285NetworkMap getDefaultNetworkMap();
 
-    public NetworkMap getNetworkMap(String id);
+    public RFC7285NetworkMap getNetworkMap(String id);
 
-    public NetworkMap getNetworkMap(VersionTag vtag);
+    public RFC7285NetworkMap getNetworkMap(RFC7285VersionTag vtag);
 
-    public NetworkMap getNetworkMap(String id, NetworkMap.Filter filter);
+    public RFC7285NetworkMap getNetworkMap(String id, RFC7285NetworkMap.Filter filter);
 
-    public NetworkMap getNetworkMap(VersionTag vtag, NetworkMap.Filter filter);
+    public RFC7285NetworkMap getNetworkMap(RFC7285VersionTag vtag, RFC7285NetworkMap.Filter filter);
 
-    public Boolean validateNetworkMapFilter(String id, NetworkMap.Filter filter);
+    public Boolean validateNetworkMapFilter(String id, RFC7285NetworkMap.Filter filter);
 
-    public Boolean validateNetworkMapFilter(VersionTag vtag, NetworkMap.Filter filter);
+    public Boolean validateNetworkMapFilter(RFC7285VersionTag vtag, RFC7285NetworkMap.Filter filter);
 
 }

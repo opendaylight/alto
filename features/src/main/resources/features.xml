@@ -26,9 +26,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-jackson-dependency' version='${project.version}' description='Opendaylight :: alto :: jackson_dependency'>
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle> 
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle> 
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle> 
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+    <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
   </feature>
 
   <feature name='odl-alto-commons' version='${project.version}' description='OpenDaylight :: alto :: utils'>
@@ -50,8 +50,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-manager' version='${project.version}' description='OpenDaylight :: alto :: Provider'>
-    <feature version='${jackson.version}'>odl-base-jackson</feature>
-    <configfile finalname="configuration/default.networkmap">mvn:org.opendaylight.alto/alto-manager/${project.version}/xml/config</configfile>
+    <feature version='${project.version}'>odl-alto-commons</feature>
     <bundle>mvn:org.apache.httpcomponents/httpclient-osgi/${httpclient.version}</bundle>
     <bundle>mvn:org.apache.httpcomponents/httpcore-osgi/${httpclient.version}</bundle>
     <bundle>mvn:org.opendaylight.alto/alto-manager/${project.version}</bundle>
