@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.alto.commons.types.alto.model.rev150404;
+package org.opendaylight.alto.commons.types.model150404;
 
 class MediaType {
 

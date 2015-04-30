@@ -455,9 +455,11 @@ module alto-service-types {
   /* meta */
   grouping IRD-meta {
     uses cost-types;
-    leaf default-alto-network-map {
-      type resource-id;
-      mandatory true;
+    container default-alto-network-map {
+      leaf resource-id {
+        type resource-id;
+        mandatory true;
+      }
     }
   }
 

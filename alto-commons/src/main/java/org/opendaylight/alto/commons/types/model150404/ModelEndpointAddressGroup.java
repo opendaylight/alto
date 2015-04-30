@@ -7,6 +7,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924.IpPrefixBuilder;
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -17,7 +18,6 @@ public class ModelEndpointAddressGroup implements EndpointAddressGroup {
 
     public static final String IPV4 = "ipv4";
     public static final String IPV6 = "ipv6";
-
 
     @JsonIgnore
     protected EndpointAddressType type;
@@ -82,7 +82,7 @@ public class ModelEndpointAddressGroup implements EndpointAddressGroup {
     }
 
     @JsonProperty("alto-service:endpoint-prefix")
-    public List<String> getJSONEndpointAddressGroup() {
+    public List<String> getJSONEndpointPrefix() {
         return prefixes;
     }
 

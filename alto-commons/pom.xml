@@ -20,11 +20,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Import-Package>
-              com.fasterxml.jackson.annotation,
-              com.fasterxml.jackson.databind,
-              org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
-            </Import-Package>
+            <Import-Package>*</Import-Package>
             <Export-Package>
               org.opendaylight.alto.commons.*;
               org.opendaylight.alto.commons.types.*;

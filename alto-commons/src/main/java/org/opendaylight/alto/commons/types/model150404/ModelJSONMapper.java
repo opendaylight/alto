@@ -1,5 +1,7 @@
 package org.opendaylight.alto.commons.types.model150404;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +16,11 @@ public class ModelJSONMapper {
         return mapper.readValue(json, ModelNetworkMap.class);
     }
 
+    public ModelEndpoint asModelEndpoint(String json) throws IOException {
+      return mapper.readValue(json, ModelEndpoint.class);
+    }
+
     public String asJSON(Object obj) throws Exception {
-        return mapper.writeValueAsString(obj);
+      return mapper.writeValueAsString(obj);
     }
 }

@@ -27,7 +27,7 @@ public class RFC2ModelNetworkMapDataConverter
         for (Map.Entry<String, RFC7285Endpoint.AddressGroup> rep: in().entrySet()) {
             ModelEndpoint mep = new ModelEndpoint();
             mep.setJSONPid(rep.getKey());
-            mep.setJSONEndpointAddressGroup(conv.reset(rep.getValue()).out());
+            mep.setJSONEndpointAddressGroup(conv.convert(rep.getValue()));
             out.add(mep);
         }
         return out;
