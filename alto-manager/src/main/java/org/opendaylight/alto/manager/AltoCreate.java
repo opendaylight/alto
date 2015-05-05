@@ -1,14 +1,16 @@
 package org.opendaylight.alto.manager;
 
-import java.io.IOException;
-
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
+import org.opendaylight.alto.commons.types.converter.RFC2ModelCostMapConverter;
+import org.opendaylight.alto.commons.types.converter.RFC2ModelEndpointPropMapConverter;
 import org.opendaylight.alto.commons.types.converter.RFC2ModelNetworkMapConverter;
+import org.opendaylight.alto.commons.types.model150404.ModelCostMap;
+import org.opendaylight.alto.commons.types.model150404.ModelEndpointPropertyMap;
 import org.opendaylight.alto.commons.types.model150404.ModelJSONMapper;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
+import org.opendaylight.alto.commons.types.model150404.ModelNetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285JSONMapper;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
+import org.opendaylight.alto.manager.AltoManagerConstants.MAP_FORMAT_TYPE;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +20,12 @@ public class AltoCreate extends AltoManager {
   
   private RFC7285JSONMapper rfcMapper = new RFC7285JSONMapper();
   private ModelJSONMapper modelMapper = new ModelJSONMapper();
-  private RFC2ModelNetworkMapConverter converter = new RFC2ModelNetworkMapConverter();
+  private RFC2ModelNetworkMapConverter networkMapConverter = new RFC2ModelNetworkMapConverter();
+  private RFC2ModelCostMapConverter costMapConverter = new RFC2ModelCostMapConverter();
+  private RFC2ModelEndpointPropMapConverter endpointPropConverter = new RFC2ModelEndpointPropMapConverter();
+
   private String data;
+  private MAP_FORMAT_TYPE format = MAP_FORMAT_TYPE.YANG;
   
   @Argument(index = 0, name = "resource-type", description = "Resource Type", required = true, multiValued = false)
   String resourceType = null;
@@ -47,45 +53,59 @@ public class AltoCreate extends AltoManager {
   
   private void putNetworkMap() throws Exception {
     log.info("Loading network map from " + this.resourceFile);
-    RFC7285NetworkMap rfcNetworkMap = rfcMapper.asNetworkMap(readFromFile(resourceFile));
-    data = createNetworkMapData(rfcNetworkMap);
-    putMap(AltoManagerConstants.NETWORK_MAP_URL, rfcNetworkMap.meta.vtag.rid);
+    ModelNetworkMap networkMap = getYangNetworkMap(readFromFile(resourceFile));
+    data = modelMapper.asJSON(networkMap);
+    putMap(AltoManagerConstants.NETWORK_MAP_URL, networkMap.rid);
   }
   
-  private String createNetworkMapData(RFC7285NetworkMap rfcNetworkMap) throws Exception {
-    String networkMapJson = modelMapper.asJSON(converter.convert(rfcNetworkMap));
-    return "{\"alto-service:network-map\":[" + networkMapJson + "]}";
+  private ModelNetworkMap getYangNetworkMap(String data) throws Exception {
+    if (MAP_FORMAT_TYPE.RFC.equals(format)) {
+      return networkMapConverter.convert(rfcMapper.asNetworkMap(data));
+    }
+    return modelMapper.asNetworkMap(data);
   }
   
   private void putCostMap() throws Exception {
     log.info("Loading cost map from " + this.resourceFile);
-    RFC7285CostMap costMap = rfcMapper.asCostMap(readFromFile(resourceFile));
-    String resourceId = getCostMapResourceId(costMap);
-    //TODO: transform it to yang format json
-    data = "";
-    putMap(AltoManagerConstants.COST_MAP_URL, resourceId);
+    ModelCostMap costMap = getYangCostMap(data);
+    data = modelMapper.asJSON(costMap);
+    putMap(AltoManagerConstants.COST_MAP_URL, costMap.rid);
   }
   
-  private void putEndpointPropertyMap() throws IOException {
+  private ModelCostMap getYangCostMap(String data) throws Exception {
+    if (MAP_FORMAT_TYPE.RFC.equals(format)) {
+      return costMapConverter.convert(rfcMapper.asCostMap(data));
+    }
+    return modelMapper.asCostMap(data);
+  }
+  
+  private void putEndpointPropertyMap() throws Exception {
     log.info("Loading endpoint property map from " + this.resourceFile);
-    //TODO: get RFC7285EndpointPropertyMap object and transform it to yang format json
-    data = "";
-    putMap(AltoManagerConstants.ENDPOINT_PROPERTY_MAP_URL, AltoManagerConstants.ENDPOINT_PROPERTY_MAP_NAME);
+    ModelEndpointPropertyMap endpointPropMap = getYangEndpointPropMap(readFromFile(resourceFile));
+    data = modelMapper.asJSON(endpointPropMap);
+    putMap(AltoManagerConstants.RESOURCES_URL, AltoManagerConstants.ENDPOINT_PROPERTY_MAP_NODE);
   }
   
-  private void putMap(String baseUrl, String resourceId) throws IOException {
+  private ModelEndpointPropertyMap getYangEndpointPropMap(String data) throws Exception {
+    if (MAP_FORMAT_TYPE.RFC.equals(format)) {
+       endpointPropConverter.convert(rfcMapper.asEndpointPropMap(data));
+    }
+    return modelMapper.asEndpointPropMap(data);
+  }
+  
+  private void putMap(String baseUrl, String resourceId) throws Exception {
     if (resourceId == null) {
       log.info("Cannot parse resourceId. Aborting");
       return;
     }
-    httpPut(baseUrl + resourceId, data);
+    httpPut(baseUrl + resourceId, wrapdata());
   }
   
-  private String getCostMapResourceId(RFC7285CostMap costMap) throws Exception {
-    String networkMapRID = costMap.meta.netmap_tags.get(0).rid;
-    String costMetric = costMap.meta.costType.metric;
-    String costMode = costMap.meta.costType.mode;
-    return networkMapRID + AltoManagerConstants.DELIMETER + costMetric
-         + AltoManagerConstants.DELIMETER + costMode;
+  private String wrapdata() throws Exception {
+    if (endpointPropertyMapType().equals(resourceType)) {
+      return "{\"alto-service:resourceType\":" + data + "}";
+    } else {
+      return "{\"alto-service:resourceType\":[" + data + "]}";
+    }
   }
 }

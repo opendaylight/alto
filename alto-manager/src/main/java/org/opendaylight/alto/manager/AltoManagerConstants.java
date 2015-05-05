@@ -20,10 +20,8 @@ public class AltoManagerConstants {
   public static final String RESOURCES_URL = HOST + RESOURCES_NODE + "/";
   public static final String NETWORK_MAP_URL = RESOURCES_URL + NETWORK_MAPS_NODE + "/" + NETWORK_MAP_NODE + "/";
   public static final String COST_MAP_URL = RESOURCES_URL + COST_MAPS_NODE + "/" + COST_MAP_NODE + "/";
-  public static final String ENDPOINT_PROPERTY_MAP_URL = RESOURCES_URL + ENDPOINT_PROPERTY_MAP_NODE + "/";
   public static final String IRD_DEFAULT_NETWORK_MAP_URL = RESOURCES_URL + IRD_NODE + "/" + META_NODE + "/" + DEFAULT_NETWORK_MAP_NODE + "/";
   
-  public static final String ENDPOINT_PROPERTY_MAP_NAME = "endpoint-property-map";
   public static final String DEFAULT_NETWORK_MAP_PROPERTY = "default-network-map";
   public static final String DELIMETER = "-";
   
@@ -33,5 +31,9 @@ public class AltoManagerConstants {
   
   public static enum SERVICE_TYPE{
     NETWORK_MAP, COST_MAP, ENDPOINT_PROPERTY_MAP
+  }
+  
+  public static enum MAP_FORMAT_TYPE {
+    YANG, RFC
   }
 }

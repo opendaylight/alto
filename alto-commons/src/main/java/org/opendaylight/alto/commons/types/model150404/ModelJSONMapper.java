@@ -13,7 +13,15 @@ public class ModelJSONMapper {
                             .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
 
     public ModelNetworkMap asNetworkMap(String json) throws Exception {
-        return mapper.readValue(json, ModelNetworkMap.class);
+      return mapper.readValue(json, ModelNetworkMap.class);
+    }
+    
+    public ModelCostMap asCostMap(String json) throws Exception {
+      return mapper.readValue(json, ModelCostMap.class);
+    }
+    
+    public ModelEndpointPropertyMap asEndpointPropMap(String json) throws Exception {
+      return mapper.readValue(json, ModelEndpointPropertyMap.class);
     }
 
     public ModelEndpoint asModelEndpoint(String json) throws IOException {

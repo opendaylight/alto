@@ -13,7 +13,11 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev1504
 public class EndpointPropertyTypeBuilder {
 
     public static EndpointPropertyType getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        if (defaultValue.contains(".")) {
+          return new EndpointPropertyType(new ResourceSpecificEndpointProperty(defaultValue));
+        } else {
+          return new EndpointPropertyType(new GlobalEndpointProperty(defaultValue.toCharArray()));
+        }
     }
 
 }

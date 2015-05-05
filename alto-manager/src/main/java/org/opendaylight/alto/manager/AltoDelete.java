@@ -41,7 +41,7 @@ public class AltoDelete extends AltoManager {
   
   private boolean deleteEndpointPropertyMap() throws IOException {
     log.info("Deleting endpoint property map " + this.resourceId);
-    return httpDelete(AltoManagerConstants.ENDPOINT_PROPERTY_MAP_URL + resourceId);
+    return httpDelete(AltoManagerConstants.RESOURCES_URL + AltoManagerConstants.ENDPOINT_PROPERTY_MAP_NODE);
   }
   
   private boolean deleteCostMap() throws IOException {

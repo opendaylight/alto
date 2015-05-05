@@ -65,6 +65,10 @@ public class RFC7285JSONMapper {
     public RFC7285VersionTag asVersionTag(String json) throws Exception {
         return mapper.readValue(json, RFC7285VersionTag.class);
     }
+    
+    public RFC7285EndpointPropertyMap asEndpointPropMap(String json) throws Exception {
+      return mapper.readValue(json, RFC7285EndpointPropertyMap.class);
+  }
 
     public String asJSON(Object obj) throws Exception {
         return mapper.writeValueAsString(obj);

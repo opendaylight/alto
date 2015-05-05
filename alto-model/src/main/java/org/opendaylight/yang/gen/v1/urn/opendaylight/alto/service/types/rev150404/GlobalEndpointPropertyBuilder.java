@@ -1,5 +1,7 @@
 package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.GlobalEndpointProperty.Enumeration;
+
 
 /**
  * The purpose of generated class in src/main/java for Union types is to create new instances of unions from a string representation.
@@ -13,7 +15,11 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev1504
 public class GlobalEndpointPropertyBuilder {
 
     public static GlobalEndpointProperty getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        if ("Pid".equals(defaultValue)) {
+            return new GlobalEndpointProperty(Enumeration.Pid);
+        } else {
+            return new GlobalEndpointProperty(defaultValue);
+        }
     }
 
 }

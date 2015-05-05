@@ -19,9 +19,9 @@ public class RFC2ModelNetworkMapConverter
     @Override
     public Object _convert() {
         ModelNetworkMap out = new ModelNetworkMap();
-        out.setJSONResourceId(in().meta.vtag.rid);
-        out.setJSONTag(in().meta.vtag.tag);
-        out.setJSONMap(conv.convert(in().map));
+        out.rid = in().meta.vtag.rid;
+        out.tag = in().meta.vtag.tag;
+        out.map = conv.convert(in().map);
         return out;
     }
 }

@@ -13,7 +13,12 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev1504
 public class TypedEndpointAddressBuilder {
 
     public static TypedEndpointAddress getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        if (defaultValue.startsWith("ipv4")) {
+            return new TypedEndpointAddress(new TypedIpv4Address(defaultValue));
+        } else if (defaultValue.startsWith("ipv6")) {
+            return new TypedEndpointAddress(new TypedIpv6Address(defaultValue));
+        }
+        throw new java.lang.UnsupportedOperationException("Wrong TypedEndpointAddress type");
     }
 
 }
