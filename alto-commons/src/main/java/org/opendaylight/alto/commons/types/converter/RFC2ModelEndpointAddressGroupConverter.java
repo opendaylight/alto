@@ -22,14 +22,14 @@ public class RFC2ModelEndpointAddressGroupConverter
         List<ModelEndpointAddressGroup> out = new LinkedList<ModelEndpointAddressGroup>();
         if ((in().ipv4 != null) && (!in().ipv4.isEmpty())) {
             ModelEndpointAddressGroup v4 = new ModelEndpointAddressGroup();
-            v4.setJSONAddressType(ModelEndpointAddressGroup.IPV4);
-            v4.setJSONEndpointPrefix(in().ipv4);
+            v4.type = ModelEndpointAddressGroup.IPV4;
+            v4.prefixes = in().ipv4;
             out.add(v4);
         }
         if ((in().ipv6 != null) && (!in().ipv6.isEmpty())) {
             ModelEndpointAddressGroup v6 = new ModelEndpointAddressGroup();
-            v6.setJSONAddressType(ModelEndpointAddressGroup.IPV6);
-            v6.setJSONEndpointPrefix(in().ipv6);
+            v6.type = ModelEndpointAddressGroup.IPV6;
+            v6.prefixes = in().ipv6;
             out.add(v6);
         }
         return out;

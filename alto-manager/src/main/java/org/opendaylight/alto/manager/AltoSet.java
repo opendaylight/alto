@@ -26,10 +26,11 @@ public class AltoSet extends AltoManager {
   protected Object doExecute() throws Exception {
     if (AltoManagerConstants.DEFAULT_NETWORK_MAP_PROPERTY.equals(property)) {
       if (!ifNetworkMapExist(value)) {
-        log.info("Network Map do not exist. Abort setting...");
-        return null;
+        throw new RuntimeException("Network map \"" + value + "\" does not exist.");
       }
       setDefaultNetworkMap();
+    } else {
+      throw new UnsupportedOperationException("Unsupported property \"" + property + "\".");
     }
     return null;
   }

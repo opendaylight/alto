@@ -1,0 +1,62 @@
+[
+  {
+    "meta": {
+      "dependent-vtags": [
+        {
+          "resource-id": "my-default-network-map",
+          "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542e"
+        }
+      ],
+      "cost-type": {
+        "cost-mode": "numerical",
+        "cost-metric": "routingcost"
+      }
+    },
+    "cost-map": {
+      "PID1": {
+        "PID1": 1,
+        "PID2": 5,
+        "PID3": 10
+      },
+      "PID2": {
+        "PID1": 5,
+        "PID2": 1,
+        "PID3": 15
+      },
+      "PID3": {
+        "PID1": 20,
+        "PID2": 15
+      }
+    }
+  },
+  {
+    "meta": {
+      "dependent-vtags": [
+        {
+          "resource-id": "new-network-map",
+          "tag": "3ee2cb7e8d63d9fab71b9b34cbf764436315542F"
+        }
+      ],
+      "cost-type": {
+        "cost-mode": "numerical",
+        "cost-metric": "routingcost"
+      }
+    },
+    "cost-map": {
+      "PID1": {
+        "PID1": 1,
+        "PID2": 5,
+        "PID3": 10
+      },
+      "PID2": {
+        "PID1": 5,
+        "PID2": 1,
+        "PID3": 15
+      },
+      "PID3": {
+        "PID1": 20,
+        "PID2": 15
+      }
+    }
+  }
+]

@@ -8,8 +8,8 @@
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
-    <relativePath/>
+    <version>1.6.0-SNAPSHOT</version>
+    <relativePath></relativePath>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
@@ -102,6 +102,39 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <repositories>
+
+    <!-- OpenDayLight Repo Mirror -->
+    <!-- NOTE: URLs need to be hardcoded in the repository section because we have
+         parent poms that do NOT exist in this project and thus need to be pulled
+         down from the repository. To override these URLs you should use the
+         mirror section in your local settings.xml file. -->
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <id>opendaylight-mirror</id>
+      <name>opendaylight-mirror</name>
+      <url>http://nexus.opendaylight.org/content/groups/public/</url>
+    </repository>
+    <!-- OpenDayLight Snapshot artifact -->
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>opendaylight-snapshot</id>
+      <name>opendaylight-snapshot</name>
+      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</url>
+    </repository>
+  </repositories>
 
   <build>
     <pluginManagement>

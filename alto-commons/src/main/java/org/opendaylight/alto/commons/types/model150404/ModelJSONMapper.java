@@ -1,6 +1,8 @@
 package org.opendaylight.alto.commons.types.model150404;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -16,8 +18,16 @@ public class ModelJSONMapper {
       return mapper.readValue(json, ModelNetworkMap.class);
     }
     
+    public List<ModelNetworkMap> asNetworkMapList(String json) throws Exception {
+      return Arrays.asList(mapper.readValue(json, ModelNetworkMap[].class));
+    }
+    
     public ModelCostMap asCostMap(String json) throws Exception {
       return mapper.readValue(json, ModelCostMap.class);
+    }
+    
+    public List<ModelCostMap> asCostMapList(String json) throws Exception {
+      return Arrays.asList(mapper.readValue(json, ModelCostMap[].class));
     }
     
     public ModelEndpointPropertyMap asEndpointPropMap(String json) throws Exception {

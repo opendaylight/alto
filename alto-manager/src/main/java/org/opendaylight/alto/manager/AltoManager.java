@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -58,7 +60,9 @@ public class AltoManager extends OsgiCommandSupport {
   
   protected String getDefaultNetworMapResourceId() throws IOException {
     HttpResponse response = httpGet(AltoManagerConstants.IRD_DEFAULT_NETWORK_MAP_URL);
-    return EntityUtils.toString(response.getEntity());
+    Pattern pattern = Pattern.compile(AltoManagerConstants.DEFAULT_NETWORK_MAP_REGEX);
+    Matcher matcher = pattern.matcher(EntityUtils.toString(response.getEntity()));
+    return matcher.find() ? matcher.group(1) : null;
   }
   
   protected HttpResponse httpGet(String url) throws IOException {
@@ -86,7 +90,7 @@ public class AltoManager extends OsgiCommandSupport {
   }
   
   private void logHttpRequest(String prefix, String url, String data) {
-    log.info(prefix + 
+    log.debug(prefix + 
         "\nUrl: " + url + 
         "\nHeader: " + HTTP.CONTENT_TYPE + ": " + AltoManagerConstants.JSON_CONTENT_TYPE +
         "\nData: " + data);

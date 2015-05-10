@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ModelEndpointPropertyMap implements EndpointPropertyMap {
 
   @JsonProperty("alto-service:meta")
-  public ModelEndpointPropertyMeta endpointPropertyMeta = null;
+  public ModelEndpointPropertyMeta endpointPropertyMeta = new ModelEndpointPropertyMeta();
   
   @JsonProperty("alto-service:endpoint-properties")
   public List<ModelEndpointProperties> properties = new LinkedList<ModelEndpointProperties>();
@@ -36,5 +36,4 @@ public class ModelEndpointPropertyMap implements EndpointPropertyMap {
   public Meta getMeta() {
     return endpointPropertyMeta;
   }
-
 }

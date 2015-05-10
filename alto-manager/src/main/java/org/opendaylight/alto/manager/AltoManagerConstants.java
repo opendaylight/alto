@@ -20,10 +20,13 @@ public class AltoManagerConstants {
   public static final String RESOURCES_URL = HOST + RESOURCES_NODE + "/";
   public static final String NETWORK_MAP_URL = RESOURCES_URL + NETWORK_MAPS_NODE + "/" + NETWORK_MAP_NODE + "/";
   public static final String COST_MAP_URL = RESOURCES_URL + COST_MAPS_NODE + "/" + COST_MAP_NODE + "/";
+  public static final String ENDPOINT_PROP_MAP_URL = RESOURCES_URL + ENDPOINT_PROPERTY_MAP_NODE;
   public static final String IRD_DEFAULT_NETWORK_MAP_URL = RESOURCES_URL + IRD_NODE + "/" + META_NODE + "/" + DEFAULT_NETWORK_MAP_NODE + "/";
   
   public static final String DEFAULT_NETWORK_MAP_PROPERTY = "default-network-map";
   public static final String DELIMETER = "-";
+  
+  public static final String DEFAULT_NETWORK_MAP_REGEX = "^\\{\"default-alto-network-map\":\\{\"resource-id\":\"(.*)\"\\}}$";
   
   public static enum COST_MODE {
     Numerical, Ordinal

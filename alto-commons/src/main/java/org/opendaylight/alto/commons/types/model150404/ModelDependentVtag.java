@@ -13,10 +13,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ModelDependentVtag implements DependentVtags {
 
   @JsonProperty("alto-service:resource-id")
-  public String rid = null;
+  public String rid = "";
   
   @JsonProperty("alto-service:tag")
-  public String vTag = null;
+  public String vTag = "";
   
   @JsonIgnore
   @Override

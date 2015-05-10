@@ -14,20 +14,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ModelEndpoint implements Map {
 
-    @JsonIgnore
-    protected PidName pid = null;
+    @JsonProperty("alto-service:pid")
+    public String pid = null;
 
-    @JsonIgnore
-    protected List<EndpointAddressGroup> data = new LinkedList<EndpointAddressGroup>();
-
-    public ModelEndpoint() {
-    }
-
-    public ModelEndpoint(Map model) {
-        this.pid = model.getPid();
-        this.setEndpointAddressGroup(model.getEndpointAddressGroup());
-    }
-
+    @JsonProperty("alto-service:endpoint-address-group")
+    public List<ModelEndpointAddressGroup> addressGroup = new LinkedList<ModelEndpointAddressGroup>();
+    
     @JsonIgnore
     @Override
     public Class<Map> getImplementedInterface() {
@@ -43,43 +35,18 @@ public class ModelEndpoint implements Map {
     @JsonIgnore
     @Override
     public MapKey getKey() {
-        return new MapKey(pid);
+        return new MapKey(getPid());
     }
 
     @JsonIgnore
     @Override
     public PidName getPid() {
-        return pid;
-    }
-
-    @JsonProperty("alto-service:pid")
-    public String getJSONPid() {
-        return pid.getValue();
-    }
-
-    @JsonProperty("alto-service:pid")
-    public void setJSONPid(String pid) {
-        this.pid = new PidName(pid);
+        return new PidName(pid);
     }
 
     @JsonIgnore
     @Override
     public List<EndpointAddressGroup> getEndpointAddressGroup() {
-        return data;
-    }
-
-    @JsonIgnore
-    public void setEndpointAddressGroup(List<EndpointAddressGroup> rhs) {
-        data = new LinkedList<EndpointAddressGroup>(rhs);
-    }
-
-    @JsonProperty("alto-service:endpoint-address-group")
-    public List<EndpointAddressGroup> getJSONEndpointAddressGroup() {
-        return data;
-    }
-
-    @JsonProperty("alto-service:endpoint-address-group")
-    public void setJSONEndpointAddressGroup(List<ModelEndpointAddressGroup> rhs) {
-        data = new LinkedList<EndpointAddressGroup>(rhs);
+        return new LinkedList<EndpointAddressGroup>(addressGroup);
     }
 }

@@ -1,5 +1,8 @@
 package org.opendaylight.alto.commons.types.rfc7285;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,6 +36,10 @@ public class RFC7285JSONMapper {
     public RFC7285CostMap asCostMap(String json) throws Exception {
         return mapper.readValue(json, RFC7285CostMap.class);
     }
+    
+    public List<RFC7285CostMap> asCostMapList(String json) throws Exception {
+      return Arrays.asList(mapper.readValue(json, RFC7285CostMap[].class));
+    }
 
     public RFC7285CostType asCostType(String json) throws Exception {
         return mapper.readValue(json, RFC7285CostType.class);
@@ -52,6 +59,10 @@ public class RFC7285JSONMapper {
 
     public RFC7285NetworkMap asNetworkMap(String json) throws Exception {
         return mapper.readValue(json, RFC7285NetworkMap.class);
+    }
+    
+    public List<RFC7285NetworkMap> asNetworkMapList(String json) throws Exception {
+      return Arrays.asList(mapper.readValue(json, RFC7285NetworkMap[].class));
     }
 
     public RFC7285NetworkMap.Filter asNetworkMapFilter(String json) throws Exception {

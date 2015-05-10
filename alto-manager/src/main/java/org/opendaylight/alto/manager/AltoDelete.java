@@ -14,7 +14,7 @@ public class AltoDelete extends AltoManager {
   @Argument(index = 0, name = "resource-type", description = "Resource Type", required = true, multiValued = false)
   String resourceType = null;
   
-  @Argument(index = 1, name = "resource-id", description = "Resource Id", required = true, multiValued = false)
+  @Argument(index = 1, name = "resource-id", description = "Resource Id", required = false, multiValued = false)
   String resourceId = null;
   
   public AltoDelete() {
@@ -23,10 +23,7 @@ public class AltoDelete extends AltoManager {
   
   @Override
   protected Object doExecute() throws Exception {
-    if (isDefaultNetworkMap(resourceId)) {
-      log.info("Cannot destroy default network map. Aborting");
-    }
-    
+    checkResourceID();
     if (networkMapType().equals(resourceType)) {
       deleteNetworkMap();
     } else if (costMapType().equals(resourceType)) {
@@ -34,9 +31,23 @@ public class AltoDelete extends AltoManager {
     } else if (endpointPropertyMapType().equals(resourceType)) {
       deleteEndpointPropertyMap();
     } else {
-      log.warn("Not supported resource type " + resourceType + ". Aborting...");
+      throw new UnsupportedOperationException("Unsupported resource type \"" + resourceType + "\".");
     }
     return null;
+  }
+  
+  private void checkResourceID() throws IOException {
+    if (networkMapType().equals(resourceType) && isDefaultNetworkMap(resourceId)) {
+      throw new RuntimeException("Cannot destroy default network map.");
+    }
+    
+    if (resourceId == null && !endpointPropertyMapType().equals(resourceType)) {
+      throw new RuntimeException("Please specify resource id for " + resourceType + ".");
+    }
+    
+    if (resourceId != null && endpointPropertyMapType().equals(resourceType)) {
+      throw new RuntimeException("Please do not specify resource id for " + resourceType + ".");
+    }
   }
   
   private boolean deleteEndpointPropertyMap() throws IOException {

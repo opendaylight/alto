@@ -12,8 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ModelCostType implements CostType {
 
+  @JsonIgnore
   public static final String NUMERICAL = "Numerical";
-  public static final String Ordinal = "Ordinal";
+  
+  @JsonIgnore
+  public static final String ORDINAL = "Ordinal";
   
   @JsonProperty("alto-service:cost-mode")
   public String costMode = null;
@@ -24,6 +27,7 @@ public class ModelCostType implements CostType {
   @JsonProperty("alto-service:description")
   public String description = null;
   
+  @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {
     return CostType.class;
@@ -41,7 +45,7 @@ public class ModelCostType implements CostType {
     switch(costMode) {
     case NUMERICAL:
       return CostMode.Numerical;
-    case Ordinal:
+    case ORDINAL:
       return CostMode.Ordinal;
     default:
       throw new RuntimeException("Non-Supported cost mode."); 

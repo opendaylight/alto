@@ -1,5 +1,9 @@
 package org.opendaylight.alto.commons.types.converter;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -18,13 +22,16 @@ public class RFC2ModelEndpointPropMapConverter
   protected Object _convert() {
     ModelEndpointPropertyMap out = new ModelEndpointPropertyMap();
     out.endpointPropertyMeta = convertMeta(in().meta);
-    
     out.properties = new LinkedList<ModelEndpointProperties>();
-    
     for (String endpoint : in().map.keySet()) {
       out.properties.add(convertEndpointProperty(endpoint, in().map.get(endpoint)));
     }
     return out;
+  }
+  
+  protected static String readFromFile(String path) throws IOException {
+    return new String(Files.readAllBytes(Paths.get(path)),
+        StandardCharsets.UTF_8);
   }
   
   private ModelEndpointPropertyMeta convertMeta(RFC7285EndpointPropertyMap.Meta meta) {

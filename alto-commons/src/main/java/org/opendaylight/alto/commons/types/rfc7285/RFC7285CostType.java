@@ -6,13 +6,13 @@ import java.util.Arrays;
 public class RFC7285CostType {
 
     @JsonProperty("cost-mode")
-    public String mode = "";
+    public String mode = null;
 
     @JsonProperty("cost-metric")
-    public String metric = "";
+    public String metric = null;
 
     @JsonProperty("description")
-    public String description = "";
+    public String description = null;
 
     public RFC7285CostType() {
     }
