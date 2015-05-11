@@ -8,8 +8,8 @@
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent</artifactId>
-    <version>1.6.0-SNAPSHOT</version>
-    <relativePath></relativePath>
+    <version>1.5.0-SNAPSHOT</version>
+    <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
@@ -22,6 +22,7 @@
     <module>alto-model</module>
     <module>alto-config</module> <!-- required by alto-manager -->
     <module>alto-provider</module>
+    <module>alto-hosttracker</module>
     <module>features</module>
     <module>alto-commons</module>
     <module>alto-manager</module>
@@ -61,6 +62,8 @@
     <controller.commons.northbound.version> <!-- required by alto-northbound -->
       0.5.0-SNAPSHOT
     </controller.commons.northbound.version>
+    <l2switch.version>0.2.0-SNAPSHOT</l2switch.version>
+    <ietf.topology.version>2013.10.21.7-SNAPSHOT</ietf.topology.version>
   </properties>
 
   <dependencyManagement>
@@ -102,39 +105,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <repositories>
-
-    <!-- OpenDayLight Repo Mirror -->
-    <!-- NOTE: URLs need to be hardcoded in the repository section because we have
-         parent poms that do NOT exist in this project and thus need to be pulled
-         down from the repository. To override these URLs you should use the
-         mirror section in your local settings.xml file. -->
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>opendaylight-mirror</id>
-      <name>opendaylight-mirror</name>
-      <url>http://nexus.opendaylight.org/content/groups/public/</url>
-    </repository>
-    <!-- OpenDayLight Snapshot artifact -->
-    <repository>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>opendaylight-snapshot</id>
-      <name>opendaylight-snapshot</name>
-      <url>http://nexus.opendaylight.org/content/repositories/opendaylight.snapshot/</url>
-    </repository>
-  </repositories>
 
   <build>
     <pluginManagement>

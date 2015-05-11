@@ -41,6 +41,9 @@ public class AltoProviderModule extends AbstractAltoProviderModule {
             dataBrokerService.registerDataChangeListener(LogicalDatastoreType.CONFIGURATION, AltoProvider.ALTO_IID, altoProvider, DataChangeScope.SUBTREE);
         final AltoProviderRuntimeRegistration runtimeReg = getRootRuntimeBeanRegistratorWrapper().register(altoProvider);
 
+        altoProvider.registerAsDataChangeListener();
+        log.info("provider success");
+
         final class AutoCloseableAlto implements AutoCloseable {
             @Override
             public void close() throws Exception {

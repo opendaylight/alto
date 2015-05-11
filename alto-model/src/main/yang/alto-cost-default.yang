@@ -1,0 +1,17 @@
+module alto-cost-default {
+    namespace "urn:opendaylight:alto:costdefault";
+    prefix "alto-cost-default";
+
+    import alto-service {prefix alto-restconf;}
+
+    revision 2015-05-07 {
+        description
+            "augment default cost in alto-service-types";
+    }
+
+    augment "/alto-restconf:endpoint-cost-service/alto-restconf:output/alto-restconf:endpoint-cost-service/alto-restconf:endpoint-cost-map/alto-restconf:dst-costs" {
+        leaf cost-default {
+            type int32;
+        }
+    }
+}
