@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.opendaylight.controller.config.yang.config.alto_provider.impl.AltoProviderRuntimeMXBean;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
@@ -44,7 +44,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev15040
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.CostMode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.TypedEndpointAddress;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.host.tracker.rev140624.HostNode;////////////////////////////////////
+import org.opendaylight.yang.gen.v1.urn.opendaylight.host.tracker.rev140624.HostNode;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.host.tracker.rev140624.host.AttachmentPoints;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NodeId;
@@ -84,11 +84,13 @@ public class AltoProvider implements
     private ListenerRegistration<DataChangeListener> hostNodeListerRegistration;
     
     private ListenerRegistration<DataChangeListener> linkListerRegistration;
+
+    private ListenerRegistration<DataChangeListener> topologyListerRegistration;
     private Map<String, String> ipSwitchIdMap = null;
     Graph<NodeId, Link> networkGraph = null;
-    Set<String> linkAdded = new HashSet<>();
+    Set<String> linkAdded = null;
     DijkstraShortestPath<NodeId, Link> shortestPath = null;
-	
+    private AtomicBoolean networkGraphFlag;
     public static final InstanceIdentifier<Resources> ALTO_IID
                         = InstanceIdentifier.builder(Resources.class).build();
 
@@ -96,9 +98,12 @@ public class AltoProvider implements
     private final ExecutorService executor;
 
     public AltoProvider() {
+        this.networkGraph = new SparseMultigraph<>();
+        this.shortestPath = new DijkstraShortestPath(this.networkGraph);
     	this.ipSwitchIdMap = new HashMap<String, String>();
+        this.linkAdded = new HashSet<>();
+        this.networkGraphFlag = new AtomicBoolean(false);
         this.executor = Executors.newFixedThreadPool(1);
-        //////////////////////////////////////////////////////////////
     }
 
     public void setDataProvider(final DataBroker salDataProvider) {
@@ -129,6 +134,9 @@ public class AltoProvider implements
 				.builder(NetworkTopology.class)//
 				.child(Topology.class,
 						new TopologyKey(new TopologyId("flow:1"))).build();
+                this.topologyListerRegistration = dataProvider.registerDataChangeListener(
+				LogicalDatastoreType.OPERATIONAL, topology, this,
+				DataChangeScope.BASE);
 
 		ReadOnlyTransaction newReadOnlyTransaction = dataProvider
 				.newReadOnlyTransaction();
@@ -137,7 +145,6 @@ public class AltoProvider implements
 				.read(LogicalDatastoreType.OPERATIONAL, topology);
 		try {
 			Topology get = dataFuture.get().get();
-			//log.trace("test " + get);
 		} catch (InterruptedException | ExecutionException ex) {
 			java.util.logging.Logger.getLogger(AltoProvider.class.getName())
 					.log(Level.SEVERE, null, ex);
@@ -164,8 +171,9 @@ public class AltoProvider implements
 			return;
 		}
 
-		if (networkGraph == null) {
-			networkGraph = new SparseMultigraph<>();
+		if (this.networkGraph == null) {
+			this.networkGraph = new SparseMultigraph<>();
+                        networkGraphFlag.set(true);
 		}
 
 		for (Link link : links) {
@@ -174,17 +182,13 @@ public class AltoProvider implements
 			}
 			NodeId sourceNodeId = link.getSource().getSourceNode();
 			NodeId destinationNodeId = link.getDestination().getDestNode();
-			networkGraph.addVertex(sourceNodeId);
-			networkGraph.addVertex(destinationNodeId);
-			networkGraph.addEdge(link, sourceNodeId, destinationNodeId,
+			this.networkGraph.addVertex(sourceNodeId);
+			this.networkGraph.addVertex(destinationNodeId);
+			this.networkGraph.addEdge(link, sourceNodeId, destinationNodeId,
 					EdgeType.UNDIRECTED);
+                        networkGraphFlag.set(true);
 		}
 
-		if (shortestPath == null) {
-			shortestPath = new DijkstraShortestPath<>(networkGraph);
-		} else {
-			shortestPath.reset();
-		}
 	}
 
 	private boolean linkAlreadyAdded(Link link) {
@@ -206,31 +210,36 @@ public class AltoProvider implements
 	}
 
 	public void processTopology(Topology topology) {
-		List<Node> nodeList = topology.getNode();
-		for (int i = 0; i < nodeList.size(); ++i) {
+		List<Node> nodeList = null;
+                if ((nodeList = topology.getNode()) != null) {
+		    for (int i = 0; i < nodeList.size(); ++i) {
 			Node node = nodeList.get(i);
 			HostNode hostNode = node.getAugmentation(HostNode.class);
 			log.info("process node "+i+hostNode);
 			processNode(hostNode);
-		}
-		List<Link> linkList = topology.getLink();
-		addLinks(linkList);
+		    }
+		    List<Link> linkList = topology.getLink();
+		    addLinks(linkList);
+                }
 	}
 
 	private void deleteHostNode(HostNode hostNode) {
-		List<AttachmentPoints> attachmentPoints = hostNode
-				.getAttachmentPoints();
+		    List<AttachmentPoints> attachmentPoints = hostNode
+			    	    .getAttachmentPoints();
 
-		TpId tpId = attachmentPoints.get(0).getTpId();
-		String tpIdString = tpId.getValue();
+		    TpId tpId = attachmentPoints.get(0).getTpId();
+		    String tpIdString = tpId.getValue();
 
-		String ipv4String = hostNode.getAddresses().get(0).getIp()
-				.getIpv4Address().getValue();
+		    String ipv4String = hostNode.getAddresses().get(0).getIp()
+				    .getIpv4Address().getValue();
 
-		this.ipSwitchIdMap.remove(ipv4String);
+		    this.ipSwitchIdMap.remove(ipv4String);
 	}
 
 	private void processNode(HostNode hostNode) {
+                if (this.networkGraph==null) {
+                      this.networkGraph = new SparseMultigraph<>(); 
+                }
 		if(hostNode==null)return;
 		List<AttachmentPoints> attachmentPoints = hostNode
 				.getAttachmentPoints();
@@ -248,10 +257,6 @@ public class AltoProvider implements
     @Override
     public void onDataChanged(
             final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-//        DataObject dataObject = change.getUpdatedSubtree();
-//        if (dataObject instanceof Resources) {
-//            Resources altoResources = (Resources) dataObject;
-//            log.info("onDataChanged - new ALTO config: {}", altoResources);
                 log.info("in Data Changed");
 		if (change == null) {
 			log.info("In onDataChanged: No processing done as change even is null.");
@@ -272,8 +277,7 @@ public class AltoProvider implements
 				HostNode node = ((HostNode) originalData.get(iid));
 				deleteHostNode(node);
 			} else if (iid.getTargetType().equals(Link.class)) {
-				// TODO performance improvement here
-                log.info("delete edge");
+                                log.info("delete edge");
 		                String linkAddedKey = null;
                                 Link link = (Link) originalData.get(iid);
 		                if (link.getDestination().getDestTp().hashCode() > link.getSource()
@@ -287,18 +291,19 @@ public class AltoProvider implements
 		                if (linkAdded.contains(linkAddedKey)) {
 		                	linkAdded.remove(linkAddedKey);
 		                }
-				networkGraph.removeEdge((Link) originalData.get(iid));
-                shortestPath.reset();
-                shortestPath = new DijkstraShortestPath<>(networkGraph);
-			}
+				this.networkGraph.removeEdge((Link) originalData.get(iid));
+                                networkGraphFlag.set(true);
+                
+			} 
 		}
 
 		for (Map.Entry<InstanceIdentifier<?>, DataObject> entrySet : updatedData
 				.entrySet()) {
-                        log.info("update hostnode data");
+            
 			InstanceIdentifier<?> iiD = entrySet.getKey();
 			final DataObject dataObject = entrySet.getValue();
 			if (dataObject instanceof HostNode) {
+                                log.info("update hostnode data");
 				processNode((HostNode) dataObject);
 			}
 		}
@@ -317,32 +322,32 @@ public class AltoProvider implements
 					NodeId sourceNodeId = link.getSource().getSourceNode();
 					NodeId destinationNodeId = link.getDestination()
 							.getDestNode();
-					networkGraph.addVertex(sourceNodeId);
-					networkGraph.addVertex(destinationNodeId);
-					networkGraph.addEdge(link, sourceNodeId, destinationNodeId,
+					this.networkGraph.addVertex(sourceNodeId);
+					this.networkGraph.addVertex(destinationNodeId);
+					this.networkGraph.addEdge(link, sourceNodeId, destinationNodeId,
 							EdgeType.UNDIRECTED);
-                    log.info("update link in networkGraph");
-                    shortestPath.reset();
-                    shortestPath = new DijkstraShortestPath<>(networkGraph);
+                                        log.info("update link in networkGraph");
+                                        networkGraphFlag.set(true);
 				}
-			}
+			} 
 		}
            
         
     }
 
     public List<EndpointCostMap> hopcountNumerical(List<TypedEndpointAddress> srcs, List<TypedEndpointAddress> dsts) {
-
+                if (networkGraphFlag.get()) {
+                    shortestPath = new DijkstraShortestPath(this.networkGraph);
+                    networkGraphFlag.set(false);
+                }
 		List<EndpointCostMap> result = new ArrayList<EndpointCostMap>();
 		for (int i = 0; i < srcs.size(); ++i) {
 			TypedEndpointAddress teaSrc = srcs.get(i);
 			String ipv4SrcString = teaSrc.getTypedIpv4Address().getValue()
 					.substring(5);
-                        log.info("ipv4SrcString:"+ipv4SrcString);
 			String tpIdSrc = this.ipSwitchIdMap.get(ipv4SrcString);
 			String[] tempi = tpIdSrc.split(":");
 			String swSrcId = tempi[0] + ":" + tempi[1];
-                        log.info("swSrcId:"+swSrcId);
 			List<DstCosts> dstCostsList = new ArrayList<DstCosts>();
 
 			for (int j = 0; j < dsts.size(); ++j) {
@@ -355,7 +360,6 @@ public class AltoProvider implements
 
 				NodeId srcNodeId = new NodeId(swSrcId);
 				NodeId dstNodeId = new NodeId(swDstId);
-                                log.info("caculate shortest path");
 				Number number = shortestPath.getDistance(srcNodeId, dstNodeId);
                                 DstCosts1 dst1 = null;
                                 if (number!=null) {
@@ -380,11 +384,7 @@ public class AltoProvider implements
     @Override
     public Future<RpcResult<EndpointCostServiceOutput>> endpointCostService(
             EndpointCostServiceInput input) {
-/*        // TODO Auto-generated method stub
     	
-        return null;*/
-        log.info("all input:"+input);
-    	log.info("start rpc");
         CostType costTypeInput = null;
         List<Constraint> constraintsInput = null;
         Endpoints endpointsInput = null;
@@ -392,49 +392,42 @@ public class AltoProvider implements
         RpcResultBuilder<EndpointCostServiceOutput> endpointCostServiceBuilder = null;
 
         EndpointCostServiceOutput output = null;
-        //EndpointCostServiceOutputBuilder outputBuilder = null;
         
         if ((costTypeInput = input.getCostType()) == null) {
             endpointCostServiceBuilder = RpcResultBuilder.<EndpointCostServiceOutput>failed().withError(ErrorType.APPLICATION, "Invalid cost-type value ", "Argument can not be null.");
         }
         else {
-            log.info("costTypeInput: "+costTypeInput);
             if ((endpointsInput = input.getEndpoints()) == null) {
                 endpointCostServiceBuilder = RpcResultBuilder.<EndpointCostServiceOutput>failed().withError(ErrorType.APPLICATION, "Invalid endpoints value ", "Argument can not be null.");
             }
             else {
-                log.info("costMetric: "+costTypeInput.getCostMetric());
             	Endpoints endpoints = input.getEndpoints();
             	List<TypedEndpointAddress> srcs = endpoints.getSrcs();
             	List<TypedEndpointAddress> dsts = endpoints.getDsts();
-            	//judge whether srcs or dsts are discovered
                 boolean srcDstFoundFlag = true;
             	for (int i = 0; i < srcs.size(); ++i) {
             		TypedEndpointAddress teaSrc = srcs.get(i);
         			String ipv4SrcString = teaSrc.getTypedIpv4Address().getValue()
         					.substring(5);
-                                log.info("parsed ipv4SrcString:"+ipv4SrcString);
                     if (this.ipSwitchIdMap.get(ipv4SrcString) == null) {
-                    	endpointCostServiceBuilder = RpcResultBuilder.<EndpointCostServiceOutput>failed().withError(ErrorType.APPLICATION, "Invalid endpoints value ", "IP can not be found.");
+                    	endpointCostServiceBuilder = RpcResultBuilder.<EndpointCostServiceOutput>failed().withError(ErrorType.APPLICATION, "Invalid endpoints value ", "src IP:"+ipv4SrcString+ " can not be found. Or Topology has not been built.");
                         srcDstFoundFlag = false;
+                        return Futures.immediateFuture(endpointCostServiceBuilder.build());
                     }           		
             	}
             	for (int j = 0; j < dsts.size(); ++j) {
     				TypedEndpointAddress teaDst = dsts.get(j);
     				String ipv4DstString = teaDst.getTypedIpv4Address().getValue()
     						.substring(5);
-                                log.info("parsed ipv4DstString:"+ipv4DstString);
     				if (this.ipSwitchIdMap.get(ipv4DstString) == null) {
-    					endpointCostServiceBuilder = RpcResultBuilder.<EndpointCostServiceOutput>failed().withError(ErrorType.APPLICATION, "Invalid endpoints value ", "IP can not be found.");
+    					endpointCostServiceBuilder = RpcResultBuilder.<EndpointCostServiceOutput>failed().withError(ErrorType.APPLICATION, "Invalid endpoints value ", "dst IP:"+ipv4DstString+" can not be found. Or Topology has not been built.");
                         srcDstFoundFlag = false;
+                        return Futures.immediateFuture(endpointCostServiceBuilder.build());
     				}
             	}
                 CostMetric costMetric = costTypeInput.getCostMetric();
                 CostMode costMode = costTypeInput.getCostMode();
-                log.info("costmetric string:888"+costMetric.getString());
-                log.info("costmode string:888"+costMode);
                 if (srcDstFoundFlag && costMode.equals(CostMode.Numerical) && (costMetric.getEnumeration() == CostMetric.Enumeration.Hopcount || costMetric.getString().equals("hopcount"))){
-                	log.info("in hopcount");
                 	org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.endpoint.cost.service.output.endpoint.cost.service.meta.CostType costType = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.endpoint.cost.service.output.endpoint.cost.service.meta.CostTypeBuilder()
                 	.setCostMetric(costMetric)
                 	.setCostMode(costMode).build();
@@ -443,7 +436,6 @@ public class AltoProvider implements
                 	EndpointCostService ecs = new EndpointCostServiceBuilder().setMeta(meta).setEndpointCostMap(ecmList).build();
                 	
                     if ((output = new EndpointCostServiceOutputBuilder().setEndpointCostService(ecs).build()) != null) {
-                        log.info("output valid");
                         endpointCostServiceBuilder = RpcResultBuilder.success(output);
                     }
                     else {
