@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class RFC7285QueryPairs {
 
     @JsonProperty("srcs")
-    List<String> src = new LinkedList<String>();
+    public List<String> src = new LinkedList<String>();
 
     @JsonProperty("dsts")
-    List<String> dst = new LinkedList<String>();
+    public List<String> dst = new LinkedList<String>();
 
 }
 

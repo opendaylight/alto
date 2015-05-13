@@ -13,10 +13,10 @@ public class ModelDstCosts implements DstCosts {
 
   @JsonProperty("alto-service:dst")
   public String dst = null;
-  
+
   @JsonProperty("alto-service:cost")
   public Object cost = null;
-  
+
   @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {

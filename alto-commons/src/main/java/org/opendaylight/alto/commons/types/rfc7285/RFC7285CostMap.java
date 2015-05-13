@@ -2,6 +2,7 @@ package org.opendaylight.alto.commons.types.rfc7285;
 
 import java.util.List;
 import java.util.Map;
+import java.util.LinkedList;
 import java.util.LinkedHashMap;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +15,7 @@ public class RFC7285CostMap {
     public static class Meta extends Extensible {
 
         @JsonProperty("dependent-vtags")
-        public List<RFC7285VersionTag> netmap_tags;
+        public List<RFC7285VersionTag> netmap_tags = new LinkedList<RFC7285VersionTag>();
 
         @JsonProperty("cost-type")
         public RFC7285CostType costType;
@@ -33,7 +34,7 @@ public class RFC7285CostMap {
     }
 
     @JsonProperty("meta")
-    public Meta meta;
+    public Meta meta = new Meta();
 
     @JsonProperty("cost-map")
     public Map<String, Map<String, Object>> map

@@ -13,7 +13,7 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev1504
 public class CostMetricBuilder {
 
     public static CostMetric getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        return new CostMetric(defaultValue);
     }
 
 }

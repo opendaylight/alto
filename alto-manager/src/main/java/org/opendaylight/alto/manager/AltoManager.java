@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 public class AltoManager extends OsgiCommandSupport {
   private static final Logger log = LoggerFactory.getLogger(AltoManager.class);
-  
+
   protected HttpClient httpClient;
 
   public AltoManager () {
@@ -42,7 +42,7 @@ public class AltoManager extends OsgiCommandSupport {
         new UsernamePasswordCredentials("admin:admin"));
     return HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
   }
-  
+
   @Override
   protected Object doExecute() throws Exception {
     return null;
@@ -52,26 +52,26 @@ public class AltoManager extends OsgiCommandSupport {
     return new String(Files.readAllBytes(Paths.get(path)),
         StandardCharsets.UTF_8);
   }
-  
+
   protected boolean isDefaultNetworkMap(String resourceId) throws IOException {
     String defaultNetworkResourceId = getDefaultNetworMapResourceId();
     return (defaultNetworkResourceId != null) && defaultNetworkResourceId.equals(resourceId);
   }
-  
+
   protected String getDefaultNetworMapResourceId() throws IOException {
     HttpResponse response = httpGet(AltoManagerConstants.IRD_DEFAULT_NETWORK_MAP_URL);
     Pattern pattern = Pattern.compile(AltoManagerConstants.DEFAULT_NETWORK_MAP_REGEX);
     Matcher matcher = pattern.matcher(EntityUtils.toString(response.getEntity()));
     return matcher.find() ? matcher.group(1) : null;
   }
-  
+
   protected HttpResponse httpGet(String url) throws IOException {
     HttpGet httpGet = new HttpGet(url);
     logHttpRequest("HTTP GET:", url, "");
     httpGet.setHeader(HTTP.CONTENT_TYPE, AltoManagerConstants.JSON_CONTENT_TYPE);
     return httpClient.execute(httpGet);
   }
-  
+
   protected boolean httpPut(String url, String data) throws IOException {
     HttpPut httpPut = new HttpPut(url);
     httpPut.setHeader(HTTP.CONTENT_TYPE, AltoManagerConstants.JSON_CONTENT_TYPE);
@@ -80,7 +80,7 @@ public class AltoManager extends OsgiCommandSupport {
     HttpResponse response = httpClient.execute(httpPut);
     return handleResponse(response);
   }
-  
+
   protected boolean httpDelete(String url) throws IOException {
     HttpDelete httpDelete = new HttpDelete(url);
     httpDelete.setHeader(HTTP.CONTENT_TYPE, AltoManagerConstants.JSON_CONTENT_TYPE);
@@ -88,14 +88,14 @@ public class AltoManager extends OsgiCommandSupport {
     HttpResponse response = httpClient.execute(httpDelete);
     return handleResponse(response);
   }
-  
+
   private void logHttpRequest(String prefix, String url, String data) {
-    log.debug(prefix + 
-        "\nUrl: " + url + 
+    log.debug(prefix +
+        "\nUrl: " + url +
         "\nHeader: " + HTTP.CONTENT_TYPE + ": " + AltoManagerConstants.JSON_CONTENT_TYPE +
         "\nData: " + data);
   }
-  
+
   protected boolean handleResponse(HttpResponse response) throws ParseException, IOException {
     int statusCode = response.getStatusLine().getStatusCode();
     logResponse(response);
@@ -107,7 +107,7 @@ public class AltoManager extends OsgiCommandSupport {
       return false;
     }
   }
-  
+
   protected void logResponse(HttpResponse response) throws IOException {
     HttpEntity entity = response.getEntity();
     int statusCode = response.getStatusLine().getStatusCode();
@@ -116,17 +116,17 @@ public class AltoManager extends OsgiCommandSupport {
       + "\nStatus Code: " + statusCode
       + "\nBody: " + body);
   }
-  
+
   protected String networkMapType() {
     return AltoManagerConstants.SERVICE_TYPE.NETWORK_MAP.toString()
         .toLowerCase().replace("_", "-");
   }
-  
+
   protected String costMapType() {
     return AltoManagerConstants.SERVICE_TYPE.COST_MAP.toString()
         .toLowerCase().replace("_", "-");
   }
-  
+
   protected String endpointPropertyMapType() {
     return AltoManagerConstants.SERVICE_TYPE.ENDPOINT_PROPERTY_MAP.toString()
         .toLowerCase().replace("_", "-");

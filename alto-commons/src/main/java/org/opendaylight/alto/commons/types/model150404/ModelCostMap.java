@@ -17,16 +17,16 @@ public class ModelCostMap implements CostMap {
 
   @JsonProperty("alto-service:resource-id")
   public String rid = null;
-  
+
   @JsonProperty("alto-service:tag")
   public String tag = null;
-  
+
   @JsonProperty("alto-service:meta")
   public ModelCostMapMeta meta = null;
-  
+
   @JsonProperty("alto-service:map")
   public List<ModelCostMapData> map = new LinkedList<ModelCostMapData>();
-  
+
   @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {
