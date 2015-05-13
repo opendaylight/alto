@@ -49,6 +49,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto/alto-provider/${project.version}</bundle>
   </feature>
 
+  <feature name='odl-alto-hosttracker' version='${project.version}' description='OpenDaylight :: alto :: Hosttracker'>
+    <feature version='${project.version}'>odl-alto-model</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${l2switch.version}'>odl-l2switch-hosttracker</feature>
+    <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
+    <configfile finalname="etc/opendaylight/karaf/59-altohosttracker.xml">mvn:org.opendaylight.alto.alto-hosttracker/alto-hosttracker-config/${project.version}/xml/config</configfile>
+    <bundle>mvn:org.opendaylight.alto.alto-hosttracker/alto-hosttracker-impl/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.alto-hosttracker/alto-hosttracker-model/${project.version}</bundle>
+  </feature>
+
   <feature name='odl-alto-extension' version='${project.version}' description='Opendaylight :: alto :: extension'>
     <feature version='${project.version}'>odl-alto-commons</feature>
     <bundle>mvn:org.opendaylight.alto/services.ext.fs-map/${project.version}</bundle>

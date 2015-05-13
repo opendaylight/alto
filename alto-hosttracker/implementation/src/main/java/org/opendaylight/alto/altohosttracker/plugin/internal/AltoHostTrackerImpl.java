@@ -114,6 +114,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
     private final DataBroker dataService;
     private final String topologyId;
 
+    private String networkTag=null;
     // public static final InstanceIdentifier<Resources> ALTO_IID =
     // InstanceIdentifier.builder(Resources.class).toInstance();
 
@@ -168,8 +169,9 @@ public class AltoHostTrackerImpl implements DataChangeListener {
         ValidIdString vis1 = new ValidIdString("pid1");
         PidName pid1 = new PidName(vis1);
 
+        TagString dtag = new TagString(this.networkTag);
         DependentVtags dv = new DependentVtagsBuilder().setResourceId(rid)
-                .setTag(tag).build();
+                .setTag(dtag).build();
         List<DependentVtags> dvList = new ArrayList<DependentVtags>();
         dvList.add(dv);
         CostType ct = new CostTypeBuilder().setCostMode(CostMode.Numerical)
@@ -295,7 +297,8 @@ public class AltoHostTrackerImpl implements DataChangeListener {
     private List<NetworkMap> loadNetworkMapList() {
         List<NetworkMap> networkMapList = new ArrayList<NetworkMap>();
         ResourceId rid = new ResourceId(new ValidIdString(NMRESOURCEID));
-        TagString tag = new TagString(TagGenerator.getTag(32));
+        this.networkTag = TagGenerator.getTag(32);
+        TagString tag = new TagString(this.networkTag);
         ValidIdString vis = new ValidIdString("pid0");
         PidName pid = new PidName(vis);
         IpPrefix ep = new IpPrefix(new Ipv4Prefix("0.0.0.0/0"));

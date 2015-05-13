@@ -68,7 +68,7 @@ module alto-service {
           type alto:pid-name;
         }
         key "dst";
-        uses alto:alto-cost;
+        //uses alto:alto-cost;
       }
     }
   }
@@ -193,7 +193,7 @@ module alto-service {
               type alto:typed-endpoint-address;
             }
             key "dst";
-            uses alto:alto-cost;
+            //uses alto:alto-cost;
           }
         }
       }
