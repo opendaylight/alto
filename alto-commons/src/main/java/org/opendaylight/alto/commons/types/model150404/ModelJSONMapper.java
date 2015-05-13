@@ -14,22 +14,23 @@ public class ModelJSONMapper {
                             .setSerializationInclusion(Include.NON_DEFAULT)
                             .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
 
+
     public ModelNetworkMap asNetworkMap(String json) throws Exception {
       return mapper.readValue(json, ModelNetworkMap.class);
     }
-    
+
     public List<ModelNetworkMap> asNetworkMapList(String json) throws Exception {
       return Arrays.asList(mapper.readValue(json, ModelNetworkMap[].class));
     }
-    
+
     public ModelCostMap asCostMap(String json) throws Exception {
       return mapper.readValue(json, ModelCostMap.class);
     }
-    
+
     public List<ModelCostMap> asCostMapList(String json) throws Exception {
       return Arrays.asList(mapper.readValue(json, ModelCostMap[].class));
     }
-    
+
     public ModelEndpointPropertyMap asEndpointPropMap(String json) throws Exception {
       return mapper.readValue(json, ModelEndpointPropertyMap.class);
     }

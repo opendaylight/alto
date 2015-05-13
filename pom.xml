@@ -27,6 +27,7 @@
     <module>alto-commons</module>
     <module>alto-manager</module>
     <module>alto-services/api</module>
+    <module>alto-services/provider</module>
     <module>alto-extensions</module>
     <!-- <module>alto-karaf</module> -->
     <module>alto-northbound</module>
@@ -48,7 +49,7 @@
          TODO: need more investigation -->
     <config.version>0.3.0-SNAPSHOT</config.version>
 
-    <sal.version>0.7.1-SNAPSHOT</sal.version>
+    <sal.version>0.9.0-SNAPSHOT</sal.version>
     <war.version>${karaf.version}</war.version>
     <mdsal.version>1.2.0-SNAPSHOT</mdsal.version>
     <jmxGeneratorPath>src/main/yang-gen-config</jmxGeneratorPath>
@@ -64,6 +65,7 @@
     </controller.commons.northbound.version>
     <l2switch.version>0.2.0-SNAPSHOT</l2switch.version>
     <ietf.topology.version>2013.10.21.7-SNAPSHOT</ietf.topology.version>
+    <commons.catalina.version>7.0.53.v201406061610</commons.catalina.version>
   </properties>
 
   <dependencyManagement>

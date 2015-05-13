@@ -34,15 +34,11 @@
           <instructions>
             <Import-Package>
               org.opendaylight.yang.gen.v1.urn.opendaylight.alto.*,
-              org.opendaylight.alto.ext.fake,
               org.opendaylight.alto.services.api.rfc7285,
               org.opendaylight.alto.commons.*,
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
               org.apache.commons.logging,
               com.sun.jersey.spi.container.servlet,
-              org.opendaylight.controller.northbound.commons,
-              org.opendaylight.controller.northbound.commons.exception,
-              org.opendaylight.controller.northbound.commons.utils,
               org.opendaylight.controller.sal.utils,
               org.opendaylight.controller.sal.authorization,
               org.opendaylight.controller.sal.packet.address,
@@ -77,6 +73,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>sal-common-util</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.codehaus.enunciate</groupId>
       <artifactId>enunciate-core-annotations</artifactId>
     </dependency>
@@ -106,12 +107,6 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>service-api-rfc7285</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>alto-fake-extension</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

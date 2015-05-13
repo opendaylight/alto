@@ -36,7 +36,7 @@ public class RFC7285JSONMapper {
     public RFC7285CostMap asCostMap(String json) throws Exception {
         return mapper.readValue(json, RFC7285CostMap.class);
     }
-    
+
     public List<RFC7285CostMap> asCostMapList(String json) throws Exception {
       return Arrays.asList(mapper.readValue(json, RFC7285CostMap[].class));
     }
@@ -60,7 +60,7 @@ public class RFC7285JSONMapper {
     public RFC7285NetworkMap asNetworkMap(String json) throws Exception {
         return mapper.readValue(json, RFC7285NetworkMap.class);
     }
-    
+
     public List<RFC7285NetworkMap> asNetworkMapList(String json) throws Exception {
       return Arrays.asList(mapper.readValue(json, RFC7285NetworkMap[].class));
     }
@@ -76,7 +76,7 @@ public class RFC7285JSONMapper {
     public RFC7285VersionTag asVersionTag(String json) throws Exception {
         return mapper.readValue(json, RFC7285VersionTag.class);
     }
-    
+
     public RFC7285EndpointPropertyMap asEndpointPropMap(String json) throws Exception {
       return mapper.readValue(json, RFC7285EndpointPropertyMap.class);
   }

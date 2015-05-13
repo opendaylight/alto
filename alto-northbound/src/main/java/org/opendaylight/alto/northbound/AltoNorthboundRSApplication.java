@@ -9,7 +9,6 @@ public class AltoNorthboundRSApplication extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<Class<?>>();
         classes.add(AltoNorthbound.class);
-        classes.add(Echo.class);
         return classes;
     }
 }

@@ -52,11 +52,7 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Import-Package>
-              org.opendaylight.alto.services.api.rfc7285,
-              org.opendaylight.alto.commons.types.rfc7285,
-              org.slf4j,
-            </Import-Package>
+            <Import-Package>*</Import-Package>
             <Export-Package>
               org.opendaylight.alto.ext.fake;
             </Export-Package>

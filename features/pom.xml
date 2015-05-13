@@ -19,6 +19,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <properties>
     <features.file>features.xml</features.file>
+    <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
   <dependencyManagement>
@@ -71,6 +72,15 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>org.opendaylight.controller</groupId>
+      <artifactId>features-adsal</artifactId>
+      <version>${sal.version}</version>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.controller</groupId>
       <artifactId>features-restconf</artifactId>
       <classifier>features</classifier>
       <type>xml</type>
@@ -99,6 +109,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>${project.groupId}</groupId>
       <artifactId>alto-config</artifactId>
       <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>simple-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>simple-impl</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
     </dependency>
 
     <dependency>
