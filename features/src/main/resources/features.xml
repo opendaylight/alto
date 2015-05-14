@@ -30,12 +30,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto/alto-model/${project.version}</bundle>
   </feature>
 
-  <feature name='odl-alto-jackson-dependency' version='${project.version}' description='Opendaylight :: alto :: jackson_dependency'>
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
-    <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
-  </feature>
-
   <feature name='odl-alto-commons' version='${project.version}' description='OpenDaylight :: alto :: utils'>
     <feature version='${project.version}'>odl-alto-model</feature>
     <feature version='${jackson.version}'>odl-base-jackson</feature>
