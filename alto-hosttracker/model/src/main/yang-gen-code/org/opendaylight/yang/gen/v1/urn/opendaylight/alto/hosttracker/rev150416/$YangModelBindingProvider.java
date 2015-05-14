@@ -1,4 +1,4 @@
-package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150416;
+package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.hosttracker.rev150416;
 
 public final class $YangModelBindingProvider implements org.opendaylight.yangtools.yang.binding.YangModelBindingProvider {
 

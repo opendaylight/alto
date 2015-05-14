@@ -1,4 +1,4 @@
-package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150416 ;
+package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.hosttracker.rev150416 ;
 import org.opendaylight.yangtools.yang.binding.YangModuleInfo;
 import java.util.Set;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ public final class $YangModuleInfoImpl implements YangModuleInfo {
     private static final YangModuleInfo INSTANCE = new $YangModuleInfoImpl();
 
     private final String name = "alto-hosttracker-cost-service";
-    private final String namespace = "urn:opendaylight:alto";
+    private final String namespace = "urn:opendaylight:alto:hosttracker";
     private final String revision = "2015-04-16";
     private final String resourcePath = "/META-INF/yang/alto-hosttracker-cost-service.yang";
 

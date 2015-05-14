@@ -7,6 +7,7 @@ import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostType;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
@@ -21,9 +22,6 @@ public class YANGJSON2RFCCostMapConverter extends Converter<JsonNode, RFC7285Cos
     public YANGJSON2RFCCostMapConverter(JsonNode _in) {
         super(_in);
     }
-
-    protected YANGJSON2RFCAddressGroupConverter group_converter
-                = new YANGJSON2RFCAddressGroupConverter();
 
     @Override
     protected Object _convert() {
@@ -50,9 +48,11 @@ public class YANGJSON2RFCCostMapConverter extends Converter<JsonNode, RFC7285Cos
 
             for (JsonNode dst: cost_map.get("dstCosts")) {
                 String dst_pid = dst.get("dst").get("value").asText();
-                //TODO Don't know how to get data...
 
-                data.put(dst_pid, new Integer(1));
+                JsonNode cost_node = dst.get("cost");
+                if ((cost_node != null) && (!cost_node.isNull())) {
+                    data.put(dst_pid, cost_node.asText());
+                }
             }
 
             cm.map.put(src_pid, data);
