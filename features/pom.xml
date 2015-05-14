@@ -109,6 +109,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>${project.groupId}</groupId>
       <artifactId>alto-config</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
     </dependency>
 
     <dependency>
@@ -153,6 +155,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>${project.groupId}.alto-hosttracker</groupId>
       <artifactId>alto-hosttracker-config</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
     </dependency>
 
 
@@ -166,35 +170,47 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>httpcore-osgi</artifactId>
     </dependency>
 
-        <dependency>
-            <groupId>org.opendaylight.controller.model</groupId>
-            <artifactId>model-inventory</artifactId>
-            <version>${mdsal.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.l2switch.addresstracker</groupId>
-            <artifactId>addresstracker-model</artifactId>
-            <version>${l2switch.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.l2switch.hosttracker</groupId>
-            <artifactId>hosttracker-model</artifactId>
-            <version>${l2switch.version}</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.yangtools.model</groupId>
-            <artifactId>ietf-topology</artifactId>
-            <version>${ietf.topology.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.opendaylight.controller.thirdparty</groupId>
-            <artifactId>net.sf.jung2</artifactId>
-            <version>2.0.1</version>
-        </dependency>
+    <dependency>
+      <groupId>org.opendaylight.controller.model</groupId>
+      <artifactId>model-inventory</artifactId>
+      <version>${mdsal.version}</version>
+      <type>jar</type>
+    </dependency>
 
+    <dependency>
+      <groupId>org.opendaylight.l2switch</groupId>
+      <artifactId>features-l2switch</artifactId>
+      <classifier>features</classifier>
+      <version>${l2switch.version}</version>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.l2switch.addresstracker</groupId>
+      <artifactId>addresstracker-model</artifactId>
+      <version>${l2switch.version}</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.l2switch.hosttracker</groupId>
+      <artifactId>hosttracker-model</artifactId>
+      <version>${l2switch.version}</version>
+      <type>jar</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.yangtools.model</groupId>
+      <artifactId>ietf-topology</artifactId>
+      <version>${ietf.topology.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.controller.thirdparty</groupId>
+      <artifactId>net.sf.jung2</artifactId>
+      <version>2.0.1</version>
+    </dependency>
   </dependencies>
 
   <build>
