@@ -1,5 +1,5 @@
 module alto-hosttracker-cost-service {
-    namespace "urn:opendaylight:alto";
+    namespace "urn:opendaylight:alto:hosttracker";
     prefix alto-host-track-cost;
 
     import ietf-yang-types {prefix yang;}

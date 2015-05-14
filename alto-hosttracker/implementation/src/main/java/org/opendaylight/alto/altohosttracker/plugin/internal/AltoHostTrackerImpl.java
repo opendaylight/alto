@@ -19,8 +19,8 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.CheckedFuture;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150416.DstCosts1;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150416.DstCosts1Builder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.hosttracker.rev150416.DstCosts1;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.hosttracker.rev150416.DstCosts1Builder;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;

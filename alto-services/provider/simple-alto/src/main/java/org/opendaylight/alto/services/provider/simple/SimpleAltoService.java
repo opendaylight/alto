@@ -14,6 +14,9 @@ import org.opendaylight.alto.commons.types.converter.YANGJSON2RFCNetworkMapConve
 import org.opendaylight.alto.commons.types.converter.YANGJSON2RFCCostMapConverter;
 
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
+import org.opendaylight.yangtools.yang.binding.Augmentable;
+import org.opendaylight.yangtools.yang.binding.Augmentation;
+import org.opendaylight.yangtools.yang.binding.util.BindingReflections;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.Resources;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.IRD;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.NetworkMaps;
@@ -22,6 +25,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.co
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.cost.maps.CostMapKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.network.maps.NetworkMap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.resources.network.maps.NetworkMapKey;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.map.DstCosts;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ResourceId;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ird.meta.DefaultAltoNetworkMap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ird.Meta;
@@ -41,6 +45,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -49,8 +54,12 @@ import java.util.LinkedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 public class SimpleAltoService implements NetworkMapService, CostMapService, AutoCloseable {
 
@@ -61,6 +70,44 @@ public class SimpleAltoService implements NetworkMapService, CostMapService, Aut
     private YANGJSON2RFCNetworkMapConverter m_nmconverter = null;
     private YANGJSON2RFCCostMapConverter m_cmconverter = null;
 
+    protected class DstCostSerializer extends JsonSerializer<DstCosts> {
+        @Override
+        public void serialize(DstCosts value, JsonGenerator jgen, SerializerProvider provider) {
+            try {
+                jgen.writeStartObject();
+
+                jgen.writeObjectFieldStart("dst");
+                jgen.writeStringField("value", value.getDst().getValue());
+                jgen.writeEndObject();
+
+                Map<Class<? extends Augmentation<?>>, Augmentation<?>> augmentations
+                        = BindingReflections.getAugmentations(value);
+                String cost = null;
+                for (Augmentation<?> aug: augmentations.values()) {
+                    try {
+                        ObjectNode node = m_mapper.valueToTree(aug);
+                        for (Iterator<String> itr = node.fieldNames(); itr.hasNext(); ) {
+                            String field = itr.next();
+                            if (field.toLowerCase().indexOf("cost") >= 0) {
+                                cost = node.get(field).asText();
+                                break;
+                            }
+                        }
+                    } catch (Exception e) {
+                        m_logger.warn("Failed to write data from {}", cost);
+                    }
+                }
+                if (cost != null) {
+                    jgen.writeStringField("cost", cost);
+                }
+
+                jgen.writeEndObject();
+            } catch (Exception e) {
+                m_logger.info("Failed to parse DstCosts");
+            }
+        }
+    }
+
     public SimpleAltoService(DataBroker db) {
         this.m_db = db;
         this.m_nmconverter = new YANGJSON2RFCNetworkMapConverter();
@@ -68,6 +115,14 @@ public class SimpleAltoService implements NetworkMapService, CostMapService, Aut
 
         this.register(NetworkMapService.class);
         this.register(CostMapService.class);
+
+        try {
+            SimpleModule module = new SimpleModule();
+            module.addSerializer(DstCosts.class, new DstCostSerializer());
+            m_mapper.registerModule(module);
+        } catch (Exception e) {
+            m_logger.info("failed to load customized serializer");
+        }
     }
 
     protected <E> void register(Class<E> clazz) {
