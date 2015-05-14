@@ -14,6 +14,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-restconf/${mdsal.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-base/${odl.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.l2switch/features-l2switch/${l2switch.version}/xml/features</repository>
 
   <feature name='odl-alto-all' version='${project.version}' description='OpenDaylight :: alto :: All '>
     <feature version='${project.version}'>odl-alto-provider</feature>
@@ -85,8 +86,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${mdsal.version}'>odl-mdsal-common</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version='${sal.version}'>odl-adsal-core</feature>
-    <bundle>mvn:org.opendaylight.alto/simple-impl/${project.version}</bundle>
     <configfile finalname='${configfile.directory}/alto-simple.xml'>mvn:org.opendaylight.alto/simple-impl/${project.version}/xml/config</configfile>
+    <bundle>mvn:org.opendaylight.alto/simple-impl/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-northbound' version='${project.version}' description='Opendaylight :: alto :: Northbound'>
@@ -100,6 +101,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-integration-test' version='${project.version}' description='Opendaylight :: alto :: IntegrationTest'>
     <feature>odl-restconf-all</feature>
+    <feature version='${project.version}'>odl-alto-hosttracker</feature>
     <feature version='${project.version}'>odl-alto-northbound</feature>
     <feature version='${project.version}'>odl-alto-manager</feature>
   </feature>

@@ -166,6 +166,7 @@ public class SimpleAltoService implements NetworkMapService, CostMapService, Aut
         return validateNetworkMapFilter(vtag.rid, filter);
     }
 
+
     @Override
 	public RFC7285CostMap getCostMap(String id) {
         m_logger.info("Handling cost-map resource: {}", id);
@@ -178,6 +179,7 @@ public class SimpleAltoService implements NetworkMapService, CostMapService, Aut
                         = tx.read(LogicalDatastoreType.CONFIGURATION, ciid);
             if (result.get().isPresent()) {
                 CostMap cm = result.get().get();
+                m_logger.info(cm.toString());
                 m_logger.info(m_mapper.writeValueAsString(cm));
                 ObjectNode node = m_mapper.valueToTree(cm);
 

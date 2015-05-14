@@ -158,6 +158,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
     }
 
     public void writeDefaultCostMaps() {
+        ResourceId nm_rid = new ResourceId(new ValidIdString(NMRESOURCEID));
         ResourceId rid = new ResourceId(new ValidIdString(CMRESOURCEID));
 
         InstanceIdentifier<CostMaps> ALTO_CMS = InstanceIdentifier
@@ -170,7 +171,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
         PidName pid1 = new PidName(vis1);
 
         TagString dtag = new TagString(this.networkTag);
-        DependentVtags dv = new DependentVtagsBuilder().setResourceId(rid)
+        DependentVtags dv = new DependentVtagsBuilder().setResourceId(nm_rid)
                 .setTag(dtag).build();
         List<DependentVtags> dvList = new ArrayList<DependentVtags>();
         dvList.add(dv);
