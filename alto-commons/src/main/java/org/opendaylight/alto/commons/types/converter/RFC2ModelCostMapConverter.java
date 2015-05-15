@@ -6,7 +6,6 @@ import org.opendaylight.alto.commons.types.model150404.ModelCostMap;
 import org.opendaylight.alto.commons.types.model150404.ModelCostMapData;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class RFC2ModelCostMapConverter
     extends Converter<RFC7285CostMap, ModelCostMap>{
