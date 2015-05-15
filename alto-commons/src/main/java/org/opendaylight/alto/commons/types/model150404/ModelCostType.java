@@ -14,19 +14,19 @@ public class ModelCostType implements CostType {
 
   @JsonIgnore
   public static final String NUMERICAL = "Numerical";
-  
+
   @JsonIgnore
   public static final String ORDINAL = "Ordinal";
-  
+
   @JsonProperty("alto-service:cost-mode")
   public String costMode = null;
-  
+
   @JsonProperty("alto-service:cost-metric")
   public String costMetric = null;
-  
+
   @JsonProperty("alto-service:description")
   public String description = null;
-  
+
   @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {
@@ -48,7 +48,7 @@ public class ModelCostType implements CostType {
     case ORDINAL:
       return CostMode.Ordinal;
     default:
-      throw new RuntimeException("Non-Supported cost mode."); 
+      throw new RuntimeException("Non-Supported cost mode.");
     }
   }
 

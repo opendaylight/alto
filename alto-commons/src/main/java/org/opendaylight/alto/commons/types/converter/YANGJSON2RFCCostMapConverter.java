@@ -4,15 +4,11 @@ import org.opendaylight.alto.commons.helper.Converter;
 
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostType;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class YANGJSON2RFCCostMapConverter extends Converter<JsonNode, RFC7285CostMap> {

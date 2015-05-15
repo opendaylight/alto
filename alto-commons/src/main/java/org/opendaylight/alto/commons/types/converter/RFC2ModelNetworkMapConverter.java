@@ -15,7 +15,7 @@ public class RFC2ModelNetworkMapConverter
     public RFC2ModelNetworkMapConverter(RFC7285NetworkMap _in) {
         super(_in);
     }
-    
+
     @Override
     public Object _convert() {
         ModelNetworkMap out = new ModelNetworkMap();

@@ -17,10 +17,10 @@ public class ModelCostMapData implements Map {
 
   @JsonProperty("alto-service:src")
   public String src = null;
-  
+
   @JsonProperty("alto-service:dst-costs")
   public List<ModelDstCosts> dstCosts = new LinkedList<ModelDstCosts>();
-  
+
   @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {
@@ -44,7 +44,7 @@ public class ModelCostMapData implements Map {
   public List<DstCosts> getDstCosts() {
     return new LinkedList<DstCosts>(dstCosts);
   }
-  
+
   @JsonIgnore
   @Override
   public MapKey getKey() {

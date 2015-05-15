@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ModelNetworkMap implements NetworkMap {
-    
+
     @JsonProperty("alto-service:resource-id")
     public String rid = null;
 

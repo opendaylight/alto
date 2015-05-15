@@ -37,7 +37,6 @@
   <properties>
     <odl.version>1.5.0-SNAPSHOT</odl.version>
     <karaf.shell.version>2.2.11</karaf.shell.version>
-    <checkstyle.skip>true</checkstyle.skip>
 
     <!-- required by alto command line -->
     <httpclient.version>4.4.1</httpclient.version>
