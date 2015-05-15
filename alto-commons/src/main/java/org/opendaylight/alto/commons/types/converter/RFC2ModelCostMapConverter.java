@@ -36,9 +36,9 @@ public class RFC2ModelCostMapConverter
               hexString.append('0');
           }
           hexString.append(hex);
-      }    
+      }
       return hexString.toString();
-  } 
+  }
 
   @Override
   protected Object _convert() {
