@@ -17,7 +17,7 @@ public class ModelEndpointProperties implements EndpointProperties {
 
   @JsonProperty("alto-service:endpoint")
   public String endpoint = null;
-  
+
   @JsonProperty("alto-service:properties")
   public List<ModelProperties> properties = new LinkedList<ModelProperties>();
 
@@ -36,8 +36,8 @@ public class ModelEndpointProperties implements EndpointProperties {
 
   @JsonIgnore
   @Override
-  public TypedEndpointAddress getEndpoint() {    
-    return new TypedEndpointAddress(endpoint.toCharArray()); 
+  public TypedEndpointAddress getEndpoint() {
+    return new TypedEndpointAddress(endpoint.toCharArray());
   }
 
   @JsonIgnore

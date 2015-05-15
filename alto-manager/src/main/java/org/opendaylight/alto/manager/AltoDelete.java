@@ -13,14 +13,14 @@ public class AltoDelete extends AltoManager {
 
   @Argument(index = 0, name = "resource-type", description = "Resource Type", required = true, multiValued = false)
   String resourceType = null;
-  
+
   @Argument(index = 1, name = "resource-id", description = "Resource Id", required = false, multiValued = false)
   String resourceId = null;
-  
+
   public AltoDelete() {
     super();
   }
-  
+
   @Override
   protected Object doExecute() throws Exception {
     checkResourceID();
@@ -35,31 +35,31 @@ public class AltoDelete extends AltoManager {
     }
     return null;
   }
-  
+
   private void checkResourceID() throws IOException {
     if (networkMapType().equals(resourceType) && isDefaultNetworkMap(resourceId)) {
       throw new RuntimeException("Cannot destroy default network map.");
     }
-    
+
     if (resourceId == null && !endpointPropertyMapType().equals(resourceType)) {
       throw new RuntimeException("Please specify resource id for " + resourceType + ".");
     }
-    
+
     if (resourceId != null && endpointPropertyMapType().equals(resourceType)) {
       throw new RuntimeException("Please do not specify resource id for " + resourceType + ".");
     }
   }
-  
+
   private boolean deleteEndpointPropertyMap() throws IOException {
     log.info("Deleting endpoint property map " + this.resourceId);
     return httpDelete(AltoManagerConstants.RESOURCES_URL + AltoManagerConstants.ENDPOINT_PROPERTY_MAP_NODE);
   }
-  
+
   private boolean deleteCostMap() throws IOException {
     log.info("Deleting endpoint property map " + this.resourceId);
     return httpDelete(AltoManagerConstants.COST_MAP_URL + resourceId);
   }
-  
+
   private boolean deleteNetworkMap() throws IOException {
     log.info("Deleting endpoint property map " + this.resourceId);
     return httpDelete(AltoManagerConstants.NETWORK_MAP_URL + resourceId);

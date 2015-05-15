@@ -15,10 +15,10 @@ public class ModelEndpointPropertyMap implements EndpointPropertyMap {
 
   @JsonProperty("alto-service:meta")
   public ModelEndpointPropertyMeta endpointPropertyMeta = new ModelEndpointPropertyMeta();
-  
+
   @JsonProperty("alto-service:endpoint-properties")
   public List<ModelEndpointProperties> properties = new LinkedList<ModelEndpointProperties>();
-  
+
   @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {

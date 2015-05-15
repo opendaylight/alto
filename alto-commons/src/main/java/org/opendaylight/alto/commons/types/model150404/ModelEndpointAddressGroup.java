@@ -17,7 +17,7 @@ public class ModelEndpointAddressGroup implements EndpointAddressGroup {
 
     @JsonIgnore
     public static final String IPV4 = "ipv4";
-    
+
     @JsonIgnore
     public static final String IPV6 = "ipv6";
 

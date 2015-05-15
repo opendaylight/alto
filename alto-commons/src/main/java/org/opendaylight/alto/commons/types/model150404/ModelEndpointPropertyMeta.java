@@ -14,7 +14,7 @@ public class ModelEndpointPropertyMeta implements Meta {
 
   @JsonProperty("alto-service:dependent-vtags")
   public List<ModelDependentVtag> dependentVtags = new LinkedList<ModelDependentVtag>();
-  
+
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {
     return Meta.class;

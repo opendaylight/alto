@@ -19,7 +19,7 @@ public class ModelEndpoint implements Map {
 
     @JsonProperty("alto-service:endpoint-address-group")
     public List<ModelEndpointAddressGroup> addressGroup = new LinkedList<ModelEndpointAddressGroup>();
-    
+
     @JsonIgnore
     @Override
     public Class<Map> getImplementedInterface() {
