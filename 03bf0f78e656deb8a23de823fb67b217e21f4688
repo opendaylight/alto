@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a9dcd25_0acb6373",
+        "filename": "features/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 2046
+      },
+      "writtenOn": "2015-05-15T12:46:57Z",
+      "side": 1,
+      "message": "\u003ctype\u003exml\u003c/type\u003e\n\u003cclassifier\u003econfig\u003c/classifier\u003e",
+      "range": {
+        "startLine": 131,
+        "startChar": 42,
+        "endLine": 132,
+        "endChar": 5
+      },
+      "revId": "03bf0f78e656deb8a23de823fb67b217e21f4688",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
