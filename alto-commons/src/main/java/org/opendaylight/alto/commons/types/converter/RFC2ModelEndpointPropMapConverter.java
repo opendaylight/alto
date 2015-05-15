@@ -15,9 +15,9 @@ import org.opendaylight.alto.commons.types.model150404.ModelEndpointPropertyMeta
 import org.opendaylight.alto.commons.types.model150404.ModelProperties;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285EndpointPropertyMap;
 
-public class RFC2ModelEndpointPropMapConverter 
+public class RFC2ModelEndpointPropMapConverter
   extends Converter<RFC7285EndpointPropertyMap, ModelEndpointPropertyMap> {
-  
+
   @Override
   protected Object _convert() {
     ModelEndpointPropertyMap out = new ModelEndpointPropertyMap();
@@ -28,25 +28,25 @@ public class RFC2ModelEndpointPropMapConverter
     }
     return out;
   }
-  
+
   protected static String readFromFile(String path) throws IOException {
     return new String(Files.readAllBytes(Paths.get(path)),
         StandardCharsets.UTF_8);
   }
-  
+
   private ModelEndpointPropertyMeta convertMeta(RFC7285EndpointPropertyMap.Meta meta) {
     ModelEndpointPropertyMeta endpointPropertyMeta = new ModelEndpointPropertyMeta();
-    
+
     endpointPropertyMeta.dependentVtags = new LinkedList<ModelDependentVtag>();
     ModelDependentVtag dependentVtag = new ModelDependentVtag();
     dependentVtag.rid = meta.netmap_tags.get(0).rid;
     dependentVtag.vTag = meta.netmap_tags.get(0).tag;
-    
+
     endpointPropertyMeta.dependentVtags.add(dependentVtag);
     return endpointPropertyMeta;
   }
-  
-  private ModelEndpointProperties 
+
+  private ModelEndpointProperties
     convertEndpointProperty(String endpoint, Map<String, String> property) {
       ModelEndpointProperties endpointProperty = new ModelEndpointProperties();
       endpointProperty.endpoint = endpoint;
@@ -56,7 +56,7 @@ public class RFC2ModelEndpointPropMapConverter
       }
       return endpointProperty;
   }
-  
+
   private ModelProperties convertProperty(String propertyType, String propertyValue) {
     ModelProperties property = new ModelProperties();
     property.propertyType = propertyType;

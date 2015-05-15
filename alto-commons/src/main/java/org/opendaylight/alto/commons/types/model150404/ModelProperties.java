@@ -14,10 +14,10 @@ public class ModelProperties implements Properties {
 
   @JsonProperty("alto-service:property-type")
   public String propertyType = null;
-  
+
   @JsonProperty("alto-service:property")
   public String propertyValue = null;
-  
+
   @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {

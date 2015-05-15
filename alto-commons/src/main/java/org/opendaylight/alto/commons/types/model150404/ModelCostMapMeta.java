@@ -16,10 +16,10 @@ public class ModelCostMapMeta implements Meta  {
 
   @JsonProperty("alto-service:dependent-vtags")
   public List<ModelDependentVtag> dependentVtags = new LinkedList<ModelDependentVtag>();
-  
+
   @JsonProperty("alto-service:cost-type")
   public ModelCostType costType = new ModelCostType();
-  
+
   @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {

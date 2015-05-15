@@ -7,14 +7,12 @@ import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostType;
 
 import org.opendaylight.alto.commons.types.converter.YANGJSON2RFCNetworkMapConverter;
 import org.opendaylight.alto.commons.types.converter.YANGJSON2RFCCostMapConverter;
 
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.binding.Augmentable;
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.util.BindingReflections;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.Resources;
@@ -32,17 +30,12 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev15040
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 
 import org.opendaylight.controller.sal.utils.ServiceHelper;
 import org.osgi.framework.ServiceRegistration;
 
 import com.google.common.base.Optional;
-import com.google.common.util.concurrent.AsyncFunction;
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Iterator;
@@ -223,7 +216,7 @@ public class SimpleAltoService implements NetworkMapService, CostMapService, Aut
 
 
     @Override
-	public RFC7285CostMap getCostMap(String id) {
+    public RFC7285CostMap getCostMap(String id) {
         m_logger.info("Handling cost-map resource: {}", id);
         InstanceIdentifier<CostMap> ciid = getCostMapIID(id);
         m_logger.info("CostMap IID: {}", ciid);
@@ -250,13 +243,13 @@ public class SimpleAltoService implements NetworkMapService, CostMapService, Aut
     }
 
     @Override
-	public RFC7285CostMap getCostMap(RFC7285VersionTag vtag) {
+    public RFC7285CostMap getCostMap(RFC7285VersionTag vtag) {
         //TODO
         return null;
     }
 
     @Override
-	public RFC7285CostMap getCostMap(String id, RFC7285CostType type) {
+    public RFC7285CostMap getCostMap(String id, RFC7285CostType type) {
         RFC7285CostMap cm = getCostMap(id);
         if (cm == null)
             return null;
@@ -266,13 +259,13 @@ public class SimpleAltoService implements NetworkMapService, CostMapService, Aut
     }
 
     @Override
-	public RFC7285CostMap getCostMap(RFC7285VersionTag vtag, RFC7285CostType type) {
+    public RFC7285CostMap getCostMap(RFC7285VersionTag vtag, RFC7285CostType type) {
         //TODO
         return null;
     }
 
     @Override
-	public RFC7285CostMap getCostMap(String id, RFC7285CostMap.Filter filter) {
+    public RFC7285CostMap getCostMap(String id, RFC7285CostMap.Filter filter) {
         RFC7285CostMap cm = null;
         if (filter.costType != null) {
             cm = getCostMap(id, filter.costType);
@@ -315,31 +308,31 @@ public class SimpleAltoService implements NetworkMapService, CostMapService, Aut
     }
 
     @Override
-	public RFC7285CostMap getCostMap(RFC7285VersionTag vtag, RFC7285CostMap.Filter filter) {
+    public RFC7285CostMap getCostMap(RFC7285VersionTag vtag, RFC7285CostMap.Filter filter) {
         //TODO
         return null;
     }
 
     @Override
-	public Boolean supportCostType(String id, RFC7285CostType type) {
+    public Boolean supportCostType(String id, RFC7285CostType type) {
         //TODO
         return true;
     }
 
     @Override
-	public Boolean supportCostType(RFC7285VersionTag vtag, RFC7285CostType type) {
+    public Boolean supportCostType(RFC7285VersionTag vtag, RFC7285CostType type) {
         //TODO
         return true;
     }
 
     @Override
-	public Boolean validateCostMapFilter(String id, RFC7285CostMap.Filter filter) {
+    public Boolean validateCostMapFilter(String id, RFC7285CostMap.Filter filter) {
         //TODO
         return true;
     }
 
     @Override
-	public Boolean validateCostMapFilter(RFC7285VersionTag vtag, RFC7285CostMap.Filter filter) {
+    public Boolean validateCostMapFilter(RFC7285VersionTag vtag, RFC7285CostMap.Filter filter) {
         //TODO
         return true;
     }

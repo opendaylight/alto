@@ -2,11 +2,8 @@ package org.opendaylight.alto.commons.types.converter;
 
 import org.opendaylight.alto.commons.helper.Converter;
 
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class YANGJSON2RFCAddressGroupConverter extends Converter<JsonNode, RFC7285Endpoint.AddressGroup> {

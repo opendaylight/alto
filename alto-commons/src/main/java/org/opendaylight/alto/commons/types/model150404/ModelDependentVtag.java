@@ -14,10 +14,10 @@ public class ModelDependentVtag implements DependentVtags {
 
   @JsonProperty("alto-service:resource-id")
   public String rid = "";
-  
+
   @JsonProperty("alto-service:tag")
   public String vTag = "";
-  
+
   @JsonIgnore
   @Override
   public Class<? extends DataContainer> getImplementedInterface() {

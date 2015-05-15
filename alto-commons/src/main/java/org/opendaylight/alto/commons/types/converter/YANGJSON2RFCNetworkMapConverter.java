@@ -6,8 +6,6 @@ import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class YANGJSON2RFCNetworkMapConverter extends Converter<JsonNode, RFC7285NetworkMap> {
