@@ -41,8 +41,8 @@
     <!-- required by alto command line -->
     <httpclient.version>4.4.1</httpclient.version>
 
-    <ietf.model.version>2010.09.24.7-SNAPSHOT</ietf.model.version>
-    <ietf.yang.types.version>2013.07.15.7-SNAPSHOT</ietf.yang.types.version>
+    <ietf.model.version>2010.09.24.8-SNAPSHOT</ietf.model.version>
+    <ietf.yang.types.version>2013.07.15.8-SNAPSHOT</ietf.yang.types.version>
 
     <!-- used by yangtools, but the name is strange.
          TODO: need more investigation -->
@@ -63,7 +63,7 @@
       0.6.0-SNAPSHOT
     </controller.commons.northbound.version>
     <l2switch.version>0.3.0-SNAPSHOT</l2switch.version>
-    <ietf.topology.version>2013.10.21.7-SNAPSHOT</ietf.topology.version>
+    <ietf.topology.version>2013.10.21.8-SNAPSHOT</ietf.topology.version>
     <commons.catalina.version>7.0.53.v201406061610</commons.catalina.version>
   </properties>
 
