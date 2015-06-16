@@ -687,14 +687,17 @@ public class AltoHostTrackerImpl implements DataChangeListener {
             Nodes ns = opNodes.get();
             for (org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.Node n : ns
                     .getNode()) {
-                for (NodeConnector nc : n.getNodeConnector()) {
-                    AddressCapableNodeConnector acnc = (AddressCapableNodeConnector) nc
-                            .getAugmentation(AddressCapableNodeConnector.class);
-                    if (acnc != null) {
-                        for (Addresses addrs : acnc.getAddresses()) {
-                            log.info("existing address: " + addrs);
-                            addrsList.add(addrs);
-                            mergeEndpointPropertyMapForAddresses(addrs);
+                List<NodeConnector> connectors = n.getNodeConnector();
+                if (connectors != null) {
+                    for (NodeConnector nc : connectors) {
+                        AddressCapableNodeConnector acnc = (AddressCapableNodeConnector) nc
+                                .getAugmentation(AddressCapableNodeConnector.class);
+                        if (acnc != null) {
+                            for (Addresses addrs : acnc.getAddresses()) {
+                                log.info("existing address: " + addrs);
+                                addrsList.add(addrs);
+                                mergeEndpointPropertyMapForAddresses(addrs);
+                            }
                         }
                     }
                 }
