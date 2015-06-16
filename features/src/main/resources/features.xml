@@ -74,7 +74,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version='${jackson.version}'>odl-base-jackson</feature>
     <feature version='${project.version}'>odl-alto-commons</feature>
+    <!-- bundle no longer exists
     <bundle>mvn:org.opendaylight.alto/alto-services/${project.version}</bundle>
+    -->
   </feature>
 
   <feature name='odl-alto-simple' version='${project.version}' description='OpenDaylight :: alto :: Simple'>
