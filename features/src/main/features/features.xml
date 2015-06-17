@@ -56,11 +56,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto.alto-hosttracker/alto-hosttracker-model/${project.version}</bundle>
   </feature>
 
-  <feature name='odl-alto-extension' version='${project.version}' description='Opendaylight :: alto :: extension'>
-    <feature version='${project.version}'>odl-alto-commons</feature>
-    <bundle>mvn:org.opendaylight.alto/services.ext.fs-map/${project.version}</bundle>
-  </feature>
-
   <feature name='odl-alto-manager' version='${project.version}' description='OpenDaylight :: alto :: Provider'>
     <feature version='${project.version}'>odl-alto-commons</feature>
     <bundle>mvn:org.apache.httpcomponents/httpclient-osgi/${httpclient.version}</bundle>
