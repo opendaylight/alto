@@ -28,8 +28,9 @@
     <module>alto-manager</module>
     <module>alto-services/api</module>
     <module>alto-services/provider</module>
+    <!--
     <module>alto-extensions</module>
-    <!-- <module>alto-karaf</module> -->
+    -->
     <module>alto-northbound</module>
     <module>alto-karaf</module>
   </modules>
