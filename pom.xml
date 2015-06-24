@@ -66,6 +66,9 @@
     <l2switch.version>0.2.0-SNAPSHOT</l2switch.version>
     <ietf.topology.version>2013.10.21.7-SNAPSHOT</ietf.topology.version>
     <commons.catalina.version>7.0.53.v201406061610</commons.catalina.version>
+
+    <!-- Sonar -->
+    <sonar.host.url>https://sonar.opendaylight.org/</sonar.host.url>
   </properties>
 
   <dependencyManagement>
@@ -75,31 +78,37 @@
         <artifactId>ietf-inet-types</artifactId>
         <version>${ietf.model.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.opendaylight.yangtools.model</groupId>
         <artifactId>ietf-yang-types-20130715</artifactId>
         <version>${ietf.yang.types.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient-osgi</artifactId>
         <version>${httpclient.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpcore-osgi</artifactId>
         <version>${httpclient.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.opendaylight.controller</groupId>
         <artifactId>sal-binding-api</artifactId>
         <version>${mdsal.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.opendaylight.controller</groupId>
         <artifactId>sal-binding-config</artifactId>
         <version>${mdsal.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.opendaylight.controller</groupId>
         <artifactId>sal-common-util</artifactId>
@@ -108,13 +117,86 @@
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <!-- Sonar -->
+    <dependency>
+      <groupId>org.codehaus.sonar-plugins.java</groupId>
+      <artifactId>sonar-jacoco-listeners</artifactId>
+      <version>${sonar-jacoco-listeners.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+
   <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.6.3.201306030806</version>
+        <executions>
+          <execution>
+            <id>prepare-ut-agent</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${sonar.jacoco.reportPath}</destFile>
+              <propertyName>jacoco.agent.ut.arg</propertyName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>prepare-it-agent</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <destFile>${sonar.jacoco.itReportPath}</destFile>
+              <propertyName>jacoco.agent.it.arg</propertyName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
     <pluginManagement>
       <plugins>
         <plugin> <!-- used by most projects -->
           <groupId>org.opendaylight.yangtools</groupId>
           <artifactId>yang-maven-plugin</artifactId>
           <version>${yangtools.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <properties>
+              <property>
+                <name>listener</name>
+                <value>org.sonar.java.jacoco.JUnitListener</value>
+              </property>
+            </properties>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <configuration>
+            <!-- Specific to generate mapping between tests and covered code -->
+            <argLine>${jacoco.agent.it.arg}</argLine>
+            <properties>
+              <property>
+                <name>listener</name>
+                <value>org.sonar.java.jacoco.JUnitListener</value>
+              </property>
+            </properties>
+            <!-- Let's put failsafe reports with surefire to have access to tests failures/success reports in sonar -->
+            <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+          </configuration>
         </plugin>
 
         <plugin> <!-- global checkstyle -->
@@ -148,6 +230,119 @@
               <version>${controller.checkstyle.version}</version>
             </dependency>
           </dependencies>
+        </plugin>
+
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                    <versionRange>[0.0,)</versionRange>
+                    <goals>
+                      <goal>set-system-properties</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <versionRange>[0.0,)</versionRange>
+                    <goals>
+                      <goal>prepare-agent</goal>
+                      <goal>pre-test</goal>
+                      <goal>post-test</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.ops4j.pax.exam</groupId>
+                    <artifactId>maven-paxexam-plugin</artifactId>
+                    <versionRange>[1.2.4,)</versionRange>
+                    <goals>
+                      <goal>generate-depends-file</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute>
+                      <runOnIncremental>false</runOnIncremental>
+                    </execute>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <versionRange>[2.0,)</versionRange>
+                    <goals>
+                      <goal>check</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.opendaylight.yangtools</groupId>
+                    <artifactId>yang-maven-plugin</artifactId>
+                    <versionRange>[0.5,)</versionRange>
+                    <goals>
+                      <goal>generate-sources</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute/>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.groovy.maven</groupId>
+                    <artifactId>gmaven-plugin</artifactId>
+                    <versionRange>1.0</versionRange>
+                    <goals>
+                      <goal>execute</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <versionRange>${enforcer.version}</versionRange>
+                    <goals>
+                      <goal>enforce</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

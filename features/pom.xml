@@ -173,6 +173,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <classifier>config</classifier>
     </dependency>
 
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>service-api-rfc7285</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>simple-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
