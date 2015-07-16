@@ -16,6 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.opendaylight.alto.commons.helper.ServiceHelper;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285JSONMapper;
 import org.opendaylight.alto.commons.types.rfc7285.FormatValidator;
 import org.opendaylight.alto.commons.types.rfc7285.MediaType;
@@ -25,20 +26,14 @@ import org.opendaylight.alto.commons.types.rfc7285.RFC7285IRD;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
-
 import org.opendaylight.alto.services.api.rfc7285.AltoService;
 import org.opendaylight.alto.services.api.rfc7285.IRDService;
 import org.opendaylight.alto.services.api.rfc7285.NetworkMapService;
 import org.opendaylight.alto.services.api.rfc7285.CostMapService;
 import org.opendaylight.alto.services.api.rfc7285.EndpointCostService;
 import org.opendaylight.alto.services.api.rfc7285.EndpointPropertyService;
-
-
 import org.opendaylight.alto.northbound.exception.AltoBasicException;
 import org.opendaylight.alto.northbound.exception.AltoBadFormatException;
-
-import org.opendaylight.controller.sal.utils.ServiceHelper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +44,7 @@ public class AltoNorthbound {
 
     private RFC7285JSONMapper mapper = new RFC7285JSONMapper();
 
+    @SuppressWarnings("unchecked")
     private <E> E getService(Class<E> clazz) {
         E service = (E)ServiceHelper.getGlobalInstance(clazz, this);
         if (service == null) {

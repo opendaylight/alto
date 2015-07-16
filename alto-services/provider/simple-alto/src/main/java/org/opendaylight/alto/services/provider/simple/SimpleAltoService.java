@@ -2,16 +2,14 @@ package org.opendaylight.alto.services.provider.simple;
 
 import org.opendaylight.alto.services.api.rfc7285.NetworkMapService;
 import org.opendaylight.alto.services.api.rfc7285.CostMapService;
-
+import org.opendaylight.alto.commons.helper.ServiceHelper;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostType;
-
 import org.opendaylight.alto.commons.types.converter.YANGJSON2RFCNetworkMapConverter;
 import org.opendaylight.alto.commons.types.converter.YANGJSON2RFCCostMapConverter;
-
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.Augmentation;
 import org.opendaylight.yangtools.yang.binding.util.BindingReflections;
@@ -27,12 +25,9 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.cost.map.map
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ResourceId;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ird.meta.DefaultAltoNetworkMap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.ird.Meta;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-
-import org.opendaylight.controller.sal.utils.ServiceHelper;
 import org.osgi.framework.ServiceRegistration;
 
 import com.google.common.base.Optional;
@@ -54,6 +49,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+@SuppressWarnings("rawtypes")
 public class SimpleAltoService implements NetworkMapService, CostMapService, AutoCloseable {
 
     private final Logger m_logger = LoggerFactory.getLogger(SimpleAltoService.class);

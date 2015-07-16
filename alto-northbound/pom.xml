@@ -17,13 +17,6 @@
       <plugin>
         <groupId>org.codehaus.enunciate</groupId>
         <artifactId>maven-enunciate-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>org.opendaylight.controller</groupId>
-            <artifactId>sal</artifactId>
-            <version>${sal.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
 
       <plugin>
@@ -39,7 +32,6 @@
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
               org.apache.commons.logging,
               com.sun.jersey.spi.container.servlet,
-              org.opendaylight.controller.sal.utils,
               org.opendaylight.controller.sal.authorization,
               org.opendaylight.controller.sal.packet.address,
               javax.ws.rs,
