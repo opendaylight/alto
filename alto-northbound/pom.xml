@@ -60,12 +60,6 @@
 
     <dependency>
       <groupId>org.opendaylight.controller</groupId>
-      <artifactId>commons.northbound</artifactId>
-      <version>${controller.commons.northbound.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.controller</groupId>
       <artifactId>sal-common-util</artifactId>
     </dependency>
 
