@@ -10,10 +10,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
   <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.controller/features-adsal/${sal.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.controller/features-restconf/${mdsal.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.controller/features-base/${odl.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.l2switch/features-l2switch/${l2switch.version}/xml/features</repository>
 
   <feature name='odl-alto-all' version='${project.version}' description='OpenDaylight :: alto :: All '>
@@ -32,8 +30,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-commons' version='${project.version}' description='OpenDaylight :: alto :: utils'>
     <feature version='${project.version}'>odl-alto-model</feature>
-    <feature version='${jackson.version}'>odl-base-jackson</feature>
-    <feature version='7.0.53'>odl-base-tomcat</feature>
+    <bundle start="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+    <bundle start="true">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+    <bundle start="true">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
+    <bundle>mvn:org.osgi/org.osgi.core/${osgi.core.version}</bundle>
     <bundle>mvn:org.opendaylight.alto/alto-commons/${project.version}</bundle>
   </feature>
 
@@ -72,25 +72,34 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-commons</feature>
     <feature version='${mdsal.version}'>odl-mdsal-common</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
-    <feature version='${jackson.version}'>odl-base-jackson</feature>
     <feature version='${project.version}'>odl-alto-commons</feature>
     <bundle>mvn:org.opendaylight.alto/alto-services/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-simple' version='${project.version}' description='OpenDaylight :: alto :: Simple'>
-    <feature version='${project.version}'>odl-alto-commons</feature>
     <feature version='${mdsal.version}'>odl-mdsal-common</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
-    <feature version='${sal.version}'>odl-adsal-core</feature>
-    <bundle>mvn:org.opendaylight.alto/service-api-rfc7285/${project.version}</bundle>
+    <feature version='${project.version}'>odl-alto-commons</feature>
     <configfile finalname='${configfile.directory}/alto-simple.xml'>mvn:org.opendaylight.alto/simple-impl/${project.version}/xml/config</configfile>
+    <bundle>mvn:org.opendaylight.alto/service-api-rfc7285/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto/simple-impl/${project.version}</bundle>
   </feature>
 
+  <feature name='odl-alto-tomcat' version='${project.version}' description='Opendaylight :: alto :: Tomcat'>
+    <bundle start="true">mvn:orbit/javax.ejb/3.1.1.v201204261316</bundle>
+    <bundle start="true">mvn:orbit/javax.xml.rpc/1.1.0.v201005080400</bundle>
+    <bundle start="true">mvn:eclipselink/javax.persistence/2.0.4.v201112161009</bundle>
+    <bundle start="true">mvn:orbit/org.apache.catalina/${commons.catalina.version}</bundle>
+    <bundle start="true">mvn:orbit/org.apache.coyote/${commons.coyote.version}</bundle>
+    <bundle start="true">mvn:orbit/org.apache.juli.extras/${commons.juli.version}</bundle>
+    <bundle start="true">mvn:orbit/org.apache.tomcat.api/${commons.tomcat.api.version}</bundle>
+    <bundle start="true">mvn:orbit/org.apache.tomcat.util/${commons.tomcat.util.version}</bundle>
+  </feature>
+
   <feature name='odl-alto-northbound' version='${project.version}' description='Opendaylight :: alto :: Northbound'>
-    <feature version='${jersey.version}'>odl-base-jersey</feature>
     <feature>war</feature>
-    <feature version='${project.version}'>odl-alto-commons</feature>
+    <bundle>mvn:com.sun.jersey/jersey-servlet/${jersey.version}</bundle>
+    <feature version='${project.version}'>odl-alto-tomcat</feature>
     <feature version='${project.version}'>odl-alto-simple</feature>
     <bundle>mvn:org.opendaylight.alto/alto-northbound/${project.version}</bundle>
   </feature>

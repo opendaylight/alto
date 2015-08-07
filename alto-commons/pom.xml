@@ -23,6 +23,7 @@
             <Import-Package>*</Import-Package>
             <Export-Package>
               org.opendaylight.alto.commons.*;
+              org.opendaylight.alto.commons.helper.*;
               org.opendaylight.alto.commons.types.*;
               org.opendaylight.alto.commons.types.rfc7285.*;
             </Export-Package>

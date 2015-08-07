@@ -65,6 +65,10 @@
     <l2switch.version>0.3.0-SNAPSHOT</l2switch.version>
     <ietf.topology.version>2013.10.21.8-SNAPSHOT</ietf.topology.version>
     <commons.catalina.version>7.0.53.v201406061610</commons.catalina.version>
+    <commons.coyote.version>7.0.53.v201406070630</commons.coyote.version>
+    <commons.juli.version>7.0.53.v201406060720</commons.juli.version>
+    <commons.tomcat.api.version>7.0.53.v201406060720</commons.tomcat.api.version>
+    <commons.tomcat.util.version>7.0.53.v201406070630</commons.tomcat.util.version>
   </properties>
 
   <dependencyManagement>
