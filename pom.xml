@@ -29,9 +29,8 @@
     <module>alto-services/api</module>
     <module>alto-services/provider</module>
     <module>alto-extensions</module>
-    <!-- <module>alto-karaf</module> -->
     <module>alto-northbound</module>
-    <module>alto-karaf</module>
+    <!-- <module>alto-karaf</module> -->
   </modules>
 
   <properties>
@@ -152,7 +151,41 @@
             </dependency>
           </dependencies>
         </plugin>
+
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>prepare-ut-agent</id>
+              <phase>process-test-classes</phase>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+              <configuration>
+                <destFile>${sonar.jacoco.reportPath}</destFile>
+              </configuration>
+            </execution>
+            <execution>
+              <id>prepare-it-agent</id>
+              <phase>pre-integration-test</phase>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+              <configuration>
+                <destFile>${sonar.jacoco.itReportPath}</destFile>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
   </build>
 </project>

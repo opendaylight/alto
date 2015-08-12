@@ -31,3 +31,4 @@ maven-eclipse.xml
 **/*.swp
 **/*.checkstyle
 **/*.swo
+.zsh*
