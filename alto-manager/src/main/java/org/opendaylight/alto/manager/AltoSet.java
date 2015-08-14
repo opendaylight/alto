@@ -10,9 +10,9 @@ package org.opendaylight.alto.manager;
 
 import java.io.IOException;
 
-import org.apache.felix.gogo.commands.Argument;
-import org.apache.felix.gogo.commands.Command;
 import org.apache.http.HttpResponse;
+import org.apache.karaf.shell.commands.Argument;
+import org.apache.karaf.shell.commands.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
