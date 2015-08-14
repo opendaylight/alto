@@ -11,8 +11,8 @@ package org.opendaylight.alto.manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.felix.gogo.commands.Argument;
-import org.apache.felix.gogo.commands.Command;
+import org.apache.karaf.shell.commands.Argument;
+import org.apache.karaf.shell.commands.Command;
 import org.opendaylight.alto.commons.types.converter.RFC2ModelCostMapConverter;
 import org.opendaylight.alto.commons.types.converter.RFC2ModelEndpointPropMapConverter;
 import org.opendaylight.alto.commons.types.converter.RFC2ModelNetworkMapConverter;
