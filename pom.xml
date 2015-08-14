@@ -18,6 +18,13 @@
   <name>alto</name> <!-- Used by Sonar to set project name -->
   <packaging>pom</packaging>
 
+  <scm>
+    <connection>scm:git:ssh://git.opendaylight.org:29418/alto.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/alto.git</developerConnection>
+    <url>https://wiki.opendaylight.org/view/ALTO:Main</url>
+    <tag>HEAD</tag>
+  </scm>
+
   <modules>
     <module>alto-model</module>
     <module>alto-config</module> <!-- required by alto-manager -->
