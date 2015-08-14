@@ -51,6 +51,7 @@
               org.apache.karaf.shell.console,
               org.apache.http.*,
               org.opendaylight.alto.commons.*,
+              org.osgi.framework.*,
               org.slf4j
             </Import-Package>
             <Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
