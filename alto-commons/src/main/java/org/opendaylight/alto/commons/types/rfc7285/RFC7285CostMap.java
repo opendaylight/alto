@@ -38,7 +38,7 @@ public class RFC7285CostMap {
         public RFC7285CostType costType;
 
         @JsonProperty("pids")
-        public RFC7285QueryPairs pids;
+        public RFC7285QueryPairs pids = new RFC7285QueryPairs();
     }
 
     @JsonProperty("meta")

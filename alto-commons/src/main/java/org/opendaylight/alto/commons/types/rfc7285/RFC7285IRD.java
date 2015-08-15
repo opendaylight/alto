@@ -19,15 +19,10 @@ public class RFC7285IRD {
     public class Meta extends Extensible {
 
         @JsonProperty("default-alto-network-map")
-        public String defaultAltoNetworkMap;
+        public String defaultAltoNetworkMap = "";
 
         @JsonProperty("cost-types")
-        public Map<String, RFC7285CostType> costTypes;
-
-        public Meta() {
-            defaultAltoNetworkMap = null;
-            costTypes = new LinkedHashMap<String, RFC7285CostType>();
-        }
+        public Map<String, RFC7285CostType> costTypes = new LinkedHashMap<String, RFC7285CostType>();
 
     }
 
@@ -49,7 +44,7 @@ public class RFC7285IRD {
     }
 
     @JsonProperty("meta")
-    public Meta meta;
+    public Meta meta = new Meta();
 
     @JsonProperty("resources")
     public Map<String, Entry> resources = new LinkedHashMap<String, Entry>();
