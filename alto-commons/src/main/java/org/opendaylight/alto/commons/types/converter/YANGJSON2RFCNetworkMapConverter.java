@@ -38,7 +38,7 @@ public class YANGJSON2RFCNetworkMapConverter extends Converter<JsonNode, RFC7285
         nm.meta.vtag = new RFC7285VersionTag(resource_id, tag);
 
         JsonNode map = node.get("map");
-        assert !map.isArray();
+        assert map.isArray();
         for (JsonNode egroup: map) {
             String pid = extract_pid(egroup);
             JsonNode addr_group = egroup.get("endpointAddressGroup");
