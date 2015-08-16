@@ -9,7 +9,6 @@
 package org.opendaylight.alto.commons.types.rfc7285;
 
 import java.util.LinkedHashMap;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +32,9 @@ public class RFC7285NetworkMap {
     public static class Filter {
 
         @JsonProperty("pids")
-        public List<String> pids = new ArrayList<String>();
-
+        public List<String> pids;
+        @JsonProperty("address-types")
+        public List<String> addressTypes;
     }
 
     @JsonProperty("meta")

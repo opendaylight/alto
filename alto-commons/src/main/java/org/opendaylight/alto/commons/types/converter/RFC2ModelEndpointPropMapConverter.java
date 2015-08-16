@@ -22,6 +22,7 @@ import org.opendaylight.alto.commons.types.model150404.ModelEndpointPropertyMap;
 import org.opendaylight.alto.commons.types.model150404.ModelEndpointPropertyMeta;
 import org.opendaylight.alto.commons.types.model150404.ModelProperties;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285EndpointPropertyMap;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 
 public class RFC2ModelEndpointPropMapConverter
   extends Converter<RFC7285EndpointPropertyMap, ModelEndpointPropertyMap> {
@@ -46,11 +47,13 @@ public class RFC2ModelEndpointPropMapConverter
     ModelEndpointPropertyMeta endpointPropertyMeta = new ModelEndpointPropertyMeta();
 
     endpointPropertyMeta.dependentVtags = new LinkedList<ModelDependentVtag>();
-    ModelDependentVtag dependentVtag = new ModelDependentVtag();
-    dependentVtag.rid = meta.netmap_tags.get(0).rid;
-    dependentVtag.vTag = meta.netmap_tags.get(0).tag;
+    for (RFC7285VersionTag vtag : meta.netmap_tags) {
+        ModelDependentVtag dependentVtag = new ModelDependentVtag();
+        dependentVtag.rid = vtag.rid;
+        dependentVtag.vTag = vtag.tag;
+        endpointPropertyMeta.dependentVtags.add(dependentVtag);
+    }
 
-    endpointPropertyMeta.dependentVtags.add(dependentVtag);
     return endpointPropertyMeta;
   }
 
@@ -71,5 +74,4 @@ public class RFC2ModelEndpointPropMapConverter
     property.propertyValue = propertyValue;
     return property;
   }
-
 }

@@ -12,20 +12,32 @@ import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class RFC7285IRD {
-
-    public class Meta extends Extensible {
-
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public class Meta {
         @JsonProperty("default-alto-network-map")
-        public String defaultAltoNetworkMap = "";
+        public String defaultAltoNetworkMap;
 
         @JsonProperty("cost-types")
         public Map<String, RFC7285CostType> costTypes = new LinkedHashMap<String, RFC7285CostType>();
 
     }
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    public class Capability {
+        @JsonProperty("cost-constraints")
+        public Boolean costConstraints;
 
+        @JsonProperty("cost-type-names")
+        public List<String> costTypeNames;
+
+        @JsonProperty("prop-types")
+        public List<String> propTypes;
+    }
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public class Entry {
         @JsonProperty("uri")
         public String uri;
@@ -37,7 +49,7 @@ public class RFC7285IRD {
         public String accepts;
 
         @JsonProperty("capabilities")
-        public Map<String, Object> capabilities;
+        public Capability capabilities;
 
         @JsonProperty("uses")
         public List<String> uses;

@@ -13,7 +13,29 @@ package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev1504
 public class MediaTypeBuilder {
 
     public static MediaType getDefaultInstance(java.lang.String defaultValue) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+        if ("application/alto-directory+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoDirectory);
+        } else if ("application/alto-networkmap+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoNetworkmap);
+        } else if ("application/alto-networkmapfilter+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoNetworkmapfilter);
+        } else if ("application/alto-costmap+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoCostmap);
+        } else if ("application/alto-costmapfilter+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoCostmapfilter);
+        } else if ("application/alto-endpointprop+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoEndpointprop);
+        } else if ("application/alto-endpointpropparams+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoEndpointpropparams);
+        } else if ("application/alto-endpointcost+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoEndpointcost);
+        } else if ("application/alto-endpointcostparams+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoEndpointcostparams);
+        } else if ("application/alto-error+json".equals(defaultValue)) {
+            return new MediaType(MediaType.Enumeration.AltoError);
+        }
+
+        throw new java.lang.UnsupportedOperationException("Wrong MediaType: "+defaultValue);
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -111,7 +112,7 @@ public class TestRFC7285Types {
         RFC7285JSONMapper mapper = new RFC7285JSONMapper();
 
         RFC7285NetworkMap.Filter filter = new RFC7285NetworkMap.Filter();
-
+        filter.pids = new ArrayList<String>();
         filter.pids.add("PID1");
         filter.pids.add("PID2");
 
@@ -199,6 +200,7 @@ public class TestRFC7285Types {
 
         RFC7285CostMap.Filter filter = new RFC7285CostMap.Filter();
         filter.costType = new RFC7285CostType("numerical", "routingcost", "test");
+        filter.pids = new RFC7285QueryPairs();
         filter.pids.src.add("PID1");
         filter.pids.dst.add("PID1");
         filter.pids.dst.add("PID2");

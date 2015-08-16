@@ -37,11 +37,11 @@ public class RFC7285Endpoint {
 
     public static class PropertyRequest {
 
-        @JsonProperty("properties")
-        public List<String> properties = new ArrayList<String>();
+        @JsonProperty(value="properties")
+        public List<String> properties;
 
-        @JsonProperty("endpoints")
-        public List<String> endpoints = new ArrayList<String>();
+        @JsonProperty(value="endpoints")
+        public List<String> endpoints;
     }
 
     public static class PropertyResponse {

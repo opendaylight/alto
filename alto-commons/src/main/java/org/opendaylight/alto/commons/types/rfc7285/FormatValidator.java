@@ -24,6 +24,28 @@ public class FormatValidator {
     private static final String VALID_TAG_CHARSET = "!-~";
     private static final Pattern VALID_TAG_PATTERN
                             = Pattern.compile("^["+VALID_TAG_CHARSET+"]{1,64}$");
+    private static final String VALID_ADDR_IPV4 = "^ipv4:(([0-9]|[1-9][0-9]|1[0-9][0-9]|"
+                                                    + "2[0-4][0-9]|25[0-5])\\.){3}"
+                                                    + "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"
+                                                    + "(%[\\p{N}\\p{L}]+)?$";
+    private static final Pattern VALID_ADDR_IPV4_PATTERN
+                            = Pattern.compile(VALID_ADDR_IPV4);
+    private static final String VALID_ADDR_IPV6_1 = "^ipv6:((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}"
+                                                    + "((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|"
+                                                    + "(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\\.){3}"
+                                                    + "(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))"
+                                                    + "(%[\\p{N}\\p{L}]+)?$";
+    private static final Pattern VALID_ADDR_IPV6_1_PATTERN
+                            = Pattern.compile(VALID_ADDR_IPV6_1);
+    private static final String VALID_ADDR_IPV6_2 = "^ipv6:((([^:]+:){6}(([^:]+:[^:]+)|(.*\\..*)))|"
+                                                    + "((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)"
+                                                    + "(%.+)?)$";
+    private static final Pattern VALID_ADDR_IPV6_2_PATTERN
+                            = Pattern.compile(VALID_ADDR_IPV6_2);
+    private static final String VALID_OPERATORS = "(gt|lt|ge|le|eq)";
+    private static final Pattern VALID_CONSTRAINTS_PATTERN
+                            = Pattern.compile("^"+VALID_OPERATORS+" [0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$");
+
 
     public static boolean validId(String id) {
         return VALID_ID_PATTERN.matcher(id).matches();
@@ -79,5 +101,25 @@ public class FormatValidator {
      * */
     public static boolean validGlobalEndpointProperty(String prop) {
         return (prop.length() <= 32) && validId(prop);
+    }
+
+    /**
+     * RFC 7285 section 11.3.2
+     * */
+    public static boolean validFilterConstraint(String constrant) {
+        return VALID_CONSTRAINTS_PATTERN.matcher(constrant).matches();
+    }
+
+    public static boolean validAddressIpv4(String address) {
+        return VALID_ADDR_IPV4_PATTERN.matcher(address).matches();
+    }
+
+    public static boolean validAddressIpv6(String address) {
+        return VALID_ADDR_IPV6_1_PATTERN.matcher(address).matches() &&
+                VALID_ADDR_IPV6_2_PATTERN.matcher(address).matches();
+    }
+
+    public static boolean validEndpointAddress(String address) {
+        return validAddressIpv4(address) || validAddressIpv6(address);
     }
 }

@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.TypedEndpointAddress;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.TypedEndpointAddressBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.endpoint.property.map.data.EndpointProperties;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.endpoint.property.map.data.EndpointPropertiesKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.endpoint.property.map.data.endpoint.properties.Properties;
@@ -45,7 +46,7 @@ public class ModelEndpointProperties implements EndpointProperties {
   @JsonIgnore
   @Override
   public TypedEndpointAddress getEndpoint() {
-    return new TypedEndpointAddress(endpoint.toCharArray());
+    return TypedEndpointAddressBuilder.getDefaultInstance(endpoint);
   }
 
   @JsonIgnore

@@ -23,8 +23,8 @@ public final class $YangModuleInfoImpl implements YangModuleInfo {
     private $YangModuleInfoImpl() {
         Set<YangModuleInfo> set = new HashSet<>();
         set.add(org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.$YangModuleInfoImpl.getInstance());
-        set.add(org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.$YangModuleInfoImpl.getInstance());
         set.add(org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.types.rev150404.$YangModuleInfoImpl.getInstance());
+        set.add(org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.$YangModuleInfoImpl.getInstance());
         importedModules = ImmutableSet.copyOf(set);
     
         InputStream stream = $YangModuleInfoImpl.class.getResourceAsStream(resourcePath);

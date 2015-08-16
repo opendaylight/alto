@@ -29,12 +29,12 @@ public class RFC2ModelCostMapDataConverter
   protected Object _convert() {
     List<ModelDstCosts> dstCostsList = new LinkedList<ModelDstCosts>();
     for (String dst : in().keySet()) {
+      //TODO: Should support different implementations
       ModelDstCosts dstCosts = new ModelDstCosts();
       dstCosts.dst = dst;
-      dstCosts.cost = in().get(dst);
+      dstCosts.costDefault = in().get(dst).toString();
       dstCostsList.add(dstCosts);
     }
     return dstCostsList;
   }
-
 }

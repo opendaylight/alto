@@ -22,4 +22,3 @@ public class RFC7285QueryPairs {
     public List<String> dst = new LinkedList<String>();
 
 }
-

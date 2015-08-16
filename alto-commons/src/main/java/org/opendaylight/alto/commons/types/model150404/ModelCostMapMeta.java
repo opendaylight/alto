@@ -20,36 +20,42 @@ import org.opendaylight.yangtools.yang.binding.DataContainer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ModelCostMapMeta implements Meta  {
+public class ModelCostMapMeta implements Meta {
 
-  @JsonProperty("alto-service:dependent-vtags")
-  public List<ModelDependentVtag> dependentVtags = new LinkedList<ModelDependentVtag>();
+    @JsonProperty("alto-service:dependent-vtags")
+    public List<ModelDependentVtag> dependentVtags = new LinkedList<ModelDependentVtag>();
 
-  @JsonProperty("alto-service:cost-type")
-  public ModelCostType costType = new ModelCostType();
+    @JsonProperty("alto-service:cost-type")
+    public ModelCostType costType = new ModelCostType();
 
-  @JsonIgnore
-  @Override
-  public Class<? extends DataContainer> getImplementedInterface() {
-    return Meta.class;
-  }
+    @JsonIgnore
+    @Override
+    public Class<? extends DataContainer> getImplementedInterface() {
+        return Meta.class;
+    }
 
-  @JsonIgnore
-  @Override
-  public List<DependentVtags> getDependentVtags() {
-    return new LinkedList<DependentVtags>(dependentVtags);
-  }
+    @JsonIgnore
+    @Override
+    public List<DependentVtags> getDependentVtags() {
+        return new LinkedList<DependentVtags>(dependentVtags);
+    }
 
-  @JsonIgnore
-  @Override
-  public CostType getCostType() {
-    return costType;
-  }
+    @JsonIgnore
+    @Override
+    public CostType getCostType() {
+        return costType;
+    }
 
-  @JsonIgnore
-  @Override
-  public <E extends Augmentation<Meta>> E getAugmentation(Class<E> arg0) {
-    return null;
-  }
+    @JsonIgnore
+    @Override
+    public <E extends Augmentation<Meta>> E getAugmentation(Class<E> arg0) {
+        return null;
+    }
+
+    @JsonIgnore
+    public static String getCostMapResourceId(String networkMapRID,
+            String costMetric, String costMode) {
+        return networkMapRID + "-" + costMetric + "-" + costMode;
+    }
 
 }

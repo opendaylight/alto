@@ -20,6 +20,11 @@ import java.util.LinkedHashMap;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class YANGJSON2RFCCostMapConverter extends Converter<JsonNode, RFC7285CostMap> {
+    private static final String NUMERICAL_MODE = "numerical";
+    private static final String ORDINAL_MODE = "ordinal";
+    private static final String ROUTING_COST_METRIC = "routingcost";
+    private static final String HOP_COUNT_METRIC = "hopcount";
+
     public YANGJSON2RFCCostMapConverter() {
     }
 
@@ -40,8 +45,8 @@ public class YANGJSON2RFCCostMapConverter extends Converter<JsonNode, RFC7285Cos
         }
 
         JsonNode cost_type = meta.get("costType");
-        String mode = cost_type.get("costMode").asText();
-        String metric = cost_type.get("costMetric").get("value").asText();
+        String mode = cost_type.get("costMode").asText().toLowerCase();
+        String metric = cost_type.get("costMetric").get("value").asText().toLowerCase();
         cm.meta.costType = new RFC7285CostType(mode, metric);
 
         JsonNode map = node.get("map");
@@ -55,12 +60,28 @@ public class YANGJSON2RFCCostMapConverter extends Converter<JsonNode, RFC7285Cos
 
                 JsonNode cost_node = dst.get("cost");
                 if ((cost_node != null) && (!cost_node.isNull())) {
-                    data.put(dst_pid, cost_node.asText());
+                    Object cost = cost(mode, metric, cost_node.asText());
+                    data.put(dst_pid, cost);
                 }
             }
 
             cm.map.put(src_pid, data);
         }
         return cm;
+    }
+
+    private Object cost(String mode, String metric, String cost) {
+        if (ORDINAL_MODE.equals(mode.toLowerCase())) {
+            return Integer.parseInt(cost);
+        }
+
+        if (NUMERICAL_MODE.equals(mode.toLowerCase())) {
+            if (HOP_COUNT_METRIC.equals(metric.toLowerCase())) {
+                return Integer.parseInt(cost);
+            } else if (ROUTING_COST_METRIC.equals(metric.toLowerCase())) {
+                return Double.parseDouble(cost);
+            }
+        }
+        return cost;
     }
 }

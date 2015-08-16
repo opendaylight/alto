@@ -103,9 +103,9 @@ module alto-service-types {
             + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
             + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
             + '(%[\p{N}\p{L}]+)?';
-      pattern 'ipv6:(([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+      pattern 'ipv6:((([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
             + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
-            + '(%.+)?';
+            + '(%.+)?)';
     }
   }
 
@@ -441,7 +441,7 @@ module alto-service-types {
 
   typedef constraint {
     type string {
-      pattern "(gt|ge|lt|le|eq) [0-9]+";
+      pattern "(gt|ge|lt|le|eq) [0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?";
     }
     description
       "RFC7285 Sec. 11.3.2.3. The second part must be in the" +

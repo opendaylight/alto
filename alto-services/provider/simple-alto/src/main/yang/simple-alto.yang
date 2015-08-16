@@ -31,6 +31,15 @@ module simple-alto-adsal-impl {
         case simple-alto-adsal-impl {
             when "/config:modules/config:module/config:type = 'simple-alto-adsal-impl'";
 
+            container rpc-registry {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity mdsal:binding-rpc-registry;
+                    }
+                }
+            }
+
             container data-broker {
                 uses config:service-ref {
                     refine type {

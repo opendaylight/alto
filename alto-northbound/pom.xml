@@ -17,6 +17,13 @@
       <plugin>
         <groupId>org.codehaus.enunciate</groupId>
         <artifactId>maven-enunciate-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.opendaylight.controller</groupId>
+            <artifactId>sal</artifactId>
+            <version>${sal.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
 
       <plugin>
@@ -32,13 +39,23 @@
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
               org.apache.commons.logging,
               com.sun.jersey.spi.container.servlet,
+              org.opendaylight.controller.sal.utils,
+              org.opendaylight.controller.sal.authorization,
+              org.opendaylight.controller.sal.packet.address,
               javax.ws.rs,
               javax.ws.rs.core,
+              javax.ws.rs.ext,
               javax.xml.bind.annotation,
               javax.xml.bind,
+              javax.xml.ws.http,
+              javax.servlet.http,
               org.slf4j,
               org.apache.catalina.filters,
-              !org.codehaus.enunciate.jaxrs,
+              com.fasterxml.jackson.jaxrs.base,
+              com.fasterxml.jackson.jaxrs.json,
+              com.fasterxml.jackson.core,
+              com.fasterxml.jackson.databind,
+              !org.codehaus.enunciate.jaxrs
             </Import-Package>
             <Web-ContextPath>/controller/nb/v2/alto</Web-ContextPath>
           </instructions>
@@ -55,8 +72,29 @@
     </dependency>
 
     <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>commons.northbound</artifactId>
+      <version>${controller.commons.northbound.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.controller</groupId>
+      <artifactId>sal-common-util</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.codehaus.enunciate</groupId>
       <artifactId>enunciate-core-annotations</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
     </dependency>
 
     <dependency>

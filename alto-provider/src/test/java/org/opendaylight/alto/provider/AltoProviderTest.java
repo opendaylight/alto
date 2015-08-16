@@ -151,7 +151,7 @@ public class AltoProviderTest {
       List<TypedEndpointAddress> teaList2 = new ArrayList<TypedEndpointAddress>();
       teaList2.add(tea2);
 
-      DstCosts1 dc1 = new DstCosts1Builder().setCostDefault(1).build();
+      DstCosts1 dc1 = new DstCosts1Builder().setCostDefault(Integer.toString(1)).build();
       DstCosts dc = new DstCostsBuilder().setDst(tea2).addAugmentation(DstCosts1.class, dc1).build();
 
       List<DstCosts> dcList = new ArrayList<DstCosts>();
