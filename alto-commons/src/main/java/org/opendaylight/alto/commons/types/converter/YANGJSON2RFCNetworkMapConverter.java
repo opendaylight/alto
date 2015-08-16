@@ -42,7 +42,7 @@ public class YANGJSON2RFCNetworkMapConverter extends Converter<JsonNode, RFC7285
         for (JsonNode egroup: map) {
             String pid = extract_pid(egroup);
             JsonNode addr_group = egroup.get("endpointAddressGroup");
-            assert addr_group.isNull();
+            assert !addr_group.isNull();
             RFC7285Endpoint.AddressGroup ag = group_converter.convert(addr_group);
 
             nm.map.put(pid, ag);
