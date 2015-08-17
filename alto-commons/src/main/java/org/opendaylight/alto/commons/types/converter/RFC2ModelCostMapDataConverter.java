@@ -23,7 +23,7 @@ public class RFC2ModelCostMapDataConverter
     for (String dst : in().keySet()) {
       ModelDstCosts dstCosts = new ModelDstCosts();
       dstCosts.dst = dst;
-      dstCosts.cost = in().get(dst);
+      dstCosts.costDefault = in().get(dst).toString();
       dstCostsList.add(dstCosts);
     }
     return dstCostsList;

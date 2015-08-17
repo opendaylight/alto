@@ -21,7 +21,7 @@ public class YANGJSON2RFCAddressGroupConverter extends Converter<JsonNode, RFC72
 
         for (JsonNode address: node) {
             JsonNode prefixes = address.get("endpointPrefix");
-            assert !prefixes.isArray();
+            assert prefixes.isArray();
             for (JsonNode prefix: prefixes) {
                 JsonNode ipv4 = prefix.get("ipv4Prefix");
                 JsonNode ipv6 = prefix.get("ipv6Prefix");

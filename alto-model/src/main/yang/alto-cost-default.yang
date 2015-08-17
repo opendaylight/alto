@@ -14,4 +14,11 @@ module alto-cost-default {
             type int32;
         }
     }
+
+    augment "/alto-restconf:resources/alto-restconf:cost-maps/alto-restconf:cost-map/alto-restconf:map/alto-restconf:dst-costs" {
+        leaf cost-default {
+            type string;
+        }
+    }
+
 }

@@ -37,7 +37,7 @@ public class YANGJSON2RFCCostMapConverter extends Converter<JsonNode, RFC7285Cos
         cm.meta.costType = new RFC7285CostType(mode, metric);
 
         JsonNode map = node.get("map");
-        assert !map.isArray();
+        assert map.isArray();
         for (JsonNode cost_map: map) {
             String src_pid = cost_map.get("src").get("value").asText();
             Map<String, Object> data = new LinkedHashMap<String, Object>();
