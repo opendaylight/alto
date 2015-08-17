@@ -35,6 +35,11 @@
 
   <dependencies>
     <dependency>
+      <artifactId>junit</artifactId>
+      <groupId>junit</groupId>
+    </dependency>
+
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>alto-model</artifactId>
       <version>${project.version}</version>
