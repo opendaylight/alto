@@ -1,0 +1,7 @@
+Verified+1: jenkins-releng <jenkins-releng@opendaylight.org>
+Code-Review+2: Y. Richard Yang <yry@cs.yale.edu>
+Submitted-by: Y. Richard Yang <yry@cs.yale.edu>
+Submitted-at: Mon, 17 Aug 2015 16:57:45 +0000
+Reviewed-on: https://git.opendaylight.org/gerrit/25372
+Project: alto
+Branch: refs/heads/stable/lithium
