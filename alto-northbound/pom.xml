@@ -39,9 +39,6 @@
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
               org.apache.commons.logging,
               com.sun.jersey.spi.container.servlet,
-              org.opendaylight.controller.sal.utils,
-              org.opendaylight.controller.sal.authorization,
-              org.opendaylight.controller.sal.packet.address,
               javax.ws.rs,
               javax.ws.rs.core,
               javax.ws.rs.ext,
@@ -51,10 +48,6 @@
               javax.servlet.http,
               org.slf4j,
               org.apache.catalina.filters,
-              com.fasterxml.jackson.jaxrs.base,
-              com.fasterxml.jackson.jaxrs.json,
-              com.fasterxml.jackson.core,
-              com.fasterxml.jackson.databind,
               !org.codehaus.enunciate.jaxrs
             </Import-Package>
             <Web-ContextPath>/controller/nb/v2/alto</Web-ContextPath>
@@ -78,23 +71,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.opendaylight.controller</groupId>
-      <artifactId>sal-common-util</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>org.codehaus.enunciate</groupId>
       <artifactId>enunciate-core-annotations</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
     </dependency>
 
     <dependency>
