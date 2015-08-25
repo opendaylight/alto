@@ -1,6 +1,7 @@
 package org.opendaylight.yang.gen.v1.urn.opendaylight.alto.simple.impl.rev150512;
 
 import org.opendaylight.alto.services.provider.simple.SimpleAltoService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.AltoServiceService;
 
 public class SimpleAltoImplModule extends org.opendaylight.yang.gen.v1.urn.opendaylight.alto.simple.impl.rev150512.AbstractSimpleAltoImplModule {
     public SimpleAltoImplModule(org.opendaylight.controller.config.api.ModuleIdentifier identifier, org.opendaylight.controller.config.api.DependencyResolver dependencyResolver) {
@@ -18,7 +19,8 @@ public class SimpleAltoImplModule extends org.opendaylight.yang.gen.v1.urn.opend
 
     @Override
     public java.lang.AutoCloseable createInstance() {
-        SimpleAltoService service = new SimpleAltoService(this.getDataBrokerDependency());
+        SimpleAltoService service = new SimpleAltoService(this.getDataBrokerDependency(), 
+                this.getRpcRegistryDependency().getRpcService(AltoServiceService.class));
         return service;
     }
 

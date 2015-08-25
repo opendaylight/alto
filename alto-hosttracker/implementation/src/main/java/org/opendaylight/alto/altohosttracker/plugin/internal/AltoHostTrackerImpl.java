@@ -312,7 +312,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
         PidName pid = new PidName(vis);
         IpPrefix ep = new IpPrefix(new Ipv4Prefix("0.0.0.0/0"));
 
-        this.networkMap.put("0.0.0.0/0", "pid0");
+        networkMap.put("0.0.0.0/0", "pid0");
 
         List<org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.network.map.Map> mapList = new ArrayList<org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.network.map.Map>();
 
@@ -696,7 +696,7 @@ public class AltoHostTrackerImpl implements DataChangeListener {
             for (org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.Node n : ns
                     .getNode()) {
                 for (NodeConnector nc : n.getNodeConnector()) {
-                    AddressCapableNodeConnector acnc = (AddressCapableNodeConnector) nc
+                    AddressCapableNodeConnector acnc = nc
                             .getAugmentation(AddressCapableNodeConnector.class);
                     if (acnc != null) {
                         for (Addresses addrs : acnc.getAddresses()) {

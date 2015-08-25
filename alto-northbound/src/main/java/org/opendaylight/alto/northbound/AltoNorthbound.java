@@ -8,25 +8,28 @@
 
 package org.opendaylight.alto.northbound;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.opendaylight.alto.commons.helper.ServiceHelper;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285JSONMapper;
 import org.opendaylight.alto.commons.types.rfc7285.FormatValidator;
-import org.opendaylight.alto.commons.types.rfc7285.MediaType;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostType;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285IRD;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285JSONMapper;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285QueryPairs;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285IRD;
+import org.opendaylight.alto.commons.types.rfc7285.MediaType;
 import org.opendaylight.alto.services.api.rfc7285.AltoService;
 import org.opendaylight.alto.services.api.rfc7285.IRDService;
 import org.opendaylight.alto.services.api.rfc7285.NetworkMapService;
@@ -38,12 +41,28 @@ import org.opendaylight.alto.northbound.exception.AltoBadFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Path("/")
 public class AltoNorthbound {
 
     private static final Logger logger = LoggerFactory.getLogger(AltoNorthbound.class);
 
     private RFC7285JSONMapper mapper = new RFC7285JSONMapper();
+
+    private static final List<String> definedProperties = Arrays.asList(
+            "my-alternate-network-map.pid",
+            "my-default-network-map.pid",
+            "priv:ietf-type");
+
+    private static final List<String> definedCostMetrics = Arrays.asList(
+                                                        "routingcost",
+                                                        "hopcount");
+
+    private static final List<String> definedCostModes = Arrays.asList(
+                                                        "ordinal",
+                                                        "numerical");
 
     @SuppressWarnings("unchecked")
     private <E> E getService(Class<E> clazz) {
@@ -69,6 +88,81 @@ public class AltoNorthbound {
             throw new AltoBadFormatException("tag", tag);
     }
 
+    private void checkPropertyName(List<String> properties) throws AltoBadFormatException {
+        for (String name : properties) {
+            if (!definedProperties.contains(name))
+                throw new AltoBadFormatException("E_INVALID_FIELD_VALUE", "properties", name);
+        }
+    }
+
+    private void checkEndpointAddress(List<String> endpoints) throws AltoBadFormatException {
+        for (String address : endpoints) {
+            if (!FormatValidator.validEndpointAddress(address))
+                throw new AltoBadFormatException("E_INVALID_FIELD_VALUE", "endpoints", address);
+        }
+    }
+
+    private void checkPropertyRequest(RFC7285Endpoint.PropertyRequest request) throws AltoBadFormatException {
+        checkPropertyName(request.properties);
+        checkEndpointAddress(request.endpoints);
+    }
+
+    private void checkCostMetric(String metric) throws AltoBadFormatException {
+        if (!definedCostMetrics.contains(metric))
+            throw new AltoBadFormatException("E_INVALID_FIELD_VALUE", "cost-type/cost-metric", metric);
+    }
+
+    private void checkCostMode(String mode) throws AltoBadFormatException {
+        if (!definedCostModes.contains(mode))
+            throw new AltoBadFormatException("E_INVALID_FIELD_VALUE", "cost-type/cost-mode", mode);
+    }
+
+    private void checkCostType(RFC7285CostType costType) throws AltoBadFormatException {
+        checkCostMetric(costType.metric);
+        checkCostMode(costType.mode);
+    }
+
+    private void checkConstraints(List<String> constraints) throws AltoBadFormatException {
+        for (String constraint : constraints)
+            if (!FormatValidator.validFilterConstraint(constraint))
+                throw new AltoBadFormatException("E_INVALID_FIELD_VALUE", "constraints", constraint);
+    }
+
+    private void checkCostRequest(HttpServletRequest httpRequest, RFC7285Endpoint.CostRequest request) throws AltoBadFormatException {
+        checkCostType(request.costType);
+        checkEndponints(httpRequest, request.endpoints);
+    }
+
+    private void checkCostMapFilter(RFC7285CostMap.Filter filter) throws AltoBadFormatException {
+        checkCostType(filter.costType);
+        if (filter.constraints != null)
+            checkConstraints(filter.constraints);
+    }
+
+    private void checkEndponints(HttpServletRequest httpRequest, RFC7285QueryPairs endpoints) {
+        String ipAddress = getClientIpAddress(httpRequest);
+        if (endpoints.src.size() == 0) {
+            endpoints.src.add(ipAddress);
+        }
+
+        if (endpoints.dst.size() == 0) {
+            endpoints.dst.add(ipAddress);
+        }
+    }
+
+    private String getClientIpAddress(HttpServletRequest httpRequest) {
+        String remoteAddress = httpRequest.getRemoteAddr();
+        if (FormatValidator.validAddressIpv4("ipv4:" + remoteAddress)) {
+            return "ipv4:" + remoteAddress;
+        }
+
+        if (FormatValidator.validAddressIpv6("ipv6:" + remoteAddress)) {
+            return "ipv6:" + remoteAddress;
+        }
+
+        throw new AltoBadFormatException("E_INVALID_CLIENT_IP");
+    }
+
     private Response fail(Response.Status status, Object data) {
         try {
             String output = (data == null ? "" : mapper.asJSON(data));
@@ -88,10 +182,12 @@ public class AltoNorthbound {
             return Response.ok(output, mediaType).build();
         } catch (Exception e) {
             logger.error("Failed to parse object to json: {}", data.toString());
+            logger.error(e.getMessage());
             return fail(Status.INTERNAL_SERVER_ERROR, null);
         }
     }
 
+    @Path("/directory")
     @GET
     @Produces({ MediaType.ALTO_DIRECTORY, MediaType.ALTO_ERROR })
     public Response retrieveIRD() throws Exception {
@@ -101,21 +197,6 @@ public class AltoNorthbound {
         RFC7285IRD ird = service.getDefaultIRD();
         if (ird == null)
             return fail(Status.NOT_FOUND, null);
-        return success(ird, MediaType.ALTO_DIRECTORY);
-    }
-
-    @Path("/ird/{id}")
-    @GET
-    @Produces({ MediaType.ALTO_DIRECTORY, MediaType.ALTO_ERROR })
-    public Response retrieveIRD(
-            @PathParam("id") String id) throws Exception {
-        IRDService service = getService(IRDService.class);
-        checkService(service);
-        checkResourceId(id);
-
-        RFC7285IRD ird = service.getIRD(id);
-        if (ird == null)
-            return fail(Status.NOT_FOUND, id);
         return success(ird, MediaType.ALTO_DIRECTORY);
     }
 
@@ -295,6 +376,7 @@ public class AltoNorthbound {
         checkResourceId(id);
 
         RFC7285CostMap.Filter filter = mapper.asCostMapFilter(filterJSON);
+        checkCostMapFilter(filter);
         if (!service.validateCostMapFilter(id, filter))
             return fail(Status.BAD_REQUEST, filter);
 
@@ -318,6 +400,7 @@ public class AltoNorthbound {
 
         RFC7285VersionTag vtag = new RFC7285VersionTag(id, tag);
         RFC7285CostMap.Filter filter = mapper.asCostMapFilter(filterJSON);
+        checkCostMapFilter(filter);
         if (!service.validateCostMapFilter(vtag, filter))
             return fail(Status.BAD_REQUEST, filter);
 
@@ -327,19 +410,18 @@ public class AltoNorthbound {
         return success(map, MediaType.ALTO_COSTMAP);
     }
 
-    @Path("/endpointprop/lookup/{id}")
+    @Path("/endpointprop/lookup")
     @POST
     @Consumes({ MediaType.ALTO_ENDPOINT_PROPPARAMS })
     @Produces({ MediaType.ALTO_ENDPOINT_PROP, MediaType.ALTO_ERROR })
     public Response retrieveEndpointPropMap(
-            @PathParam("id") String id,
             String params) throws Exception {
         EndpointPropertyService service = getService(EndpointPropertyService.class);
         checkService(service);
-        checkResourceId(id);
 
         RFC7285Endpoint.PropertyRequest request = mapper.asPropertyRequest(params);
-        RFC7285Endpoint.PropertyResponse response = service.getEndpointProperty(id, request);
+        checkPropertyRequest(request);
+        RFC7285Endpoint.PropertyResponse response = service.getEndpointProperty(request);
         if (response == null)
             return fail(Status.NOT_FOUND, request);
         return success(response, MediaType.ALTO_ENDPOINT_PROP);
@@ -366,19 +448,18 @@ public class AltoNorthbound {
         return success(response, MediaType.ALTO_ENDPOINT_PROP);
     }
 
-    @Path("/endpointcost/lookup/{id}")
+    @Path("/endpointcost/lookup")
     @POST
     @Consumes({ MediaType.ALTO_ENDPOINT_COSTPARAMS })
     @Produces({ MediaType.ALTO_ENDPOINT_COST, MediaType.ALTO_ERROR })
-    public Response retrieveEndpointCostMap(
-            @PathParam("id") String id,
+    public Response retrieveEndpointCostMap(@Context HttpServletRequest httpRequest,
             String params) throws Exception {
         EndpointCostService service = getService(EndpointCostService.class);
         checkService(service);
-        checkResourceId(id);
 
         RFC7285Endpoint.CostRequest request = mapper.asCostRequest(params);
-        RFC7285Endpoint.CostResponse response = service.getEndpointCost(id, request);
+        checkCostRequest(httpRequest, request);
+        RFC7285Endpoint.CostResponse response = service.getEndpointCost(request);
         if (response == null)
             return fail(Status.NOT_FOUND, request);
         return success(response, MediaType.ALTO_ENDPOINT_COST);

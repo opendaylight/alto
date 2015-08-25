@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -245,6 +246,7 @@ public class TestRFC7285Types {
 
         RFC7285Endpoint.CostRequest req = new RFC7285Endpoint.CostRequest();
         req.costType = new RFC7285CostType("ordinal", "routingcost", "test");
+        req.endpoints = new RFC7285QueryPairs();
         req.endpoints.src.add("ipv4:192.0.2.2");
         req.endpoints.dst.add("ipv4:192.0.2.89");
         req.endpoints.dst.add("ipv4:198.51.100.34");
@@ -282,6 +284,7 @@ public class TestRFC7285Types {
 
         RFC7285Endpoint.CostResponse ecsr = new RFC7285Endpoint.CostResponse();
         ecsr.meta.costType = new RFC7285CostType("ordinal", "routingcost");
+        ecsr.answer = new LinkedHashMap<String, Map<String, Object>>();
         ecsr.answer.put(src[0], new LinkedHashMap<String, Object>());
         ecsr.answer.get(src[0]).put(dst[0], new Integer(1));
         ecsr.answer.get(src[0]).put(dst[1], new Integer(2));

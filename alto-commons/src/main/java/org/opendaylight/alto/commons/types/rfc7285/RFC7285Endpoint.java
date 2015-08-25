@@ -64,10 +64,10 @@ public class RFC7285Endpoint {
     public static class CostRequest {
 
         @JsonProperty("cost-type")
-        public RFC7285CostType costType = new RFC7285CostType();
+        public RFC7285CostType costType;
 
         @JsonProperty("endpoints")
-        public RFC7285QueryPairs endpoints = new RFC7285QueryPairs();
+        public RFC7285QueryPairs endpoints;
     }
 
     public static class CostResponse {
@@ -83,7 +83,6 @@ public class RFC7285Endpoint {
         public Meta meta = new Meta();
 
         @JsonProperty("endpoint-cost-map")
-        public Map<String, Map<String, Object>> answer
-                            = new LinkedHashMap<String, Map<String, Object>>();
+        public Map<String, Map<String, Object>> answer = null;
     }
 }

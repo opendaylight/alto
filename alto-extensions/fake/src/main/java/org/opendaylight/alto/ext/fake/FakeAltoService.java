@@ -9,6 +9,10 @@
 package org.opendaylight.alto.ext.fake;
 
 import org.opendaylight.alto.services.api.rfc7285.AltoService;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint.CostRequest;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint.CostResponse;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint.PropertyRequest;
+import org.opendaylight.alto.commons.types.rfc7285.RFC7285Endpoint.PropertyResponse;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostType;
@@ -197,6 +201,18 @@ public class FakeAltoService implements AltoService {
     }
 
     public RFC7285Endpoint.PropertyResponse getEndpointProperty(RFC7285VersionTag vtag, RFC7285Endpoint.PropertyRequest request) {
+        return null;
+    }
+
+    @Override
+    public PropertyResponse getEndpointProperty(PropertyRequest request) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public CostResponse getEndpointCost(CostRequest request) {
+        // TODO Auto-generated method stub
         return null;
     }
 

@@ -14,8 +14,8 @@ import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 
 public interface EndpointPropertyService {
 
-    public PropertyResponse getEndpointProperty(String id, PropertyRequest request);
+    PropertyResponse getEndpointProperty(PropertyRequest request);
 
-    public PropertyResponse getEndpointProperty(RFC7285VersionTag vtag, PropertyRequest request);
+    PropertyResponse getEndpointProperty(RFC7285VersionTag vtag, PropertyRequest request);
 
 }

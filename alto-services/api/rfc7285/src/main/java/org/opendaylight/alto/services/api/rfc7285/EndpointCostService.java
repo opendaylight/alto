@@ -14,8 +14,8 @@ import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 
 public interface EndpointCostService {
 
-    public CostResponse getEndpointCost(String id, CostRequest request);
+    CostResponse getEndpointCost(CostRequest request);
 
-    public CostResponse getEndpointCost(RFC7285VersionTag vtag, CostRequest request);
+    CostResponse getEndpointCost(RFC7285VersionTag vtag, CostRequest request);
 
 }

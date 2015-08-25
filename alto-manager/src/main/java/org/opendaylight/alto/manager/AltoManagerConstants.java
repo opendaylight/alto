@@ -36,15 +36,15 @@ public class AltoManagerConstants {
 
   public static final String DEFAULT_NETWORK_MAP_REGEX = "^\\{\"default-alto-network-map\":\\{\"resource-id\":\"(.*)\"\\}}$";
 
-  public static enum COST_MODE {
+  public enum COST_MODE {
     Numerical, Ordinal
   }
 
-  public static enum SERVICE_TYPE{
+  public enum SERVICE_TYPE{
     NETWORK_MAP, COST_MAP, ENDPOINT_PROPERTY_MAP
   }
 
-  public static enum MAP_FORMAT_TYPE {
+  public enum MAP_FORMAT_TYPE {
     YANG, RFC
   }
 }
