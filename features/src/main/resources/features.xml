@@ -23,8 +23,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-model' version='${project.version}' description='OpenDaylight :: alto :: Model '>
-    <feature version='${yangtools.version}'>odl-yangtools-models</feature>
-    <feature version='${yangtools.version}'>odl-yangtools-binding</feature>
+    <feature version='${yangtools.version}'>odl-mdsal-models</feature>
+    <feature version='${yangtools.version}'>odl-mdsal-binding-base</feature>
     <bundle>mvn:org.opendaylight.alto/alto-model/${project.version}</bundle>
   </feature>
 
