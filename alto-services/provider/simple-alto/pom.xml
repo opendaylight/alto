@@ -14,6 +14,18 @@
   <version>0.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
+  <dependencyManagement>
+      <dependencies>
+        <dependency>
+          <groupId>org.opendaylight.mdsal.model</groupId>
+          <artifactId>mdsal-model-artifacts</artifactId>
+          <version>0.8.0-SNAPSHOT</version>
+          <type>pom</type>
+          <scope>import</scope>
+        </dependency>
+      </dependencies>
+    </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -62,7 +74,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.opendaylight.yangtools.model</groupId>
+      <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>ietf-inet-types</artifactId>
     </dependency>
 

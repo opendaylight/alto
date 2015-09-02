@@ -92,7 +92,7 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.opendaylight.yangtools.model</groupId>
+            <groupId>org.opendaylight.mdsal.model</groupId>
             <artifactId>ietf-topology</artifactId>
             <version>${ietf.topology.version}</version>
         </dependency>
@@ -133,7 +133,7 @@
             <version>${config.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.opendaylight.yangtools</groupId>
+            <groupId>org.opendaylight.mdsal</groupId>
             <artifactId>maven-sal-api-gen-plugin</artifactId>
             <version>${yangtools.version}</version>
             <type>jar</type>
