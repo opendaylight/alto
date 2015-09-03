@@ -62,9 +62,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
 
     <dependency>
-      <groupId>org.opendaylight.controller</groupId>
+      <groupId>org.opendaylight.netconf</groupId>
       <artifactId>features-restconf</artifactId>
       <classifier>features</classifier>
+      <version>${restconf.version}</version>
       <type>xml</type>
       <scope>runtime</scope>
     </dependency>
