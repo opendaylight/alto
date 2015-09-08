@@ -65,9 +65,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.opendaylight.controller</groupId>
-      <artifactId>commons.northbound</artifactId>
-      <version>${controller.commons.northbound.version}</version>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>${servlet.version}</version>
     </dependency>
 
     <dependency>
