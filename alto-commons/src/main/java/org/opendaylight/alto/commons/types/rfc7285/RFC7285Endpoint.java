@@ -66,6 +66,9 @@ public class RFC7285Endpoint {
         @JsonProperty("cost-type")
         public RFC7285CostType costType;
 
+        @JsonProperty("constraints")
+        public List<String> constraints = new ArrayList<String>();
+
         @JsonProperty("endpoints")
         public RFC7285QueryPairs endpoints;
     }

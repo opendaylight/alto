@@ -8,14 +8,12 @@
 
 package org.opendaylight.alto.northbound;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -27,7 +25,6 @@ import org.opendaylight.alto.commons.types.rfc7285.RFC7285JSONMapper;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285VersionTag;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285CostMap;
-import org.opendaylight.alto.commons.types.rfc7285.RFC7285QueryPairs;
 import org.opendaylight.alto.commons.types.rfc7285.RFC7285IRD;
 import org.opendaylight.alto.commons.types.rfc7285.MediaType;
 import org.opendaylight.alto.services.api.rfc7285.AltoService;
@@ -128,39 +125,14 @@ public class AltoNorthbound {
                 throw new AltoBadFormatException("E_INVALID_FIELD_VALUE", "constraints", constraint);
     }
 
-    private void checkCostRequest(HttpServletRequest httpRequest, RFC7285Endpoint.CostRequest request) throws AltoBadFormatException {
+    private void checkCostRequest(RFC7285Endpoint.CostRequest request) throws AltoBadFormatException {
         checkCostType(request.costType);
-        checkEndponints(httpRequest, request.endpoints);
     }
 
     private void checkCostMapFilter(RFC7285CostMap.Filter filter) throws AltoBadFormatException {
         checkCostType(filter.costType);
         if (filter.constraints != null)
             checkConstraints(filter.constraints);
-    }
-
-    private void checkEndponints(HttpServletRequest httpRequest, RFC7285QueryPairs endpoints) {
-        String ipAddress = getClientIpAddress(httpRequest);
-        if (endpoints.src.size() == 0) {
-            endpoints.src.add(ipAddress);
-        }
-
-        if (endpoints.dst.size() == 0) {
-            endpoints.dst.add(ipAddress);
-        }
-    }
-
-    private String getClientIpAddress(HttpServletRequest httpRequest) {
-        String remoteAddress = httpRequest.getRemoteAddr();
-        if (FormatValidator.validAddressIpv4("ipv4:" + remoteAddress)) {
-            return "ipv4:" + remoteAddress;
-        }
-
-        if (FormatValidator.validAddressIpv6("ipv6:" + remoteAddress)) {
-            return "ipv6:" + remoteAddress;
-        }
-
-        throw new AltoBadFormatException("E_INVALID_CLIENT_IP");
     }
 
     private Response fail(Response.Status status, Object data) {
@@ -452,13 +424,12 @@ public class AltoNorthbound {
     @POST
     @Consumes({ MediaType.ALTO_ENDPOINT_COSTPARAMS })
     @Produces({ MediaType.ALTO_ENDPOINT_COST, MediaType.ALTO_ERROR })
-    public Response retrieveEndpointCostMap(@Context HttpServletRequest httpRequest,
-            String params) throws Exception {
+    public Response retrieveEndpointCostMap(String params) throws Exception {
         EndpointCostService service = getService(EndpointCostService.class);
         checkService(service);
 
         RFC7285Endpoint.CostRequest request = mapper.asCostRequest(params);
-        checkCostRequest(httpRequest, request);
+        checkCostRequest(request);
         RFC7285Endpoint.CostResponse response = service.getEndpointCost(request);
         if (response == null)
             return fail(Status.NOT_FOUND, request);

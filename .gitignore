@@ -21,6 +21,7 @@ MANIFEST.MF
 xtend-gen
 yang-gen-config
 yang-gen-sal
+yang-gen-code
 classes
 out/
 .externalToolBuilders
