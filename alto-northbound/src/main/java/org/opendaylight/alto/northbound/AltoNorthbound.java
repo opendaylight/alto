@@ -130,7 +130,7 @@ public class AltoNorthbound {
 
     private void checkCostRequest(HttpServletRequest httpRequest, RFC7285Endpoint.CostRequest request) throws AltoBadFormatException {
         checkCostType(request.costType);
-        checkEndponints(httpRequest, request.endpoints);
+        checkEndpoints(httpRequest, request.endpoints);
     }
 
     private void checkCostMapFilter(RFC7285CostMap.Filter filter) throws AltoBadFormatException {
@@ -139,8 +139,15 @@ public class AltoNorthbound {
             checkConstraints(filter.constraints);
     }
 
-    private void checkEndponints(HttpServletRequest httpRequest, RFC7285QueryPairs endpoints) {
+    private void checkEndpoints(HttpServletRequest httpRequest, RFC7285QueryPairs endpoints) {
+        /*
+         * See https://tools.ietf.org/html/rfc7285#section-11.5.1.3
+         * */
         String ipAddress = getClientIpAddress(httpRequest);
+        if ((endpoints.src.size() == 0) && (endpoints.dst.size() == 0)) {
+            throw new AltoBadFormatException("E_INVALID_FIELD_VALUE", "endpoints", "");
+        }
+
         if (endpoints.src.size() == 0) {
             endpoints.src.add(ipAddress);
         }

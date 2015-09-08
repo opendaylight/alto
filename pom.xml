@@ -75,6 +75,7 @@
     <commons.juli.version>7.0.53.v201406060720</commons.juli.version>
     <commons.tomcat.api.version>7.0.53.v201406060720</commons.tomcat.api.version>
     <commons.tomcat.util.version>7.0.53.v201406070630</commons.tomcat.util.version>
+    <servlet.version>3.0.1</servlet.version>
   </properties>
 
   <dependencyManagement>

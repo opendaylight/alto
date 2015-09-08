@@ -293,7 +293,6 @@ public class TestRFC7285Types {
         return ecsr;
     }
 
-
     @Test
     public void testECSAnswer() throws Exception {
         RFC7285JSONMapper mapper = new RFC7285JSONMapper();
@@ -309,6 +308,90 @@ public class TestRFC7285Types {
         for (String endpoint: endpoints) {
             assertCollectionEquals(ecsr.answer.get(endpoint).entrySet(),
                                    _ecsr.answer.get(endpoint).entrySet());
+        }
+    }
+
+    @Test
+    public void testEPSRequest() throws Exception {
+        /*
+         *  {
+         *      "properties" : [
+         *          "my-default-networkmap.pid",
+         *          "priv:ietf-example-prop"
+         *      ],
+         *      "endpoints"  : [
+         *          "ipv4:192.0.2.34",
+         *          "ipv4:203.0.113.129"
+         *      ]
+         *  }
+        */
+        RFC7285JSONMapper mapper = new RFC7285JSONMapper();
+
+        RFC7285Endpoint.PropertyRequest req = new RFC7285Endpoint.PropertyRequest();
+        if (req.properties == null)
+            req.properties = new ArrayList<String>();
+        req.properties.add("my-default-networkmap.pid");
+        req.properties.add("priv:ietf-example-prop");
+
+        if (req.endpoints == null)
+            req.endpoints = new ArrayList<String>();
+
+        req.endpoints.add("ipv4:192.0.2.34");
+        req.endpoints.add("ipv4:203.0.113.129");
+
+        String epsrString = mapper.asJSON(req);
+        RFC7285Endpoint.PropertyRequest _req = mapper.asPropertyRequest(epsrString);
+
+        assertCollectionEquals(req.properties, _req.properties);
+        assertCollectionEquals(req.endpoints, _req.endpoints);
+    }
+
+    @Test
+    public void testEPSResponse() throws Exception {
+        /*
+         *  {
+         *      "meta" : {
+         *          "dependent-vtags" : [
+         *              {
+         *                  "resource-id": "my-default-network-map",
+         *                  "tag": "7915dc0290c2705481c491a2b4ffbec482b3cf62"
+         *              }
+         *          ]
+         *      },
+         *      "endpoint-properties": {
+         *          "ipv4:192.0.2.34": {
+         *              "my-default-network-map.pid": "PID1",
+         *              "priv:ietf-example-prop": "1"
+         *          },
+         *          "ipv4:203.0.113.129": {
+         *              "my-default-network-map.pid": "PID3"
+         *          }
+         *      }
+         *  }
+         * */
+        RFC7285JSONMapper mapper = new RFC7285JSONMapper();
+
+        RFC7285Endpoint.PropertyResponse res = new RFC7285Endpoint.PropertyResponse();
+        RFC7285VersionTag vtag = new RFC7285VersionTag("my-default-network-map",
+                                                       "7915dc0290c2705481c491a2b4ffbec482b3cf62");
+        res.meta.netmap_tags.add(vtag);
+
+        String endpoints[] = { "ipv4:192.0.2.34", "ipv4:203.0.113.129" };
+        String properties[] = { "my-default-network-map", "priv:itef-example-prop" };
+        for (String endpoint: endpoints) {
+            res.answer.put(endpoint, new LinkedHashMap<String, Object>());
+        }
+        res.answer.get(endpoints[0]).put(properties[0], "PID1");
+        res.answer.get(endpoints[0]).put(properties[1], new Integer(1));
+        res.answer.get(endpoints[1]).put(properties[0], "PID3");
+
+        String epsrString = mapper.asJSON(res);
+        RFC7285Endpoint.PropertyResponse _res = mapper.asPropertyResponse(epsrString);
+
+        assertCollectionEquals(res.meta.netmap_tags, _res.meta.netmap_tags);
+        for (String endpoint: endpoints) {
+            assertCollectionEquals(res.answer.get(endpoint).entrySet(),
+                                   _res.answer.get(endpoint).entrySet());
         }
     }
 }

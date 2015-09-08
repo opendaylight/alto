@@ -424,14 +424,11 @@ public class AltoProvider implements AltoServiceService, DataChangeListener,
                 NodeId srcNodeId = new NodeId(swSrcId);
                 NodeId dstNodeId = new NodeId(swDstId);
                 Number number = shortestPath.getDistance(srcNodeId, dstNodeId);
-                DstCosts1 dst1 = null;
-                if (number != null) {
-                    dst1 = new DstCosts1Builder().setCostDefault(
-                            Integer.toString(number.intValue())).build();
-                } else {
-                    dst1 = new DstCosts1Builder().setCostDefault(
-                            Integer.toString(Integer.MAX_VALUE)).build();
+                if (number == null) {
+                    number = Integer.MAX_VALUE;
                 }
+                DstCosts1 dst1 = new DstCosts1Builder()
+                        .setCostDefault(new Integer(number.intValue()).toString()).build();
                 DstCosts dstCost = new DstCostsBuilder()
                         .addAugmentation(DstCosts1.class, dst1).setDst(teaDst)
                         .build();
@@ -557,8 +554,8 @@ public class AltoProvider implements AltoServiceService, DataChangeListener,
                 PidName dstPid = dstPids.get(dst);
                 String cost = getCostDefault(srcPid, dstPid, costMaps);
                 if (cost != null) {
-                    DstCosts1 dstCost1 = new DstCosts1Builder().setCostDefault(
-                            cost).build();
+                    DstCosts1 dstCost1 = new DstCosts1Builder()
+                            .setCostDefault(cost).build();
                     DstCosts dstCosts = new DstCostsBuilder()
                             .setDst(dst)
                             .setKey(new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.rev150404.endpoint.cost.service.output.endpoint.cost.service.endpoint.cost.map.DstCostsKey(
