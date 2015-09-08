@@ -55,7 +55,7 @@ public class EndpointCostServiceOutput2CostResponseConverter extends
             Map<String, Object> map = new HashMap<String, Object>();
             for (DstCosts dstCosts : ecm.getDstCosts()) {
                 String dst = String.valueOf(dstCosts.getDst().getValue());
-                String cost = dstCosts.getAugmentation(DstCosts1.class).getCostDefault();
+                String cost = dstCosts.getAugmentation(DstCosts1.class).getCostDefault().toString();
                 map.put(dst, cost(resp.meta.costType.mode, resp.meta.costType.metric, cost));
             }
             resp.answer.put(String.valueOf(src.getValue()), map);
