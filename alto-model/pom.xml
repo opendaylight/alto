@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.opendaylight.alto</groupId>
     <artifactId>alto-parent</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.1.2-Lithium-SR2</version>
     <relativePath>../</relativePath>
   </parent>
 

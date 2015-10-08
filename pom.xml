@@ -8,13 +8,13 @@
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.2-Lithium-SR2</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>alto-parent</artifactId>
-  <version>0.1.2-SNAPSHOT</version>
+  <version>0.1.2-Lithium-SR2</version>
   <name>alto</name> <!-- Used by Sonar to set project name -->
   <packaging>pom</packaging>
 
@@ -36,35 +36,35 @@
   </modules>
 
   <properties>
-    <odl.version>1.5.2-SNAPSHOT</odl.version>
+    <odl.version>1.5.2-Lithium-SR2</odl.version>
     <karaf.shell.version>2.2.11</karaf.shell.version>
 
     <!-- required by alto command line -->
     <httpclient.version>4.4.1</httpclient.version>
 
-    <ietf.model.version>2010.09.24.7.2-SNAPSHOT</ietf.model.version>
-    <ietf.yang.types.version>2013.07.15.7.2-SNAPSHOT</ietf.yang.types.version>
+    <ietf.model.version>2010.09.24.7.2-Lithium-SR2</ietf.model.version>
+    <ietf.yang.types.version>2013.07.15.7.2-Lithium-SR2</ietf.yang.types.version>
 
     <!-- used by yangtools, but the name is strange.
          TODO: need more investigation -->
-    <config.version>0.3.2-SNAPSHOT</config.version>
+    <config.version>0.3.2-Lithium-SR2</config.version>
 
-    <sal.version>0.9.2-SNAPSHOT</sal.version>
+    <sal.version>0.9.2-Lithium-SR2</sal.version>
     <war.version>${karaf.version}</war.version>
-    <mdsal.version>1.2.2-SNAPSHOT</mdsal.version>
+    <mdsal.version>1.2.2-Lithium-SR2</mdsal.version>
     <jmxGeneratorPath>src/main/yang-gen-config</jmxGeneratorPath>
     <salGeneratorPath>src/main/yang-gen-sal</salGeneratorPath>
 
-    <yangtools.version>0.7.2-SNAPSHOT</yangtools.version>
+    <yangtools.version>0.7.2-Lithium-SR2</yangtools.version>
 
     <controller.checkstyle.version> <!-- checkstyle artifact of controller -->
-      0.1.2-SNAPSHOT
+      0.1.2-Lithium-SR2
     </controller.checkstyle.version>
     <controller.commons.northbound.version> <!-- required by alto-northbound -->
-      0.5.2-SNAPSHOT
+      0.5.2-Lithium-SR2
     </controller.commons.northbound.version>
-    <l2switch.version>0.2.2-SNAPSHOT</l2switch.version>
-    <ietf.topology.version>2013.10.21.7.2-SNAPSHOT</ietf.topology.version>
+    <l2switch.version>0.2.2-Lithium-SR2</l2switch.version>
+    <ietf.topology.version>2013.10.21.7.2-Lithium-SR2</ietf.topology.version>
     <commons.catalina.version>7.0.53.v201406061610</commons.catalina.version>
   </properties>
 
