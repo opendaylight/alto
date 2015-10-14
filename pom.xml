@@ -38,6 +38,7 @@
     <module>alto-extensions</module>
     <module>alto-northbound</module>
     <!-- <module>alto-karaf</module> -->
+    <module>alto-release-features</module>
   </modules>
 
   <properties>

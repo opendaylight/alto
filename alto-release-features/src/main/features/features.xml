@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2015 Yale University
+
+This program and the accompanying materials are made available under the
+terms of the Eclipse Public License v1.0 which accompanies this distribution,
+and is available at http://www.eclipse.org/legal/epl-v10.html
+-->
+<features name="odl-alto-release-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
+
+<feature name='odl-alto-release' version='${project.version}'
+          description='OpenDaylight :: alto :: Release'>
+    <feature version='${project.version}'>odl-alto-core</feature>
+    <feature version='${project.version}'>odl-alto-basic</feature>
+  </feature>
+
+  <feature name='odl-alto-core' version='${project.version}'
+          description='OpenDaylight :: alto :: Core'>
+    <feature version='${project.version}'>odl-alto-standard-types</feature>
+    <feature version='${project.version}'>odl-alto-resourcepool</feature>
+    <feature version='${project.version}'>odl-alto-northbound</feature>
+    <feature version='${project.version}'>odl-alto-standard-service-model</feature>
+    <feature version='${project.version}'>odl-alto-standard-northbound-route</feature>
+    <feature version='${project.version}'>odl-alto-standard-resource-translator</feature>
+  </feature>
+
+  <feature name='odl-alto-basic' version='${project.version}'
+            description='OpenDaylight :: alto :: Basic'>
+    <feature version='${project.version}'>odl-alto-ird</feature>
+    <feature version='${project.version}'>odl-alto-manual-maps</feature>
+    <feature version='${project.version}'>odl-alto-hosttracker</feature>
+  </feature>
+
+  <feature name='odl-alto-extension' version='${project.version}'
+            description='OpenDaylight :: alto :: Extension'>
+    <feature version='${project.version}'>odl-alto-nonstandard-types</feature>
+    <feature version='${project.version}'>odl-alto-nonstandard-service-model</feature>
+    <feature version='${project.version}'>odl-alto-nonstandard-northbound-route</feature>
+  </feature>
+
+  <feature name='odl-alto-standard-types' version='${project.version}'
+            description='OpenDaylight :: alto :: standard-types'>
+  </feature>
+
+  <feature name='odl-alto-resourcepool' version='${project.version}'
+            description='OpenDaylight :: alto :: resourcepool'>
+  </feature>
+
+  <feature name='odl-alto-northbound' version='${project.version}'
+            description='OpenDaylight :: alto :: northbound'>
+  </feature>
+
+  <feature name='odl-alto-standard-service-model' version='${project.version}'
+            description='OpenDaylight :: alto :: standard-service-model'>
+  </feature>
+
+  <feature name='odl-alto-standard-northbound-route' version='${project.version}'
+            description='OpenDaylight :: alto :: standard-northbound-route'>
+  </feature>
+
+  <feature name='odl-alto-standard-resource-translator' version='${project.version}'
+            description='OpenDaylight :: alto :: standard-resource-translator'>
+  </feature>
+
+  <feature name='odl-alto-ird' version='${project.version}'
+            description='OpenDaylight :: alto :: ird'>
+  </feature>
+
+  <feature name='odl-alto-manual-maps' version='${project.version}'
+            description='OpenDaylight :: alto :: manual-maps'>
+  </feature>
+
+  <feature name='odl-alto-hosttracker' version='${project.version}'
+            description='OpenDaylight :: alto :: hosttracker'>
+  </feature>
+
+  <feature name='odl-alto-nonstandard-types' version='${project.version}'
+            description='OpenDaylight :: alto :: nonstandard-types'>
+  </feature>
+
+  <feature name='odl-alto-nonstandard-service-model' version='${project.version}'
+            description='OpenDaylight :: alto :: nonstandard-service-model'>
+  </feature>
+
+  <feature name='odl-alto-nonstandard-northbound-route' version='${project.version}'
+            description='OpenDaylight :: alto :: nonstandard-northbound-route'>
+  </feature>
+
+</features>
