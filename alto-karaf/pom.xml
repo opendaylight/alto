@@ -21,7 +21,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <maven>3.1.1</maven>
   </prerequisites>
   <properties>
-    <karaf.localFeature>odl-alto-integration-test</karaf.localFeature>
+    <karaf.localFeature>odl-alto-release</karaf.localFeature>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -38,7 +38,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>features-alto</artifactId>
+      <artifactId>features-alto-release</artifactId>
       <version>${project.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
