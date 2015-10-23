@@ -1,0 +1,161 @@
+module alto-resourcepool {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:core:resourcepool";
+
+    prefix "alto-resourcepool";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "yang-ext" {
+        prefix "yang-ext";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-09-21" {
+        description "Initial revision of alto resourcepool";
+    }
+
+    identity "service-context" {
+        description
+            "The context identifier for a certain ALTO service";
+    }
+
+    identity "resource-type" {
+        description
+            "The basic type identity for ALTO resourcepool";
+    }
+
+    identity "capability-category" {
+        description
+            "The basic identity for capability categories";
+    }
+
+    grouping "capability-spec" {
+        container "spec" {
+            leaf "category" {
+                type identityref {
+                    base "capability-category";
+                }
+            }
+        }
+    }
+
+    /* Examples to extend the capability spec
+    grouping "cost-type-spec" {
+        uses "capability-spec" {
+            augment "spec" {
+                container "cost-type" {
+                    leaf "cost-metric" {
+                        type string;
+                    }
+
+                    leaf "cost-mode" {
+                        type string;
+                    }
+                }
+            }
+        }
+    }
+    */
+
+    grouping "resource-desc" {
+        leaf "resource-id" {
+            type alto-types:resource-id;
+        }
+
+        leaf "local" {
+            type boolean;
+            default true;
+        }
+
+        leaf "uri" {
+            type ietf-inet:uri;
+        }
+
+        leaf "type" {
+            type identityref {
+                base "resource-type";
+            }
+        }
+
+        list "capability" {
+            uses "capability-spec";
+        }
+
+        list "dependency" {
+            leaf "resource-id" {
+                type alto-types:resource-id;
+            }
+        }
+    }
+
+    grouping "resource-service" {
+        leaf "service-instance" {
+            type instance-identifier;
+        }
+    }
+
+    container "resource-pool" {
+        config false;
+
+        list "resource" {
+            key "resource-id";
+
+            yang-ext:context-instance "service-context";
+
+            uses "resource-desc";
+
+            uses "resource-service";
+
+            leaf "refcount" {
+                type uint16;
+            }
+
+            leaf "tag" {
+                type alto-types:tag;
+            }
+        }
+    }
+
+    rpc "add-resource" {
+        input {
+            uses "resource-desc";
+
+            uses "resource-service";
+        }
+    }
+
+    rpc "remove-resource" {
+        input {
+            leaf "resource-id" {
+                type alto-types:resource-id;
+            }
+        }
+    }
+
+    rpc "update-resource" {
+        input {
+            uses "resource-desc";
+
+            uses "resource-service";
+        }
+    }
+
+    rpc "verify-resource" {
+        input {
+            uses "resource-desc";
+
+            uses "resource-service";
+        }
+    }
+}
