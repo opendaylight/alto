@@ -13,6 +13,10 @@ module alto-resourcepool {
         prefix "yang-ext";
     }
 
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
     organization "Yale University";
 
     contact "alto-dev@lists.opendaylight.org";
@@ -74,9 +78,8 @@ module alto-resourcepool {
             default true;
         }
 
-        /* TODO yang types for uri? */
         leaf "uri" {
-            type string;
+            type ietf-inet:uri;
         }
 
         leaf "type" {
