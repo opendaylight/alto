@@ -1,0 +1,88 @@
+module alto-model-base {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model";
+
+    prefix "alto-model-base";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcepool";
+    }
+
+    import "yang-ext" {
+        prefix "yang-ext";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+
+    revision "2015-10-21" {
+        description "Initial revision of ALTO base service model";
+    }
+
+    grouping "alto-request-base" {
+        leaf "service-reference" {
+            yang-ext:context-reference "alto-resourcepool:service-context";
+
+            type "instance-identifier";
+        }
+
+        leaf "type" {
+            type "identityref" {
+                base "alto-resourcepool:resource-type";
+            }
+        }
+
+        choice "request" {
+        }
+    }
+
+    grouping "alto-response-base" {
+        leaf "type" {
+            type "identityref" {
+                base "alto-resourcepool:resource-type";
+            }
+        }
+
+        choice "response" {
+        }
+    }
+
+    identity "resource-type-error" {
+        base "alto-resourcepool:resource-type";
+        description
+            "The identity for ALTO error";
+    }
+
+    grouping "alto-response-error" {
+        container "error" {
+            leaf "error-code" {
+                type "string";
+            }
+
+            //TODO
+        }
+    }
+
+    rpc query {
+        input {
+            uses "alto-request-base";
+        }
+
+        output {
+            uses "alto-response-base";
+        }
+    }
+
+    augment "/alto-model-base:query/alto-model-base:output/alto-model-base:response" {
+        case "error-response" {
+            uses "alto-response-error";
+        }
+    }
+}

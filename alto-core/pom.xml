@@ -10,6 +10,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent</artifactId>
     <version>1.6.0-SNAPSHOT</version>
+    <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
@@ -24,6 +25,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <modules>
     <module>basic-types</module>
     <module>resourcepool</module>
+    <module>standard-service-models</module>
   </modules>
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
   <build>
