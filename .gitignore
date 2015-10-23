@@ -34,3 +34,6 @@ maven-eclipse.xml
 **/*.checkstyle
 **/*.swo
 .zsh*
+.helper
+eclimd.log
+*.xmi

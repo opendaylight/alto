@@ -1,0 +1,64 @@
+module alto-basic-types {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:core:types";
+
+    prefix "alto-basic-types";
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-09-21" {
+        description "Initial revision of alto core types";
+    }
+
+    /* See https://tools.ietf.org/html/rfc7285#section-10.1 */
+    typedef "pid-name" {
+        type string {
+            pattern "[0-9a-zA-Z\-:@_]*";
+            length "1..64";
+        }
+    }
+
+    /* See https://tools.ietf.org/html/rfc7285#section-10.2 */
+    typedef "resource-id" {
+        type string {
+            pattern "[0-9a-zA-Z\-:@_]*";
+            length "1..64";
+        }
+    }
+
+    /* See https://tools.ietf.org/html/rfc7285#section-10.3 */
+    typedef "tag" {
+        type string {
+            pattern "[!-~]*";
+            length "1..32";
+        }
+    }
+
+    /* See https://tools.ietf.org/html/rfc7285#section-10.6 */
+    typedef "cost-metric" {
+        type string {
+            pattern "[0-9a-zA-Z\-_:]*";
+            length "1..32";
+        }
+    }
+
+    /* See https://tools.ietf.org/html/rfc7285#section-10.8.1 */
+    typedef "specific-endpoint-property" {
+        type string {
+            pattern "[0-9a-zA-Z\-:@_]{1,64}\.[0-9a-zA-Z\-:_]{1,32}";
+            length "3..97";
+        }
+    }
+
+    /* See https://tools.ietf.org/html/rfc7285#section-10.8.2 */
+    typedef "global-endpoint-property" {
+        type string {
+            pattern "[0-9a-zA-Z\-:_]*";
+            length "1..32";
+        }
+    }
+
+}
