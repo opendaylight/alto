@@ -1,0 +1,35 @@
+module alto-networkmap-test-impl {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:service:model:test:networkmap";
+    prefix "alto-model-networkmap-test-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix md-sal-binding; revision-date 2013-10-28;}
+
+    description
+        "Service definition for networkmap project";
+
+    revision "2015-10-21" {
+        description
+            "Initial revision";
+    }
+
+    identity alto-model-networkmap-test {
+        base config:module-type;
+        config:java-name-prefix AltoNetworkmap;
+    }
+
+    augment "/config:modules/config:module/config:configuration" {
+        case alto-model-networkmap-test-impl {
+            when "/config:modules/config:module/config:type = 'alto-model-networkmap-test'";
+            container broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity md-sal-binding:binding-broker-osgi-registry;
+                    }
+                }
+            }
+        }
+    }
+}
