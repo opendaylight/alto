@@ -1,0 +1,131 @@
+module alto-model-networkmap {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:networkmap";
+
+    prefix "alto-model-networkmap";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcpool";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto networkmap";
+    }
+
+    identity "resource-type-networkmap" {
+        base "alto-resourcepool:resource-type";
+        description
+            "The resource type for network map";
+    }
+
+    identity "property-type" {
+        description
+            "Base type for PID properties";
+    }
+
+    identity "address-type-base" {
+        base "property-type";
+        description
+            "Base type for address type";
+    }
+
+    grouping "networkmap-filter" {
+        leaf-list "pid" {
+            type "alto-types:pid-name";
+        }
+
+        leaf-list "address-type" {
+            type "identityref" {
+                base "alto-model-networkmap:address-type-base";
+            }
+        }
+    }
+
+    grouping "networkmap-data" {
+        list "partition" {
+            key "pid";
+
+            leaf "pid" {
+                type "alto-types:pid-name";
+            }
+
+            list "property" {
+                key "property-type";
+
+                leaf "property-type" {
+                    type "identityref" {
+                        base "alto-model-networkmap:property-type";
+                    }
+                }
+
+                choice "data" {
+                }
+            }
+        }
+    }
+
+    augment "/base:query/base:input/base:request" {
+        when "../type = 'resource-type-networkmap'";
+
+        case networkmap-request {
+            uses "networkmap-filter";
+        }
+    }
+
+    augment "/base:query/base:output/base:response" {
+        when "../type = 'resource-type-networkmap'";
+
+        case networkmap-response {
+            uses "networkmap-data";
+        }
+    }
+
+    identity "address-type-ipv4" {
+        base "address-type-base";
+        description
+            "Address type for IPv4";
+    }
+
+    identity "address-type-ipv6" {
+        base "address-type-base";
+        description
+            "Address type for IPv6";
+    }
+
+    augment "/base:query/base:output/base:response/networkmap-response/partition/property/data" {
+        when "../property-type = 'address-type-ipv4'";
+
+        case ipv4 {
+            leaf-list "ipv4" {
+                type ietf-inet:ipv4-prefix;
+            }
+        }
+    }
+
+    augment "/base:query/base:output/base:response/networkmap-response/partition/property/data" {
+        when "../property-type = 'address-type-ipv6'";
+
+        case ipv6 {
+            leaf-list "ipv6" {
+                type ietf-inet:ipv6-prefix;
+            }
+        }
+    }
+}
