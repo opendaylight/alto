@@ -1,0 +1,160 @@
+module alto-model-endpointcost-rfc7285 {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:endpointcost:rfc7285";
+
+    prefix "alto-model-endpointcost-rfc7285";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcpool";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+
+    import "alto-model-networkmap" {
+        prefix "networkmap";
+    }
+
+    import "alto-model-endpointcost" {
+        prefix "endpointcost";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto endpointcost";
+    }
+
+    grouping "typed-address-data" {
+        choice "address" {
+        }
+    }
+
+    grouping "endpoint-filter-data" {
+        container "endpoint-filter" {
+            list "source" {
+                uses "typed-address-data";
+            }
+
+            list "destination" {
+                uses "typed-address-data";
+            }
+        }
+    }
+
+    identity "filter-type-endpointfilter" {
+        base "endpointcost:filter-type-base";
+    }
+
+    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request-data/endpointcost:endpointcost-request/endpointcost:filter" {
+        case "endpoint-filter-data" {
+            uses "endpoint-filter-data";
+        }
+    }
+
+    identity "endpointcost-response-type-endpointcostmap" {
+        base "endpointcost:endpointcost-response-type-base";
+    }
+
+    grouping "endpointcostmap-response-data" {
+        container "endpoint-cost-map" {
+            list "endpoint-cost-list" {
+                uses "typed-address-data";
+
+                list "endpoint-destination-cost" {
+                    uses "typed-address-data";
+
+                    choice "cost" {
+                    }
+                }
+            }
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response-data/endpointcost:endpointcost-response/endpointcost:data/" {
+        case "endpoint-cost-map-data" {
+            uses "endpointcostmap-response-data";
+        }
+    }
+
+    grouping "ipv4-address-data" {
+        leaf "ipv4" {
+            type ietf-inet:ipv4-address;
+        }
+    }
+
+    grouping "ipv6-address-data" {
+        leaf "ipv6" {
+            type ietf-inet:ipv6-address;
+        }
+    }
+
+    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request-data/endpointcost:endpointcost-request/endpointcost:filter/endpoint-filter-data/endpoint-filter/source/address" {
+        case ipv4 {
+            uses "ipv4-address-data";
+        }
+
+        case ipv6 {
+            uses "ipv6-address-data";
+        }
+    }
+
+    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request-data/endpointcost:endpointcost-request/endpointcost:filter/endpoint-filter-data/endpoint-filter/destination/address" {
+        case ipv4 {
+            uses "ipv4-address-data";
+        }
+
+        case ipv6 {
+            uses "ipv6-address-data";
+        }
+    }
+
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response-data/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map-data/endpoint-cost-map/endpoint-cost-list/address" {
+        case ipv4 {
+            uses "ipv4-address-data";
+        }
+
+        case ipv6 {
+            uses "ipv6-address-data";
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response-data/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map-data/endpoint-cost-map/endpoint-cost-list/endpoint-destination-cost/address" {
+        case ipv4 {
+            uses "ipv4-address-data";
+        }
+
+        case ipv6 {
+            uses "ipv6-address-data";
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response-data/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map-data/endpoint-cost-map/endpoint-cost-list/endpoint-destination-cost/cost" {
+        case numerical {
+            leaf "cost" {
+                type decimal64 {
+                    fraction-digits 4;
+                }
+            }
+        }
+
+       case ordinal {
+            leaf "cost" {
+                type int32;
+            }
+        }
+    }
+}

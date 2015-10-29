@@ -1,0 +1,116 @@
+module alto-model-endpointcost {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:endpointcost";
+
+    prefix "alto-model-endpointcost";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcpool";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+
+    import "alto-model-networkmap" {
+        prefix "networkmap";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto endpointcost";
+    }
+
+    identity "resource-type-endpointcost" {
+        base "alto-resourcepool:resource-type";
+        description
+            "The resource type for endpoint cost service";
+    }
+
+    grouping "cost-type-data" {
+        container "cost-type" {
+            leaf "cost-metric" {
+                type alto-types:cost-metric;
+            }
+
+            leaf "cost-mode" {
+                mandatory true;
+                type string;
+            }
+        }
+    }
+
+    identity "filter-type-base" {
+        description
+            "Base type for endpoint cost filters";
+    }
+
+    grouping "endpointcost-request-data" {
+        container "endpointcost-request" {
+            uses "cost-type-data";
+
+            leaf-list "constraints" {
+                type string;
+            }
+
+            choice "filter" {
+            }
+        }
+    }
+
+    identity "endpointcost-response-type-base" {
+        description
+            "Base identity for endpoint cost response";
+    }
+
+    grouping "endpointcost-response-data" {
+        container "endpointcost-response" {
+            uses "cost-type-data";
+
+            choice "data" {
+            }
+        }
+    }
+
+    augment "/base:query/base:input/base:request" {
+        case "endpointcost-request-data" {
+            uses "endpointcost-request-data";
+        }
+    }
+
+    augment "/base:query/base:output/base:response" {
+        case "endpointcost-response-data" {
+            uses "endpointcost-response-data";
+        }
+    }
+
+    augment "/alto-resourcepool:resource-pool/alto-resourcepool:resource/alto-resourcepool:capability/alto-resourcepool:spec/" {
+        case "cost-type-spec" {
+            uses "cost-type-data";
+        }
+    }
+
+    augment "/alto-resourcepool:verify-resource/alto-resourcepool:input/alto-resourcepool:capability/alto-resourcepool:spec/" {
+        case "cost-type-spec" {
+            uses "cost-type-data";
+        }
+    }
+
+    augment "/alto-resourcepool:add-resource/alto-resourcepool:input/alto-resourcepool:capability/alto-resourcepool:spec/" {
+        case "cost-type-spec" {
+            uses "cost-type-data";
+        }
+    }
+}

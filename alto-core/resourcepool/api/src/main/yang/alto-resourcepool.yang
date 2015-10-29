@@ -41,32 +41,15 @@ module alto-resourcepool {
     }
 
     grouping "capability-spec" {
-        container "spec" {
-            leaf "category" {
-                type identityref {
-                    base "capability-category";
-                }
+        leaf "category" {
+            type identityref {
+                base "capability-category";
             }
         }
-    }
 
-    /* Examples to extend the capability spec
-    grouping "cost-type-spec" {
-        uses "capability-spec" {
-            augment "spec" {
-                container "cost-type" {
-                    leaf "cost-metric" {
-                        type string;
-                    }
-
-                    leaf "cost-mode" {
-                        type string;
-                    }
-                }
-            }
+        choice "spec" {
         }
     }
-    */
 
     grouping "resource-desc" {
         leaf "resource-id" {
