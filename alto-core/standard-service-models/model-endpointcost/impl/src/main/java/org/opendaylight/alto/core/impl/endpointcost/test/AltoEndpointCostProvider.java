@@ -22,6 +22,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev1
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.AltoResourcepoolService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ResourcePool;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ServiceContext;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.desc.Capability;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.desc.CapabilityBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.Resource;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.ResourceKey;
@@ -29,9 +31,11 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev1
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.CapabilityCategoryCosttype;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.query.input.request.EndpointcostRequest;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.query.output.response.EndpointcostResponseBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.resource.pool.resource.capability.spec.CostTypeSpecBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.EndpointcostResponseTypeEndpointcostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.FilterTypeEndpointfilter;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.TypedAddressData;
@@ -78,8 +82,20 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
         m_dataBrokerService = session.getSALService(DataBroker.class);
         m_serviceReg = session.addRoutedRpcImplementation(AltoModelBaseService.class, this);
 
+        CostTypeSpecBuilder ctsBuilder = new CostTypeSpecBuilder();
+        ctsBuilder.setCostMetric(new CostMetric("routingcost"));
+        ctsBuilder.setCostMode("ordinal");
+
+        CapabilityBuilder capBuilder = new CapabilityBuilder();
+        capBuilder.setCategory(CapabilityCategoryCosttype.class);
+        capBuilder.setSpec(ctsBuilder.build());
+
+        LinkedList<Capability> capabilityList = new LinkedList<Capability>();
+        capabilityList.add(capBuilder.build());
+
         ResourceBuilder builder = new ResourceBuilder();
         builder.setResourceId(TEST_ENDPOINTCOST_RID).setType(ResourceTypeEndpointcost.class);
+        builder.setCapability(capabilityList);
 
         AddResourceInputBuilder inputBuilder = new AddResourceInputBuilder();
         inputBuilder.fieldsFrom(builder.build());

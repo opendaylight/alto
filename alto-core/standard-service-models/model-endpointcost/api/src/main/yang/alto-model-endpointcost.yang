@@ -41,10 +41,12 @@ module alto-model-endpointcost {
 
     grouping "cost-type-data" {
         leaf "cost-metric" {
+            mandatory true;
             type alto-types:cost-metric;
         }
 
         leaf "cost-mode" {
+            mandatory true;
             type string;
         }
     }
@@ -105,4 +107,31 @@ module alto-model-endpointcost {
         }
     }
 
+    identity "capability-category-costtype" {
+        base "alto-resourcepool:capability-category";
+    }
+
+    augment "/alto-resourcepool:resource-pool/alto-resourcepool:resource/alto-resourcepool:capability/alto-resourcepool:spec/" {
+        when "../category = 'capability-category-costtype'";
+
+        case "cost-type-spec" {
+            uses "cost-type-data";
+        }
+    }
+
+    augment "/alto-resourcepool:verify-resource/alto-resourcepool:input/alto-resourcepool:capability/alto-resourcepool:spec/" {
+        when "../category = 'capability-category-costtype'";
+
+        case "cost-type-spec" {
+            uses "cost-type-data";
+        }
+    }
+
+    augment "/alto-resourcepool:add-resource/alto-resourcepool:input/alto-resourcepool:capability/alto-resourcepool:spec/" {
+        when "../category = 'capability-category-costtype'";
+
+        case "cost-type-spec" {
+            uses "cost-type-data";
+        }
+    }
 }
