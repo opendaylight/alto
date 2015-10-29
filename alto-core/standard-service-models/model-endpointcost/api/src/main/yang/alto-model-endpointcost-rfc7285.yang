@@ -1,0 +1,200 @@
+module alto-model-endpointcost-rfc7285 {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:endpointcost:rfc7285";
+
+    prefix "alto-model-endpointcost-rfc7285";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcpool";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+
+    import "alto-model-networkmap" {
+        prefix "networkmap";
+    }
+
+    import "alto-model-endpointcost" {
+        prefix "endpointcost";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto endpointcost";
+    }
+
+    grouping "typed-address-data" {
+        leaf "type" {
+            type identityref {
+                base "networkmap:address-type-base";
+            }
+        }
+
+        choice "address" {
+        }
+    }
+
+    grouping "endpoint-filter-data" {
+        list "source" {
+            uses "typed-address-data";
+        }
+
+        list "destination" {
+            uses "typed-address-data";
+        }
+    }
+
+    identity "filter-type-endpointfilter" {
+        base "endpointcost:filter-type-base";
+    }
+
+    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request/endpointcost:filter-data" {
+        when "../filter-type = 'endpointcost:filter-type-endpointfilter'";
+
+        case endpoint-filter {
+            uses "endpoint-filter-data";
+        }
+    }
+
+    identity "endpointcost-response-type-endpointcostmap" {
+        base "endpointcost:endpointcost-response-type-base";
+    }
+
+    grouping "endpointcostmap-response-data" {
+        list "endpoint-cost-list" {
+            uses "typed-address-data";
+
+            list "endpoint-destination-cost" {
+                uses "typed-address-data";
+
+                choice "cost" {
+                }
+            }
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response/endpointcost:data/" {
+        when "../type = 'endpointcost-response-type-endpointcostmap'";
+
+        case "endpoint-cost-map" {
+            uses "endpointcostmap-response-data";
+        }
+    }
+
+    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request/endpointcost:filter-data/endpoint-filter/source/address" {
+        when "../type = 'networkmap:address-type-ipv4'";
+
+        case ipv4 {
+            leaf address {
+                type ietf-inet:ipv4-address;
+            }
+        }
+    }
+
+    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request/endpointcost:filter-data/endpoint-filter/destination/address" {
+        when "../type = 'networkmap:address-type-ipv4'";
+
+        case ipv4 {
+            leaf address {
+                type ietf-inet:ipv4-address;
+            }
+        }
+    }
+
+    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request/endpointcost:filter-data/endpoint-filter/source/address" {
+        when "../type = 'networkmap:address-type-ipv6'";
+
+        case ipv6 {
+            leaf address {
+                type ietf-inet:ipv6-address;
+            }
+        }
+    }
+
+    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request/endpointcost:filter-data/endpoint-filter/destination/address" {
+        when "../type = 'networkmap:address-type-ipv6'";
+
+        case ipv6 {
+            leaf address {
+                type ietf-inet:ipv6-address;
+            }
+        }
+    }
+
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map/endpoint-cost-list/address" {
+        when "../type = 'networkmap:address-type-ipv4'";
+
+        case ipv4 {
+            leaf address {
+                type ietf-inet:ipv4-address;
+            }
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map/endpoint-cost-list/endpoint-destination-cost/address" {
+        when "../type = 'networkmap:address-type-ipv4'";
+
+        case ipv4 {
+            leaf address {
+                type ietf-inet:ipv4-address;
+            }
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map/endpoint-cost-list/address" {
+        when "../type = 'networkmap:address-type-ipv6'";
+
+        case ipv6 {
+            leaf address {
+                type ietf-inet:ipv6-address;
+            }
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map/endpoint-cost-list/endpoint-destination-cost/address" {
+        when "../type = 'networkmap:address-type-ipv6'";
+
+        case ipv6 {
+            leaf address {
+                type ietf-inet:ipv6-address;
+            }
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map/endpoint-cost-list/endpoint-destination-cost/cost" {
+        when "../../../../endpointcost:cost-mode = 'numerical'";
+
+        case numerical {
+            leaf "value" {
+                type decimal64 {
+                    fraction-digits 4;
+                }
+            }
+        }
+    }
+
+    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map/endpoint-cost-list/endpoint-destination-cost/cost" {
+        when "../../../../endpointcost:cost-mode = 'ordinal'";
+
+        case ordinal {
+            leaf "value" {
+                type int32;
+            }
+        }
+    }
+}

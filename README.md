@@ -6,3 +6,50 @@
 
 [routed-rpc]: https://ask.opendaylight.org/question/99/how-does-request-routing-works/
 [routed-rpc-example]: https://git.opendaylight.org/gerrit/gitweb?p=controller.git;a=blob;f=opendaylight/md-sal/sal-binding-it/src/test/java/org/opendaylight/controller/test/sal/binding/it/RoutedServiceTest.jav=d49d6f0e25e271e43c8550feb5eef63d9630118b=HEAD4a
+
+# Test service models for ALTO
+
+~~~
+{
+  "input": {
+    "service-reference":"/alto-resourcepool:resource-pool/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-base']"
+  }
+}
+
+{
+  "input": {
+    "service-reference":"/alto-resourcepool:resource-pool/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-networkmap']",
+    "type": "alto-model-networkmap:resource-type-networkmap"
+  }
+}
+
+{
+  "input": {
+    "service-reference":"/alto-resourcepool:resource-pool/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-endpointcost']",
+    "type":"alto-model-endpointcost:resource-type-endpointcost",
+    "filter-type":"alto-model-endpointcost-rfc7285:filter-type-endpointfilter",
+    "cost-mode": "ordinal",
+    "cost-metric": "routingcost",
+    "source": [
+      {
+        "type":"alto-model-networkmap:address-type-ipv4",
+        "address":"192.168.0.1"
+      },
+      {
+        "type":"alto-model-networkmap:address-type-ipv4",
+        "address":"192.168.0.2"
+      }
+    ],
+    "destination": [
+      {
+        "type":"alto-model-networkmap:address-type-ipv4",
+        "address":"192.168.1.1"
+      },
+      {
+        "type":"alto-model-networkmap:address-type-ipv4",
+        "address":"192.168.1.2"
+      }
+    ]
+  }
+}
+~~~
