@@ -41,10 +41,10 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkm
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.networkmap.response.data.network.map.PartitionBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.networkmap.response.data.network.map.partition.Property;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.networkmap.response.data.network.map.partition.PropertyBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.query.input.request.NetworkmapRequestData;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.query.output.response.NetworkmapResponseDataBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.query.output.response.networkmap.response.data.network.map.partition.property.data.Ipv4Builder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.query.output.response.networkmap.response.data.network.map.partition.property.data.Ipv6Builder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.query.input.request.AltoNetworkmapRequest;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.query.output.response.AltoNetworkmapResponseBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.query.output.response.alto.networkmap.response.network.map.partition.property.data.Ipv4Builder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.query.output.response.alto.networkmap.response.network.map.partition.property.data.Ipv6Builder;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.AltoModelBaseService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.QueryInput;
@@ -113,7 +113,7 @@ public class AltoNetworkmapProvider implements BindingAwareProvider, AutoCloseab
         if (!input.getType().equals(ResourceTypeNetworkmap.class)) {
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
         }
-        NetworkmapRequestData request = (NetworkmapRequestData)input.getRequest();
+        AltoNetworkmapRequest request = (AltoNetworkmapRequest)input.getRequest();
         NetworkmapFilter filter = request.getNetworkmapFilter();
 
         List<PidName> pids = filter.getPid();
@@ -157,7 +157,7 @@ public class AltoNetworkmapProvider implements BindingAwareProvider, AutoCloseab
         NetworkMapBuilder nmBuilder = new NetworkMapBuilder();
         nmBuilder.setPartition(partitionList);
 
-        NetworkmapResponseDataBuilder nmrBuilder = new NetworkmapResponseDataBuilder();
+        AltoNetworkmapResponseBuilder nmrBuilder = new AltoNetworkmapResponseBuilder();
         nmrBuilder.setNetworkMap(nmBuilder.build());
 
         QueryOutputBuilder builder = new QueryOutputBuilder();
