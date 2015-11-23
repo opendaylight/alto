@@ -1,4 +1,5 @@
 module alto-model-networkmap {
+
     yang-version 1;
 
     namespace "urn:opendaylight:alto:service:model:networkmap";
@@ -15,14 +16,6 @@ module alto-model-networkmap {
 
     import "alto-model-base" {
         prefix "base";
-    }
-
-    import "ietf-inet-types" {
-        prefix "ietf-inet";
-    }
-
-    import yang-ext {
-        prefix ext;
     }
 
     organization "Yale University";
@@ -72,35 +65,37 @@ module alto-model-networkmap {
                 leaf "pid" {
                     type "alto-types:pid-name";
                 }
+            }
+        }
+    }
 
-                list "property" {
-                    key "property-type";
-
-                    leaf "property-type" {
-                        type identityref {
-                            base "property-type-base";
-                        }
-                    }
-
-                    choice "data" {
-                    }
+    grouping "alto-request-networkmap" {
+        uses "base:alto-request-base" {
+            augment "request" {
+                case "networkmap-request" {
+                    uses "networkmap-request-data";
                 }
             }
         }
     }
 
-    augment "/base:query/base:input/base:request" {
-        ext:augment-identifier "alto-networkmap-request";
-
-        case "alto-networkmap-request" {
-            uses "networkmap-request-data";
+    grouping "alto-response-networkmap" {
+        uses "base:alto-response-error" {
+            augment "response" {
+                case "networkmap-response" {
+                    uses "networkmap-response-data";
+                }
+            }
         }
     }
 
-    augment "/base:query/base:output/base:response" {
-        ext:augment-identifier "alto-networkmap-response";
-        case "alto-networkmap-response" {
-            uses "networkmap-response-data";
+    rpc query {
+        input {
+            uses "alto-request-networkmap";
+        }
+
+        output {
+            uses "alto-response-networkmap";
         }
     }
 
@@ -116,19 +111,4 @@ module alto-model-networkmap {
             "Address type for IPv6";
     }
 
-    augment "/base:query/base:output/base:response/alto-networkmap-response/network-map/partition/property/data" {
-        ext:augment-identifier "rfc7285-networkmap-property-data";
-
-        case ipv4 {
-            leaf-list "ipv4" {
-                type ietf-inet:ipv4-prefix;
-            }
-        }
-
-        case ipv6 {
-            leaf-list "ipv6" {
-                type ietf-inet:ipv6-prefix;
-            }
-        }
-    }
 }

@@ -32,8 +32,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev15102
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.QueryInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.QueryOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.QueryOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.query.output.response.ErrorResponseBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.alto.response.error.ErrorBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.alto.response.error.response.ErrorResponseBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.alto.response.error.response.error.response.ErrorBuilder;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.AltoResourcepoolService;
 

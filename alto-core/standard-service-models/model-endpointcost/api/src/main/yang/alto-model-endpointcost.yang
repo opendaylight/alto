@@ -10,7 +10,7 @@ module alto-model-endpointcost {
     }
 
     import "alto-resourcepool" {
-        prefix "alto-resourcpool";
+        prefix "alto-resourcepool";
     }
 
     import "alto-model-base" {
@@ -52,13 +52,8 @@ module alto-model-endpointcost {
         }
     }
 
-    identity "filter-type-base" {
-        description
-            "Base type for endpoint cost filters";
-    }
-
     grouping "endpointcost-request-data" {
-        container "endpointcost-request" {
+        container "endpointcost-params" {
             uses "cost-type-data";
 
             leaf-list "constraints" {
@@ -76,23 +71,37 @@ module alto-model-endpointcost {
     }
 
     grouping "endpointcost-response-data" {
-        container "endpointcost-response" {
-            uses "cost-type-data";
+        choice "endpointcost-data" {
+        }
+    }
 
-            choice "data" {
+    grouping "alto-request-endpointcost" {
+        uses "base:alto-request-base" {
+            augment "request" {
+                case "endpointcost-request" {
+                    uses "endpointcost-request-data";
+                }
             }
         }
     }
 
-    augment "/base:query/base:input/base:request" {
-        case "endpointcost-request-data" {
-            uses "endpointcost-request-data";
+    grouping "alto-response-endpointcost" {
+        uses "base:alto-response-error" {
+            augment "response" {
+                case "endpointcost-response" {
+                    uses "endpointcost-response-data";
+                }
+            }
         }
     }
 
-    augment "/base:query/base:output/base:response" {
-        case "endpointcost-response-data" {
-            uses "endpointcost-response-data";
+    rpc query {
+        input {
+            uses "alto-request-endpointcost";
+        }
+
+        output {
+            uses "alto-response-endpointcost";
         }
     }
 

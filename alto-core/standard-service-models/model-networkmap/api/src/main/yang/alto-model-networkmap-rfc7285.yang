@@ -1,0 +1,46 @@
+module alto-model-networkmap-rfc7285 {
+
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:networkmap:rfc7285";
+
+    prefix "alto-model-networkmap-rfc7285";
+
+    import "alto-model-networkmap" {
+        prefix "alto-nm";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    import yang-ext {
+        prefix ext;
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto networkmap";
+    }
+
+
+    augment "/alto-nm:query/alto-nm:output/alto-nm:response/alto-nm:networkmap-response/alto-nm:network-map/alto-nm:partition" {
+        ext:augment-identifier "ipv4-prefix-list";
+
+        leaf-list "ipv4" {
+            type ietf-inet:ipv4-prefix;
+        }
+    }
+
+    augment "/alto-nm:query/alto-nm:output/alto-nm:response/alto-nm:networkmap-response/alto-nm:network-map/alto-nm:partition" {
+        ext:augment-identifier "ipv6-prefix-list";
+
+        leaf-list "ipv6" {
+            type ietf-inet:ipv6-prefix;
+        }
+    }
+
+}

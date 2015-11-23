@@ -31,32 +31,33 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev1
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.AltoModelEndpointcostService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.request.endpointcost.request.EndpointcostRequest;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.cost.type.data.CostType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.cost.type.data.CostTypeBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.endpointcost.request.data.EndpointcostRequest;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.endpointcost.response.data.EndpointcostResponseBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.query.input.request.EndpointcostRequestData;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.query.output.response.EndpointcostResponseDataBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.endpointcost.request.data.EndpointcostParams;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.verify.resource.input.capability.spec.CostTypeSpecBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.Ipv4AddressData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.Ipv6AddressData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.TypedAddressData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpoint.filter.data.EndpointFilter;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.EndpointCostMapBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.EndpointCostList;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.EndpointCostListBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.list.EndpointDestinationCost;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.list.EndpointDestinationCostBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.Cost;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.input.request.endpointcost.request.data.endpointcost.request.filter.EndpointFilterData;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.EndpointCostMapDataBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.EndpointCost;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.EndpointCostBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.Cost;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.DestinationBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.SourceBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.input.request.endpointcost.request.endpointcost.params.filter.EndpointFilterData;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.cost.NumericalBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.cost.OrdinalBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.EndpointCostmapDataBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.typed.address.data.Address;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.response.endpointcost.response.EndpointcostResponseBuilder;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.AltoModelBaseService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.QueryInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.QueryOutput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.rev151021.QueryOutputBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -65,12 +66,12 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AltoEndpointCostProvider implements BindingAwareProvider, AutoCloseable, AltoModelBaseService {
+public class AltoEndpointCostProvider implements BindingAwareProvider, AutoCloseable, AltoModelEndpointcostService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoEndpointCostProvider.class);
 
     private DataBroker m_dataBrokerService = null;
-    private RoutedRpcRegistration<AltoModelBaseService> m_serviceReg = null;
+    private RoutedRpcRegistration<AltoModelEndpointcostService> m_serviceReg = null;
     private AltoResourcepoolService m_resourcepoolService = null;
 
     private static final ResourceId TEST_ENDPOINTCOST_RID = new ResourceId("test-model-endpointcost");
@@ -87,7 +88,7 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
         LOG.info("AltoModelEndpointCostProvider Session Initiated");
 
         m_dataBrokerService = session.getSALService(DataBroker.class);
-        m_serviceReg = session.addRoutedRpcImplementation(AltoModelBaseService.class, this);
+        m_serviceReg = session.addRoutedRpcImplementation(AltoModelEndpointcostService.class, this);
 
         CostTypeBuilder ctBuilder = new CostTypeBuilder();
         ctBuilder.setCostMetric(COST_METRIC_ROUTINGCOST);
@@ -130,16 +131,16 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
     }
 
     protected Cost createNumericalCost(double cost) {
-        org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.cost.NumericalBuilder builder;
-        builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.cost.NumericalBuilder();
+        NumericalBuilder builder;
+        builder = new NumericalBuilder();
 
         builder.setCost(new BigDecimal(cost));
         return builder.build();
     }
 
     protected Cost createOrdinalCost(int order) {
-        org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.cost.OrdinalBuilder builder;
-        builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.cost.OrdinalBuilder();
+        OrdinalBuilder builder;
+        builder = new OrdinalBuilder();
 
         builder.setCost(order);
         return builder.build();
@@ -147,14 +148,14 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
 
     protected Address createSourceAddress(Address from) {
         if (from instanceof Ipv4AddressData) {
-            org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.address.Ipv4Builder builder;
-            builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.address.Ipv4Builder();
+            org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.source.address.Ipv4Builder builder;
+            builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.source.address.Ipv4Builder();
 
             builder.fieldsFrom((Ipv4AddressData)from);
             return builder.build();
         } else if (from instanceof Ipv6AddressData) {
-            org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.address.Ipv6Builder builder;
-            builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.address.Ipv6Builder();
+            org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.source.address.Ipv6Builder builder;
+            builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.source.address.Ipv6Builder();
 
             builder.fieldsFrom((Ipv6AddressData)from);
             return builder.build();
@@ -164,18 +165,18 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
 
     protected Address createDestinationAddress(Address from) {
         if (from instanceof Ipv4AddressData) {
-            org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.address.Ipv4Builder builder;
-            builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.address.Ipv4Builder();
+            org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.destination.address.Ipv4Builder builder;
+            builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.destination.address.Ipv4Builder();
 
             builder.fieldsFrom((Ipv4AddressData)from);
             return builder.build();
         } else if (from instanceof Ipv6AddressData) {
-            org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.address.Ipv6Builder builder;
-            builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.data.endpointcost.response.data.endpoint.cost.map.data.endpoint.cost.map.endpoint.cost.list.endpoint.destination.cost.address.Ipv6Builder();
+            org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.destination.address.Ipv6Builder builder;
+            builder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.destination.address.Ipv6Builder();
 
             builder.fieldsFrom((Ipv6AddressData)from);
             return builder.build();
-        }
+}
         return null;
     }
 
@@ -184,13 +185,10 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
         if (!input.getType().equals(ResourceTypeEndpointcost.class)) {
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
         }
-        EndpointcostRequestData requestData = (EndpointcostRequestData)input.getRequest();
-        EndpointcostRequest request = requestData.getEndpointcostRequest();
-        CostType costType = request.getCostType();
+        EndpointcostRequest request = (EndpointcostRequest)input.getRequest();
+        EndpointcostParams params = request.getEndpointcostParams();
 
-        if (!(request.getFilter() instanceof EndpointFilterData)) {
-            return RpcResultBuilder.<QueryOutput>failed().buildFuture();
-        }
+        CostType costType = params.getCostType();
         if (!costType.getCostMode().equals("ordinal")) {
             LOG.warn(costType.getCostMode().toString());
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
@@ -200,45 +198,45 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
         }
 
-        EndpointFilter filter = ((EndpointFilterData)request.getFilter()).getEndpointFilter();
+        if (!(params.getFilter() instanceof EndpointFilterData)) {
+            return RpcResultBuilder.<QueryOutput>failed().buildFuture();
+        }
+
+        EndpointFilter filter = ((EndpointFilterData)params.getFilter()).getEndpointFilter();
         List<? extends TypedAddressData> source = filter.getSource();
         List<? extends TypedAddressData> destination = filter.getDestination();
 
         int order = 0;
-        LinkedList<EndpointCostList> eclList = new LinkedList<EndpointCostList>();
+        LinkedList<EndpointCost> ecList = new LinkedList<EndpointCost>();
         for (TypedAddressData src: source) {
-            LinkedList<EndpointDestinationCost> edcList = new LinkedList<EndpointDestinationCost>();
             for (TypedAddressData dst: destination) {
-                EndpointDestinationCostBuilder edcBuilder = new EndpointDestinationCostBuilder();
+                SourceBuilder srcBuilder = new SourceBuilder();
+                srcBuilder.setAddress(createSourceAddress(src.getAddress()));
 
-                edcBuilder.setAddress(createDestinationAddress(dst.getAddress()));
-                edcBuilder.setCost(createOrdinalCost(++order));
+                DestinationBuilder dstBuilder = new DestinationBuilder();
+                dstBuilder.setAddress(createDestinationAddress(dst.getAddress()));
 
-                edcList.add(edcBuilder.build());
+
+                EndpointCostBuilder ecBuilder = new EndpointCostBuilder();
+                ecBuilder.setSource(srcBuilder.build());
+                ecBuilder.setDestination(dstBuilder.build());
+                ecBuilder.setCost(createOrdinalCost(++order));
+
+                ecList.add(ecBuilder.build());
             }
-
-            EndpointCostListBuilder eclBuilder = new EndpointCostListBuilder();
-            eclBuilder.setAddress(createSourceAddress(src.getAddress()));
-            eclBuilder.setEndpointDestinationCost(edcList);
-
-            eclList.add(eclBuilder.build());
         }
 
         EndpointCostMapBuilder ecmBuilder = new EndpointCostMapBuilder();
-        ecmBuilder.setEndpointCostList(eclList);
+        ecmBuilder.setEndpointCost(ecList);
 
-        EndpointCostMapDataBuilder ecmdBuilder = new EndpointCostMapDataBuilder();
+        EndpointCostmapDataBuilder ecmdBuilder = new EndpointCostmapDataBuilder();
         ecmdBuilder.setEndpointCostMap(ecmBuilder.build());
 
-        EndpointcostResponseBuilder ecsBuilder = new EndpointcostResponseBuilder();
-        ecsBuilder.setCostType(costType);
-        ecsBuilder.setData(ecmdBuilder.build());
-
-        EndpointcostResponseDataBuilder ecrdBuilder = new EndpointcostResponseDataBuilder();
-        ecrdBuilder.setEndpointcostResponse(ecsBuilder.build());
+        EndpointcostResponseBuilder ecrBuilder = new EndpointcostResponseBuilder();
+        ecrBuilder.setEndpointcostData(ecmdBuilder.build());
 
         QueryOutputBuilder builder = new QueryOutputBuilder();
-        builder.setType(ResourceTypeEndpointcost.class).setResponse(ecrdBuilder.build());
+        builder.setType(ResourceTypeEndpointcost.class).setResponse(ecrBuilder.build());
         return RpcResultBuilder.<QueryOutput>success(builder.build()).buildFuture();
     }
 

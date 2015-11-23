@@ -36,7 +36,7 @@
     "input": {
         "service-reference":"/alto-resourcepool:resource-pool/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-endpointcost']",
         "type":"alto-model-endpointcost:resource-type-endpointcost",
-        "endpointcost-request": {
+        "endpointcost-params": {
             "cost-type": {
                 "cost-mode": "ordinal",
                 "cost-metric": "routingcost"

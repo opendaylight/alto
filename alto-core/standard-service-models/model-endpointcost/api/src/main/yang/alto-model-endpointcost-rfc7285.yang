@@ -5,28 +5,16 @@ module alto-model-endpointcost-rfc7285 {
 
     prefix "alto-model-endpointcost-rfc7285";
 
-    import "alto-basic-types" {
-        prefix "alto-types";
-    }
-
-    import "alto-resourcepool" {
-        prefix "alto-resourcpool";
-    }
-
-    import "alto-model-base" {
-        prefix "base";
-    }
-
-    import "alto-model-networkmap" {
-        prefix "networkmap";
-    }
-
     import "alto-model-endpointcost" {
-        prefix "endpointcost";
+        prefix "alto-ecs";
     }
 
     import "ietf-inet-types" {
         prefix "ietf-inet";
+    }
+
+    import yang-ext {
+        prefix ext;
     }
 
     organization "Yale University";
@@ -54,37 +42,39 @@ module alto-model-endpointcost-rfc7285 {
         }
     }
 
-    identity "filter-type-endpointfilter" {
-        base "endpointcost:filter-type-base";
-    }
+    augment "/alto-ecs:query/alto-ecs:input/alto-ecs:request/alto-ecs:endpointcost-request/alto-ecs:endpointcost-params/alto-ecs:filter" {
+        ext:augment-identifier "rfc7285-endpoint-filter";
 
-    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request-data/endpointcost:endpointcost-request/endpointcost:filter" {
         case "endpoint-filter-data" {
             uses "endpoint-filter-data";
         }
     }
 
     identity "endpointcost-response-type-endpointcostmap" {
-        base "endpointcost:endpointcost-response-type-base";
+        base "alto-ecs:endpointcost-response-type-base";
     }
 
     grouping "endpointcostmap-response-data" {
         container "endpoint-cost-map" {
-            list "endpoint-cost-list" {
-                uses "typed-address-data";
-
-                list "endpoint-destination-cost" {
+            list "endpoint-cost" {
+                container "source" {
                     uses "typed-address-data";
+                }
 
-                    choice "cost" {
-                    }
+                container "destination" {
+                    uses "typed-address-data";
+                }
+
+                choice "cost" {
                 }
             }
         }
     }
 
-    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response-data/endpointcost:endpointcost-response/endpointcost:data/" {
-        case "endpoint-cost-map-data" {
+    augment "/alto-ecs:query/alto-ecs:output/alto-ecs:response/alto-ecs:endpointcost-response/alto-ecs:endpointcost-data" {
+        ext:augment-identifier "rfc7285-endpoint-cost-map";
+
+        case "endpoint-costmap-data" {
             uses "endpointcostmap-response-data";
         }
     }
@@ -101,7 +91,9 @@ module alto-model-endpointcost-rfc7285 {
         }
     }
 
-    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request-data/endpointcost:endpointcost-request/endpointcost:filter/endpoint-filter-data/endpoint-filter/source/address" {
+    augment "/alto-ecs:query/alto-ecs:input/alto-ecs:request/alto-ecs:endpointcost-request/alto-ecs:endpointcost-params/alto-ecs:filter/endpoint-filter-data/endpoint-filter/source/address" {
+        ext:augment-identifier "rfc7285-endpoint-filter-source";
+
         case ipv4 {
             uses "ipv4-address-data";
         }
@@ -111,7 +103,20 @@ module alto-model-endpointcost-rfc7285 {
         }
     }
 
-    augment "/base:query/base:input/base:request/endpointcost:endpointcost-request-data/endpointcost:endpointcost-request/endpointcost:filter/endpoint-filter-data/endpoint-filter/destination/address" {
+    augment "/alto-ecs:query/alto-ecs:input/alto-ecs:request/alto-ecs:endpointcost-request/alto-ecs:endpointcost-params/alto-ecs:filter/endpoint-filter-data/endpoint-filter/destination/address" {
+        ext:augment-identifier "rfc7285-endpoint-filter-destination";
+        case ipv4 {
+            uses "ipv4-address-data";
+        }
+
+        case ipv6 {
+            uses "ipv6-address-data";
+        }
+    }
+
+    augment "/alto-ecs:query/alto-ecs:output/alto-ecs:response/alto-ecs:endpointcost-response/alto-ecs:endpointcost-data/endpoint-costmap-data/endpoint-cost-map/endpoint-cost/source/address" {
+        ext:augment-identifier "rfc7285-endpoint-costmap-source";
+
         case ipv4 {
             uses "ipv4-address-data";
         }
@@ -122,7 +127,9 @@ module alto-model-endpointcost-rfc7285 {
     }
 
 
-    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response-data/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map-data/endpoint-cost-map/endpoint-cost-list/address" {
+    augment "/alto-ecs:query/alto-ecs:output/alto-ecs:response/alto-ecs:endpointcost-response/alto-ecs:endpointcost-data/endpoint-costmap-data/endpoint-cost-map/endpoint-cost/destination/address" {
+        ext:augment-identifier "rfc7285-endpoint-costmap-destination";
+
         case ipv4 {
             uses "ipv4-address-data";
         }
@@ -132,17 +139,9 @@ module alto-model-endpointcost-rfc7285 {
         }
     }
 
-    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response-data/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map-data/endpoint-cost-map/endpoint-cost-list/endpoint-destination-cost/address" {
-        case ipv4 {
-            uses "ipv4-address-data";
-        }
+    augment "/alto-ecs:query/alto-ecs:output/alto-ecs:response/alto-ecs:endpointcost-response/alto-ecs:endpointcost-data/endpoint-costmap-data/endpoint-cost-map/endpoint-cost/cost" {
+        ext:augment-identifier "rfc7825-endpoint-costmap-cost";
 
-        case ipv6 {
-            uses "ipv6-address-data";
-        }
-    }
-
-    augment "/base:query/base:output/base:response/endpointcost:endpointcost-response-data/endpointcost:endpointcost-response/endpointcost:data/endpoint-cost-map-data/endpoint-cost-map/endpoint-cost-list/endpoint-destination-cost/cost" {
         case numerical {
             leaf "cost" {
                 type decimal64 {

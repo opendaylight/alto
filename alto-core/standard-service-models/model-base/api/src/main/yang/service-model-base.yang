@@ -61,12 +61,18 @@ module alto-model-base {
     }
 
     grouping "alto-response-error" {
-        container "error" {
-            leaf "error-code" {
-                type "string";
-            }
+        uses "alto-response-base" {
+            augment "response" {
+                case "error-response" {
+                    container "error" {
+                        leaf "error-code" {
+                            type "string";
+                        }
 
-            //TODO
+                        //TODO
+                    }
+                }
+            }
         }
     }
 
@@ -76,12 +82,6 @@ module alto-model-base {
         }
 
         output {
-            uses "alto-response-base";
-        }
-    }
-
-    augment "/alto-model-base:query/alto-model-base:output/alto-model-base:response" {
-        case "error-response" {
             uses "alto-response-error";
         }
     }
