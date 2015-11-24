@@ -7,29 +7,33 @@
  */
 package org.opendaylight.alto.core.impl.networkmap.test;
 
-import java.util.concurrent.Future;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
+import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
+import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
+
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RoutedRpcRegistration;
+import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
+
+import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
+import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils.ContextTagListener;
 
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv6Prefix;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.AddResourceInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.AltoResourcepoolService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ResourcePool;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ServiceContext;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.Resource;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.ResourceKey;
-
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.PidName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
+
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.Resource;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AddressTypeBase;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AddressTypeIpv4;
@@ -50,8 +54,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkm
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rfc7285.rev151021.Ipv6PrefixList;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rfc7285.rev151021.Ipv6PrefixListBuilder;
 
+import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
@@ -62,42 +66,56 @@ public class AltoNetworkmapProvider implements BindingAwareProvider, AutoCloseab
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoNetworkmapProvider.class);
 
-    private DataBroker m_dataBrokerService = null;
+    private DataBroker m_dataBroker = null;
     private RoutedRpcRegistration<AltoModelNetworkmapService> m_serviceReg = null;
-    private AltoResourcepoolService m_resourcepoolService = null;
+    private ListenerRegistration<DataChangeListener> m_listener = null;
 
-    private static final ResourceId TEST_NETWORKMAP_RID = new ResourceId("test-model-networkmap");
+    private static final String TEST_NETWORKMAP_NAME = "test-model-networkmap";
+    private static final ResourceId TEST_NETWORKMAP_RID = new ResourceId(TEST_NETWORKMAP_NAME);
     private InstanceIdentifier<Resource> m_testIID = null;
 
-    protected InstanceIdentifier<Resource> getResourceIID(ResourceId rid) {
-        ResourceKey key = new ResourceKey(rid);
-        return InstanceIdentifier.builder(ResourcePool.class).child(Resource.class, key).build();
+    protected void createContextTag()
+            throws InterruptedException, ExecutionException, TransactionCommitFailedException  {
+        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+        ResourcepoolUtils.createResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_NETWORKMAP_NAME,
+                                            ResourceTypeNetworkmap.class, wx);
+
+        ResourcepoolUtils.lazyUpdateResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_NETWORKMAP_NAME, wx);
+
+        wx.submit().get();
+    }
+
+    protected void removeContextTag()
+            throws InterruptedException, ExecutionException, TransactionCommitFailedException  {
+        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+
+        ResourcepoolUtils.deleteResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_NETWORKMAP_NAME, wx);
+
+        wx.submit().get();
+    }
+
+    protected void setupListener() {
+        ContextTagListener listener = new ContextTagListener(m_testIID, m_serviceReg);
+        m_listener = m_dataBroker.registerDataChangeListener(LogicalDatastoreType.OPERATIONAL,
+                                        m_testIID,listener, DataChangeScope.SUBTREE);
+
+        assert m_listener != null;
     }
 
     @Override
     public void onSessionInitiated(ProviderContext session) {
         LOG.info("AltoModelNetworkProvider Session Initiated");
 
-        m_dataBrokerService = session.getSALService(DataBroker.class);
+        m_dataBroker = session.getSALService(DataBroker.class);
         m_serviceReg = session.addRoutedRpcImplementation(AltoModelNetworkmapService.class, this);
-
-        ResourceBuilder builder = new ResourceBuilder();
-        builder.setResourceId(TEST_NETWORKMAP_RID).setType(ResourceTypeNetworkmap.class);
-
-        AddResourceInputBuilder inputBuilder = new AddResourceInputBuilder();
-        inputBuilder.fieldsFrom(builder.build());
+        m_testIID = ResourcepoolUtils.getResourceIID(ResourcepoolUtils.DEFAULT_CONTEXT, TEST_NETWORKMAP_NAME);
 
         try {
-            AltoResourcepoolService resourcepool;
-            resourcepool = session.getRpcService(AltoResourcepoolService.class);
-
-            RpcResult<Void> result;
-            result = resourcepool.addResource(inputBuilder.build()).get();
-
-            assert result.isSuccessful();
-
-            m_testIID = getResourceIID(TEST_NETWORKMAP_RID);
-            m_serviceReg.registerPath(ServiceContext.class, m_testIID);
+            setupListener();
+            createContextTag();
         } catch (Exception e) {
         }
     }
@@ -105,6 +123,15 @@ public class AltoNetworkmapProvider implements BindingAwareProvider, AutoCloseab
     @Override
     public void close() throws Exception {
         LOG.info("AltoModelBaseProvider Closed");
+
+        if (m_serviceReg != null) {
+            m_serviceReg.close();
+        }
+
+        try {
+            removeContextTag();
+        } catch (Exception e) {
+        }
     }
 
     @Override

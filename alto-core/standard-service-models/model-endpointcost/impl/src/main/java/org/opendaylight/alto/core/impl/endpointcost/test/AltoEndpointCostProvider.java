@@ -8,39 +8,45 @@
 package org.opendaylight.alto.core.impl.endpointcost.test;
 
 import java.math.BigDecimal;
-import java.util.concurrent.Future;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
+import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
+import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
+import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
+
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RoutedRpcRegistration;
+import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.AddResourceInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.AltoResourcepoolService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ResourcePool;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ServiceContext;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.desc.Capability;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.desc.CapabilityBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.Resource;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.resource.pool.ResourceKey;
+import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
+import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils.ContextTagListener;
+import org.opendaylight.alto.core.service.model.endpointcost.EndpointcostUtils;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.Resource;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.resource.CapabilitiesBuilder;
+
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.AltoModelEndpointcostService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.CapabilitiesCostType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.CapabilitiesCostTypeBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.request.endpointcost.request.EndpointcostRequest;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.response.endpointcost.response.EndpointcostResponseBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.cost.type.data.CostType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.cost.type.data.CostTypeBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.endpointcost.request.data.EndpointcostParams;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.verify.resource.input.capability.spec.CostTypeSpecBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.Ipv4AddressData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.Ipv6AddressData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.TypedAddressData;
@@ -52,14 +58,13 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpoint
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.DestinationBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.input.request.endpointcost.request.endpointcost.params.filter.EndpointFilterData;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.EndpointCostmapDataBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.cost.NumericalBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.cost.OrdinalBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.EndpointCostmapDataBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.typed.address.data.Address;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.response.endpointcost.response.EndpointcostResponseBuilder;
 
+import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
@@ -70,57 +75,69 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoEndpointCostProvider.class);
 
-    private DataBroker m_dataBrokerService = null;
+    private DataBroker m_dataBroker = null;
     private RoutedRpcRegistration<AltoModelEndpointcostService> m_serviceReg = null;
-    private AltoResourcepoolService m_resourcepoolService = null;
+    private ListenerRegistration<DataChangeListener> m_listener = null;
 
-    private static final ResourceId TEST_ENDPOINTCOST_RID = new ResourceId("test-model-endpointcost");
+    private static final String TEST_ENDPOINTCOST_NAME = "test-model-endpointcost";
+    private static final ResourceId TEST_ENDPOINTCOST_RID = new ResourceId(TEST_ENDPOINTCOST_NAME);
     private static final CostMetric COST_METRIC_ROUTINGCOST = new CostMetric("routingcost");
+    private static final String COST_MODE_ORDINAL = "ordinal";
     private InstanceIdentifier<Resource> m_testIID = null;
 
-    protected InstanceIdentifier<Resource> getResourceIID(ResourceId rid) {
-        ResourceKey key = new ResourceKey(rid);
-        return InstanceIdentifier.builder(ResourcePool.class).child(Resource.class, key).build();
+    protected void createContextTag()
+            throws InterruptedException, ExecutionException, TransactionCommitFailedException  {
+        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+
+        CapabilitiesCostTypeBuilder cctBuilder = new CapabilitiesCostTypeBuilder();
+        cctBuilder.setCostType(Arrays.asList(
+                EndpointcostUtils.createCostTypeCapability(COST_METRIC_ROUTINGCOST,
+                                                            COST_MODE_ORDINAL)
+        ));
+        CapabilitiesBuilder builder = new CapabilitiesBuilder();
+        builder.addAugmentation(CapabilitiesCostType.class, cctBuilder.build());
+
+        ResourcepoolUtils.createResourceWithCapabilities(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_ENDPOINTCOST_NAME,
+                                            ResourceTypeEndpointcost.class,
+                                            builder.build(), wx);
+
+        ResourcepoolUtils.lazyUpdateResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_ENDPOINTCOST_NAME, wx);
+
+        wx.submit().get();
+    }
+
+    protected void removeContextTag()
+            throws InterruptedException, ExecutionException, TransactionCommitFailedException  {
+        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+
+        ResourcepoolUtils.deleteResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_ENDPOINTCOST_NAME, wx);
+
+        wx.submit().get();
+    }
+
+    protected void setupListener() {
+        ContextTagListener listener = new ContextTagListener(m_testIID, m_serviceReg);
+        m_listener = m_dataBroker.registerDataChangeListener(LogicalDatastoreType.OPERATIONAL,
+                                        m_testIID,listener, DataChangeScope.SUBTREE);
+
+        assert m_listener != null;
     }
 
     @Override
     public void onSessionInitiated(ProviderContext session) {
         LOG.info("AltoModelEndpointCostProvider Session Initiated");
 
-        m_dataBrokerService = session.getSALService(DataBroker.class);
+        m_dataBroker = session.getSALService(DataBroker.class);
+        m_testIID = ResourcepoolUtils.getResourceIID(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                                        TEST_ENDPOINTCOST_NAME);
         m_serviceReg = session.addRoutedRpcImplementation(AltoModelEndpointcostService.class, this);
 
-        CostTypeBuilder ctBuilder = new CostTypeBuilder();
-        ctBuilder.setCostMetric(COST_METRIC_ROUTINGCOST);
-        ctBuilder.setCostMode("ordinal");
-
-        CostTypeSpecBuilder ctsBuilder = new CostTypeSpecBuilder();
-        ctsBuilder.setCostType(ctBuilder.build());
-
-        CapabilityBuilder capBuilder = new CapabilityBuilder();
-        capBuilder.setSpec(ctsBuilder.build());
-
-        LinkedList<Capability> capabilityList = new LinkedList<Capability>();
-        capabilityList.add(capBuilder.build());
-
-        ResourceBuilder builder = new ResourceBuilder();
-        builder.setResourceId(TEST_ENDPOINTCOST_RID).setType(ResourceTypeEndpointcost.class);
-        builder.setCapability(capabilityList);
-
-        AddResourceInputBuilder inputBuilder = new AddResourceInputBuilder();
-        inputBuilder.fieldsFrom(builder.build());
-
         try {
-            AltoResourcepoolService resourcepool;
-            resourcepool = session.getRpcService(AltoResourcepoolService.class);
-
-            RpcResult<Void> result;
-            result = resourcepool.addResource(inputBuilder.build()).get();
-
-            assert result.isSuccessful();
-
-            m_testIID = getResourceIID(TEST_ENDPOINTCOST_RID);
-            m_serviceReg.registerPath(ServiceContext.class, m_testIID);
+            setupListener();
+            createContextTag();
         } catch (Exception e) {
         }
     }
@@ -128,6 +145,15 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
     @Override
     public void close() throws Exception {
         LOG.info("AltoModelBaseProvider Closed");
+
+        if (m_serviceReg != null) {
+            m_serviceReg.close();
+        }
+
+        try {
+            removeContextTag();
+        } catch (Exception e) {
+        }
     }
 
     protected Cost createNumericalCost(double cost) {
@@ -189,7 +215,7 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
         EndpointcostParams params = request.getEndpointcostParams();
 
         CostType costType = params.getCostType();
-        if (!costType.getCostMode().equals("ordinal")) {
+        if (!costType.getCostMode().equals(COST_MODE_ORDINAL)) {
             LOG.warn(costType.getCostMode().toString());
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
         }

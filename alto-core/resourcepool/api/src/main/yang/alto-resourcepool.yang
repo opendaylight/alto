@@ -13,6 +13,10 @@ module alto-resourcepool {
         prefix "yang-ext";
     }
 
+    import "ietf-yang-types" {
+        prefix "ietf-types";
+    }
+
     import "ietf-inet-types" {
         prefix "ietf-inet";
     }
@@ -35,110 +39,55 @@ module alto-resourcepool {
             "The basic type identity for ALTO resourcepool";
     }
 
-    identity "capability-category" {
-        description
-            "The basic identity for capability categories";
-    }
-
-    grouping "capability-spec" {
-        leaf "category" {
-            type identityref {
-                base "capability-category";
-            }
-        }
-
-        choice "spec" {
-        }
-    }
-
-    grouping "resource-desc" {
-        leaf "resource-id" {
-            type alto-types:resource-id;
-        }
-
-        leaf "local" {
-            type boolean;
-            default true;
-        }
-
-        leaf "uri" {
-            type ietf-inet:uri;
-        }
-
-        leaf "type" {
-            type identityref {
-                base "resource-type";
-            }
-        }
-
-        list "capability" {
-            uses "capability-spec";
-        }
-
-        list "dependency" {
-            leaf "resource-id" {
-                type alto-types:resource-id;
-            }
-        }
-    }
-
-    grouping "resource-service" {
-        leaf "service-instance" {
-            type instance-identifier;
-        }
-    }
-
-    container "resource-pool" {
+    list "context" {
         config false;
+
+        key "context-id";
+
+        leaf "context-id" {
+            type ietf-types:uuid;
+            default "00000000-0000-0000-0000-000000000000";
+        }
 
         list "resource" {
             key "resource-id";
 
-            yang-ext:context-instance "service-context";
-
-            uses "resource-desc";
-
-            uses "resource-service";
-
-            leaf "refcount" {
-                type uint16;
-            }
-
-            leaf "tag" {
-                type alto-types:tag;
-            }
-        }
-    }
-
-    rpc "add-resource" {
-        input {
-            uses "resource-desc";
-
-            uses "resource-service";
-        }
-    }
-
-    rpc "remove-resource" {
-        input {
             leaf "resource-id" {
                 type alto-types:resource-id;
             }
-        }
-    }
 
-    rpc "update-resource" {
-        input {
-            uses "resource-desc";
+            leaf "type" {
+                type identityref {
+                    base "resource-type";
+                }
+            }
 
-            uses "resource-service";
-        }
-    }
+            container "capabilities" {
+            }
 
-    rpc "verify-resource" {
-        input {
-            uses "resource-desc";
+            leaf "default-tag" {
+                type leafref {
+                    path "../context-tag/tag";
+                }
+            }
 
-            uses "resource-service";
+            list "context-tag" {
+                key "tag";
+
+                leaf "tag" {
+                    type alto-types:tag;
+                }
+
+                yang-ext:context-instance "service-context";
+
+                leaf-list "dependency" {
+                    type instance-identifier {
+                        require-instance true;
+                        description
+                            "Should point to a ../../../resource/context-tag instance (in the same context)";
+                    }
+                }
+            }
         }
     }
 }
