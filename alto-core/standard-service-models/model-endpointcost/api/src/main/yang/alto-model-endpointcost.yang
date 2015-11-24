@@ -25,6 +25,10 @@ module alto-model-endpointcost {
         prefix "ietf-inet";
     }
 
+    import "yang-ext" {
+        prefix "yang-ext";
+    }
+
     organization "Yale University";
 
     contact "alto-dev@lists.opendaylight.org";
@@ -105,21 +109,21 @@ module alto-model-endpointcost {
         }
     }
 
-    augment "/alto-resourcepool:resource-pool/alto-resourcepool:resource/alto-resourcepool:capability/alto-resourcepool:spec/" {
-        case "cost-type-spec" {
-            uses "cost-type-data";
-        }
-    }
+    augment "/alto-resourcepool:context"
+            + "/alto-resourcepool:resource"
+            + "/alto-resourcepool:capabilities" {
+        yang-ext:augment-identifier "capabilities-cost-type";
 
-    augment "/alto-resourcepool:verify-resource/alto-resourcepool:input/alto-resourcepool:capability/alto-resourcepool:spec/" {
-        case "cost-type-spec" {
-            uses "cost-type-data";
-        }
-    }
+        list "cost-type" {
+            unique "cost-metric cost-mode";
 
-    augment "/alto-resourcepool:add-resource/alto-resourcepool:input/alto-resourcepool:capability/alto-resourcepool:spec/" {
-        case "cost-type-spec" {
-            uses "cost-type-data";
+            leaf "cost-metric" {
+                type alto-types:cost-metric;
+            }
+
+            leaf "cost-mode" {
+                type string;
+            }
         }
     }
 }

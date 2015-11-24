@@ -12,14 +12,14 @@
 ~~~
 {
     "input": {
-        "service-reference":"/alto-resourcepool:resource-pool/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-base']"
+        "service-reference":"/alto-resourcepool:context[alto-resourcepool:context-id='00000000-0000-0000-0000-000000000000']/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-base']/alto-resourcepool:context-tag[alto-resourcepool:tag='NEED TO CHECK THE RESOURCEPOOL']"
     }
 }
 
 
 {
     "input": {
-        "service-reference":"/alto-resourcepool:resource-pool/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-networkmap']",
+        "service-reference":"/alto-resourcepool:context[alto-resourcepool:context-id='00000000-0000-0000-0000-000000000000']/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-networkmap']/alto-resourcepool:context-tag[alto-resourcepool:tag='NEED TO CHECK THE RESOURCEPOOL']",
         "type":"alto-model-networkmap:resource-type-networkmap",
         "networkmap-filter": {
             "pid": ["PID1", "PID2", "PID3"],
@@ -34,7 +34,7 @@
 
 {
     "input": {
-        "service-reference":"/alto-resourcepool:resource-pool/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-endpointcost']",
+        "service-reference":"/alto-resourcepool:context[alto-resourcepool:context-id='00000000-0000-0000-0000-000000000000']/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-endpointcost']/alto-resourcepool:context-tag[alto-resourcepool:tag='NEED TO CHECK THE RESOURCEPOOL']",
         "type":"alto-model-endpointcost:resource-type-endpointcost",
         "endpointcost-params": {
             "cost-type": {
