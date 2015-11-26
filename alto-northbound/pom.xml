@@ -15,8 +15,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.enunciate</groupId>
-        <artifactId>maven-enunciate-plugin</artifactId>
+        <groupId>com.webcohesion.enunciate</groupId>
+        <artifactId>enunciate-maven-plugin</artifactId>
       </plugin>
 
       <plugin>
@@ -64,7 +64,7 @@
     </dependency>
 
     <dependency>
-      <groupId>org.codehaus.enunciate</groupId>
+      <groupId>com.webcohesion.enunciate</groupId>
       <artifactId>enunciate-core-annotations</artifactId>
     </dependency>
 
