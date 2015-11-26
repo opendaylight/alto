@@ -17,13 +17,6 @@
       <plugin>
         <groupId>org.codehaus.enunciate</groupId>
         <artifactId>maven-enunciate-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>org.opendaylight.controller</groupId>
-            <artifactId>sal</artifactId>
-            <version>${sal.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
 
       <plugin>
