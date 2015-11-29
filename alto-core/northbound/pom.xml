@@ -77,11 +77,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <connection>scm:git:ssh://git.opendaylight.org:29418/alto-northbound.git</connection>
-    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/alto-northbound.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://wiki.opendaylight.org/view/alto-northbound:Main</url>
-  </scm>
 </project>

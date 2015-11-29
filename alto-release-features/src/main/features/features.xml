@@ -101,6 +101,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-alto-standard-northbound-route' version='${project.version}'
             description='OpenDaylight :: alto :: standard-northbound-route'>
     <!-- TODO standard routes for network map/cost map/endpoint cost/endpoint property -->
+    <feature version='${project.version}'>odl-alto-standard-service-models</feature>
+    <feature version='${project.version}'>odl-alto-northbound</feature>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-northbound-route-networkmap.xml">
+        mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}/xml/config
+    </configfile>
   </feature>
 
   <feature name='odl-alto-standard-resource-translator' version='${project.version}'

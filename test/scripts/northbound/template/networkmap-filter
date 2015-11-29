@@ -1,0 +1,4 @@
+{
+	"pids": ["PID1", "PID2"],
+	"address-types": ["ipv4", "ipv6"]
+}

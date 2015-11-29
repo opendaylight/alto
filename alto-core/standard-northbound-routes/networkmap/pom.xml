@@ -14,9 +14,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </parent>
 
   <groupId>org.opendaylight.alto.core</groupId>
-  <artifactId>standard-northbound-routes-aggregator</artifactId>
+  <artifactId>routes-networkmap-aggregator</artifactId>
   <version>0.2.0-SNAPSHOT</version>
-  <name>alto-standard-nb-routes-aggregator</name>
+  <name>alto-northbound-route-networkmap-aggregator</name>
   <packaging>pom</packaging>
   <modelVersion>4.0.0</modelVersion>
   <prerequisites>
@@ -30,22 +30,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <activeByDefault>true</activeByDefault>
       </activation>
       <modules>
-        <module>networkmap</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-dev</id>
-      <modules>
-        <module>example</module>
-        <module>networkmap</module>
+        <module>api</module>
+        <module>impl</module>
       </modules>
     </profile>
 
     <profile>
       <id>alto-test</id>
       <modules>
-        <module>example</module>
+        <module>api</module>
+        <module>impl</module>
       </modules>
     </profile>
   </profiles>
