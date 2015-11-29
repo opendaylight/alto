@@ -1,0 +1,48 @@
+module alto-nbr-networkmap {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:core:northbound:route:networkmap";
+
+    prefix "alto-nbr-networkmap";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import ietf-inet-types { prefix ietf-inet; revision-date 2013-07-15; }
+    import alto-model-networkmap { prefix networkmap-model; revision-date 2015-10-21; }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto-northbound model";
+    }
+
+    container "records" {
+        list "record" {
+            key "path";
+
+            leaf "path" {
+                type ietf-inet:uri;
+            }
+
+            leaf "resource-iid" {
+                type instance-identifier;
+            }
+
+            list "address-type-mapping" {
+                key "address-type-string";
+
+                leaf "address-type-string" {
+                    type string;
+                }
+
+                leaf "address-type" {
+                    type identityref {
+                        base "networkmap-model:address-type-base";
+                    }
+                }
+            }
+        }
+    }
+
+}

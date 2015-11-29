@@ -15,6 +15,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${mdsal.model.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.dlux/features-dlux/${dlux.version}/xml/features</repository>
+
+  <repository>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-features/${project.version}/xml/features</repository>
+
   <feature name='odl-alto-northbound-api' version='${project.version}' description='OpenDaylight :: alto-northbound :: api'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <feature version="${restconf.version}">odl-restconf</feature>
@@ -29,7 +32,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-alto-northbound-route-test' version='${project.version}' description='OpenDaylight :: ALTO :: Route Exmaple'>
       <feature version='${project.version}'>odl-alto-northbound</feature>
       <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-example/${project.version}</bundle>
-      <configfile finalname="${configfile.directory}/alto-northbound-route-example.xml">mvn:org.opendaylight.alto.core/alto-northbound-route-example/${project.version}/xml/config</configfile>
+      <configfile finalname="${configfile.directory}/alto-northbound-route-example.xml">
+        mvn:org.opendaylight.alto.core/alto-northbound-route-example/${project.version}/xml/config
+      </configfile>
+
+      <feature version='${project.version}'>odl-alto-service-model-networkmap</feature>
+      <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-api/${project.version}</bundle>
+      <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}</bundle>
+      <configfile finalname="${configfile.directory}/alto-northbound-route-networkmap.xml">
+        mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}/xml/config
+      </configfile>
   </feature>
   <feature name='odl-alto-northbound-rest' version='${project.version}' description='OpenDaylight :: alto-northbound :: REST'>
     <feature version="${project.version}">odl-alto-northbound</feature>
