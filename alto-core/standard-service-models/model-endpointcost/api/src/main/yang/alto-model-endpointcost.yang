@@ -43,22 +43,15 @@ module alto-model-endpointcost {
             "The resource type for endpoint cost service";
     }
 
-    grouping "cost-type-data" {
+    grouping "cost-type-container" {
         container "cost-type" {
-            leaf "cost-metric" {
-                type alto-types:cost-metric;
-            }
-
-            leaf "cost-mode" {
-                mandatory true;
-                type string;
-            }
+            uses "alto-types:cost-type-data";
         }
     }
 
     grouping "endpointcost-request-data" {
         container "endpointcost-params" {
-            uses "cost-type-data";
+            uses "cost-type-container";
 
             leaf-list "constraints" {
                 type string;
@@ -115,15 +108,15 @@ module alto-model-endpointcost {
         yang-ext:augment-identifier "capabilities-cost-type";
 
         list "cost-type" {
-            unique "cost-metric cost-mode";
+            uses "alto-types:cost-type-data";
 
-            leaf "cost-metric" {
-                type alto-types:cost-metric;
-            }
-
-            leaf "cost-mode" {
+            leaf "description" {
                 type string;
             }
+        }
+
+        leaf "constraint-support" {
+            type boolean;
         }
     }
 }

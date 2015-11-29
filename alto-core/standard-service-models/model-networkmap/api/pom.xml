@@ -41,11 +41,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <dependency>
       <groupId>org.opendaylight.mdsal.model</groupId>
-      <artifactId>yang-ext</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.mdsal.model</groupId>
       <artifactId>ietf-inet-types-2013-07-15</artifactId>
     </dependency>
 

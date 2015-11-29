@@ -1,0 +1,6 @@
+{
+    "ird-instance-configuration": {
+        "entry-context": "/alto-resourcepool:context[alto-resourcepool:context-id='$1']",
+        "instance-id": "$2"
+    }
+}

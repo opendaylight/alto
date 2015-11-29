@@ -1,0 +1,7 @@
+{
+    "ird-configuration-entry": {
+        "entry-id": "$1",
+	"instance": "/alto-resourcepool:context[alto-resourcepool:context-id='$2']/alto-resourcepool:resource[alto-resourcepool:resource-id='$1']",
+	"path": "$3/$1"
+    }
+}

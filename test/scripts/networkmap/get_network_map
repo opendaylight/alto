@@ -1,0 +1,19 @@
+#!/bin/bash
+
+RESOURCE_ID=$1
+if [ $2 ] ; then
+	CONTEXT_ID=$2
+else
+	CONTEXT_ID="00000000-0000-0000-0000-000000000000"
+fi
+TAG=$(./resourcepool/get_default_tag $RESOURCE_ID $CONTEXT_ID)
+
+URL="http://localhost:8181/restconf/operations/alto-model-networkmap:query"
+
+DATA=$(cat ./networkmap/template/networkmap_input \
+	| sed 's/\$1/'$CONTEXT_ID'/g' \
+	| sed 's/\$2/'$RESOURCE_ID'/g' \
+	| sed 's/\$3/'$TAG'/g')
+
+curl -X POST -u admin:admin -H "Content-Type: application/json" \
+	-d "$(echo $DATA)" $URL | python -m json.tool

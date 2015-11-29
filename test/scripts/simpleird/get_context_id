@@ -1,0 +1,9 @@
+#!/bin/bash
+
+COMMAND="curl -4 -X GET -u admin:admin http://localhost:8080/restconf/operational/alto-simple-ird:information"
+
+if [ $1 ]; then
+	$COMMAND | python -m json.tool
+fi
+
+$COMMAND | python -m json.tool | sed -n '/.*context-id.*/p' | sed 's/^.*:.*\"\(.*\)\".*/\1/g'

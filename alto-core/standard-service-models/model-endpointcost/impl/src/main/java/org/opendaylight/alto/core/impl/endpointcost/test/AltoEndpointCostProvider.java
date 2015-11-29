@@ -32,6 +32,7 @@ import org.opendaylight.alto.core.service.model.endpointcost.EndpointcostUtils;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostTypeData;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.resource.CapabilitiesBuilder;
@@ -45,7 +46,6 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpoint
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.request.endpointcost.request.EndpointcostRequest;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.response.endpointcost.response.EndpointcostResponseBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.cost.type.data.CostType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.endpointcost.request.data.EndpointcostParams;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.Ipv4AddressData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.Ipv6AddressData;
@@ -214,7 +214,7 @@ public class AltoEndpointCostProvider implements BindingAwareProvider, AutoClose
         EndpointcostRequest request = (EndpointcostRequest)input.getRequest();
         EndpointcostParams params = request.getEndpointcostParams();
 
-        CostType costType = params.getCostType();
+        CostTypeData costType = params.getCostType();
         if (!costType.getCostMode().equals(COST_MODE_ORDINAL)) {
             LOG.warn(costType.getCostMode().toString());
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();

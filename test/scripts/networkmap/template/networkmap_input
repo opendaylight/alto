@@ -1,0 +1,17 @@
+{
+    "input": {
+        "networkmap-filter": {
+            "address-type": [
+                "alto-model-networkmap:address-type-ipv4",
+                "alto-model-networkmap:address-type-ipv6"
+            ],
+            "pid": [
+                "PID1",
+                "PID2",
+                "PID3"
+            ]
+        },
+        "service-reference": "/alto-resourcepool:context[alto-resourcepool:context-id='$1']/alto-resourcepool:resource[alto-resourcepool:resource-id='$2']/alto-resourcepool:context-tag[alto-resourcepool:tag='$3']",
+        "type": "alto-model-networkmap:resource-type-networkmap"
+    }
+}

@@ -1,0 +1,92 @@
+module alto-simple-ird-rfc7285 {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:basic:simple:ird:rfc7285";
+
+    prefix "simple-ird-rfc7285";
+
+    import "ietf-yang-types" {
+        prefix "ietf-types";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcepool";
+    }
+
+    import "yang-ext" {
+        prefix "ext";
+    }
+
+    import "alto-simple-ird" {
+        prefix "ird";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of simple-ird model";
+    }
+
+    grouping "rfc7285-ird-meta-configuration" {
+        leaf "default-network-map" {
+            type leafref {
+                path "/alto-resourcepool:context"
+                    + "/alto-resourcepool:resource/alto-resourcepool:resource-id";
+            }
+        }
+    }
+
+    grouping "rfc7285-ird-meta" {
+        uses "rfc7285-ird-meta-configuration";
+
+        list "cost-type" {
+            key "name";
+
+            leaf "name" {
+                type string;
+            }
+
+            uses "alto-types:cost-type-data";
+        }
+    }
+
+    augment "/ird:ird-instance/ird:ird-entry/ird:entry-capabilities" {
+        ext:augment-identifier "rfc7285-cost-type-capabilities";
+
+        leaf-list "cost-type-names" {
+            type string;
+        }
+
+        leaf "cost-constraints" {
+            type boolean;
+        }
+    }
+
+    augment "/ird:ird-instance-configuration" {
+        ext:augment-identifier "rfc7285-ird-configuration-metadata";
+
+        container "meta-configuration" {
+            uses "rfc7285-ird-meta-configuration";
+        }
+    }
+
+    augment "/ird:ird-instance" {
+        ext:augment-identifier "rfc7285-ird-metadata";
+
+        config false;
+
+        container "meta" {
+            uses "rfc7285-ird-meta";
+        }
+    }
+}

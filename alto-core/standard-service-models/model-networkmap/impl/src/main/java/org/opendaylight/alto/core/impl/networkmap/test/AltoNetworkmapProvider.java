@@ -32,6 +32,7 @@ import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.PidName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.Tag;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.Resource;
 
@@ -42,6 +43,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkm
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.QueryInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.QueryOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.QueryOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeFilteredNetworkmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeNetworkmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.alto.request.networkmap.request.NetworkmapRequest;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.alto.response.networkmap.response.NetworkmapResponseBuilder;
@@ -69,10 +71,13 @@ public class AltoNetworkmapProvider implements BindingAwareProvider, AutoCloseab
     private DataBroker m_dataBroker = null;
     private RoutedRpcRegistration<AltoModelNetworkmapService> m_serviceReg = null;
     private ListenerRegistration<DataChangeListener> m_listener = null;
+    private ListenerRegistration<DataChangeListener> m_filteredListener = null;
 
     private static final String TEST_NETWORKMAP_NAME = "test-model-networkmap";
+    private static final String TEST_FILTERED_NETWORKMAP_NAME = "test-model-filtered-networkmap";
     private static final ResourceId TEST_NETWORKMAP_RID = new ResourceId(TEST_NETWORKMAP_NAME);
     private InstanceIdentifier<Resource> m_testIID = null;
+    private InstanceIdentifier<Resource> m_testFilteredIID = null;
 
     protected void createContextTag()
             throws InterruptedException, ExecutionException, TransactionCommitFailedException  {
@@ -81,9 +86,22 @@ public class AltoNetworkmapProvider implements BindingAwareProvider, AutoCloseab
                                             TEST_NETWORKMAP_NAME,
                                             ResourceTypeNetworkmap.class, wx);
 
-        ResourcepoolUtils.lazyUpdateResource(ResourcepoolUtils.DEFAULT_CONTEXT,
-                                            TEST_NETWORKMAP_NAME, wx);
+        Tag tag = ResourcepoolUtils.lazyUpdateResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                                        TEST_NETWORKMAP_NAME, wx);
 
+        ResourcepoolUtils.createResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_FILTERED_NETWORKMAP_NAME,
+                                            ResourceTypeFilteredNetworkmap.class, wx);
+
+        List<InstanceIdentifier<?>> dependencies = new LinkedList<>();
+        dependencies.add(
+                (InstanceIdentifier<?>)ResourcepoolUtils.getContextTagIID(
+                        ResourcepoolUtils.DEFAULT_CONTEXT,
+                        TEST_NETWORKMAP_NAME, tag.getValue())
+        );
+        ResourcepoolUtils.updateResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_FILTERED_NETWORKMAP_NAME,
+                                            dependencies, wx);
         wx.submit().get();
     }
 
@@ -94,15 +112,34 @@ public class AltoNetworkmapProvider implements BindingAwareProvider, AutoCloseab
         ResourcepoolUtils.deleteResource(ResourcepoolUtils.DEFAULT_CONTEXT,
                                             TEST_NETWORKMAP_NAME, wx);
 
+        ResourcepoolUtils.deleteResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                            TEST_FILTERED_NETWORKMAP_NAME, wx);
+
         wx.submit().get();
     }
 
     protected void setupListener() {
-        ContextTagListener listener = new ContextTagListener(m_testIID, m_serviceReg);
+        ContextTagListener listener;
+
+        listener = new ContextTagListener(m_testIID, m_serviceReg);
         m_listener = m_dataBroker.registerDataChangeListener(LogicalDatastoreType.OPERATIONAL,
-                                        m_testIID,listener, DataChangeScope.SUBTREE);
+                                        m_testIID, listener, DataChangeScope.SUBTREE);
+
+        listener = new ContextTagListener(m_testFilteredIID, m_serviceReg);
+        m_filteredListener = m_dataBroker.registerDataChangeListener(LogicalDatastoreType.OPERATIONAL,
+                                        m_testFilteredIID, listener, DataChangeScope.SUBTREE);
 
         assert m_listener != null;
+        assert m_filteredListener != null;
+    }
+
+    protected void closeListener() {
+        if (m_listener != null) {
+            m_listener.close();
+        }
+        if (m_filteredListener != null) {
+            m_filteredListener.close();
+        }
     }
 
     @Override
@@ -111,7 +148,10 @@ public class AltoNetworkmapProvider implements BindingAwareProvider, AutoCloseab
 
         m_dataBroker = session.getSALService(DataBroker.class);
         m_serviceReg = session.addRoutedRpcImplementation(AltoModelNetworkmapService.class, this);
-        m_testIID = ResourcepoolUtils.getResourceIID(ResourcepoolUtils.DEFAULT_CONTEXT, TEST_NETWORKMAP_NAME);
+        m_testIID = ResourcepoolUtils.getResourceIID(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                                        TEST_NETWORKMAP_NAME);
+        m_testFilteredIID = ResourcepoolUtils.getResourceIID(ResourcepoolUtils.DEFAULT_CONTEXT,
+                                                                TEST_FILTERED_NETWORKMAP_NAME);
 
         try {
             setupListener();
