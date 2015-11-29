@@ -19,7 +19,6 @@ public class AltoNorthboundRouteExampleModule extends org.opendaylight.yang.gen.
     @Override
     public java.lang.AutoCloseable createInstance() {
         getAltoNorthboundRouterDependency().addRoute("example", new AltoNorthboundRouteExample());
-        System.out.println("haha");
 
         return new AutoCloseable() {
             @Override

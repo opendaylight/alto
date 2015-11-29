@@ -1,0 +1,16 @@
+{
+	"record": {
+		"path": "$1",
+		"resource-iid": "/alto-resourcepool:context[alto-resourcepool:context-id='$2']/alto-resourcepool:resource[alto-resourcepool:resource-id='$3']",
+		"address-type-mapping": [
+			{
+				"address-type-string": "ipv4",
+				"address-type": "alto-model-networkmap:address-type-ipv4"
+			},
+			{
+				"address-type-string": "ipv6",
+				"address-type": "alto-model-networkmap:address-type-ipv6"
+			}
+		]
+	}
+}
