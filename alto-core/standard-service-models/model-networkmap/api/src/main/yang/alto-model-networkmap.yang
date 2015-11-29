@@ -32,6 +32,12 @@ module alto-model-networkmap {
             "The resource type for network map";
     }
 
+    identity "resource-type-filtered-networkmap" {
+        base "alto-resourcepool:resource-type";
+        description
+            "The resource type for filtered network map";
+    }
+
     identity "property-type-base" {
         description
             "Base type for PID properties";

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+RESOURCE_ID=$1
+if [ $2 ] ; then
+	CONTEXT_ID=$2
+else
+	CONTEXT_ID="00000000-0000-0000-0000-000000000000"
+fi
+
+URL="http://localhost:8181/restconf/operational/alto-resourcepool:context/"$CONTEXT_ID"/alto-resourcepool:resource/"$RESOURCE_ID
+
+curl -X GET -u admin:admin $URL | python -m json.tool | sed -n '/default-tag/p' | sed 's/.*:.*\"\(.*\)\".*/\1/g'

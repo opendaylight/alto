@@ -61,4 +61,14 @@ module alto-basic-types {
         }
     }
 
+    grouping "cost-type-data" {
+        leaf "cost-metric" {
+            type cost-metric;
+        }
+
+        leaf "cost-mode" {
+            mandatory true;
+            type string;
+        }
+    }
 }

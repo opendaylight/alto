@@ -1,0 +1,17 @@
+#!/bin/bash
+
+RESOURCE_ID=$1
+CONTEXT_ID="00000000-0000-0000-0000-000000000000"
+URL="http://localhost:8181/restconf/config/alto-simple-ird:ird-instance-configuration/"$RESOURCE_ID"/"
+
+# echo $URL
+
+DATA=$(cat ./simpleird/template/create_ird \
+	| sed 's/\$1/'$CONTEXT_ID'/g' \
+	| sed 's/\$2/'$RESOURCE_ID'/g')
+
+# echo $DATA | python -m json.tool
+
+curl -4 -D - -X PUT -u admin:admin \
+	-H "Content-Type: application/json" -d "$(echo $DATA)"\
+	$URL

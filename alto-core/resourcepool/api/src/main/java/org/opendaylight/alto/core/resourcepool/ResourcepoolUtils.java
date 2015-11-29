@@ -131,17 +131,25 @@ public class ResourcepoolUtils {
         return (context.isPresent());
     }
 
-    public static void createContext(String cid, final WriteTransaction wx) {
-        createContext(new Uuid(cid), wx);
+    public static Uuid createRandomContext(final WriteTransaction wx) {
+        String cid = UUID.randomUUID().toString();
+
+        return createContext(cid, wx);
     }
 
-    public static void createContext(Uuid cid, final WriteTransaction wx) {
+    public static Uuid createContext(String cid, final WriteTransaction wx) {
+        return createContext(new Uuid(cid), wx);
+    }
+
+    public static Uuid createContext(Uuid cid, final WriteTransaction wx) {
         ContextBuilder builder = new ContextBuilder();
         builder.setContextId(cid);
         builder.setResource(new LinkedList<Resource>());
 
         /* DO NOT submit because this might be just one step in a sequence of write operations */
         wx.put(LogicalDatastoreType.OPERATIONAL, getContextIID(cid), builder.build());
+
+        return cid;
     }
 
     public static void deleteContext(String cid, final WriteTransaction wx) {
@@ -168,32 +176,32 @@ public class ResourcepoolUtils {
         return (resource.isPresent());
     }
 
-    public static void createResource(String cid, String rid,
+    public static ResourceId createResource(String cid, String rid,
                                         Class<? extends ResourceType> type,
                                         final WriteTransaction wx) {
         Uuid _cid = new Uuid(cid);
         ResourceId _rid = new ResourceId(rid);
 
-        createResource(_cid, _rid, type, wx);
+        return createResource(_cid, _rid, type, wx);
     }
 
-    public static void createResource(Uuid cid, ResourceId rid,
+    public static ResourceId createResource(Uuid cid, ResourceId rid,
                                         Class<? extends ResourceType> type,
                                         final WriteTransaction wx) {
-        createResourceWithCapabilities(cid, rid, type, null, wx);
+        return createResourceWithCapabilities(cid, rid, type, null, wx);
     }
 
-    public static void createResourceWithCapabilities(String cid, String rid,
+    public static ResourceId createResourceWithCapabilities(String cid, String rid,
                                                         Class<? extends ResourceType> type,
                                                         Capabilities capabilities,
                                                         final WriteTransaction wx) {
         Uuid contextId = new Uuid(cid);
         ResourceId resourceId = new ResourceId(rid);
 
-        createResourceWithCapabilities(contextId, resourceId, type, capabilities, wx);
+        return createResourceWithCapabilities(contextId, resourceId, type, capabilities, wx);
     }
 
-    public static void createResourceWithCapabilities(Uuid cid, ResourceId rid,
+    public static ResourceId createResourceWithCapabilities(Uuid cid, ResourceId rid,
                                                         Class<? extends ResourceType> type,
                                                         Capabilities capabilities,
                                                         final WriteTransaction wx) {
@@ -210,6 +218,8 @@ public class ResourcepoolUtils {
 
         /* DO NOT submit because this might be just one step in a sequence of write operations */
         wx.put(LogicalDatastoreType.OPERATIONAL, iid, builder.build());
+
+        return rid;
     }
 
     public static void deleteResource(String cid, String rid, final WriteTransaction wx) {
@@ -226,7 +236,21 @@ public class ResourcepoolUtils {
         wx.delete(LogicalDatastoreType.OPERATIONAL, iid);
     }
 
-    public static void updateResource(Uuid cid, ResourceId rid, Tag tag,
+    public static Tag updateResource(String cid, String rid,
+                                        List<InstanceIdentifier<?>> dependencies,
+                                        final WriteTransaction wx) {
+        return updateResource(new Uuid(cid), new ResourceId(rid), dependencies, wx);
+    }
+
+    public static Tag updateResource(Uuid cid, ResourceId rid,
+                                        List<InstanceIdentifier<?>> dependencies,
+                                        final WriteTransaction wx) {
+        String stripped = getUUID().replace("-", "");
+
+        return updateResource(cid, rid, new Tag(stripped), dependencies, wx);
+    }
+
+    public static Tag updateResource(Uuid cid, ResourceId rid, Tag tag,
                                         List<InstanceIdentifier<?>> dependencies,
                                         final WriteTransaction wx) {
         ContextTagBuilder ctBuilder = new ContextTagBuilder();
@@ -248,26 +272,32 @@ public class ResourcepoolUtils {
 
         /* DO NOT submit because this might be just one step in a sequence of write operations */
         wx.merge(LogicalDatastoreType.OPERATIONAL, iid, rscBuilder.build());
+
+        return tag;
     }
 
     /*
      * For those who don't have dependencies
      * */
-    public static void lazyUpdateResource(String cid, String rid, final WriteTransaction wx) {
+    public static Tag lazyUpdateResource(String cid, String rid, final WriteTransaction wx) {
         Uuid contextId = new Uuid(cid);
         ResourceId resourceId = new ResourceId(rid);
 
-        lazyUpdateResource(contextId, resourceId, wx);
+        return lazyUpdateResource(contextId, resourceId, wx);
     }
 
-    public static void lazyUpdateResource(Uuid cid, ResourceId rid, final WriteTransaction wx) {
+    public static Tag lazyUpdateResource(Uuid cid, ResourceId rid, final WriteTransaction wx) {
         String stripped = getUUID().replace("-", "");
 
-        updateResource(cid, rid, new Tag(stripped), null, wx);
+        return updateResource(cid, rid, new Tag(stripped), null, wx);
     }
 
     public static String getUUID() {
         return UUID.randomUUID().toString();
+    }
+
+    public static String getUUID(String name) {
+        return UUID.nameUUIDFromBytes(name.getBytes()).toString();
     }
 
     public static final class ContextTagListener implements DataChangeListener {
@@ -281,6 +311,7 @@ public class ResourcepoolUtils {
             m_registration = registration;
         }
 
+        @Override
         public void onDataChanged(final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
             for (InstanceIdentifier<?> path: change.getRemovedPaths()) {
                 if (path.getTargetType().equals(ContextTag.class)) {

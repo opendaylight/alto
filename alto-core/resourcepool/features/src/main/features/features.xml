@@ -17,6 +17,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.alto.core/alto-basic-types-features/${project.version}/xml/features</repository>
   <feature name='odl-alto-resourcepool-api' version='${project.version}' description='OpenDaylight :: ALTO :: resourcepool :: api'>
     <!-- FIXME: Bug 4202: Switch to MD-SAL provided odl-mdsal-models-base -->
+    <feature version='${mdsal.version}'>odl-mdsal-all</feature>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <feature version='${project.version}'>odl-alto-basic-types</feature>
     <bundle>mvn:org.opendaylight.alto.core/alto-resourcepool-api/${project.version}</bundle>
