@@ -1,0 +1,7 @@
+#!/bin/bash
+
+RESOURCE_ID=$1
+
+URL="http://localhost:8181/restconf/config/alto-simple-ird:ird-instance-configuration/"$RESOURCE_ID"/"
+
+curl -4 -X GET -u admin:admin $URL | python -m json.tool

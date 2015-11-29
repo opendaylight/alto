@@ -1,0 +1,4 @@
+#!/bin/bash
+
+curl -4 -X GET -u admin:admin \
+	http://localhost:8181/alto/simpleird/$1 | python -m json.tool

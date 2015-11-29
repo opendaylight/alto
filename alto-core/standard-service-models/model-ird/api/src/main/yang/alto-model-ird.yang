@@ -1,0 +1,69 @@
+module alto-model-ird {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:ird";
+
+    prefix "alto-model-ird";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcpool";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto ird";
+    }
+
+    identity "resource-type-ird" {
+        base "alto-resourcepool:resource-type";
+        description
+            "The resource type for IRD";
+    }
+
+    grouping "alto-ird-request" {
+        container "ird-request" {
+        }
+    }
+
+    grouping "alto-ird-response" {
+        container "ird" {
+            container "meta" {
+            }
+
+            list "resource" {
+                key "resource-id";
+
+                leaf "resource-id" {
+                    type "alto-types:resource-id";
+                }
+            }
+        }
+    }
+
+    augment "/base:query/base:input/base:request" {
+        case "ird-request-data" {
+            uses "alto-ird-request";
+        }
+    }
+
+    augment "/base:query/base:output/base:response" {
+        case "ird-response-data" {
+            uses "alto-ird-response";
+        }
+    }
+}
