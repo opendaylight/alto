@@ -1,0 +1,11 @@
+#!/bin/bash
+
+NETWORKMAP_PATH=$1
+
+DATA=$(cat ./northbound/template/networkmap-filter)
+
+# echo $DATA | python -m json.tool
+
+curl -X POST -u admin:admin -H "Content-Type: application/alto-networkmapfilter+json" \
+	-d "$DATA" \
+	http://localhost:8080/alto/networkmap/$NETWORKMAP_PATH
