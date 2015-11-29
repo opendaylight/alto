@@ -1,0 +1,140 @@
+module alto-simple-ird {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:basic:simple:ird";
+
+    prefix "alto-simple-ird";
+
+    import "ietf-yang-types" {
+        prefix "ietf-types";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcepool";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto-simple-ird model";
+    }
+
+    grouping "ird-entry-configuration-data" {
+        leaf "entry-id" {
+            type leafref {
+                path "/alto-resourcepool:context"
+                        + "/alto-resourcepool:resource/alto-resourcepool:resource-id";
+            }
+        }
+
+        leaf "instance" {
+            type instance-identifier {
+                require-instance true;
+            }
+
+            description
+                "Must point to a node in /alto-resourcepool:context/alto-resourcepool:resource/";
+        }
+
+        choice location {
+            case "fixed-url" {
+                leaf "uri" {
+                    type "ietf-inet:uri";
+                }
+            }
+
+            case "relative-path" {
+                leaf "path" {
+                    type "ietf-inet:uri";
+                }
+            }
+        }
+    }
+
+    grouping "ird-entry-data" {
+        uses "ird-entry-configuration-data";
+
+        leaf "accepts" {
+            type string;
+        }
+
+        leaf "media-type" {
+            type string;
+        }
+
+        container "entry-capabilities" {
+        }
+
+        leaf-list "uses" {
+            type leafref {
+                path "/alto-resourcepool:context"
+                        + "/alto-resourcepool:resource/alto-resourcepool:resource-id";
+            }
+        }
+    }
+
+    grouping "ird-instance-common" {
+        leaf "instance-id" {
+            type alto-types:resource-id;
+        }
+
+        leaf "entry-context" {
+            type instance-identifier {
+                require-instance true;
+            }
+
+            description
+                "The context of the resources managed by this IRD instance"
+                + "Should follow the format:"
+                + "/alto-resourcepool:context[alto-resourcepool:context-id='...'";
+        }
+    }
+
+    list "ird-instance-configuration" {
+        key "instance-id";
+
+        uses "ird-instance-common";
+
+        list "ird-configuration-entry" {
+            key "entry-id";
+
+            uses "ird-entry-configuration-data";
+        }
+    }
+
+    list "ird-instance" {
+        config false;
+
+        key "instance-id";
+
+        uses "ird-instance-common";
+
+        list "ird-entry" {
+            key "entry-id";
+
+            uses "ird-entry-data";
+        }
+    }
+
+    container "information" {
+        config false;
+
+        leaf "context-id" {
+            type ietf-types:uuid;
+        }
+
+        leaf "base-url" {
+            type string;
+        }
+    }
+}

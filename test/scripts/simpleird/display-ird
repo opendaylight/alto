@@ -1,0 +1,16 @@
+#!/bin/bash
+
+CONTEXT_ID=$(./simpleird/get_context_id)
+RP_URL="http://localhost:8181/restconf/operational/alto-resourcepool:context/"$CONTEXT_ID
+
+RESOURCEPOOL=$(curl -4 -X GET -u admin:admin $RP_URL)
+
+# echo $RESOURCEPOOL | python -m json.tool
+
+RESOURCES=$(echo $RESOURCEPOOL | python -m json.tool \
+		| sed -n '/.*resource-id.*/p' \
+		| sed 's/.*:.*\"\(.*\)\".*/\1/g')
+
+for resource in $RESOURCES; do
+	./simpleird/ird-display $resource
+done

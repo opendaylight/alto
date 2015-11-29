@@ -1,0 +1,27 @@
+#!/bin/bash
+
+IRD_ID=$1
+RESOURCE_ID=$2
+if [ $3 ]; then
+	CONTEXT_ID=$3
+else
+	CONTEXT_ID=$(./simpleird/get_context_id)
+fi
+
+if [ $4 ]; then
+	BASE_URL=$4
+else
+	BASE_URL="$(./simpleird/get_base_url | sed -e 's/[\/&]/\\&/g')"
+fi
+
+URL="http://localhost:8181/restconf/config/alto-simple-ird:ird-instance-configuration/"$IRD_ID"/ird-configuration-entry/"$RESOURCE_ID"/"
+
+DATA=$(cat ./simpleird/template/create_resource \
+	| sed 's/\$1/'$RESOURCE_ID'/g' \
+	| sed 's/\$2/'$CONTEXT_ID'/g' \
+	| sed 's/\$3/'$BASE_URL'/g' )
+
+curl -4 -D - -X PUT -u admin:admin \
+	-H "Content-Type: application/json" -d "$(echo $DATA)" \
+	$URL
+
