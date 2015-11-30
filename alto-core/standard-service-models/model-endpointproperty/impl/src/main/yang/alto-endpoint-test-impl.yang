@@ -1,0 +1,35 @@
+module alto-endpointproperty-test-impl {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:service:model:test:endpointproperty";
+    prefix "alto-model-endpointproperty-test-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix md-sal-binding; revision-date 2013-10-28;}
+
+    description
+        "Service definition for endpointproperty project";
+
+    revision "2015-10-21" {
+        description
+            "Initial revision";
+    }
+
+    identity alto-model-endpointproperty-test {
+        base config:module-type;
+        config:java-name-prefix AltoEndpointProperty;
+    }
+
+    augment "/config:modules/config:module/config:configuration" {
+        case alto-model-endpointproperty-test-impl {
+            when "/config:modules/config:module/config:type = 'alto-model-endpointproperty-test'";
+            container broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity md-sal-binding:binding-broker-osgi-registry;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,91 @@
+module alto-model-endpointproperty {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:endpointproperty";
+
+    prefix "alto-model-endpointproperty";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcepool";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+
+    import "alto-model-networkmap" {
+        prefix "networkmap";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto endpointproperty";
+    }
+
+    identity "resource-type-endpointproperty" {
+        base "alto-resourcepool:resource-type";
+        description
+            "The resource type for endpoint property service";
+    }
+
+
+
+    grouping "endpointproperty-request-data" {
+        container "endpointproperty-params" {
+
+            choice "filter" {
+            }
+        }
+    }
+
+    identity "endpointproperty-response-type-base" {
+        description
+            "Base identity for endpoint property response";
+    }
+
+    grouping "endpointproperty-response-data" {
+        choice "endpointproperty-data" {
+        }
+    }
+
+    grouping "alto-request-endpointproperty" {
+        uses "base:alto-request-base" {
+            augment "request" {
+                case "endpointproperty-request" {
+                    uses "endpointproperty-request-data";
+                }
+            }
+        }
+    }
+
+    grouping "alto-response-endpointproperty" {
+        uses "base:alto-response-error" {
+            augment "response" {
+                case "endpointproperty-response" {
+                    uses "endpointproperty-response-data";
+                }
+            }
+        }
+    }
+
+    rpc query {
+        input {
+            uses "alto-request-endpointproperty";
+        }
+
+        output {
+            uses "alto-response-endpointproperty";
+        }
+    }
+}
