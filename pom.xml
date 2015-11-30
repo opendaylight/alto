@@ -54,7 +54,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
           </executions>
 
           <configuration>
-            <!-- TODO: remove before releasing -->
             <failsOnError>true</failsOnError>
             <configLocation>controller/checkstyle.xml</configLocation>
             <consoleOutput>true</consoleOutput>
