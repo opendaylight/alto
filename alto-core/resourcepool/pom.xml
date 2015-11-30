@@ -33,6 +33,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <modules>
         <module>api</module>
         <module>impl</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>alto-dev</id>
+      <modules>
+        <module>api</module>
+        <module>impl</module>
         <module>features</module>
         <module>artifacts</module>
       </modules>
