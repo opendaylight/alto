@@ -1,0 +1,66 @@
+module alto-model-costmap-rfc7285 {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:costmap:rfc7285";
+
+    prefix "alto-model-costmap-rfc7285";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-model-costmap" {
+        prefix "alto-cm";
+    }
+
+    import yang-ext {
+        prefix ext;
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto costmap";
+    }
+
+    grouping "costmap-filter-data"{
+        container "costmap-filter"{
+            leaf-list "pid-source"{
+                type "alto-types:pid-name";
+            }
+            leaf-list "pid-destination"{
+                type "alto-types:pid-name";
+            }
+        }
+    }
+
+
+   augment "alto-cm:query/alto-cm:input/alto-cm:request/alto-cm:costmap-request/alto-cm:costmap-params/alto-cm:filter" {
+        ext:augment-identifier "rfc7285-costmap-filter";
+        case "costmap-filter-data" {
+            uses "costmap-filter-data";
+        }
+    }
+
+
+    augment "alto-cm:query/alto-cm:output/alto-cm:response/alto-cm:costmap-response/alto-cm:costmap-response-data/alto-cm:costmap-source/alto-cm:costmap-destination/alto-cm:cost" {
+        case numerical {
+            leaf "cost" {
+                type decimal64 {
+                    fraction-digits 4;
+                }
+            }
+        }
+       case ordinal {
+            leaf "cost" {
+                type int32;
+            }
+        }
+    }
+
+
+
+
+}

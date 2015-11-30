@@ -1,0 +1,144 @@
+module alto-model-costmap {
+
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:costmap";
+
+    prefix "alto-model-costmap";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "alto-resourcpool";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+    import "yang-ext" {
+        prefix "yang-ext";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto costmap";
+    }
+
+    identity "resource-type-costmap"{
+        base "alto-resourcepool:resource-type";
+        description
+            "The resource type for cost map";
+    }
+
+    grouping "cost-type-data" {
+        container "cost-type" {
+            leaf "cost-metric" {
+                type alto-types:cost-metric;
+            }
+
+            leaf "cost-mode" {
+                mandatory true;
+                type string;
+            }
+        }
+    }
+
+    grouping "costmap-request-data" {
+        container "costmap-params" {
+            uses "cost-type-data";
+
+            leaf-list "constraints" {
+                type string;
+            }
+
+            choice "filter" {
+            }
+        }
+    }
+
+    identity "costmap-response-type-base" {
+        description
+            "Base identity for costmap response";
+    }
+
+    grouping "costmap-response-data"{
+        container "costmap-response-data"{
+            uses "cost-type-data";
+            list "costmap-source"{
+                key "pid-source";
+                leaf "pid-source"{
+                    type "alto-types:pid-name";
+                }
+                list "costmap-destination"{
+                    key "pid-destination";
+                    leaf "pid-destination"{
+                        type "alto-types:pid-name";
+                    }
+                    choice "cost"{
+                    }
+                }
+            }
+        }
+    }
+
+    grouping "alto-request-costmap" {
+        uses "base:alto-request-base" {
+            augment "request" {
+                case "costmap-request" {
+                    uses "costmap-request-data";
+                }
+            }
+        }
+    }
+
+    grouping "alto-response-costmap" {
+        uses "base:alto-response-error" {
+            augment "response" {
+                case "costmap-response" {
+                    uses "costmap-response-data";
+                }
+            }
+        }
+    }
+
+    rpc query {
+        input {
+            uses "alto-request-costmap";
+        }
+
+        output {
+            uses "alto-response-costmap";
+        }
+    }
+
+    augment "/alto-resourcepool:context"
+            + "/alto-resourcepool:resource"
+            + "/alto-resourcepool:capabilities" {
+
+
+        yang-ext:augment-identifier "capabilities-cost-type";
+
+        list "cost-type" {
+            uses "alto-types:cost-type-data";
+
+            leaf "description" {
+                type string;
+            }
+        }
+
+        leaf "constraint-support" {
+            type boolean;
+        }
+    }
+}

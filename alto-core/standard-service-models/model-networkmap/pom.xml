@@ -31,6 +31,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </activation>
       <modules>
         <module>api</module>
+        <module>impl</module>
+        <module>features</module>
+        <module>artifacts</module>
       </modules>
     </profile>
 

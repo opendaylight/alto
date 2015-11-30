@@ -1,0 +1,193 @@
+module alto-model-endpointproperty-rfc7285 {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:endpointproperty:rfc7285";
+
+    prefix "alto-model-endpointproperty-rfc7285";
+
+    import "alto-model-endpointproperty" {
+        prefix "alto-eps";
+    }
+
+    import "alto-basic-types"{
+        prefix "base";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    import yang-ext {
+        prefix ext;
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto endpointproperty";
+    }
+    grouping "typed-property-data" {
+        choice "property" {
+        }
+    }
+
+    grouping "typed-address-data" {
+        choice "address" {
+        }
+    }
+
+    grouping "resource-specific-property"{
+        leaf "resource-specific-property"{
+            type base:specific-endpoint-property;
+        }
+    }
+
+    grouping "global-property"{
+        leaf "global-property"{
+            type base:global-endpoint-property;
+        }
+    }
+
+    grouping "ipv4-address-data" {
+        leaf "ipv4" {
+            type ietf-inet:ipv4-address;
+        }
+    }
+
+
+    grouping "ipv6-address-data" {
+        leaf "ipv6" {
+            type ietf-inet:ipv6-address;
+        }
+    }
+
+
+    grouping "endpointproperty-filter-data" {
+        container "endpointproperty-filter" {
+            list "property-filter" {
+                uses "typed-property-data";
+            }
+
+            list "endpoint-filter" {
+                uses "typed-address-data";
+            }
+        }
+    }
+    augment "/alto-eps:query/alto-eps:input/alto-eps:request/alto-eps:endpointproperty-request/alto-eps:endpointproperty-params/alto-eps:filter" {
+
+        ext:augment-identifier "rfc7285-endpointproperty-filter";
+
+        case "endpointproperty-filter-data" {
+            uses "endpointproperty-filter-data";
+        }
+    }
+
+
+
+    identity "endpointproperty-response-type-endpointpropertymap" {
+        base "alto-eps:endpointproperty-response-type-base";
+    }
+
+
+
+    augment "/alto-eps:query/alto-eps:input/alto-eps:request/alto-eps:endpointproperty-request/alto-eps:endpointproperty-params/alto-eps:filter/endpointproperty-filter-data/endpointproperty-filter/property-filter/property" {
+
+        ext:augment-identifier "rfc7285-endpoint-filter-property";
+
+        case resource-specific-property {
+            uses resource-specific-property;
+        }
+
+        case global-property {
+            uses global-property;
+        }
+    }
+
+
+
+    augment "/alto-eps:query/alto-eps:input/alto-eps:request/alto-eps:endpointproperty-request/alto-eps:endpointproperty-params/alto-eps:filter/endpointproperty-filter-data/endpointproperty-filter/endpoint-filter/address" {
+
+        ext:augment-identifier "rfc7285-endpointproperty-filter-endpoint";
+        case ipv4 {
+            uses "ipv4-address-data";
+        }
+
+        case ipv6 {
+            uses "ipv6-address-data";
+        }
+    }
+
+    augment "/alto-eps:query/alto-eps:output/alto-eps:response/alto-eps:endpointproperty-response/alto-eps:endpointproperty-data/endpoint-propertymap-data/endpoint-property-map/endpoint-property/source/address" {
+        ext:augment-identifier "rfc7285-endpoint-propertymap-source";
+
+        case ipv4 {
+            uses "ipv4-address-data";
+        }
+
+        case ipv6 {
+            uses "ipv6-address-data";
+        }
+    }
+
+    augment "/alto-eps:query/alto-eps:output/alto-eps:response/alto-eps:endpointproperty-response/alto-eps:endpointproperty-data/endpoint-propertymap-data/endpoint-property-map/endpoint-property/property/property" {
+        ext:augment-identifier "rfc7285-endpoint-propertymap-property";
+
+        case resource-specific-property {
+            uses resource-specific-property;
+        }
+
+        case global-property {
+            uses global-property;
+        }
+    }
+
+
+    grouping "endpointpropertymap-response-data" {
+        container "endpoint-property-map" {
+            list "endpoint-property" {
+                container "source" {
+                    uses "typed-address-data";
+                }
+
+                container "property" {
+                    uses "typed-property-data";
+                }
+
+                choice "property-value" {
+                }
+            }
+        }
+    }
+
+
+
+    augment "/alto-eps:query/alto-eps:output/alto-eps:response/alto-eps:endpointproperty-response/alto-eps:endpointproperty-data" {
+
+        ext:augment-identifier "rfc7285-endpoint-property-map";
+
+        case "endpoint-propertymap-data" {
+            uses "endpointpropertymap-response-data";
+        }
+    }
+
+
+
+
+    augment "/alto-eps:query/alto-eps:output/alto-eps:response/alto-eps:endpointproperty-response/alto-eps:endpointproperty-data/endpoint-propertymap-data/endpoint-property-map/endpoint-property/property-value"{
+        case pid-name {
+            leaf "value"{
+                type base:pid-name;
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+}
