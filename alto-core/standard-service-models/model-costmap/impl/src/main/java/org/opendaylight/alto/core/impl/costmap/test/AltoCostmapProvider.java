@@ -7,30 +7,39 @@
  */
 package org.opendaylight.alto.core.impl.costmap.test;
 
-
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
 import org.opendaylight.alto.core.service.model.costmap.CostmapUtils;
+
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
+
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
+
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.resource.CapabilitiesBuilder;
+
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.PidName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
+
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.AltoModelCostmapService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.CapabilitiesCostType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.CapabilitiesCostTypeBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.QueryInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.QueryOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.QueryOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeCostmap;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeFilteredCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.alto.request.costmap.request.CostmapRequest;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.alto.response.costmap.response.CostmapResponseBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.cost.type.data.CostType;
@@ -46,19 +55,17 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rfc7285.rev151021.query.input.request.costmap.request.costmap.params.filter.CostmapFilterData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rfc7285.rev151021.query.output.response.costmap.response.costmap.response.data.costmap.source.costmap.destination.cost.NumericalBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rfc7285.rev151021.query.output.response.costmap.response.costmap.response.data.costmap.source.costmap.destination.cost.OrdinalBuilder;
+
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.CapabilitiesCostType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.CapabilitiesCostTypeBuilder;
+
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class AltoCostmapProvider implements BindingAwareProvider, AutoCloseable, AltoModelCostmapService {
 
@@ -70,6 +77,7 @@ public class AltoCostmapProvider implements BindingAwareProvider, AutoCloseable,
     private ListenerRegistration<DataChangeListener> m_listener=null;
 
     private static final String TEST_COSTMAP_NAME="test-model-costmap";
+    private static final String TEST_FILTERED_COSTMAP_NAME="test-model-filtered-costmap";
     private static final ResourceId TEST_COSTMAP_RID = new ResourceId(TEST_COSTMAP_NAME);
     private static final CostMetric COST_METRIC_ROUTINGCOST = new CostMetric("routingcost");
     private static final String COST_MODE_ORDINAL = "ordinal";
@@ -78,8 +86,6 @@ public class AltoCostmapProvider implements BindingAwareProvider, AutoCloseable,
     protected void createContextTag()
             throws InterruptedException, ExecutionException, TransactionCommitFailedException  {
         WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
-
-
 
         CapabilitiesCostTypeBuilder cctBuilder = new CapabilitiesCostTypeBuilder();
         cctBuilder.setCostType(Arrays.asList(
@@ -96,6 +102,14 @@ public class AltoCostmapProvider implements BindingAwareProvider, AutoCloseable,
 
         ResourcepoolUtils.lazyUpdateResource(ResourcepoolUtils.DEFAULT_CONTEXT,
                 TEST_COSTMAP_NAME, wx);
+
+        ResourcepoolUtils.createResourceWithCapabilities(ResourcepoolUtils.DEFAULT_CONTEXT,
+                TEST_FILTERED_COSTMAP_NAME,
+                ResourceTypeFilteredCostmap.class,
+                builder.build(), wx);
+
+        ResourcepoolUtils.lazyUpdateResource(ResourcepoolUtils.DEFAULT_CONTEXT,
+                TEST_FILTERED_COSTMAP_NAME, wx);
 
         wx.submit().get();
     }
@@ -170,7 +184,8 @@ public class AltoCostmapProvider implements BindingAwareProvider, AutoCloseable,
 
     @Override
     public Future<RpcResult<QueryOutput>> query(QueryInput input) {
-        if (!input.getType().equals(ResourceTypeCostmap.class)) {
+        if (!input.getType().equals(ResourceTypeCostmap.class)
+                && !input.getType().equals(ResourceTypeFilteredCostmap.class)) {
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
         }
 
