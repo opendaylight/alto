@@ -19,6 +19,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.alto.core/alto-northbound-features/${project.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-features/${project.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.alto.core/alto-service-model-endpointcost-features/${project.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.alto.core/alto-service-model-costmap-features/${project.version}/xml/features</repository>
 
   <feature name='odl-alto-simple-ird-api' version='${project.version}' description='OpenDaylight :: alto-simple-ird :: api'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
@@ -34,6 +35,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-resourcepool</feature>
     <feature version='${project.version}'>odl-alto-service-model-networkmap</feature>
     <feature version='${project.version}'>odl-alto-service-model-endpointcost</feature>
+    <feature version='${project.version}'>odl-alto-service-model-costmap</feature>
     <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ird-impl/${project.version}</bundle>
     <configfile finalname="${configfile.directory}/alto-simple-ird.xml">mvn:org.opendaylight.alto.basic/alto-simple-ird-impl/${project.version}/xml/config</configfile>
   </feature>
