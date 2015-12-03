@@ -41,6 +41,12 @@ module alto-model-costmap {
             "The resource type for cost map";
     }
 
+    identity "resource-type-filtered-costmap"{
+        base "alto-resourcepool:resource-type";
+        description
+            "The resource type for filtered cost map";
+    }
+
     grouping "cost-type-data" {
         container "cost-type" {
             leaf "cost-metric" {
@@ -119,26 +125,6 @@ module alto-model-costmap {
 
         output {
             uses "alto-response-costmap";
-        }
-    }
-
-    augment "/alto-resourcepool:context"
-            + "/alto-resourcepool:resource"
-            + "/alto-resourcepool:capabilities" {
-
-
-        yang-ext:augment-identifier "capabilities-cost-type";
-
-        list "cost-type" {
-            uses "alto-types:cost-type-data";
-
-            leaf "description" {
-                type string;
-            }
-        }
-
-        leaf "constraint-support" {
-            type boolean;
         }
     }
 }
