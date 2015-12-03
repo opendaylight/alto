@@ -39,6 +39,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev1
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostTypeData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeCostmap;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeFilteredCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.CapabilitiesCostType;
@@ -108,13 +110,15 @@ public final class SimpleIrdRfc7285CostTypeListener
             resourceIID = (InstanceIdentifier<Resource>)entry.getInstance();
 
             Resource resource = rwx.read(LogicalDatastoreType.OPERATIONAL, resourceIID).get().get();
-            if (resource.getType().equals(ResourceTypeEndpointcost.class)) {
+            if (resource.getType().equals(ResourceTypeEndpointcost.class)
+                    || resource.getType().equals(ResourceTypeCostmap.class)
+                    || resource.getType().equals(ResourceTypeFilteredCostmap.class)) {
                 CapabilitiesCostType capabilities;
                 capabilities = resource.getCapabilities()
-                                        .getAugmentation(CapabilitiesCostType.class);
+                    .getAugmentation(CapabilitiesCostType.class);
 
                 if ((capabilities == null) || (capabilities.getCostType() == null)
-                            || (capabilities.getCostType().isEmpty())) {
+                        || (capabilities.getCostType().isEmpty())) {
                     LOG.warn("Missing cost-type information in {}", resource.getResourceId());
                     continue;
                 }
@@ -142,9 +146,8 @@ public final class SimpleIrdRfc7285CostTypeListener
                     supportConstraint = capabilities.isConstraintSupport();
                 }
                 setCostTypeNames(m_instance, entry.getEntryId(),
-                                    costTypeNames, supportConstraint, rwx);
+                        costTypeNames, supportConstraint, rwx);
             } else {
-                //TODO :: handle cost map/filtered cost map
                 continue;
             }
         }

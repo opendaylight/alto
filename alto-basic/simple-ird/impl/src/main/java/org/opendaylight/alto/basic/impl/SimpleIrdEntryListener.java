@@ -47,6 +47,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.R
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.Tag;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.ird.rev151021.ResourceTypeIrd;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeCostmap;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeFilteredCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeFilteredNetworkmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeNetworkmap;
@@ -333,6 +335,11 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
             } else if (resource.getType().equals(ResourceTypeEndpointcost.class)) {
                 entryBuilder.setAccepts("application/alto-endpointcostparams+json");
                 entryBuilder.setMediaType("application/alto-endpointcost+json");
+            } else if (resource.getType().equals(ResourceTypeCostmap.class)) {
+                entryBuilder.setMediaType("application/alto-costmap+json");
+            } else if (resource.getType().equals(ResourceTypeFilteredCostmap.class)) {
+                entryBuilder.setAccepts("application/alto-costmapfilter+json");
+                entryBuilder.setMediaType("application/alto-costmap+json");
             } else {
                 LOG.warn("Haven't implemented yet, skipping");
                 continue;

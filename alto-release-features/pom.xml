@@ -186,6 +186,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
 
     <dependency>
+      <groupId>org.opendaylight.alto.core</groupId>
+      <artifactId>alto-service-model-costmap-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.opendaylight.alto.basic</groupId>
       <artifactId>alto-simple-ird-impl</artifactId>
       <version>${project.version}</version>

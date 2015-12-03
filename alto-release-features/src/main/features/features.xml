@@ -93,6 +93,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-ird-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-endpointcost-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-service-model-costmap-api/${project.version}</bundle>
+
     <!--
       TODO :: service models for cost map and endpoint property
     -->
