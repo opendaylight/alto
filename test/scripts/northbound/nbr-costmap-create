@@ -1,0 +1,20 @@
+#!/bin/bash
+
+COSTMAP_PATH=$1
+RESOURCE_ID=$2
+if [ $3 ]; then
+	CONTEXT_ID=$3
+else
+	CONTEXT_ID="00000000-0000-0000-0000-000000000000"
+fi
+
+DATA=$(cat ./template/nbr-record-costmap \
+		| sed 's/\$1/'$COSTMAP_PATH'/g' \
+		| sed 's/\$2/'$CONTEXT_ID'/g' \
+		| sed 's/\$3/'$RESOURCE_ID'/g')
+
+# echo $DATA | python -m json.tool
+
+curl -X PUT -u admin:admin -H "Content-Type: application/json" \
+	-d "$DATA" \
+	http://localhost:8181/restconf/config/alto-nbr-costmap:records/record/$COSTMAP_PATH

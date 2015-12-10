@@ -1,0 +1,36 @@
+module alto-nbr-costmap {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:core:northbound:route:costmap";
+
+    prefix "alto-nbr-costmap";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import ietf-inet-types { prefix ietf-inet; revision-date 2013-07-15; }
+    import alto-model-costmap { prefix costmap-model; revision-date 2015-10-21; }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto-northbound model";
+    }
+
+    container "records" {
+        list "record" {
+            key "path";
+
+            leaf "path" {
+                type ietf-inet:uri;
+            }
+
+            leaf "resource-iid" {
+                type instance-identifier;
+            }
+
+
+        }
+    }
+
+}

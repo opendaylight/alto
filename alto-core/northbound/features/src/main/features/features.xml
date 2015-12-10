@@ -17,6 +17,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.dlux/features-dlux/${dlux.version}/xml/features</repository>
 
   <repository>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-features/${project.version}/xml/features</repository>
+    <repository>mvn:org.opendaylight.alto.core/alto-service-model-costmap-features/${project.version}/xml/features</repository>
 
   <feature name='odl-alto-northbound-api' version='${project.version}' description='OpenDaylight :: alto-northbound :: api'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
@@ -42,6 +43,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <configfile finalname="${configfile.directory}/alto-northbound-route-networkmap.xml">
         mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}/xml/config
       </configfile>
+
+      <feature version='${project.version}'>odl-alto-service-model-costmap</feature>
+      <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-api/${project.version}</bundle>
+      <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-impl/${project.version}</bundle>
+      <configfile finalname="${configfile.directory}/alto-northbound-route-costmap.xml">
+          mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-impl/${project.version}/xml/config
+      </configfile>
+
   </feature>
   <feature name='odl-alto-northbound-rest' version='${project.version}' description='OpenDaylight :: alto-northbound :: REST'>
     <feature version="${project.version}">odl-alto-northbound</feature>

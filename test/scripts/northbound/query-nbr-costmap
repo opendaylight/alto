@@ -1,0 +1,11 @@
+#!/bin/bash
+
+COSTMAP_PATH=$1
+
+DATA=$(cat ./template/costmap-filter)
+
+
+
+curl -X POST -u admin:admin -H "Content-Type: application/alto-costmapfilter+json" \
+	-d "$DATA" \
+	http://localhost:8080/alto/costmap/$COSTMAP_PATH | python -m json.tool

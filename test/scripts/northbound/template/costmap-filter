@@ -1,0 +1,17 @@
+{
+    "cost-type": {
+        "cost-metric": "routingcost",
+        "cost-mode": "numerical"
+    },
+    "pids": {
+        "dsts": [
+            "PID1",
+            "PID2",
+            "PID3"
+        ],
+        "srcs": [
+            "PID1"
+        ]
+    }
+}
+
