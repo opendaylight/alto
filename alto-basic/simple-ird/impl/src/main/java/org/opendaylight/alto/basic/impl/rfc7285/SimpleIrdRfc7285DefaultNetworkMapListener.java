@@ -136,7 +136,13 @@ public final class SimpleIrdRfc7285DefaultNetworkMapListener
         InstanceIdentifier<Rfc7285IrdMetadata> iid;
         iid = SimpleIrdUtils.getInstanceIID(instanceId).augmentation(Rfc7285IrdMetadata.class);
 
-        Optional<Rfc7285IrdMetadata> metadata = rx.read(LogicalDatastoreType.OPERATIONAL, iid).get();
+        Optional<Rfc7285IrdMetadata> metadata = Optional.absent();
+        try {
+        metadata = rx.read(LogicalDatastoreType.OPERATIONAL, iid).get();
+    } catch (InterruptedException | ExecutionException e) {
+        throw e;
+    } catch (Exception e) {
+    }
 
         if (metadata.isPresent()) {
             return metadata.get().getMeta().getDefaultNetworkMap();

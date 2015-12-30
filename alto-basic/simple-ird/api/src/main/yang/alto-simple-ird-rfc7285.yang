@@ -83,8 +83,6 @@ module alto-simple-ird-rfc7285 {
     augment "/ird:ird-instance" {
         ext:augment-identifier "rfc7285-ird-metadata";
 
-        config false;
-
         container "meta" {
             uses "rfc7285-ird-meta";
         }
