@@ -81,10 +81,10 @@ module alto-resourcepool {
                 yang-ext:context-instance "service-context";
 
                 leaf-list "dependency" {
+                    description
+                        "Should point to a ../../../resource/context-tag instance (in the same context)";
                     type instance-identifier {
                         require-instance true;
-                        description
-                            "Should point to a ../../../resource/context-tag instance (in the same context)";
                     }
                 }
             }
