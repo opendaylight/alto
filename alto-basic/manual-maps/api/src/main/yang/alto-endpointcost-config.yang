@@ -1,0 +1,23 @@
+module alto-endpointcost-config {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:basic:manual:maps:endpointcost";
+
+    prefix "alto-endpointcost-config";
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto-endpointcost-config model";
+    }
+}

@@ -1,0 +1,74 @@
+module alto-costmap-config {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:basic:manual:maps:costmap";
+
+    prefix "alto-costmap-config";
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto-costmap-config model";
+    }
+
+    grouping cost-map-meta {
+        uses alto-types:dependent-vtags {
+            refine dependent-vtags {
+                max-elements 1;
+            }
+        }
+    }
+
+    grouping cost-map {
+        leaf "resource-id" {
+            mandatory true;
+            type alto-types:resource-id;
+        }
+        leaf tag {
+            mandatory ture;
+            type alto-types:tag;
+        }
+
+        container meta {
+            must "current()";
+            uses cost-map-meta;
+        }
+
+        list "map" {
+            leaf src {
+                type alto-types:pid-name;
+            }
+            key "src";
+            list dst-costs {
+                leaf dst {
+                    type alto-types:pid-name;
+                }
+                key "dst";
+                choice cost {
+                    case type-numerical {
+                        leaf cost-value {
+                            type decimal64 {
+                                fraction-digits 4;
+                            }
+                        }
+                    }
+                    case type-ordinal {
+                        leaf cost-value {
+                            type int32;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
