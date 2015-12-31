@@ -2,7 +2,7 @@
 <metadata modelVersion="1.1.0">
   <groupId>org.opendaylight.alto.core</groupId>
   <artifactId>alto-service-model-endpointproperty-impl</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.2.1-SNAPSHOT</version>
   <versioning>
     <snapshot>
       <localCopy>true</localCopy>
@@ -12,7 +12,7 @@
       <snapshotVersion>
         <classifier>config</classifier>
         <extension>xml</extension>
-        <value>0.2.0-SNAPSHOT</value>
+        <value>0.2.1-SNAPSHOT</value>
         <updated>20151028073152</updated>
       </snapshotVersion>
     </snapshotVersions>

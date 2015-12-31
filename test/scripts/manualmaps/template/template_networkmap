@@ -1,0 +1,37 @@
+{
+  "resource-network-map": {
+    "resource-id": "$1",
+    "tag": "$2",
+    "map": [
+      {
+        "pid": "PID0",
+        "endpoint-address-group": [
+          {
+            "address-type": "ipv4",
+            "endpoint-prefix": [
+              "127.0.0.1/8"
+            ]
+          }
+        ]
+      },
+      {
+        "pid": "PID1",
+        "endpoint-address-group": [
+          {
+            "address-type": "ipv4",
+            "endpoint-prefix": [
+              "192.168.1.0/24",
+              "192.168.2.0/24"
+            ]
+          },
+          {
+            "address-type": "ipv6",
+            "endpoint-prefix": [
+              "fe80::7a2b:cbff:fef7:2055/64"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
