@@ -1,0 +1,89 @@
+module alto-manual-maps {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:basic:manual:maps";
+
+    prefix "alto-manual-maps";
+
+    import "ietf-yang-types" {
+        prefix "ietf-types";
+    }
+
+    import "alto-networkmap-config" {
+        prefix "networkmap-config";
+    }
+
+    import "alto-costmap-config" {
+        prefix "costmap-config";
+    }
+
+    import "alto-endpointproperty-config" {
+        prefix "endpointproperty-config";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+
+    import "alto-model-config" {
+        prefix "alto-cfg";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto-manual-maps model";
+    }
+
+    list config-context {
+        key "context-id";
+
+        leaf "context-id" {
+            type ietf-types:uuid;
+            default "00000000-0000-0000-0000-000000000000";
+        }
+
+        list resource-network-map {
+            key "resource-id";
+            uses networkmap-config:network-map;
+        }
+
+        list resource-cost-map {
+            key "resource-id";
+            uses costmap-config:cost-map;
+        }
+
+//        container resource-endpoint-property {
+//            uses endpointproperty-config:endpoint-property-map;
+//        }
+    }
+
+    augment "alto-cfg:query/alto-cfg:input/alto-cfg:request/alto-cfg:config-request/"
+          + "alto-cfg:config-request-message/alto-cfg:config-resource-data" {
+        case "config-networkmap-data" {
+            uses networkmap-config:network-map;
+        }
+        case "config-costmap-data" {
+            uses costmap-config:cost-map;
+        }
+    }
+
+    augment "alto-cfg:query/alto-cfg:output/alto-cfg:response/alto-cfg:config-response/"
+          + "alto-cfg:config-response-message/alto-cfg:meta" {
+        leaf "config-response-error-code" {
+            type string;
+        }
+    }
+
+    augment "alto-cfg:query/alto-cfg:output/alto-cfg:response/alto-cfg:config-response/"
+          + "alto-cfg:config-response-message/alto-cfg:config-response-data" {
+        container "config-networkmap-response-data" {
+            uses networkmap-config:network-map;
+        }
+        container "config-costmap-response-data" {
+            uses costmap-config:cost-map;
+        }
+    }
+}
