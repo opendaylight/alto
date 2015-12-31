@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vi: set et smarttab sw=4 tabstop=4: -->
+<!--
+Copyright © 2015 Yale University and others. All rights reserved.
+
+This program and the accompanying materials are made available under the
+terms of the Eclipse Public License v1.0 which accompanies this distribution,
+and is available at http://www.eclipse.org/legal/epl-v10.html
+-->
+<features name="odl-alto-manual-maps-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
+  <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${mdsal.model.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.dlux/features-dlux/${dlux.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.alto.core/alto-resourcepool-features/${project.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.alto.core/alto-northbound-features/${project.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-features/${project.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.alto.core/alto-service-model-costmap-features/${project.version}/xml/features</repository>
+
+  <feature name='odl-alto-manual-maps-api' version='${project.version}' description='OpenDaylight :: alto-manual-maps :: api'>
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${project.version}'>odl-alto-resourcepool-api</feature>
+    <bundle>mvn:org.opendaylight.alto.core/alto-service-model-base-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-service-model-config-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-api/${project.version}</bundle>
+  </feature>
+  <feature name='odl-alto-manual-maps' version='${project.version}' description='OpenDaylight :: alto-manual-maps'>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${project.version}'>odl-alto-manual-maps-api</feature>
+    <feature version='${project.version}'>odl-alto-northbound</feature>
+    <feature version='${project.version}'>odl-alto-resourcepool</feature>
+    <feature version='${project.version}'>odl-alto-service-model-networkmap</feature>
+    <feature version='${project.version}'>odl-alto-service-model-costmap</feature>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-manual-maps.xml">mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}/xml/config</configfile>
+  </feature>
+  <feature name='odl-alto-manual-maps-rest' version='${project.version}' description='OpenDaylight :: alto-manual-maps :: REST'>
+    <feature version="${project.version}">odl-alto-manual-maps</feature>
+    <feature version="${restconf.version}">odl-restconf</feature>
+  </feature>
+  <feature name='odl-alto-manual-maps-ui' version='${project.version}' description='OpenDaylight :: alto-manual-maps :: UI'>
+    <feature version="${project.version}">odl-alto-manual-maps-rest</feature>
+    <feature version="${restconf.version}">odl-mdsal-apidocs</feature>
+    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
+    <feature version="${dlux.version}">odl-dlux-yangui</feature>
+  </feature>
+
+</features>
