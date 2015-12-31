@@ -1,0 +1,35 @@
+module alto-config-test-impl {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:service:model:test:config";
+    prefix "alto-model-config-test-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix md-sal-binding; revision-date 2013-10-28;}
+
+    description
+        "Service definition for config project";
+
+    revision "2015-10-21" {
+        description
+            "Initial revision";
+    }
+
+    identity alto-model-config-test {
+        base config:module-type;
+        config:java-name-prefix AltoConfig;
+    }
+
+    augment "/config:modules/config:module/config:configuration" {
+        case alto-model-config-test-impl {
+            when "/config:modules/config:module/config:type = 'alto-model-config-test'";
+            container broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity md-sal-binding:binding-broker-osgi-registry;
+                    }
+                }
+            }
+        }
+    }
+}
