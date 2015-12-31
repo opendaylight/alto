@@ -1,0 +1,66 @@
+module alto-networkmap-config {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:basic:manual:maps:networkmap";
+
+    prefix "alto-networkmap-config";
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto-networkmap-config model";
+    }
+
+    typedef endpoint-address-type {
+        type union {
+            type enumeration {
+                enum ipv4;
+                enum ipv6;
+            }
+        }
+    }
+
+    grouping "endpoint-address-group" {
+        list "endpoint-address-group" {
+            key "address-type";
+
+            leaf "address-type" {
+                mandatory true;
+                type endpoint-address-type;
+            }
+
+            leaf-list endpoint-prefix {
+                type ietf-inet:ip-prefix;
+            }
+        }
+    }
+
+    grouping "network-map" {
+        leaf "resource-id" {
+            mandatory true;
+            type alto-types:resource-id;
+        }
+        leaf "tag" {
+            mandatory true;
+            type alto-types:tag;
+        }
+
+        list "map" {
+            key "pid";
+            leaf pid {
+                type alto-types:pid-name;
+            }
+            uses endpoint-address-group;
+        }
+    }
+}
