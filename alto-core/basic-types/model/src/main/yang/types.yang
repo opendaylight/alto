@@ -71,4 +71,24 @@ module alto-basic-types {
             type string;
         }
     }
+
+    grouping "vtag" {
+        leaf "resource-id" {
+            type resource-id;
+            mandatory true;
+        }
+
+        leaf "tag" {
+            type tag;
+            mandatory true;
+        }
+    }
+
+    grouping "dependent-vtags" {
+        list "dependent-vtags" {
+            key "resource-id";
+            uses "vtag";
+            min-elements 1;
+        }
+    }
 }
