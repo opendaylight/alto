@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NETWORKMAP_PATH=$1
+ENDPOINTCOST_PATH=$1
 RESOURCE_ID=$2
 if [ $3 ]; then
 	CONTEXT_ID=$3
@@ -8,8 +8,8 @@ else
 	CONTEXT_ID="00000000-0000-0000-0000-000000000000"
 fi
 
-DATA=$(cat ./template/nbr-record-networkmap \
-		| sed 's/\$1/'$NETWORKMAP_PATH'/g' \
+DATA=$(cat ./template/nbr-record-endpointcost \
+		| sed 's/\$1/'$ENDPOINTCOST_PATH'/g' \
 		| sed 's/\$2/'$CONTEXT_ID'/g' \
 		| sed 's/\$3/'$RESOURCE_ID'/g')
 
@@ -17,4 +17,4 @@ DATA=$(cat ./template/nbr-record-networkmap \
 
 curl -X PUT -u admin:admin -H "Content-Type: application/json" \
 	-d "$DATA" \
-	http://localhost:8181/restconf/config/alto-nbr-networkmap:records/record/$NETWORKMAP_PATH
+	http://localhost:8181/restconf/config/alto-nbr-endpointcost:records/record/$ENDPOINTCOST_PATH
