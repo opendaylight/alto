@@ -1,0 +1,6 @@
+{
+	"record": {
+		"path": "$1",
+		"resource-iid": "/alto-resourcepool:context[alto-resourcepool:context-id='$2']/alto-resourcepool:resource[alto-resourcepool:resource-id='$3']"
+	}
+}
