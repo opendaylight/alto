@@ -8,11 +8,9 @@
 
 package org.opendaylight.alto.core.northbound.api.utils.rfc7285;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RFC7285CostType {
 
     @JsonProperty("cost-mode")
