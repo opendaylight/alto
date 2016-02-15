@@ -26,6 +26,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <yangtools.version>1.0.0-SNAPSHOT</yangtools.version>
     <dlux.version>0.4.0-SNAPSHOT</dlux.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
+    <l2switch.version>0.4.0-SNAPSHOT</l2switch.version>
+    <openflow.plugin.version>0.3.0-SNAPSHOT</openflow.plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -187,6 +189,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>org.opendaylight.alto.core</groupId>
+      <artifactId>alto-service-model-endpointproperty-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.alto.core</groupId>
       <artifactId>alto-service-model-costmap-api</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -208,6 +216,57 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <dependency>
       <groupId>org.opendaylight.alto.basic</groupId>
       <artifactId>alto-simple-ird-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.openflowplugin</groupId>
+      <artifactId>features-openflowplugin</artifactId>
+      <classifier>features</classifier>
+      <version>${openflow.plugin.version}</version>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.openflowplugin.model</groupId>
+      <artifactId>model-flow-statistics</artifactId>
+      <version>${openflow.plugin.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch</groupId>
+      <artifactId>features-l2switch</artifactId>
+      <classifier>features</classifier>
+      <version>${l2switch.version}</version>
+      <type>xml</type>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.addresstracker</groupId>
+      <artifactId>addresstracker-model</artifactId>
+      <version>${l2switch.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.hosttracker</groupId>
+      <artifactId>hosttracker-model</artifactId>
+      <version>${l2switch.version}</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.basic</groupId>
+      <artifactId>endpointcostservice-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.basic</groupId>
+      <artifactId>endpointcostservice-impl</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}.basic</groupId>
+      <artifactId>endpointcostservice-api</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

@@ -15,8 +15,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${mdsal.model.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
-
-  <!-- TODO add features repository for alto-core and alto-basic -->
+  <repository>mvn:org.opendaylight.l2switch/features-l2switch/${l2switch.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.openflowplugin/features-openflowplugin/${openflow.plugin.version}/xml/features</repository>
 
   <feature name='odl-alto-release' version='${project.version}'
           description='OpenDaylight :: alto :: Release'>
@@ -94,10 +94,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-endpointcost-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-costmap-api/${project.version}</bundle>
-
-    <!--
-      TODO :: service models for cost map and endpoint property
-    -->
+    <bundle>mvn:org.opendaylight.alto.core/alto-service-model-endpointproperty-api/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-standard-northbound-route' version='${project.version}'
@@ -142,6 +139,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-alto-hosttracker' version='${project.version}'
             description='OpenDaylight :: alto :: hosttracker'>
     <!-- TODO -->
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${l2switch.version}'>odl-l2switch-hosttracker</feature>
+    <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
+    <feature version='${openflow.plugin.version}'>odl-openflowplugin-flow-services</feature>
+
+    <feature version='${project.version}'>odl-alto-core</feature>
+
+    <bundle>mvn:org.opendaylight.alto.basic/endpointcostservice-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/endpointcostservice-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
+        mvn:org.opendaylight.alto.basic/endpointcostservice-impl/${project.version}/xml/config
+    </configfile>
   </feature>
 
   <feature name='odl-alto-nonstandard-types' version='${project.version}'
