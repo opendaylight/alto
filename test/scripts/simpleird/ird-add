@@ -9,7 +9,7 @@ else
 fi
 
 if [ $4 ]; then
-	BASE_URL=$4
+	BASE_URL="$(echo $4 | sed -e 's/[\/&]/\\&/g')"
 else
 	BASE_URL="$(./simpleird/get_base_url | sed -e 's/[\/&]/\\&/g')"
 fi
