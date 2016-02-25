@@ -56,14 +56,14 @@ module alto-costmap-config {
                 key "dst";
                 choice cost {
                     case type-numerical {
-                        leaf cost-value {
+                        leaf numerical-cost-value {
                             type decimal64 {
                                 fraction-digits 4;
                             }
                         }
                     }
                     case type-ordinal {
-                        leaf cost-value {
+                        leaf ordinal-cost-value {
                             type int32;
                         }
                     }
