@@ -108,6 +108,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <configfile finalname="${configfile.directory}/alto-northbound-route-networkmap.xml">
         mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}/xml/config
     </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-northbound-route-costmap.xml">
+      mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-impl/${project.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-northbound-route-endpointcost.xml">
+      mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-impl/${project.version}/xml/config
+    </configfile>
   </feature>
 
   <feature name='odl-alto-standard-resource-translator' version='${project.version}'
@@ -133,7 +145,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-manual-maps' version='${project.version}'
             description='OpenDaylight :: alto :: manual-maps'>
-    <!-- TODO -->
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+
+    <feature version='${project.version}'>odl-alto-northbound</feature>
+    <feature version='${project.version}'>odl-alto-resourcepool</feature>
+    <feature version='${project.version}'>odl-alto-standard-service-models</feature>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-service-model-config-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-manual-maps.xml">
+      mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}/xml/config
+    </configfile>
   </feature>
 
   <feature name='odl-alto-hosttracker' version='${project.version}'
