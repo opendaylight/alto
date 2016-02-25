@@ -1,0 +1,22 @@
+#!/bin/bash
+
+RESOURCE_ID=$1
+TAG=$2
+if [ $3 ]; then
+	CONTEXT_ID=$3
+else
+	CONTEXT_ID="00000000-0000-0000-0000-000000000000"
+fi
+URL="http://localhost:8181/restconf/config/alto-manual-maps:config-context/"$CONTEXT_ID"/resource-cost-map/"$RESOURCE_ID
+
+echo $URL
+
+DATA=$(cat ./manualmaps/template/template_costmap \
+    | sed 's/\$1/'$RESOURCE_ID'/g' \
+    | sed 's/\$2/'$TAG'/g')
+
+echo $DATA
+
+curl -X PUT -u admin:admin -v \
+    -H "Content-Type: application/json" -d "$(echo $DATA)"\
+    $URL

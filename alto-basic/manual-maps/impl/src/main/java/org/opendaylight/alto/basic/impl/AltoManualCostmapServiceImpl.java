@@ -128,11 +128,11 @@ public class AltoManualCostmapServiceImpl implements AltoModelCostmapService {
                 Cost cost = dstCosts.getCost();
                 if (cost instanceof TypeNumerical) {
                     costmapDestinationBuilder.setCost(new NumericalBuilder()
-                            .setCost(((TypeNumerical) cost).getCostValue())
+                            .setCost(((TypeNumerical) cost).getNumericalCostValue())
                             .build());
                 } else if (cost instanceof TypeOrdinal) {
                     costmapDestinationBuilder.setCost(new OrdinalBuilder()
-                            .setCost(((TypeOrdinal) cost).getCostValue())
+                            .setCost(((TypeOrdinal) cost).getOrdinalCostValue())
                             .build());
                 }
                 costmapDestinations.add(costmapDestinationBuilder.build());

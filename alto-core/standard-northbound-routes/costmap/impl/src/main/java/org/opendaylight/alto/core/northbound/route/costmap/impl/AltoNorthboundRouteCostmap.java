@@ -114,7 +114,48 @@ public class AltoNorthboundRouteCostmap implements BindingAwareProvider, AutoClo
     @GET
     @Produces({ALTO_COSTMAP, ALTO_ERROR})
     public Response getFullMap(@PathParam("path") String path) throws JsonProcessingException{
-        QueryInput input = prepareDefaultInput(path);
+        QueryInput input = prepareDefaultInput(path, "numerical", "hopcount");
+        Future<RpcResult<QueryOutput>> outputFuture = mapService.query(input);
+        QueryOutput output = null;
+        try {
+            output = outputFuture.get().getResult();
+        } catch (Exception e) {
+            LOG.warn("get output failed:" , e);
+        }
+        Response response = buildOutput(input, output);
+        if(response != null)
+            return response;
+        else
+            return Response.status(404).build();
+    }
+
+    @Path("{path}/{mode}")
+    @GET
+    @Produces({ALTO_COSTMAP, ALTO_ERROR})
+    public Response getFullMap(@PathParam("path") String path,
+                               @PathParam("mode") String mode) throws JsonProcessingException{
+        QueryInput input = prepareDefaultInput(path, mode, "hopcount");
+        Future<RpcResult<QueryOutput>> outputFuture = mapService.query(input);
+        QueryOutput output = null;
+        try {
+            output = outputFuture.get().getResult();
+        } catch (Exception e) {
+            LOG.warn("get output failed:" , e);
+        }
+        Response response = buildOutput(input, output);
+        if(response != null)
+            return response;
+        else
+            return Response.status(404).build();
+    }
+
+    @Path("{path}/{mode}/{metric}")
+    @GET
+    @Produces({ALTO_COSTMAP, ALTO_ERROR})
+    public Response getFullMap(@PathParam("path") String path,
+                               @PathParam("mode") String mode,
+                               @PathParam("metric") String metric) throws JsonProcessingException{
+        QueryInput input = prepareDefaultInput(path, mode, metric);
         Future<RpcResult<QueryOutput>> outputFuture = mapService.query(input);
         QueryOutput output = null;
         try {
@@ -214,16 +255,14 @@ public class AltoNorthboundRouteCostmap implements BindingAwareProvider, AutoClo
         return new LinkedList<String>(retval);
     }
 
-    protected QueryInput prepareDefaultInput(String rid) {
+    protected QueryInput prepareDefaultInput(String rid, String cost_mode, String cost_metric) {
         /*
-         * Set pids as empty so all PID should be returned.
+         * Set source and destination pids as empty so all PID pairs should be returned.
          *
-         * Set address-types as missing so all address types should be returned.
-         *
-         * See https://tools.ietf.org/html/rfc7285#section-11.3.1.3
+         * See https://tools.ietf.org/html/rfc7285#section-11.3.2.3
          *
          * */
-        return prepareInput(rid, null, null, new LinkedList<String>(), new LinkedList<String>());
+        return prepareInput(rid, cost_mode, cost_metric, new LinkedList<String>(), new LinkedList<String>());
     }
 
     protected QueryInput prepareInput(String path, String cost_mode, String cost_metric, List<String> pid_source, List<String> pid_destination) {
