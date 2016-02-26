@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a3d3df0_66ced52f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 2759
+      },
+      "writtenOn": "2016-02-26T16:45:48Z",
+      "side": 1,
+      "message": "Just a minor nitpick. There is no need to say Patch Set 2. The commit message is not a log of things you changed during your review. Think of it as a summary and description of what your patch is providing to the project and why it is needed. You can see some good examples of what well formed commit messages look like here:\n\n http://chris.beams.io/posts/git-commit/\n\n\nHope this helps.",
+      "revId": "ca80f12cf214bc61c908fea103805cb137c24fc1",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
