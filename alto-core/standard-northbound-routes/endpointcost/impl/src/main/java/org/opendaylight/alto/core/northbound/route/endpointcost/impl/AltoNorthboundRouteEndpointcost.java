@@ -280,7 +280,7 @@ public class AltoNorthboundRouteEndpointcost implements BindingAwareProvider, Au
             if(tmp[0].equals("ipv4")){
                 ipv4.setIpv4(new Ipv4Address(tmp[1]));
                 destinationBuilder.setAddress(ipv4.build());
-            }else if(tmp[0].equals("ipv4")){
+            }else if(tmp[0].equals("ipv6")){
                 ipv6.setIpv6(new Ipv6Address(tmp[1]));
                 destinationBuilder.setAddress(ipv6.build());
             }else return null;
