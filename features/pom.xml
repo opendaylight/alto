@@ -10,22 +10,22 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>features-parent</artifactId>
-    <version>1.5.4-SNAPSHOT</version>
+    <version>1.5.4-Lithium-SR4</version>
     <relativePath></relativePath>
   </parent>
 
   <artifactId>features-alto</artifactId>
   <groupId>org.opendaylight.alto</groupId>
-  <version>0.1.4-SNAPSHOT</version>
+  <version>0.1.4-Lithium-SR4</version>
   <name>${project.artifactId}</name>
 
   <properties>
-    <odl.version>1.5.4-SNAPSHOT</odl.version>
+    <odl.version>1.5.4-Lithium-SR4</odl.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
-    <mdsal.version>1.2.4-SNAPSHOT</mdsal.version>
-    <yangtools.version>0.7.4-SNAPSHOT</yangtools.version>
-    <sal.version>0.9.4-SNAPSHOT</sal.version>
-    <l2switch.version>0.2.4-SNAPSHOT</l2switch.version>
+    <mdsal.version>1.2.4-Lithium-SR4</mdsal.version>
+    <yangtools.version>0.7.4-Lithium-SR4</yangtools.version>
+    <sal.version>0.9.4-Lithium-SR4</sal.version>
+    <l2switch.version>0.2.4-Lithium-SR4</l2switch.version>
     <httpclient.version>4.4.1</httpclient.version>
   </properties>
 
