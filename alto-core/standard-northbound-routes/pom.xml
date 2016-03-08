@@ -33,6 +33,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <module>networkmap</module>
         <module>costmap</module>
         <module>endpointcost</module>
+        <module>endpointproperty</module>
       </modules>
     </profile>
 
@@ -43,6 +44,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <module>networkmap</module>
         <module>costmap</module>
         <module>endpointcost</module>
+        <module>endpointproperty</module>
       </modules>
     </profile>
 
