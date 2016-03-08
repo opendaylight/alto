@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.opendaylight.alto.core.northbound.api.exception.AltoBadFormatException;
+import org.opendaylight.alto.core.northbound.api.exception.AltoErrorTestException;
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
@@ -23,13 +25,10 @@ import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFaile
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RoutedRpcRegistration;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
-
-
-
-
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.PidName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.SpecificEndpointProperty;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.AltoModelEndpointpropertyService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.QueryInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.QueryOutput;
@@ -39,18 +38,19 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpoint
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.alto.response.endpointproperty.response.EndpointpropertyResponseBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.endpointproperty.request.data.EndpointpropertyParams;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.TypedAddressData;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.TypedPropertyData;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointproperty.filter.data.endpointproperty.filter.PropertyFilter;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointpropertymap.response.data.EndpointPropertyMapBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointpropertymap.response.data.endpoint.property.map.EndpointProperty;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointpropertymap.response.data.endpoint.property.map.EndpointPropertyBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointpropertymap.response.data.endpoint.property.map.endpoint.property.PropertyBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointpropertymap.response.data.endpoint.property.map.endpoint.property.Properties;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointpropertymap.response.data.endpoint.property.map.endpoint.property.PropertiesBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointpropertymap.response.data.endpoint.property.map.endpoint.property.SourceBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.endpointpropertymap.response.data.endpoint.property.map.endpoint.property.properties.PropertyContainerBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.input.request.endpointproperty.request.endpointproperty.params.filter.EndpointpropertyFilterData;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.input.request.endpointproperty.request.endpointproperty.params.filter.endpointproperty.filter.data.endpointproperty.filter.property.filter.property.InputGlobalProperty;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.EndpointPropertymapDataBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.endpoint.propertymap.data.endpoint.property.map.endpoint.property.property.value.PidNameBuilder;
-
-
-
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.endpoint.propertymap.data.endpoint.property.map.endpoint.property.properties.property.container.property.OutputResourceSpecificPropertyBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.endpoint.propertymap.data.endpoint.property.map.endpoint.property.properties.property.value.PidNameBuilder;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
@@ -70,8 +70,6 @@ public class AltoEndpointPropertyProvider implements BindingAwareProvider, AutoC
     private static  final String TEST_ENDPOINTPROPERTY_NAME="test-model-endpointproperty";
     private static final ResourceId TEST_ENDPOINTPROPERTY_RID = new ResourceId(TEST_ENDPOINTPROPERTY_NAME);
     private InstanceIdentifier<Resource> m_testIID = null;
-
-
 
     protected void createContextTag()
             throws InterruptedException, ExecutionException, TransactionCommitFailedException {
@@ -136,48 +134,63 @@ public class AltoEndpointPropertyProvider implements BindingAwareProvider, AutoC
         }
     }
 
-
-
-
-
-
-
-
-
     @Override
     public Future<RpcResult<QueryOutput>> query(QueryInput input) {
-
-
+        LOG.info("test-model-endpointproperty has been called");
         if (!input.getType().equals(ResourceTypeEndpointproperty.class)) {
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
         }
 
         EndpointpropertyRequest request = (EndpointpropertyRequest)input.getRequest();
-
         EndpointpropertyParams params = request.getEndpointpropertyParams();
-
-
         EndpointpropertyFilterData filter= (EndpointpropertyFilterData)params.getFilter();
 
-
-
-
         List<? extends TypedAddressData> endpoints=filter.getEndpointpropertyFilter().getEndpointFilter();
-        List<? extends TypedPropertyData> properties = filter.getEndpointpropertyFilter().getPropertyFilter();
+        List<PropertyFilter> properties = filter.getEndpointpropertyFilter().getPropertyFilter();
 
+        for (PropertyFilter property: properties) {
+            if (property.getProperty() instanceof InputGlobalProperty) {
+                String propertyString = ((InputGlobalProperty)property.getProperty()).getGlobalProperty().getValue();
+                if (propertyString.equals("no-such-property")) {
+                    throw new AltoBadFormatException(AltoErrorTestException.ERROR_CODES.E_INVALID_FIELD_VALUE.name(), "properties", "no-such-property");
+                }
+            }
+        }
 
         int order = 0;
         LinkedList<EndpointProperty> eppist = new LinkedList<EndpointProperty>();
         for (TypedAddressData endpoint: endpoints) {
-            for (TypedPropertyData property: properties) {
+            SourceBuilder srcBuilder = new SourceBuilder();
+            srcBuilder.setAddress(endpoint.getAddress());
+
+            PidName pidName = new PidName("PID1");
+            PidNameBuilder pidNameBuilder = new PidNameBuilder();
+            pidNameBuilder.setValue(pidName);
+
+            EndpointPropertyBuilder epBuilder = new EndpointPropertyBuilder();
+            epBuilder.setSource(srcBuilder.build());
+
+            LinkedList<Properties> propertiesInResponse = new LinkedList<Properties>();
+            PropertiesBuilder propertiesBuilder = new PropertiesBuilder();
+            PropertyContainerBuilder pcBuilder = new PropertyContainerBuilder();
+            pcBuilder.setProperty(
+                    new OutputResourceSpecificPropertyBuilder().
+                            setResourceSpecificProperty(new SpecificEndpointProperty("my-default-networkmap.pid")).build());
+            propertiesBuilder.setPropertyContainer(pcBuilder.build()).setPropertyValue(pidNameBuilder.build());
+            propertiesInResponse.add(propertiesBuilder.build());
+            epBuilder.setProperties(propertiesInResponse);
+            //propertiesBuilder.setPropertyContainer(new PropertyContainerBuilder().build()).setPropertyValue(pidName);
 
 
-                SourceBuilder srcBuilder = new SourceBuilder();
-                srcBuilder.setAddress(endpoint.getAddress());
+            /*for (TypedPropertyData property: properties) {
 
 
-                PropertyBuilder propertyBuilder = new PropertyBuilder();
-                propertyBuilder.setProperty(property.getProperty());
+            //    SourceBuilder srcBuilder = new SourceBuilder();
+            //    srcBuilder.setAddress(endpoint.getAddress());
+
+
+            //    PropertyContainerBuilder propertyBuilder = new PropertyContainerBuilder();
+            //    propertyBuilder.setProperty(property.getProperty());
 
                 PidName pidName = new PidName("PID1");
                 PidNameBuilder pidNameBuilder = new PidNameBuilder();
@@ -187,17 +200,18 @@ public class AltoEndpointPropertyProvider implements BindingAwareProvider, AutoC
 
                 EndpointPropertyBuilder epBuilder = new EndpointPropertyBuilder();
                 epBuilder.setSource(srcBuilder.build());
-                epBuilder.setProperty(propertyBuilder.build());
+                epBuilder.setProperties()
+                        setProperty(propertyBuilder.build());
                 epBuilder.setPropertyValue(pidNameBuilder.build());
 
 
                 eppist.add(epBuilder.build());
-            }
+            }*/
+            eppist.add(epBuilder.build());
         }
 
         EndpointPropertyMapBuilder endpointPropertyMapBuilder = new EndpointPropertyMapBuilder();
         endpointPropertyMapBuilder.setEndpointProperty(eppist);
-
 
         EndpointPropertymapDataBuilder endpointPropertymapDataBuilder = new EndpointPropertymapDataBuilder();
         endpointPropertymapDataBuilder.setEndpointPropertyMap(endpointPropertyMapBuilder.build());
@@ -206,8 +220,8 @@ public class AltoEndpointPropertyProvider implements BindingAwareProvider, AutoC
         endpointpropertyResponseBuilder.setEndpointpropertyData(endpointPropertymapDataBuilder.build());
 
         QueryOutputBuilder queryOutputBuilder = new QueryOutputBuilder();
-        queryOutputBuilder.setResponse(endpointpropertyResponseBuilder.build());
-        return RpcResultBuilder.<QueryOutput>success(queryOutputBuilder.build()).buildFuture();
+        queryOutputBuilder.setType(ResourceTypeEndpointproperty.class).setResponse(endpointpropertyResponseBuilder.build());
+        return RpcResultBuilder.success(queryOutputBuilder.build()).buildFuture();
     }
 
 }

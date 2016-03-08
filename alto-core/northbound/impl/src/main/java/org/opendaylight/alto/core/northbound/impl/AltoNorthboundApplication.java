@@ -17,6 +17,7 @@ public class AltoNorthboundApplication extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<Class<?>>();
         classes.add(AltoNorthbound.class);
+        classes.add(AltoNorthboundExceptionHandler.class);
         return classes;
     }
 }
