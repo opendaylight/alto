@@ -1,0 +1,17 @@
+{
+    "input": {
+        "endpointproperty-params": {
+          "endpointproperty-filter": {
+            "property-filter": [
+              {"resource-specific-property": "my-default-networkmap.pid"}
+            ],
+            "endpoint-filter": [
+              {"ipv4":"192.0.2.34"},
+              {"ipv4":"203.0.113.129"}
+            ]
+          }
+        },
+        "service-reference": "/alto-resourcepool:context[alto-resourcepool:context-id='00000000-0000-0000-0000-000000000000']/alto-resourcepool:resource[alto-resourcepool:resource-id='test-model-endpointproperty']/alto-resourcepool:context-tag[alto-resourcepool:tag='1b2fc6780d7c42979cdcf75df0da1336']",
+        "type": "alto-model-endpointproperty:resource-type-endpointproperty"
+    }
+}
