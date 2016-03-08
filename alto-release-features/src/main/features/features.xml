@@ -120,6 +120,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <configfile finalname="${configfile.directory}/alto-northbound-route-endpointcost.xml">
       mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-impl/${project.version}/xml/config
     </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-northbound-route-endpointproperty.xml">
+      mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-impl/${project.version}/xml/config
+    </configfile>
   </feature>
 
   <feature name='odl-alto-standard-resource-translator' version='${project.version}'
