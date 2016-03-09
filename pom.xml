@@ -30,12 +30,31 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <tag>HEAD</tag>
   </scm>
 
-  <modules>
-    <module>alto-core</module>
-    <module>alto-basic</module>
-    <module>alto-extensions</module>
-    <module>alto-release-features</module>
-  </modules>
+  <profiles>
+    <profile>
+      <id>minimal</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>alto-core</module>
+        <module>alto-basic</module>
+        <module>alto-extensions</module>
+        <module>alto-release-features</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>alto-test</id>
+      <modules>
+        <module>alto-core</module>
+        <module>alto-basic</module>
+        <module>alto-extensions</module>
+        <module>alto-release-features</module>
+        <module>alto-karaf</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <build>
     <pluginManagement>
