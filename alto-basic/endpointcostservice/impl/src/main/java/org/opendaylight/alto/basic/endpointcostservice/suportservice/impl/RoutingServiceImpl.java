@@ -125,10 +125,9 @@ public class RoutingServiceImpl implements RoutingService {
         } else {
             LinkNode node = new LinkNode(link);
             String srcTpId = link.getSource().getSourceTp().getValue();
-            //Long bandwidth = this.flowCapableNodeService.getAvailableBandwidth(srcTpId, meterId);
-            //log.info("createLinkNode: " + link + ":" + bandwidth);
-            //node.setAvailableBandwidth(bandwidth);
-            node.setAvailableBandwidth(123L);
+            Long bandwidth = this.flowCapableNodeService.getAvailableBandwidth(srcTpId, meterId);
+            log.info("createLinkNode: " + link + ":" + bandwidth);
+            node.setAvailableBandwidth(bandwidth);
             return node;
         }
     }
@@ -139,7 +138,6 @@ public class RoutingServiceImpl implements RoutingService {
         pathStack.add(head);
         while (!pathStack.isEmpty()) {
             LinkNode top = pathStack.remove(pathStack.size() - 1);
-            //////////////////////////
             if(top.children().size() == 0 && top.getLink().getDestination().getDestTp().equals(getLinkByHostIp(matchFields.dstIp).getSource().getSourceTp())){
                 top.setAsDestHost();
             }

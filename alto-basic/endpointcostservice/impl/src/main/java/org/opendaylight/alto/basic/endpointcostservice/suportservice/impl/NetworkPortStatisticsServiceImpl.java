@@ -54,6 +54,7 @@ public class NetworkPortStatisticsServiceImpl implements NetworkPortStatisticsSe
 
     private Map<String, nodeStatistic> nodeStatisticData = null;
     private ListenerRegistration<DataChangeListener> portListener = null;
+
     public NetworkPortStatisticsServiceImpl(DataBroker dataBroker) {
         this.logger.info("NetworkPortStatisticsServiceImpl initial.");
         this.dataBroker = dataBroker;
