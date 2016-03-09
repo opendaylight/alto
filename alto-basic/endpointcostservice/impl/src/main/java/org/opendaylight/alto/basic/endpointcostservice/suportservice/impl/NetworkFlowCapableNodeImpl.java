@@ -35,10 +35,12 @@ public class NetworkFlowCapableNodeImpl implements NetworkFlowCapableNodeService
     }
 
     @Override
-    public void addFlowCapableNode(FlowCapableNode node) {}
+    public void addFlowCapableNode(FlowCapableNode node) {//// TODO: 16-3-2
+    }
 
     @Override
-    public void deleteFlowCapableNode(FlowCapableNode node) {}
+    public void deleteFlowCapableNode(FlowCapableNode node) {//TODO: 16-3-2
+    }
 
     @Override
     public FlowCapableNode getFlowCapableNode(String nodeId) {
@@ -111,11 +113,22 @@ public class NetworkFlowCapableNodeImpl implements NetworkFlowCapableNodeService
         return getCapacity(nodeConnector, readMeter(tpId, meterId));
     }
 
-    private long getConsumedBandwidth(String tpId, boolean isHalfDuplex) {
-        long transmitted = portStatistics.getCurrentTxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND)
-                / 1000;
-        long received = portStatistics.getCurrentRxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND)
-                / 1000;
+    private Long getConsumedBandwidth(String tpId, boolean isHalfDuplex) {
+        Long transmitted,received;
+        if(portStatistics.getCurrentRxSpeed(tpId,NetworkPortStatisticsService.Metric.BITSPERSECOND) != null){
+            transmitted = portStatistics.getCurrentTxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND)
+                    / 1000;
+        }
+        else {
+            transmitted = 0L;
+        }
+        if(portStatistics.getCurrentRxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND) != null){
+            received = portStatistics.getCurrentRxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND)
+                    / 1000;
+        }
+        else {
+            received = 0L;
+        }
         if (isHalfDuplex) {
             return transmitted + received;
         } else {
@@ -130,7 +143,7 @@ public class NetworkFlowCapableNodeImpl implements NetworkFlowCapableNodeService
                 || portFeatures[NetworkServiceConstants.PORT_FEATURES.get(NetworkServiceConstants.ONE_GB_HD)];
     }
 
-    private Meter readMeter(String tpId, long meterId) {
+    private Meter readMeter(String tpId, Long meterId) {
         String nodeId = NameConverter.extractNodeId(tpId);
         try {
             return DataStoreHelper.readOperational(this.dataBroker,
@@ -144,9 +157,9 @@ public class NetworkFlowCapableNodeImpl implements NetworkFlowCapableNodeService
     }
     private Long getCapacity(FlowCapableNodeConnector nodeConnector, Meter meter) {
         if (nodeConnector == null) return null;
-        long currentSpeed = nodeConnector.getCurrentSpeed();
+        Long currentSpeed = nodeConnector.getCurrentSpeed();
         if (meter == null) return currentSpeed;
-        long bandRate = -1;
+        Long bandRate = -1L;
         for (MeterBandHeader band : meter.getMeterBandHeaders().getMeterBandHeader()) {
             if (bandRate > band.getBandRate() && bandRate < currentSpeed) {
                 bandRate = band.getBandRate();
