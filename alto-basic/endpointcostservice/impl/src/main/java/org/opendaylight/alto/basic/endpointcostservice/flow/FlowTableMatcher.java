@@ -53,14 +53,13 @@ public class FlowTableMatcher {
     public class FlowTableLookUpResult {
         public List<Uri> outputNodeConnectors = new ArrayList<Uri>();
         public boolean sendToController = false;
-        public long meterId = -1;
+        public Long meterId = -1L;
     }
 
     private void prepare(FlowCapableNode node) {
         applyActions.clear();
         pipelineActions.clear();
-        //meterId = null;
-        meterId = 123L;
+        meterId = null;
         indexTables.clear();
         indexTables = indexByTableId(node.getTable());
         indexedGroups = indexByGroupId(node.getGroup());

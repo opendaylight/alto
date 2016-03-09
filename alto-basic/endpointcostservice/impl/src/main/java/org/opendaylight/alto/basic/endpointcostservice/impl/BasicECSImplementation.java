@@ -79,11 +79,41 @@ public class BasicECSImplementation extends BaseECSImplementation{
             return null;
         }else if(costMetric.getValue().toString().equals(new String("bandwidth"))){
              log.info("bandwidth");
-//            Numerical cost = computeBandwidthECS(head);
-//            return (cost == null) ? null : cost;
-            return null;
+            Numerical cost = computeBandwidthECS(head);
+            return (cost == null) ? null : cost;
         }
         return null;
+    }
+
+    private Numerical computeBandwidthECS(LinkNode head) {
+        //// TODO: 16-3-3
+        Long result = null;
+        LinkedList<LinkNode> queue = new LinkedList<>();
+        Map<LinkNode, Long> maxBw = new HashMap<LinkNode, Long>();
+        queue.addLast(head);
+        maxBw.put(head, head.availableBandwidth());
+        while (!queue.isEmpty()) {
+            LinkNode now = queue.pop();
+            Long topBw = maxBw.get(now)==null?0L:maxBw.get(now);
+            if (now.isDestHost()) {
+                result = maxBw.get(now);
+            }
+            for (LinkNode child : now.children()) {
+                Long bw = (child.availableBandwidth() > topBw) ? child.availableBandwidth() : topBw;
+                if (maxBw.containsKey(child)) {
+                    Long currentBw = maxBw.get(child);
+                    if (bw > currentBw) {
+                        maxBw.put(child, bw);
+                        queue.addLast(child);
+                    }
+                } else {
+                    maxBw.put(child, bw);
+                    queue.addLast(child);
+                }
+            }
+        }
+        NumericalBuilder re = new NumericalBuilder();
+        return (result == null) ? null : re.setCost(new BigDecimal(-result/500)).build();
     }
 
     private boolean hasLoop(LinkNode head, Map<LinkNode, Integer> status) {
