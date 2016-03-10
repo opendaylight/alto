@@ -1,0 +1,35 @@
+module network-tracker-impl {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:spce:impl:network-tracker:impl";
+    prefix "network-tracker-impl";
+
+    import config { prefix config; revision-date 2013-04-05; }
+    import opendaylight-md-sal-binding { prefix md-sal-binding; revision-date 2013-10-28;}
+
+    description
+        "Service definition for network-tracker project";
+
+    revision "2014-12-10" {
+        description
+            "Initial revision";
+    }
+
+    identity network-tracker {
+        base config:module-type;
+        config:java-name-prefix NetworkTracker;
+    }
+
+    augment "/config:modules/config:module/config:configuration" {
+        case network-tracker {
+            when "/config:modules/config:module/config:type = 'network-tracker'";
+            container broker {
+                uses config:service-ref {
+                    refine type {
+                        mandatory true;
+                        config:required-identity md-sal-binding:binding-broker-osgi-registry;
+                    }
+                }
+            }
+        }
+    }
+}
