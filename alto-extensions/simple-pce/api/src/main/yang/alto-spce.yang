@@ -1,0 +1,92 @@
+module alto-spce {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:spce";
+    prefix "alto-spce";
+
+    import ietf-inet-types {prefix inet;}
+
+    organization "SNLab.";
+    contact "Jensen Zhang <jingxuan.zhang@gmail.com>";
+
+    revision "2015-11-06" {
+        description "Initial revision of alto-spce model. The model is based
+        on PCEP (https://tools.ietf.org/rfc/rfc5440.txt) but with simplifications.
+        A key simplification is that it does not specify whether it is re-optimization
+        or a new request. We expect the next version to fix the issue.";
+    }
+
+    typedef error-code-type {
+        type enumeration {
+            enum OK;
+            enum ERROR;
+        }
+    }
+
+    typedef alto-spce-metric {
+        type enumeration {
+            enum bandwidth;
+            enum hopcount;
+        }
+    }
+
+    rpc alto-spce-setup {
+        description "Given the endpoints, this service computes a path
+           satisfying the constraints; among those satisfying the constraints, 
+           it computes the one with the best object metrics. If a path is 
+           found, the service will setup the path by installing flow rules 
+           in FRM. This service does not handle the complexity of re-route.";
+
+        input {
+            container endpoint {
+                leaf src {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description "Source IP address";
+                }
+                leaf dst {
+                    type inet:ipv4-address;
+                    mandatory true;
+                    description "Destination IP address";
+                } 
+            }
+            leaf-list objective-metrics {
+                type alto-spce-metric;
+            }
+            list constraint-metric {
+                leaf metric {
+                    type alto-spce-metric;
+                }
+                leaf min {
+                    type uint64;
+                    description "We use min and max to allow more flexible range spec.";
+                }
+                leaf max {
+                    type uint64;
+                }
+            }
+        }
+
+        output {
+           leaf path {
+               type string;
+           }
+           leaf error-code {
+               type error-code-type;
+           }
+        }
+    }
+
+    rpc alto-spce-remove {
+        input {
+            leaf path {
+                type string;
+            }
+        }
+
+        output {
+            leaf error-code {
+                type error-code-type;
+            }
+        }
+    }
+}

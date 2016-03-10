@@ -33,6 +33,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <modules>
     <module>alto-core</module>
     <module>alto-basic</module>
+    <module>alto-extensions</module>
     <module>alto-release-features</module>
   </modules>
 
