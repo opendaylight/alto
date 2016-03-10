@@ -16,9 +16,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>fs-map</module>
-    <module>fake</module>
-    <module>cli</module>
+    <module>simple-pce</module>
   </modules>
 
 </project>

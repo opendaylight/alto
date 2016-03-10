@@ -46,6 +46,57 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-nonstandard-types</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-service-models</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-northbound-route</feature>
+    <feature version='${project.version}'>odl-alto-spce</feature>
+  </feature>
+
+  <feature name='odl-alto-spce' version='${project.version}'
+            description='OpenDaylight :: alto :: SPCE'>
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version="${openflow.plugin.version}">odl-openflowplugin-flow-services</feature>
+    <feature version="${openflow.plugin.version}">odl-openflowplugin-southbound</feature>
+
+    <bundle>mvn:org.opendaylight.l2switch.packethandler/packethandler-model/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.l2switch.packethandler/packethandler-impl/${l2switch.version}</bundle>
+    <configfile finalname="${configfile.directory}/${l2switch.packethandler.configfile}">
+      mvn:org.opendaylight.l2switch.packethandler/packethandler-config/${l2switch.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.l2switch.loopremover/loopremover-model/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.l2switch.loopremover/loopremover-impl/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.controller.thirdparty/net.sf.jung2/2.0.1</bundle>
+    <configfile finalname="${configfile.directory}/${l2switch.loopremover.configfile}">
+      mvn:org.opendaylight.l2switch.loopremover/loopremover-config/${l2switch.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.l2switch.hosttracker/hosttracker-model/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.l2switch.hosttracker/hosttracker-impl/${l2switch.version}</bundle>
+    <configfile finalname="${configfile.directory}/${l2switch.hosttracker.configfile}">
+      mvn:org.opendaylight.l2switch.hosttracker/hosttracker-config/${l2switch.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.l2switch.addresstracker/addresstracker-model/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.l2switch.arphandler/arphandler-impl/${l2switch.version}</bundle>
+    <configfile finalname="${configfile.directory}/54-alto-arphandler.xml">
+      mvn:org.opendaylight.alto.spce.network/network-tracker-config/${project.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.l2switch.addresstracker/addresstracker-impl/${l2switch.version}</bundle>
+    <configfile finalname="${configfile.directory}/${l2switch.addresstracker.configfile}">
+      mvn:org.opendaylight.l2switch.addresstracker/addresstracker-config/${l2switch.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.spce.network/network-tracker-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.spce.network/network-tracker-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/network-tracker.xml">
+      mvn:org.opendaylight.alto.spce.network/network-tracker-impl/${project.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.ext/alto-spce-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.ext/alto-spce-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-spce.xml">
+      mvn:org.opendaylight.alto.ext/alto-spce-impl/${project.version}/xml/config
+    </configfile>
   </feature>
 
   <feature name='odl-alto-standard-types' version='${project.version}'
