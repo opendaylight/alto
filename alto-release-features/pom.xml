@@ -28,6 +28,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
     <l2switch.version>0.3.1-SNAPSHOT</l2switch.version>
     <openflow.plugin.version>0.2.1-SNAPSHOT</openflow.plugin.version>
+    <l2switch.packethandler.configfile>50-packethandler.xml</l2switch.packethandler.configfile>
+    <l2switch.loopremover.configfile>52-loopremover.xml</l2switch.loopremover.configfile>
+    <l2switch.addresstracker.configfile>56-addresstracker.xml</l2switch.addresstracker.configfile>
+    <l2switch.hosttracker.configfile>57-hosttracker.xml</l2switch.hosttracker.configfile>
   </properties>
 
   <dependencyManagement>
@@ -313,11 +317,123 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <type>jar</type>
     </dependency>
     <dependency>
+      <groupId>org.opendaylight.l2switch.packethandler</groupId>
+      <artifactId>packethandler-model</artifactId>
+      <version>${l2switch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.packethandler</groupId>
+      <artifactId>packethandler-impl</artifactId>
+      <version>${l2switch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.packethandler</groupId>
+      <artifactId>packethandler-config</artifactId>
+      <version>${l2switch.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.addresstracker</groupId>
+      <artifactId>addresstracker-model</artifactId>
+      <version>${l2switch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.addresstracker</groupId>
+      <artifactId>addresstracker-config</artifactId>
+      <version>${l2switch.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.addresstracker</groupId>
+      <artifactId>addresstracker-impl</artifactId>
+      <version>${l2switch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.loopremover</groupId>
+      <artifactId>loopremover-model</artifactId>
+      <version>${l2switch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.loopremover</groupId>
+      <artifactId>loopremover-impl</artifactId>
+      <version>${l2switch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.loopremover</groupId>
+      <artifactId>loopremover-config</artifactId>
+      <version>${l2switch.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
+    </dependency>
+    <dependency>
       <groupId>org.opendaylight.l2switch.hosttracker</groupId>
       <artifactId>hosttracker-model</artifactId>
       <version>${l2switch.version}</version>
-      <type>jar</type>
     </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.hosttracker</groupId>
+      <artifactId>hosttracker-impl</artifactId>
+      <version>${l2switch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.hosttracker</groupId>
+      <artifactId>hosttracker-config</artifactId>
+      <version>${l2switch.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.l2switch.arphandler</groupId>
+      <artifactId>arphandler-impl</artifactId>
+      <version>${l2switch.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.spce.network</groupId>
+      <artifactId>network-tracker-config</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.spce.network</groupId>
+      <artifactId>network-tracker-impl</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.spce.network</groupId>
+      <artifactId>network-tracker-impl</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.spce.network</groupId>
+      <artifactId>network-tracker-api</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.ext</groupId>
+      <artifactId>alto-spce-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.ext</groupId>
+      <artifactId>alto-spce-impl</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>config</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.ext</groupId>
+      <artifactId>alto-spce-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>${project.groupId}.basic</groupId>
       <artifactId>endpointcostservice-impl</artifactId>
