@@ -14,20 +14,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.basic</groupId>
-  <artifactId>endpointcostservice-karaf</artifactId>
+  <artifactId>alto-simple-ecs-karaf</artifactId>
   <version>0.2.1-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <prerequisites>
     <maven>3.1.1</maven>
   </prerequisites>
   <properties>
-    <karaf.localFeature>odl-endpointcostservice-ui</karaf.localFeature>
+    <karaf.localFeature>odl-alto-simple-ecs-ui</karaf.localFeature>
   </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>${project.groupId}</groupId>
-        <artifactId>endpointcostservice-artifacts</artifactId>
+        <artifactId>alto-simple-ecs-artifacts</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>import</scope>
@@ -45,7 +45,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>endpointcostservice-features</artifactId>
+      <artifactId>alto-simple-ecs-features</artifactId>
       <classifier>features</classifier>
       <type>xml</type>
       <scope>runtime</scope>
