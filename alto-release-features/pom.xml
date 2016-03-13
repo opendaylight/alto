@@ -450,19 +450,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>${project.groupId}.basic</groupId>
-      <artifactId>endpointcostservice-impl</artifactId>
+      <artifactId>alto-simple-ecs-impl</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}.basic</groupId>
-      <artifactId>endpointcostservice-impl</artifactId>
+      <artifactId>alto-simple-ecs-impl</artifactId>
       <version>${project.version}</version>
       <type>xml</type>
       <classifier>config</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}.basic</groupId>
-      <artifactId>endpointcostservice-api</artifactId>
+      <artifactId>alto-simple-ecs-api</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

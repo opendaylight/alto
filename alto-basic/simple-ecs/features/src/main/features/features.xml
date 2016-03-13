@@ -7,7 +7,7 @@ This program and the accompanying materials are made available under the
 terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
-<features name="odl-endpointcostservice-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
+<features name="odl-alto-simple-ecs-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0">
   <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
@@ -22,17 +22,17 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.l2switch/features-l2switch/${l2switch.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.openflowplugin/features-openflowplugin/${openflow.plugin.version}/xml/features</repository>
 
-  <feature name='odl-endpointcostservice-api' version='${project.version}' description='OpenDaylight :: endpointcostservice :: api'>
+  <feature name='odl-alto-simple-ecs-api' version='${project.version}' description='OpenDaylight :: alto-simple-ecs :: api'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <feature version='${project.version}'>odl-alto-resourcepool-api</feature>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-base-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-endpointcost-api/${project.version}</bundle>
-    <bundle>mvn:org.opendaylight.alto.basic/endpointcostservice-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
   </feature>
-  <feature name='odl-endpointcostservice' version='${project.version}' description='OpenDaylight :: endpointcostservice'>
+  <feature name='odl-alto-simple-ecs' version='${project.version}' description='OpenDaylight :: alto-simple-ecs'>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
-    <feature version='${project.version}'>odl-endpointcostservice-api</feature>
+    <feature version='${project.version}'>odl-alto-simple-ecs-api</feature>
     <feature version='${project.version}'>odl-alto-northbound</feature>
     <feature version='${project.version}'>odl-alto-resourcepool</feature>
     <feature version='${project.version}'>odl-alto-service-model-networkmap</feature>
@@ -40,15 +40,15 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${l2switch.version}'>odl-l2switch-hosttracker</feature>
     <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
     <feature version='${openflow.plugin.version}'>odl-openflowplugin-flow-services</feature>
-    <bundle>mvn:org.opendaylight.alto.basic/endpointcostservice-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/endpointcostservice.xml">mvn:org.opendaylight.alto.basic/endpointcostservice-impl/${project.version}/xml/config</configfile>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-simple-ecs.xml">mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config</configfile>
   </feature>
-  <feature name='odl-endpointcostservice-rest' version='${project.version}' description='OpenDaylight :: endpointcostservice :: REST'>
-    <feature version="${project.version}">odl-endpointcostservice</feature>
+  <feature name='odl-alto-simple-ecs-rest' version='${project.version}' description='OpenDaylight :: alto-simple-ecs :: REST'>
+    <feature version="${project.version}">odl-alto-simple-ecs</feature>
     <feature version="${restconf.version}">odl-restconf</feature>
   </feature>
-  <feature name='odl-endpointcostservice-ui' version='${project.version}' description='OpenDaylight :: endpointcostservice :: UI'>
-    <feature version="${project.version}">odl-endpointcostservice-rest</feature>
+  <feature name='odl-alto-simple-ecs-ui' version='${project.version}' description='OpenDaylight :: alto-simple-ecs :: UI'>
+    <feature version="${project.version}">odl-alto-simple-ecs-rest</feature>
     <feature version="${restconf.version}">odl-mdsal-apidocs</feature>
     <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature version="${dlux.version}">odl-dlux-yangui</feature>
