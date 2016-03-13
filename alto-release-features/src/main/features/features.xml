@@ -219,20 +219,28 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-hosttracker' version='${project.version}'
             description='OpenDaylight :: alto :: hosttracker'>
-    <!-- TODO -->
-    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
-    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
-    <feature version='${l2switch.version}'>odl-l2switch-hosttracker</feature>
-    <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
-    <feature version='${openflow.plugin.version}'>odl-openflowplugin-flow-services</feature>
+    <conditional>
+      <condition>odl-l2switch-hosttracker</condition>
+      <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
+      <feature version='${project.version}'>odl-alto-core</feature>
 
-    <feature version='${project.version}'>odl-alto-core</feature>
+      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
+      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
+      <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
+        mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config
+      </configfile>
+    </conditional>
 
-    <bundle>mvn:org.opendaylight.alto.basic/endpointcostservice-api/${project.version}</bundle>
-    <bundle>mvn:org.opendaylight.alto.basic/endpointcostservice-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
-        mvn:org.opendaylight.alto.basic/endpointcostservice-impl/${project.version}/xml/config
-    </configfile>
+    <conditional>
+      <condition>odl-alto-spce</condition>
+      <feature version='${project.version}'>odl-alto-core</feature>
+
+      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
+      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
+      <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
+        mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config
+      </configfile>
+    </conditional>
   </feature>
 
   <feature name='odl-alto-nonstandard-types' version='${project.version}'

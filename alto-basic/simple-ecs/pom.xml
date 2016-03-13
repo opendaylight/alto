@@ -14,10 +14,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <relativePath/>
   </parent>
 
-  <groupId>org.opendaylight.alto.basic.endpointcostservice</groupId>
-  <artifactId>endpointcostservice-aggregator</artifactId>
+  <groupId>org.opendaylight.alto.basic</groupId>
+  <artifactId>alto-simple-ecs-aggregator</artifactId>
   <version>0.2.1-SNAPSHOT</version>
-  <name>endpointcostservice</name>
+  <name>alto-simple-ecs</name>
   <packaging>pom</packaging>
   <modelVersion>4.0.0</modelVersion>
   <prerequisites>
@@ -77,10 +77,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </plugins>
   </build>
 
-  <scm>
-    <connection>scm:git:ssh://git.opendaylight.org:29418/endpointcostservice.git</connection>
-    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/endpointcostservice.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://wiki.opendaylight.org/view/endpointcostservice:Main</url>
-  </scm>
 </project>
