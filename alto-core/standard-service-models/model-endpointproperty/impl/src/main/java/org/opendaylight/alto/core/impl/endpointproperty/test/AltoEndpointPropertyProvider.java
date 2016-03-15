@@ -179,34 +179,6 @@ public class AltoEndpointPropertyProvider implements BindingAwareProvider, AutoC
             propertiesBuilder.setPropertyContainer(pcBuilder.build()).setPropertyValue(pidNameBuilder.build());
             propertiesInResponse.add(propertiesBuilder.build());
             epBuilder.setProperties(propertiesInResponse);
-            //propertiesBuilder.setPropertyContainer(new PropertyContainerBuilder().build()).setPropertyValue(pidName);
-
-
-            /*for (TypedPropertyData property: properties) {
-
-
-            //    SourceBuilder srcBuilder = new SourceBuilder();
-            //    srcBuilder.setAddress(endpoint.getAddress());
-
-
-            //    PropertyContainerBuilder propertyBuilder = new PropertyContainerBuilder();
-            //    propertyBuilder.setProperty(property.getProperty());
-
-                PidName pidName = new PidName("PID1");
-                PidNameBuilder pidNameBuilder = new PidNameBuilder();
-                pidNameBuilder.setValue(pidName);
-
-
-
-                EndpointPropertyBuilder epBuilder = new EndpointPropertyBuilder();
-                epBuilder.setSource(srcBuilder.build());
-                epBuilder.setProperties()
-                        setProperty(propertyBuilder.build());
-                epBuilder.setPropertyValue(pidNameBuilder.build());
-
-
-                eppist.add(epBuilder.build());
-            }*/
             eppist.add(epBuilder.build());
         }
 

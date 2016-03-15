@@ -26,24 +26,24 @@ import org.slf4j.LoggerFactory;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class AltoEndpointcostIT extends AbstractMdsalTestBase {
-    private static final Logger LOG = LoggerFactory.getLogger(AltoEndpointcostIT.class);
+public class AltoEndpointpropertyIT extends AbstractMdsalTestBase {
+    private static final Logger LOG = LoggerFactory.getLogger(AltoEndpointpropertyIT.class);
 
     @Override
     public String getModuleName() {
-        return "alto-model-endpointcost-test";
+        return "alto-model-endpointproperty-test";
     }
 
     @Override
     public String getInstanceName() {
-        return "alto-endpointcost-test";
+        return "alto-endpointproperty-test";
     }
 
     @Override
     public MavenUrlReference getFeatureRepo() {
         return maven()
                 .groupId("org.opendaylight.alto.core")
-                .artifactId("alto-service-model-endpointcost-features")
+                .artifactId("alto-service-model-endpointproperty-features")
                 .classifier("features")
                 .type("xml")
                 .versionAsInProject();
@@ -51,20 +51,20 @@ public class AltoEndpointcostIT extends AbstractMdsalTestBase {
 
     @Override
     public String getFeatureName() {
-        return "odl-alto-service-model-endpointcost-ui";
+        return "odl-alto-service-model-endpointproperty-ui";
     }
 
     @Override
     public Option getLoggingOption() {
         Option option = editConfigurationFilePut(ORG_OPS4J_PAX_LOGGING_CFG,
-                logConfiguration(AltoEndpointcostIT.class),
+                logConfiguration(AltoEndpointpropertyIT.class),
                 LogLevel.INFO.name());
         option = composite(option, super.getLoggingOption());
         return option;
     }
 
     @Test
-    public void testendpointcostFeatureLoad() {
+    public void testendpointpropertyFeatureLoad() {
         Assert.assertTrue(true);
     }
 }
