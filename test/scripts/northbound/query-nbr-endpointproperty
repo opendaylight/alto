@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ENDPOINTPROPERTY_PATH=$1
+
+DATA=$(cat ./template/endpointproperty-filter)
+
+
+
+curl -X POST -u admin:admin -H "Content-Type: application/alto-endpointpropparams+json" -H "Accept: application/alto-endpointprop+json"\
+	-d "$DATA" -v \
+	http://localhost:8080/alto/endpointproperty/$ENDPOINTPROPERTY_PATH #lo| python -m json.tool

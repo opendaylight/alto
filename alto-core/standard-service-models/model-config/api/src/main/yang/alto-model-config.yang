@@ -1,0 +1,97 @@
+module alto-model-config {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:service:model:config";
+
+    prefix "alto-model-config";
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    import "alto-resourcepool" {
+        prefix "resourcepool";
+    }
+
+    import "alto-model-base" {
+        prefix "base";
+    }
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto config api";
+    }
+
+    identity "resource-type-config" {
+        base "resourcepool:resource-type";
+        description
+            "The resource type for config";
+    }
+
+    grouping "config-request-data" {
+        container "config-request-message" {
+            leaf "config-resource-id" {
+                type string;
+            }
+            leaf "config-resource-type" {
+                type string;
+            }
+            leaf "config-type" {
+                type enumeration {
+                    enum "get";
+                    enum "create";
+                    enum "update";
+                    enum "delete";
+                }
+            }
+            choice "config-resource-data" {
+            }
+        }
+    }
+
+    grouping "config-response-data" {
+        container "config-response-message" {
+            container "meta" {
+            }
+            container "config-response-data" {
+            }
+        }
+    }
+
+    grouping "alto-request-config" {
+        uses "base:alto-request-base" {
+            augment "request" {
+                case "config-request" {
+                    uses "config-request-data";
+                }
+            }
+        }
+    }
+
+    grouping "alto-response-config" {
+        uses "base:alto-response-error" {
+            augment "response" {
+                case "config-response" {
+                    uses "config-response-data";
+                }
+            }
+        }
+    }
+
+    rpc query {
+        input {
+            uses "alto-request-config";
+        }
+
+        output {
+            uses "alto-response-config";
+        }
+    }
+}

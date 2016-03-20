@@ -1,0 +1,103 @@
+module alto-endpointproperty-config {
+    yang-version 1;
+
+    namespace "urn:opendaylight:alto:basic:manual:maps:endpointproperty";
+
+    prefix "alto-endpointproperty-config";
+
+    import "ietf-inet-types" {
+        prefix "ietf-inet";
+    }
+
+    import "alto-basic-types" {
+        prefix "alto-types";
+    }
+
+    organization "Yale University";
+
+    contact "alto-dev@lists.opendaylight.org";
+
+    revision "2015-10-21" {
+        description "Initial revision of alto-endpointproperty-config model";
+    }
+
+    typedef typed-ipv4-address {
+        type string {
+            pattern 'ipv4:(([0-9]|[1-9][0-9]|1[0-9][0-9]|'
+                + '2[0-4][0-9]|25[0-5])\.){3}'
+                + '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])'
+                + '(%[\p{N}\p{L}]+)?';
+        }
+    }
+
+    typedef typed-ipv6-address {
+        type string {
+            pattern 'ipv6:((:|[0-9a-fA-F]{0,4}):)([0-9a-fA-F]{0,4}:){0,5}'
+                + '((([0-9a-fA-F]{0,4}:)?(:|[0-9a-fA-F]{0,4}))|'
+                + '(((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}'
+                + '(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])))'
+                + '(%[\p{N}\p{L}]+)?';
+            pattern 'ipv6:((([^:]+:){6}(([^:]+:[^:]+)|(.*\..*)))|'
+                + '((([^:]+:)*[^:]+)?::(([^:]+:)*[^:]+)?)'
+                + '(%.+)?)';
+        }
+    }
+
+    typedef typed-endpoint-address {
+        type union {
+            type typed-ipv4-address;
+            type typed-ipv6-address;
+            // EXTENSION: ADD NEW TYPE HERE.
+        }
+        description
+            "Ref: RFC7285 Sec. 10.4.1 Typed Endpoint Addresses" +
+            "= AddressType:EndpointAddr";
+    }
+
+    typedef endpoint-property-type {
+        type union {
+            type alto-types:specific-endpoint-property;
+            type alto-types:global-endpoint-property;
+        }
+        description
+            "Endpoint property type. RFC7285 Sec. 10.8.";
+    }
+
+    typedef endpoint-property-value {
+        type string;
+        description
+            "Endpoint property (value).";
+    }
+
+    grouping endpoint-property-map-data {
+        list endpoint-properties {
+            key endpoint;
+            leaf endpoint {
+                type typed-endpoint-address;
+                mandatory true;
+            }
+            list properties {
+                key property-type;
+                leaf property-type {
+                    type endpoint-property-type;
+                    mandatory true;
+                }
+                leaf property {
+                    type endpoint-property-value;
+                    mandatory true;
+                }
+            }
+        }
+    }
+
+    grouping endpoint-property-meta {
+        uses alto-types:dependent-vtags;
+    }
+
+    grouping  endpoint-property-map {
+        container "meta" {
+            uses endpoint-property-meta;
+        }
+        uses endpoint-property-map-data;
+    }
+}

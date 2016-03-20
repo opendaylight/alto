@@ -1,0 +1,89 @@
+module network-tracker {
+    yang-version 1;
+    namespace "urn:opendaylight:params:xml:ns:yang:network-tracker";
+    prefix "network-tracker";
+
+    revision "2015-11-07" {
+        description "Initial revision of network-tracker model";
+    }
+
+    rpc alto-spce-get-tx-bandwidth {
+        description "";
+
+        input {
+            leaf tp-id {
+                type string;
+            }
+        }
+
+        output {
+           leaf speed {
+               type uint64;
+           }
+        }
+    }
+
+    rpc alto-spce-get-tx-speed {
+        description "";
+
+        input {
+            leaf tp-id {
+                type string;
+            }
+        }
+
+        output {
+           leaf speed {
+               type uint64;
+           }
+        }
+    }
+
+    rpc alto-spce-get-rx-speed {
+        description "";
+
+        input {
+            leaf tp-id {
+                type string;
+            }
+        }
+
+        output {
+           leaf speed {
+               type uint64;
+           }
+        }
+    }
+
+    rpc alto-spce-get-mac-by-ip {
+        description "";
+
+        input {
+            leaf ip-address {
+                type string;
+            }
+        }
+
+        output {
+            leaf mac-address {
+                type string;
+            }
+        }
+    }
+
+    rpc alto-spce-get-ip-by-mac {
+        description "";
+
+        input {
+            leaf mac-address {
+                type string;
+            }
+        }
+
+        output {
+            leaf ip-address {
+                type string;
+            }
+        }
+    }
+}
