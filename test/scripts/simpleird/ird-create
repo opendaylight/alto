@@ -1,7 +1,11 @@
 #!/bin/bash
 
 RESOURCE_ID=$1
-CONTEXT_ID="00000000-0000-0000-0000-000000000000"
+if [ $2 ]; then
+    CONTEXT_ID=$2
+else
+    CONTEXT_ID="00000000-0000-0000-0000-000000000000"
+fi
 URL="http://localhost:8181/restconf/config/alto-simple-ird:ird-instance-configuration/"$RESOURCE_ID"/"
 
 # echo $URL

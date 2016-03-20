@@ -1,0 +1,25 @@
+{
+  "resource-cost-map": {
+    "resource-id": "$1",
+    "tag": "$2",
+    "meta": {
+      "dependent-vtags": [
+        {
+          "resource-id": "test-manual-networkmaps",
+          "tag": "455e4fcb78c3b0fb69f993d49b197f0e"
+        }
+      ]
+    },
+    "map": [
+      {
+        "src": "PID0",
+        "dst-costs": [
+          {
+            "dst": "PID1",
+            "numerical-cost-value": 2
+          }
+        ]
+      }
+    ]
+  }
+}

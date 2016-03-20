@@ -15,8 +15,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${mdsal.model.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.yangtools/features-yangtools/${yangtools.version}/xml/features</repository>
-
-  <!-- TODO add features repository for alto-core and alto-basic -->
+  <repository>mvn:org.opendaylight.l2switch/features-l2switch/${l2switch.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.openflowplugin/features-openflowplugin/${openflow.plugin.version}/xml/features</repository>
 
   <feature name='odl-alto-release' version='${project.version}'
           description='OpenDaylight :: alto :: Release'>
@@ -46,6 +46,57 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-nonstandard-types</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-service-models</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-northbound-route</feature>
+    <feature version='${project.version}'>odl-alto-spce</feature>
+  </feature>
+
+  <feature name='odl-alto-spce' version='${project.version}'
+            description='OpenDaylight :: alto :: SPCE'>
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version="${openflow.plugin.version}">odl-openflowplugin-flow-services</feature>
+    <feature version="${openflow.plugin.version}">odl-openflowplugin-southbound</feature>
+
+    <bundle>mvn:org.opendaylight.l2switch.packethandler/packethandler-model/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.l2switch.packethandler/packethandler-impl/${l2switch.version}</bundle>
+    <configfile finalname="${configfile.directory}/${l2switch.packethandler.configfile}">
+      mvn:org.opendaylight.l2switch.packethandler/packethandler-config/${l2switch.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.l2switch.loopremover/loopremover-model/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.l2switch.loopremover/loopremover-impl/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.controller.thirdparty/net.sf.jung2/2.0.1</bundle>
+    <configfile finalname="${configfile.directory}/${l2switch.loopremover.configfile}">
+      mvn:org.opendaylight.l2switch.loopremover/loopremover-config/${l2switch.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.l2switch.hosttracker/hosttracker-model/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.l2switch.hosttracker/hosttracker-impl/${l2switch.version}</bundle>
+    <configfile finalname="${configfile.directory}/${l2switch.hosttracker.configfile}">
+      mvn:org.opendaylight.l2switch.hosttracker/hosttracker-config/${l2switch.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.l2switch.addresstracker/addresstracker-model/${l2switch.version}</bundle>
+    <bundle>mvn:org.opendaylight.l2switch.arphandler/arphandler-impl/${l2switch.version}</bundle>
+    <configfile finalname="${configfile.directory}/54-alto-arphandler.xml">
+      mvn:org.opendaylight.alto.spce.network/network-tracker-config/${project.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.l2switch.addresstracker/addresstracker-impl/${l2switch.version}</bundle>
+    <configfile finalname="${configfile.directory}/${l2switch.addresstracker.configfile}">
+      mvn:org.opendaylight.l2switch.addresstracker/addresstracker-config/${l2switch.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.spce.network/network-tracker-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.spce.network/network-tracker-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/network-tracker.xml">
+      mvn:org.opendaylight.alto.spce.network/network-tracker-impl/${project.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.ext/alto-spce-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.ext/alto-spce-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-spce.xml">
+      mvn:org.opendaylight.alto.ext/alto-spce-impl/${project.version}/xml/config
+    </configfile>
   </feature>
 
   <feature name='odl-alto-standard-types' version='${project.version}'
@@ -94,10 +145,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-endpointcost-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-costmap-api/${project.version}</bundle>
-
-    <!--
-      TODO :: service models for cost map and endpoint property
-    -->
+    <bundle>mvn:org.opendaylight.alto.core/alto-service-model-endpointproperty-api/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-standard-northbound-route' version='${project.version}'
@@ -110,6 +158,24 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}</bundle>
     <configfile finalname="${configfile.directory}/alto-northbound-route-networkmap.xml">
         mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-northbound-route-costmap.xml">
+      mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-impl/${project.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-northbound-route-endpointcost.xml">
+      mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-impl/${project.version}/xml/config
+    </configfile>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-northbound-route-endpointproperty.xml">
+      mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-impl/${project.version}/xml/config
     </configfile>
   </feature>
 
@@ -136,12 +202,45 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-manual-maps' version='${project.version}'
             description='OpenDaylight :: alto :: manual-maps'>
-    <!-- TODO -->
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+
+    <feature version='${project.version}'>odl-alto-northbound</feature>
+    <feature version='${project.version}'>odl-alto-resourcepool</feature>
+    <feature version='${project.version}'>odl-alto-standard-service-models</feature>
+
+    <bundle>mvn:org.opendaylight.alto.core/alto-service-model-config-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-manual-maps.xml">
+      mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}/xml/config
+    </configfile>
   </feature>
 
   <feature name='odl-alto-hosttracker' version='${project.version}'
             description='OpenDaylight :: alto :: hosttracker'>
-    <!-- TODO -->
+    <conditional>
+      <condition>odl-l2switch-hosttracker</condition>
+      <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
+      <feature version='${project.version}'>odl-alto-core</feature>
+
+      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
+      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
+      <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
+        mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config
+      </configfile>
+    </conditional>
+
+    <conditional>
+      <condition>odl-alto-spce</condition>
+      <feature version='${project.version}'>odl-alto-core</feature>
+
+      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
+      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
+      <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
+        mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config
+      </configfile>
+    </conditional>
   </feature>
 
   <feature name='odl-alto-nonstandard-types' version='${project.version}'

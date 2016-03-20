@@ -1,0 +1,11 @@
+#!/bin/bash
+
+ENDPOINTCOST_PATH=$1
+
+DATA=$(cat ./template/endpointcost-filter)
+
+
+
+curl -X POST -u admin:admin -H "Content-Type: application/alto-endpointcostfilter+json" \
+	-d "$DATA" \
+	http://localhost:8080/alto/endpointcost/$ENDPOINTCOST_PATH | python -m json.tool
