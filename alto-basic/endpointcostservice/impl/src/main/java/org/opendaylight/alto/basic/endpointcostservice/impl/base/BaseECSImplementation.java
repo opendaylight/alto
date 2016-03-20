@@ -29,11 +29,15 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpoint
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.SourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.input.request.endpointcost.request.endpointcost.params.filter.EndpointFilterData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.EndpointCostmapDataBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.cost.Numerical;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.cost.OrdinalBuilder;
 import org.opendaylight.yangtools.yang.common.RpcError;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class BaseECSImplementation {
@@ -76,13 +80,40 @@ public abstract class BaseECSImplementation {
 
     private List<EndpointCost> buildEndpointCostMapList(List<? extends TypedAddressData> source, List<? extends TypedAddressData> destination, CostTypeData costType) {
         List<EndpointCost> ecmList = new ArrayList<EndpointCost>();
+
+        int length = source.size()*destination.size();
+        BigDecimal costArray[] = new BigDecimal[length];
+        int i=0;
+
         for (TypedAddressData src : source){
             for(TypedAddressData dst:destination){
                 Cost cost = getCost(src, dst, costType);
                 ecmList.add(buildEndpointCost(src,dst,cost));
+                if(cost != null) {
+                    costArray[i++] = ((Numerical) cost).getCost();
+                }
+                else {
+                    costArray[i++] = new BigDecimal(0);
+                }
             }
         }
-        //TODO  operate oridinal
+
+        if(costType.getCostMode().equals(new String("ordinal"))){
+            BigDecimal costArrayBackup[] = costArray.clone();
+            int ordinalArray[] = new int[length];
+            Arrays.sort(costArray);
+            for(int j=0;j<length;j++){
+                for(int p=0;p<length;p++){
+                    if(costArrayBackup[j] == costArray[p]){
+                        ordinalArray[j] = p;
+                    }
+                }
+            }
+            OrdinalBuilder or = new OrdinalBuilder();
+            for(int k=0;k<length;k++){
+                ecmList.set(k,buildEndpointCost(ecmList.get(k).getSource(),ecmList.get(k).getDestination(),or.setCost(ordinalArray[k]).build()));
+            }
+        }
         return ecmList;
     }
 
