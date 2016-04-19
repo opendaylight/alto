@@ -33,12 +33,17 @@
         <configuration>
           <instructions>
             <Import-Package>
+              com.sun.jersey.spi.container.servlet,
+              org.eclipse.jetty.servlets,
+              org.opendaylight.aaa.shiro.filters,
+              org.opendaylight.aaa.shiro.realm,
+              org.opendaylight.aaa.shiro.web.env,
+              org.apache.shiro.web.env,
               org.opendaylight.yang.gen.v1.urn.opendaylight.alto.*,
               org.opendaylight.alto.services.api.rfc7285,
               org.opendaylight.alto.commons.*,
               org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev100924,
               org.apache.commons.logging,
-              com.sun.jersey.spi.container.servlet,
               javax.ws.rs,
               javax.ws.rs.core,
               javax.ws.rs.ext,
