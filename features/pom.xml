@@ -151,6 +151,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <classifier>config</classifier>
     </dependency>
 
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-servlet</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
