@@ -11,7 +11,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.alto</groupId>
     <artifactId>alto-parent</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.2.2-Beryllium-SR2</version>
     <relativePath>../../../</relativePath>
   </parent>
 
