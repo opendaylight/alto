@@ -2,7 +2,7 @@ module alto-model-costmap {
 
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:costmap";
+    namespace "urn:alto:service:model:costmap";
 
     prefix "alto-model-costmap";
 

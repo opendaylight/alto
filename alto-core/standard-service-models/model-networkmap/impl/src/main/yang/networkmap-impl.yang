@@ -1,6 +1,6 @@
 module alto-networkmap-test-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:service:model:test:networkmap";
+    namespace "urn:alto:service:model:test:networkmap";
     prefix "alto-model-networkmap-test-impl";
 
     import config { prefix config; revision-date 2013-04-05; }

@@ -1,7 +1,7 @@
 module alto-model-endpointproperty {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:endpointproperty";
+    namespace "urn:alto:service:model:endpointproperty";
 
     prefix "alto-model-endpointproperty";
 

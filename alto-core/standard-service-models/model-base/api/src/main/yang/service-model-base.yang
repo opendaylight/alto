@@ -1,7 +1,7 @@
 module alto-model-base {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model";
+    namespace "urn:alto:service:model";
 
     prefix "alto-model-base";
 

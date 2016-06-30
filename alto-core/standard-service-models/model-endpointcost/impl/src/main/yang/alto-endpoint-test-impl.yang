@@ -1,6 +1,6 @@
 module alto-endpointcost-test-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:service:model:test:endpointcost";
+    namespace "urn:alto:service:model:test:endpointcost";
     prefix "alto-model-endpointcost-test-impl";
 
     import config { prefix config; revision-date 2013-04-05; }

@@ -7,7 +7,7 @@
  */
 package org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.endpointcostservice.impl.rev141210;
 
-import org.opendaylight.alto.basic.endpointcostservice.impl.EndpointcostserviceProvider;
+import org.opendaylight.alto.endpointcostservice.impl.EndpointcostserviceProvider;
 
 
 public class EndpointcostserviceModule extends org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.endpointcostservice.impl.rev141210.AbstractEndpointcostserviceModule {

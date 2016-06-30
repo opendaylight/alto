@@ -1,7 +1,7 @@
 module alto-resourcepool-impl {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:core:resourcepool:impl";
+    namespace "urn:alto:resourcepool:impl";
 
     prefix "alto-resourcepool-impl";
 

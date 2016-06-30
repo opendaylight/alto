@@ -2,7 +2,7 @@ module alto-model-networkmap-rfc7285 {
 
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:networkmap:rfc7285";
+    namespace "urn:alto:service:model:networkmap:rfc7285";
 
     prefix "alto-model-networkmap-rfc7285";
 

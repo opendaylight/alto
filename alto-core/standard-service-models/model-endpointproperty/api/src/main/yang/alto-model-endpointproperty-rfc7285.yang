@@ -1,7 +1,7 @@
 module alto-model-endpointproperty-rfc7285 {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:endpointproperty:rfc7285";
+    namespace "urn:alto:service:model:endpointproperty:rfc7285";
 
     prefix "alto-model-endpointproperty-rfc7285";
 

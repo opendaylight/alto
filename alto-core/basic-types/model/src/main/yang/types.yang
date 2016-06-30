@@ -1,7 +1,7 @@
 module alto-basic-types {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:core:types";
+    namespace "urn:alto:types";
 
     prefix "alto-basic-types";
 

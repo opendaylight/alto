@@ -1,7 +1,7 @@
 module alto-model-costmap-rfc7285 {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:costmap:rfc7285";
+    namespace "urn:alto:service:model:costmap:rfc7285";
 
     prefix "alto-model-costmap-rfc7285";
 

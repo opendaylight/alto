@@ -1,7 +1,7 @@
 module alto-model-endpointcost {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:endpointcost";
+    namespace "urn:alto:service:model:endpointcost";
 
     prefix "alto-model-endpointcost";
 

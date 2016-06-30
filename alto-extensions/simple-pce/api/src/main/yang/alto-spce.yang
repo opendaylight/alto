@@ -1,6 +1,6 @@
 module alto-spce {
     yang-version 1;
-    namespace "urn:opendaylight:alto:spce";
+    namespace "urn:alto:spce";
     prefix "alto-spce";
 
     import ietf-inet-types {prefix inet;}

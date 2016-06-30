@@ -2,7 +2,7 @@ module alto-model-networkmap {
 
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:networkmap";
+    namespace "urn:alto:service:model:networkmap";
 
     prefix "alto-model-networkmap";
 

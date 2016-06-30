@@ -1,7 +1,7 @@
 module alto-model-ird {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:ird";
+    namespace "urn:alto:service:model:ird";
 
     prefix "alto-model-ird";
 

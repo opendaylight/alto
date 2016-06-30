@@ -12,7 +12,7 @@ import org.opendaylight.controller.config.api.DependencyResolver;
 import org.opendaylight.controller.config.api.JmxAttribute;
 import org.opendaylight.controller.config.api.ModuleIdentifier;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
-import org.opendaylight.alto.basic.endpointcostservice.impl.EndpointcostserviceProvider;
+import org.opendaylight.alto.endpointcostservice.impl.EndpointcostserviceProvider;
 
 import javax.management.ObjectName;
 

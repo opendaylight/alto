@@ -310,7 +310,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </dependency>
     <dependency>
       <groupId>org.opendaylight.openflowplugin</groupId>
-      <artifactId>features-openflowplugin</artifactId>
+      <artifactId>features-openflowplugin-li</artifactId>
       <classifier>features</classifier>
       <version>${openflow.plugin.version}</version>
       <type>xml</type>

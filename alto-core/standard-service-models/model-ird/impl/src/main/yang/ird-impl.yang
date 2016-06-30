@@ -1,6 +1,6 @@
 module alto-ird-test-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:service:model:test:ird";
+    namespace "urn:alto:service:model:test:ird";
     prefix "alto-model-ird-test-impl";
 
     import config { prefix config; revision-date 2013-04-05; }

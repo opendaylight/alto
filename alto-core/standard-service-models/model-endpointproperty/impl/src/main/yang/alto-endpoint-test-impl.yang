@@ -1,6 +1,6 @@
 module alto-endpointproperty-test-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:service:model:test:endpointproperty";
+    namespace "urn:alto:service:model:test:endpointproperty";
     prefix "alto-model-endpointproperty-test-impl";
 
     import config { prefix config; revision-date 2013-04-05; }

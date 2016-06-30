@@ -1,6 +1,6 @@
 module alto-config-test-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:service:model:test:config";
+    namespace "urn:alto:service:model:test:config";
     prefix "alto-model-config-test-impl";
 
     import config { prefix config; revision-date 2013-04-05; }

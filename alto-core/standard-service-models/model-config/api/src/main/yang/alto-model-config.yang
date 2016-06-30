@@ -1,7 +1,7 @@
 module alto-model-config {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:service:model:config";
+    namespace "urn:alto:service:model:config";
 
     prefix "alto-model-config";
 

@@ -1,7 +1,7 @@
 module alto-nbr-endpointcost {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:core:northbound:route:endpointcost";
+    namespace "urn:alto:northbound:route:endpointcost";
 
     prefix "alto-nbr-endpointcost";
 

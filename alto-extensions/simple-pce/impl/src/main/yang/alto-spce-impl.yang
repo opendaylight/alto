@@ -1,6 +1,6 @@
 module alto-spce-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:spce:impl";
+    namespace "urn:alto:spce:impl";
     prefix "alto-spce-impl";
 
     import config { prefix config; revision-date 2013-04-05; }

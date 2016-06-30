@@ -1,6 +1,6 @@
 module alto-costmap-test-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:service:model:test:costmap";
+    namespace "urn:alto:service:model:test:costmap";
     prefix "alto-model-costmap-test-impl";
 
     import config { prefix config; revision-date 2013-04-05; }
