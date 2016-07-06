@@ -1,0 +1,9 @@
+Code-Review+1: Vratko Polák <vrpolak@cisco.com>
+Verified+1: jenkins-releng <jenkins-releng@opendaylight.org>
+Code-Review+1: Thanh Ha <thanh.ha@linuxfoundation.org>
+Code-Review+2: Xin Wang <13xinwang@tongji.edu.cn>
+Submitted-by: Xin Wang <13xinwang@tongji.edu.cn>
+Submitted-at: Wed, 06 Jul 2016 14:14:09 +0000
+Reviewed-on: https://git.opendaylight.org/gerrit/41285
+Project: alto
+Branch: refs/heads/master
