@@ -12,8 +12,10 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RpcRegistration;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceService;
+/*import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceService;*/
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.AltoSpceService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.service.rev130819.SalFlowService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.meter.service.rev130918.SalMeterService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.network.tracker.rev151107.NetworkTrackerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +29,10 @@ public class AltoSpceProvider implements BindingAwareProvider, AutoCloseable {
     public void onSessionInitiated(ProviderContext session) {
         LOG.info("AltoSpceProvider Session Initiated!");
         SalFlowService salFlowService = session.getRpcService(SalFlowService.class);
+        SalMeterService salMeterServer = session.getRpcService(SalMeterService.class);
         NetworkTrackerService networkTrackerService = session.getRpcService(NetworkTrackerService.class);
         DataBroker dataBroker = session.getSALService(DataBroker.class);
-        altoSpceService = session.addRpcImplementation(AltoSpceService.class, new AltoSpceImpl(salFlowService, networkTrackerService, dataBroker));
+        altoSpceService = session.addRpcImplementation(AltoSpceService.class, new AltoSpceImpl(salMeterServer,networkTrackerService, dataBroker));
     }
 
     @Override

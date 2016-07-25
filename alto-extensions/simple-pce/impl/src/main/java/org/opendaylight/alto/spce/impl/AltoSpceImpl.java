@@ -8,57 +8,39 @@
 
 package org.opendaylight.alto.spce.impl;
 
-import com.google.common.base.Optional;
 import org.opendaylight.alto.spce.impl.algorithm.PathComputation;
 import org.opendaylight.alto.spce.impl.util.FlowManager;
 import org.opendaylight.alto.spce.impl.util.InventoryReader;
+import org.opendaylight.alto.spce.impl.util.MeterManager;
+import org.opendaylight.alto.spce.impl.util.RouteManager;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.MacAddress;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceMetric;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceRemoveInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceRemoveOutput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceRemoveOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceSetupInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceSetupOutput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.AltoSpceSetupOutputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.ErrorCodeType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.alto.spce.setup.input.ConstraintMetric;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.alto.spce.setup.input.ConstraintMetricBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev151106.alto.spce.setup.input.Endpoint;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.service.rev130819.RemoveFlowInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.service.rev130819.SalFlowService;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.flow.Match;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.types.rev131026.flow.MatchBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeConnectorId;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeConnectorRef;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeId;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.NodeRef;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.Nodes;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.node.NodeConnector;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.node.NodeConnectorKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.Node;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.inventory.rev130819.nodes.NodeKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.l2.types.rev130827.EtherType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.model.match.types.rev131026.ethernet.match.fields.EthernetDestinationBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.model.match.types.rev131026.ethernet.match.fields.EthernetSourceBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.model.match.types.rev131026.ethernet.match.fields.EthernetTypeBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.model.match.types.rev131026.match.EthernetMatchBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.model.match.types.rev131026.match.layer._3.match.Ipv4MatchBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.network.tracker.rev151107.AltoSpceGetMacByIpInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.network.tracker.rev151107.AltoSpceGetMacByIpInputBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.network.tracker.rev151107.AltoSpceGetMacByIpOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.AltoSpceMetric;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.AltoSpceService;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.ErrorCodeType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.FlowType;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.GetRouteInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.GetRouteOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.GetRouteOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.RemoveRateLimitingInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.RemoveRateLimitingOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.RemoveRateLimitingOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.RemoveRouteInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.RemoveRouteOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.RemoveRouteOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.SetupRouteInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.SetupRouteOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.SetupRouteOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.UpdateRateLimitingInput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.UpdateRateLimitingOutput;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.UpdateRateLimitingOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.endpoints.group.Endpoints;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.endpoints.group.EndpointsBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.setup.route.input.ConstraintMetric;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.setup.route.input.ConstraintMetricBuilder;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.meter.service.rev130918.SalMeterService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.params.xml.ns.yang.network.tracker.rev151107.NetworkTrackerService;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TpId;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
-import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.TopologyKey;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
@@ -67,57 +49,25 @@ import org.slf4j.LoggerFactory;
 import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class AltoSpceImpl implements AltoSpceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(FlowManager.class);
-    private SalFlowService salFlowService;
-    private NetworkTrackerService networkTrackerService;
-    private DataBroker dataBroker;
     private FlowManager flowManager;
+    private MeterManager meterManager;
     private InventoryReader inventoryReader;
     private PathComputation pathComputation;
+    private RouteManager routeManager;
 
-    public AltoSpceImpl(SalFlowService salFlowService,
+    public AltoSpceImpl(SalMeterService salMeterService,
                         NetworkTrackerService networkTrackerService,
                         DataBroker dataBroker) {
-        this.salFlowService = salFlowService;
-        this.networkTrackerService = networkTrackerService;
-        this.dataBroker = dataBroker;
-        this.flowManager = new FlowManager(salFlowService);
+        this.meterManager = new MeterManager(salMeterService, dataBroker);
+        this.flowManager = new FlowManager(dataBroker);
         this.inventoryReader = new InventoryReader(dataBroker);
         this.pathComputation = new PathComputation(networkTrackerService);
-    }
-
-    public Future<RpcResult<AltoSpceRemoveOutput>> altoSpceRemove(AltoSpceRemoveInput input) {
-        String path = input.getPath();
-        ErrorCodeType errorCode = removePath(path);
-
-        AltoSpceRemoveOutput output = new AltoSpceRemoveOutputBuilder()
-                .setErrorCode(errorCode)
-                .build();
-        return RpcResultBuilder.success(output).buildFuture();
-    }
-
-    public Future<RpcResult<AltoSpceSetupOutput>> altoSpceSetup(AltoSpceSetupInput input) {
-        Endpoint endpoint = input.getEndpoint();
-        List<AltoSpceMetric> altoSpceMetrics = input.getObjectiveMetrics();
-        List<ConstraintMetric> constraintMetrics = compressConstraint(input.getConstraintMetric());
-        List<TpId> path = null;
-        ErrorCodeType errorCode = ErrorCodeType.ERROR;
-
-        if (constraintMetrics != null) {
-            path = computePath(endpoint, altoSpceMetrics, constraintMetrics);
-            errorCode = setupPath(endpoint, path);
-        }
-
-        AltoSpceSetupOutput output = new AltoSpceSetupOutputBuilder()
-                .setPath(pathToString(endpoint, path))
-                .setErrorCode(errorCode)
-                .build();
-        return RpcResultBuilder.success(output).buildFuture();
+        this.routeManager = new RouteManager(pathComputation, inventoryReader, networkTrackerService, flowManager, meterManager, dataBroker);
     }
 
     private List<ConstraintMetric> compressConstraint(List<ConstraintMetric> constraintMetrics) {
@@ -156,163 +106,7 @@ public class AltoSpceImpl implements AltoSpceService {
         return compressedConstraintMetrics;
     }
 
-    private Match parseMacMatch(String path) {
-        String[] tpList = path.split("\\|");
-        MacAddress srcEth = ipToMac(new Ipv4Address(tpList[0]));
-        MacAddress dstEth = ipToMac(new Ipv4Address(tpList[tpList.length - 1]));
-        if (srcEth == null | dstEth == null) {
-            return null;
-        }
-        return new MatchBuilder()
-                .setEthernetMatch(new EthernetMatchBuilder()
-                        .setEthernetSource(new EthernetSourceBuilder()
-                                .setAddress(srcEth)
-                                .build())
-                        .setEthernetDestination(new EthernetDestinationBuilder()
-                                .setAddress(dstEth)
-                                .build())
-                        .build())
-                .build();
-    }
-
-    private Match parseIpMatch(String path) {
-        String[] tpList = path.split("\\|");
-        Ipv4Prefix srcIp = new Ipv4Prefix(tpList[0] + "/32");
-        Ipv4Prefix dstIp = new Ipv4Prefix(tpList[tpList.length - 1] + "/32");
-        if (srcIp == null | dstIp == null) {
-            return null;
-        }
-        return new MatchBuilder()
-                .setLayer3Match(new Ipv4MatchBuilder()
-                        .setIpv4Source(srcIp)
-                        .setIpv4Destination(dstIp)
-                        .build())
-                .setEthernetMatch(new EthernetMatchBuilder()
-                        .setEthernetType(new EthernetTypeBuilder()
-                                .setType(new EtherType(0x0800L))
-                                .build())
-                        .build())
-                .build();
-    }
-
-    private List<TpId> parseTpIds(String path) {
-        List<TpId> tpIds = new LinkedList<>();
-        String[] tpList = path.split("\\|");
-        for (int i = 1; i < tpList.length -1; i++) {
-            tpIds.add(new TpId(tpList[i]));
-        }
-        return tpIds;
-    }
-
-    private ErrorCodeType removePath(String path) {
-        List<TpId> tpIds = parseTpIds(path);
-        Match macMatch = parseMacMatch(path);
-        Match ipMatch = parseIpMatch(path);
-        if (macMatch == null | ipMatch == null) {
-            return ErrorCodeType.ERROR;
-        }
-        try {
-            for (TpId tpId : tpIds) {
-                NodeRef nodeRef =
-                        new NodeRef(InstanceIdentifier.builder(Nodes.class)
-                                .child(Node.class, new NodeKey(
-                                        new NodeId(tpId.getValue().substring(0, tpId.getValue().lastIndexOf(":")))))
-                                .build());
-                this.salFlowService.removeFlow(new RemoveFlowInputBuilder()
-                        .setMatch(macMatch)
-                        .setNode(nodeRef)
-                        .setTransactionUri(tpId)
-                        .build()
-                );
-                this.salFlowService.removeFlow(new RemoveFlowInputBuilder()
-                        .setMatch(ipMatch)
-                        .setNode(nodeRef)
-                        .build()
-                );
-            }
-        } catch (Exception e) {
-            LOG.info("Exception occurs when remove a path: " + e.getMessage());
-            return ErrorCodeType.ERROR;
-        }
-        return ErrorCodeType.OK;
-    }
-
-    private List<TpId> computePath(Endpoint endpoint,
-                               List<AltoSpceMetric> altoSpceMetrics,
-                               List<ConstraintMetric> constraintMetrics) {
-        List<TpId> path = null;
-        TpId srcTpId = getAttachTp(endpoint.getSrc());
-        TpId dstTpId = getAttachTp(endpoint.getDst());
-        Topology topology = getTopology();
-
-        try {
-            if (altoSpceMetrics.get(0) == AltoSpceMetric.Bandwidth) {
-                path = pathComputation.maxBandwidthPath(srcTpId, dstTpId, topology, constraintMetrics);
-            } else if (altoSpceMetrics.get(0) == AltoSpceMetric.Hopcount) {
-                path = pathComputation.shortestPath(srcTpId, dstTpId, topology, constraintMetrics);
-            }
-        } catch (Exception e) {
-            LOG.info("Exception occurs when compute path: " + e.getMessage());
-        }
-
-        return path;
-    }
-
-    private TpId getAttachTp(Ipv4Address src) {
-        return this.inventoryReader.getNodeConnectorByMac(ipToMac(src));
-    }
-
-    private MacAddress ipToMac(Ipv4Address src) {
-        MacAddress mac = null;
-        AltoSpceGetMacByIpInput input = new AltoSpceGetMacByIpInputBuilder()
-                .setIpAddress(src.getValue())
-                .build();
-        Future<RpcResult<AltoSpceGetMacByIpOutput>> result = this.networkTrackerService.altoSpceGetMacByIp(input);
-        try {
-            AltoSpceGetMacByIpOutput output = result.get().getResult();
-            mac = new MacAddress(output.getMacAddress());
-        } catch (InterruptedException | ExecutionException e) {
-            LOG.info("Exception occurs when convert ip to mac: " + e.getMessage());
-        }
-        return mac;
-    }
-
-    private ErrorCodeType setupPath(Endpoint endpoint, List<TpId> path) {
-        if (path == null) {
-            LOG.info("Setup Error: path is null.");
-            return ErrorCodeType.ERROR;
-        }
-
-        try {
-            Ipv4Address srcIp = endpoint.getSrc();
-            Ipv4Address dstIp = endpoint.getDst();
-            MacAddress srcMac = ipToMac(srcIp);
-            MacAddress dstMac = ipToMac(dstIp);
-            List<NodeConnectorRef> nodeConnectorRefs = new LinkedList<>();
-            for (TpId tpid : path) {
-                String nc_value = tpid.getValue();
-                InstanceIdentifier<NodeConnector> ncid = InstanceIdentifier.builder(Nodes.class)
-                        .child(
-                                Node.class,
-                                new NodeKey(new NodeId(nc_value.substring(0, nc_value.lastIndexOf(':')))))
-                        .child(
-                                NodeConnector.class,
-                                new NodeConnectorKey(new NodeConnectorId(nc_value)))
-                        .build();
-                nodeConnectorRefs.add(new NodeConnectorRef(ncid));
-            }
-            LOG.info("Setup a path: srcIp=" + srcIp.getValue() + ", dstIp=" + dstIp.getValue());
-            LOG.info("Setup a path: srcMac=" + srcMac.getValue() + ", dstMac=" + dstMac.getValue());
-            this.flowManager.addFlowByPath(srcIp, dstIp, nodeConnectorRefs);
-            this.flowManager.addFlowByPath(srcMac, dstMac, nodeConnectorRefs);
-        } catch (Exception e) {
-            LOG.info("Exception occurs when setup a path: " + e.getMessage());
-            return ErrorCodeType.ERROR;
-        }
-        return ErrorCodeType.OK;
-    }
-
-    private String pathToString(Endpoint endpoint, List<TpId> path) {
+    private String showRoute(Endpoints endpoint, List<TpId> path) {
         String pathString = endpoint.getSrc().getValue();
         if (path != null) {
             for (TpId tpId : path) {
@@ -323,22 +117,103 @@ public class AltoSpceImpl implements AltoSpceService {
         return pathString;
     }
 
-    private Topology getTopology() {
-        try {
-            ReadOnlyTransaction readTx = this.dataBroker.newReadOnlyTransaction();
-
-            InstanceIdentifier<Topology> topologyInstanceIdentifier = InstanceIdentifier
-                    .builder(NetworkTopology.class)
-                    .child(Topology.class, new TopologyKey(new TopologyId("flow:1")))
-                    .build();
-
-            Optional<Topology> dataFuture = readTx.read(LogicalDatastoreType.OPERATIONAL,
-                    topologyInstanceIdentifier).get();
-
-            return dataFuture.get();
-        } catch (Exception e) {
-            LOG.info("Exception occurs when get topology: " + e.getMessage());
+    @Override
+    public Future<RpcResult<UpdateRateLimitingOutput>> updateRateLimiting(UpdateRateLimitingInput input) {
+        ErrorCodeType errorCodeType = this.routeManager.updateRateLimiting(input.getEndpoints(), input.getLimitedRate(), input.getBurstSize());
+        UpdateRateLimitingOutputBuilder builder = new UpdateRateLimitingOutputBuilder().setErrorCode(errorCodeType);
+        if (errorCodeType==ErrorCodeType.OK) {
+            builder.setRoute(showRoute(input.getEndpoints(),this.routeManager.getRoute(input.getEndpoints())));
         }
-        return null;
+        return RpcResultBuilder.success(builder.build()).buildFuture();
+    }
+
+    @Override
+    public Future<RpcResult<RemoveRateLimitingOutput>> removeRateLimiting(RemoveRateLimitingInput input) {
+        ErrorCodeType errorCodeType = this.routeManager.removeRateLimiting(input.getEndpoints());
+        RemoveRateLimitingOutputBuilder builder = new RemoveRateLimitingOutputBuilder().setErrorCode(errorCodeType);
+        if (errorCodeType==ErrorCodeType.OK) {
+            builder.setRoute(showRoute(input.getEndpoints(),this.routeManager.getRoute(input.getEndpoints())));
+        }
+        return RpcResultBuilder.success(builder.build()).buildFuture();
+    }
+
+    @Override
+    public Future<RpcResult<RemoveRouteOutput>> removeRoute(RemoveRouteInput input) {
+        String route = input.getRoute();
+        String src = route.substring(0, route.indexOf('|'));
+        String dst = route.substring(route.lastIndexOf('|')+1);
+        Endpoints endpoints = new EndpointsBuilder()
+                .setSrc(new Ipv4Address(src))
+                .setDst(new Ipv4Address(dst))
+                .build();
+
+        ErrorCodeType errorCodeType = this.routeManager.removeRoute(endpoints);
+
+        RemoveRouteOutputBuilder outputBuilder = new RemoveRouteOutputBuilder();
+        outputBuilder.setErrorCode(errorCodeType);
+        return RpcResultBuilder.success(outputBuilder.build()).buildFuture();
+    }
+
+    @Override
+    public Future<RpcResult<SetupRouteOutput>> setupRoute(SetupRouteInput input) {
+        if (null == input.getFlowLayer() || null == input.getEndpoints()) {
+            SetupRouteOutputBuilder outputBuilder = new SetupRouteOutputBuilder();
+            outputBuilder.setErrorCode(ErrorCodeType.INVALIDINPUT);
+            return RpcResultBuilder.success(outputBuilder.build()).buildFuture();
+        }
+
+        Endpoints endpoints = input.getEndpoints();
+        Integer burstSize =  input.getBurstSize();
+        Integer limitedRate = input.getLimitedRate();
+        FlowType flowLayer = input.getFlowLayer();
+        List<AltoSpceMetric> altoSpceMetrics = input.getObjectiveMetrics();
+        List<ConstraintMetric> constraintMetrics = compressConstraint(input.getConstraintMetric());
+
+        List<TpId> route;
+        ErrorCodeType errorCode;
+
+        route = this.routeManager.computeRoute(endpoints, altoSpceMetrics, constraintMetrics);
+
+        if (route == null) {
+            errorCode = ErrorCodeType.COMPUTINGROUTEERROR;
+            SetupRouteOutput output = new SetupRouteOutputBuilder()
+                    .setErrorCode(errorCode).build();
+            return RpcResultBuilder.success(output).buildFuture();
+        }
+
+        if (burstSize == null || limitedRate == null || burstSize.intValue() < 0 || limitedRate.intValue() < 0) {
+            errorCode = this.routeManager.setupRoute(endpoints, route, flowLayer, -1, -1);
+        } else {
+            errorCode = this.routeManager.setupRoute(endpoints, route, flowLayer, limitedRate, burstSize);
+        }
+
+        if (errorCode != ErrorCodeType.OK) {
+            SetupRouteOutput output = new SetupRouteOutputBuilder()
+                    .setErrorCode(errorCode).build();
+            return RpcResultBuilder.success(output).buildFuture();
+        } else {
+            SetupRouteOutput output = new SetupRouteOutputBuilder()
+                    .setRoute(showRoute(endpoints, route))
+                    .setErrorCode(errorCode)
+                    .build();
+            return RpcResultBuilder.success(output).buildFuture();
+        }
+    }
+
+    @Override
+    public Future<RpcResult<GetRouteOutput>> getRoute(GetRouteInput input) {
+        GetRouteOutputBuilder builder = new GetRouteOutputBuilder();
+        if (null == input || null == input.getEndpoints()) {
+            builder.setErrorCode(ErrorCodeType.INVALIDINPUT);
+        } else {
+            builder.setErrorCode(ErrorCodeType.OK);
+            List<TpId> route = this.routeManager.getRoute(input.getEndpoints());
+            if (null == route) {
+                builder.setRoute("ROUTE_HAVE_NOT_BEEN_SET_UP");
+            } else {
+                builder.setRoute(showRoute(input.getEndpoints(), route));
+            }
+        }
+        return RpcResultBuilder.success(builder.build()).buildFuture();
     }
 }
