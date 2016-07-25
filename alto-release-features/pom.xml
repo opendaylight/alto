@@ -28,6 +28,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
     <l2switch.version>0.4.0-SNAPSHOT</l2switch.version>
     <openflow.plugin.version>0.3.0-SNAPSHOT</openflow.plugin.version>
+    <alto.spce.version>0.4.0-SNAPSHOT</alto.spce.version>
   </properties>
 
   <dependencyManagement>
@@ -329,20 +330,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <dependency>
       <groupId>org.opendaylight.alto.spce.network</groupId>
       <artifactId>network-tracker-config</artifactId>
-      <version>${project.version}</version>
+      <version>${alto.spce.version}</version>
       <type>xml</type>
       <classifier>config</classifier>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.alto.spce.network</groupId>
       <artifactId>network-tracker-impl</artifactId>
-      <version>${project.version}</version>
+      <version>${alto.spce.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.alto.spce.network</groupId>
       <artifactId>network-tracker-impl</artifactId>
-      <version>${project.version}</version>
+      <version>${alto.spce.version}</version>
       <type>xml</type>
       <classifier>config</classifier>
       <scope>runtime</scope>
@@ -350,25 +351,25 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <dependency>
       <groupId>org.opendaylight.alto.spce.network</groupId>
       <artifactId>network-tracker-api</artifactId>
-      <version>${project.version}</version>
+      <version>${alto.spce.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.alto.ext</groupId>
       <artifactId>alto-spce-impl</artifactId>
-      <version>${project.version}</version>
+      <version>${alto.spce.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.alto.ext</groupId>
       <artifactId>alto-spce-impl</artifactId>
-      <version>${project.version}</version>
+      <version>${alto.spce.version}</version>
       <type>xml</type>
       <classifier>config</classifier>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.alto.ext</groupId>
       <artifactId>alto-spce-api</artifactId>
-      <version>${project.version}</version>
+      <version>${alto.spce.version}</version>
     </dependency>
 
     <dependency>
