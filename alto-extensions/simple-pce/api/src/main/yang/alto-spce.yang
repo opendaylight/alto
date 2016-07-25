@@ -4,21 +4,37 @@ module alto-spce {
     prefix "alto-spce";
 
     import ietf-inet-types {prefix inet;}
+    import ietf-yang-types {prefix yang;}
 
     organization "SNLab.";
-    contact "Jensen Zhang <jingxuan.zhang@gmail.com>";
+    contact "Jensen Zhang <jingxuan.zhang@gmail.com>,
+             Shawn Lin <x.shawn.lin@gmail.com>";
 
-    revision "2015-11-06" {
-        description "Initial revision of alto-spce model. The model is based
+    revision "2016-07-18" {
+        description "The second revision of alto-spce model. The model is based
         on PCEP (https://tools.ietf.org/rfc/rfc5440.txt) but with simplifications.
-        A key simplification is that it does not specify whether it is re-optimization
-        or a new request. We expect the next version to fix the issue.";
+        And we extend it with end to end rate limiting, and getting the network state.";
+    }
+
+    typedef flow-type {
+        type enumeration {
+            enum L2;
+            enum L3;
+        }
     }
 
     typedef error-code-type {
         type enumeration {
             enum OK;
-            enum ERROR;
+            enum COMPUTING_ROUTE_ERROR;
+            enum SETTING_UP_ROUTE_ERROR;
+            enum SETTING_UP_METER_ERROR;
+            enum UNDEFINED_ERROR;
+            enum REMOVING_ROUTE_ERROR;
+            enum REMOVING_METTER_ERROR;
+            enum MISSING_ROUTE_ERROR;
+            enum UPDATING_RATE_LIMITING_ERROR;
+            enum INVALID_INPUT;
         }
     }
 
@@ -29,29 +45,49 @@ module alto-spce {
         }
     }
 
-    rpc alto-spce-setup {
-        description "Given the endpoints, this service computes a path
+    grouping endpoints-group {
+        container endpoints {
+            leaf src {
+                type inet:ipv4-address;
+                mandatory true;
+                description "Source IP address";
+            }
+            leaf dst {
+                type inet:ipv4-address;
+                mandatory true;
+                description "Destination IP address";
+            }
+        }
+    }
+
+    rpc setup-route {
+        description "Given the endpoints, this service computes a route
            satisfying the constraints; among those satisfying the constraints, 
-           it computes the one with the best object metrics. If a path is 
-           found, the service will setup the path by installing flow rules 
+           it computes the one with the best object metrics. If a route is
+           found, the service will setup the route by installing flow rules
            in FRM. This service does not handle the complexity of re-route.";
 
         input {
-            container endpoint {
-                leaf src {
-                    type inet:ipv4-address;
-                    mandatory true;
-                    description "Source IP address";
-                }
-                leaf dst {
-                    type inet:ipv4-address;
-                    mandatory true;
-                    description "Destination IP address";
-                } 
+            uses endpoints-group;
+
+            leaf limited-rate {
+                description "The metric is kbps.";
+                type int32;
             }
+
+            leaf burst-size {
+                description "The metric is kb. The smaller value means rate limiting is more fine grain";
+                type int32;
+            }
+
+            leaf flow-layer {
+                type flow-type;
+            }
+
             leaf-list objective-metrics {
                 type alto-spce-metric;
             }
+
             list constraint-metric {
                 leaf metric {
                     type alto-spce-metric;
@@ -64,21 +100,24 @@ module alto-spce {
                     type uint64;
                 }
             }
+
+
         }
 
         output {
-           leaf path {
-               type string;
-           }
-           leaf error-code {
-               type error-code-type;
-           }
+            leaf route {
+                type string;
+            }
+
+            leaf error-code {
+                type error-code-type;
+            }
         }
     }
 
-    rpc alto-spce-remove {
+    rpc remove-route {
         input {
-            leaf path {
+            leaf route {
                 type string;
             }
         }
@@ -89,4 +128,69 @@ module alto-spce {
             }
         }
     }
+
+    rpc get-route {
+        input {
+            uses endpoints-group;
+        }
+        output {
+            leaf route {
+                type string;
+            }
+            leaf error-code {
+                type error-code-type;
+            }
+        }
+    }
+
+    rpc update-rate-limiting {
+        description "Given the route (source IP and destination IP are all included), and the value of the rate limiting,
+            this service will set the meter with the rate limiting value, and update every related
+            flow entries in switches along this route.";
+
+        input {
+            uses endpoints-group;
+
+            leaf limited-rate {
+                description "The metric is kbps.";
+                type int32;
+            }
+
+            leaf burst-size {
+                description "The metric is kb. The smaller value means rate limiting is more fine grain";
+                type int32;
+            }
+        }
+
+        output {
+            leaf route {
+                type string;
+            }
+
+            leaf error-code {
+                type error-code-type;
+            }
+        }
+    }
+
+    rpc remove-rate-limiting {
+        input {
+            uses endpoints-group;
+
+            leaf route {
+                type string;
+            }
+        }
+
+        output {
+            leaf route {
+                type string;
+            }
+            leaf error-code {
+                type error-code-type;
+            }
+
+        }
+    }
+
 }

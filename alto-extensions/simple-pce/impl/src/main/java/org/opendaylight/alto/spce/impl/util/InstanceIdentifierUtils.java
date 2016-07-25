@@ -9,6 +9,8 @@
 package org.opendaylight.alto.spce.impl.util;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.inventory.rev130819.FlowCapableNode;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.inventory.rev130819.meters.Meter;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.inventory.rev130819.meters.MeterKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.inventory.rev130819.tables.Table;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.inventory.rev130819.tables.TableKey;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.inventory.rev130819.tables.table.Flow;
@@ -53,5 +55,13 @@ public final class InstanceIdentifierUtils {
                                                                           final TableKey flowTableKey,
                                                                           final FlowKey flowKey) {
         return generateFlowTableInstanceIdentifier(nodeConnectorRef, flowTableKey).child(Flow.class, flowKey);
+    }
+
+    public static InstanceIdentifier<Meter> generateMeterInstanceIdentifier(final NodeConnectorRef nodeConnectorRef,
+                                                                            final MeterKey meterKey) {
+        return generateNodeInstanceIdentifier(nodeConnectorRef).builder()
+                .augmentation(FlowCapableNode.class)
+                .child(Meter.class, meterKey)
+                .build();
     }
 }
