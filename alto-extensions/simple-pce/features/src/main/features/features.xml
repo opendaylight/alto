@@ -38,9 +38,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version="${l2switch.version}">odl-l2switch-switch</feature>
     <!-- odl-l2switch-arphandler uses blueprint now, but we still attempt to write data to
     the config subsystem in order to set is-proactive-flood-mode to false. -->
-    <configfile finalname="${configfile.directory}/54-alto-arphandler.xml">
-      mvn:org.opendaylight.alto.spce.network/network-tracker-config/${project.version}/xml/config
-    </configfile>
+<!--    <configfile finalname="${configfile.directory}/54-alto-arphandler.xml">
+      mvn:org.opendaylight.alto.spce.network/network-tracker-config/0.4.0-SNAPSHOT/xml/config
+    </configfile>-->
   </feature>
 
   <feature name='odl-network-tracker-rest' version='${project.version}' description='OpenDaylight :: network-tracker :: REST'>
@@ -57,7 +57,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-spce-api' version='${project.version}' description='OpenDaylight :: alto-spce :: api'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
-    <bundle>mvn:org.opendaylight.alto/alto-spce-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.ext/alto-spce-api/${project.version}</bundle>
   </feature>
   <feature name='odl-alto-spce' version='${project.version}' description='OpenDaylight :: alto-spce'>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
@@ -65,8 +65,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${openflow.plugin.version}'>odl-openflowplugin-flow-services</feature>
     <feature version='${project.version}'>odl-alto-spce-api</feature>
     <feature version='${project.version}'>odl-network-tracker</feature>
-    <bundle>mvn:org.opendaylight.alto/alto-spce-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-spce.xml">mvn:org.opendaylight.alto/alto-spce-impl/${project.version}/xml/config</configfile>
+    <bundle>mvn:org.opendaylight.alto.ext/alto-spce-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-spce.xml">mvn:org.opendaylight.alto.ext/alto-spce-impl/${project.version}/xml/config</configfile>
   </feature>
   <feature name='odl-alto-spce-rest' version='${project.version}' description='OpenDaylight :: alto-spce :: REST'>
     <feature version="${project.version}">odl-alto-spce</feature>
