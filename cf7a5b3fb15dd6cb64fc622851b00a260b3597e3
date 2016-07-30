@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a561d44_209cc70e",
+        "filename": "alto-extensions/simple-pce/network-tracker/api/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2016-07-30T01:46:14Z",
+      "side": 1,
+      "message": "It doesn\u0027t make sense to bump the version. Why are you doing this? I cannot accept the version of a submodule is greater than one of the main module.",
+      "revId": "cf7a5b3fb15dd6cb64fc622851b00a260b3597e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a561d44_00fa6342",
+        "filename": "alto-extensions/simple-pce/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2016-07-30T01:46:14Z",
+      "side": 1,
+      "message": "Please use \u003cprofile/\u003e and never add karaf module to the default building. You can see the examples in alto-basic/manual-maps/pom.xml and alto-basic/simple-ird/pom.xml",
+      "revId": "cf7a5b3fb15dd6cb64fc622851b00a260b3597e3",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
