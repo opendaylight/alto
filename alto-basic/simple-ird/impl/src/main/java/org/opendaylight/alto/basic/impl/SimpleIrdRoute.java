@@ -70,7 +70,7 @@ public class SimpleIrdRoute implements AltoNorthboundRoute {
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
     }
 
-    private static class Rfc7285Ird {
+    protected static class Rfc7285Ird {
 
         public Map<String, Object> meta = new HashMap<String, Object>();
 
