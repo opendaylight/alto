@@ -11,19 +11,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>config-parent</artifactId>
-    <version>0.4.3-SNAPSHOT</version>
+    <version>0.4.4-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.ext</groupId>
   <artifactId>alto-spce-impl</artifactId>
-  <version>0.2.3-SNAPSHOT</version>
+  <version>0.2.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <properties>
-    <openflow.plugin.version>0.2.3-SNAPSHOT</openflow.plugin.version>
-    <mdsal.version>1.3.3-SNAPSHOT</mdsal.version>
+    <openflow.plugin.version>0.2.4-SNAPSHOT</openflow.plugin.version>
+    <mdsal.version>1.3.4-SNAPSHOT</mdsal.version>
   </properties>
 
   <dependencies>
