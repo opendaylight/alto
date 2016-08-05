@@ -8,6 +8,9 @@
 package org.opendaylight.alto.basic.impl;
 
 import org.opendaylight.alto.basic.manual.maps.ManualMapsUtils;
+import org.opendaylight.alto.basic.simpleird.SimpleIrdUtils;
+import org.opendaylight.alto.core.northbound.route.costmap.AltoNbrCostmapUtils;
+import org.opendaylight.alto.core.northbound.route.networkmap.AltoNbrNetworkmapUtils;
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
@@ -22,6 +25,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.cost
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.networkmap.rev151021.NetworkMap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.ConfigContext;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ServiceContext;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.config.rev151021.ResourceTypeConfig;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.AltoModelCostmapService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeCostmap;
@@ -88,12 +92,17 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
 
         for (Map.Entry<InstanceIdentifier<?>, DataObject> entry : change.getUpdatedData().entrySet()) {
             DataObject origin = original.get(entry.getKey());
+            InstanceIdentifier<?> updatedIID = entry.getKey();
             DataObject updated = entry.getValue();
 
             if (updated instanceof NetworkMap) {
-                updateNetworkMap((NetworkMap) origin, (NetworkMap) updated);
+                updateNetworkMap((NetworkMap) origin, (NetworkMap) updated,
+                        (InstanceIdentifier<NetworkMap>) updatedIID, rwx);
+                LOG.info("Update NetworkMap data from OPERATIONAL");
             } else if (updated instanceof CostMap) {
-                updateCostMap((CostMap) origin, (CostMap) updated);
+                updateCostMap((CostMap) origin, (CostMap) updated,
+                        (InstanceIdentifier<CostMap>) updatedIID, rwx);
+                LOG.info("Update CostMap data from OPERATIONAL");
             }
         }
 
@@ -131,15 +140,27 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
         rwx.submit();
     }
 
-    private void updateNetworkMap(NetworkMap origin, NetworkMap updated) {
-        //TODO: No Implementation
+    private void updateNetworkMap(NetworkMap origin, NetworkMap updated, InstanceIdentifier<NetworkMap> updatedIID,
+                                  final WriteTransaction wx) {
+        ResourceId rid = updated.getResourceId();
+
+        LOG.info("Updating NetworkMap: " + "\n\tResource ID: " + rid.getValue());
+        createNetworkMap(updated, updatedIID, wx);
     }
 
-    private void updateCostMap(CostMap origin, CostMap updated) {
-        //TODO: No Implementation
+    private void updateCostMap(CostMap origin, CostMap updated, InstanceIdentifier<CostMap> updatedIID,
+                               final WriteTransaction wx) {
+        ResourceId rid = updated.getResourceId();
+
+        LOG.info("Updating CostMap: " + "\n\tResource ID: " + rid.getValue());
+        createCostMap(updated, updatedIID, wx);
     }
 
     private void removeNetworkMap(InstanceIdentifier<NetworkMap> mapIID, NetworkMap removed, final WriteTransaction wx) {
+        SimpleIrdUtils.deleteConfigEntry(removed.getResourceId(), wx);
+        String path = removed.getResourceId().getValue();
+        AltoNbrNetworkmapUtils.deleteRecord(path, wx);
+
         ResourcepoolUtils.deleteResource(new Uuid(ManualMapsUtils.DEFAULT_CONTEXT), removed.getResourceId(), wx);
         m_networkmapServiceReg.unregisterPath(ServiceContext.class,
                 ResourcepoolUtils.getContextTagIID(new Uuid(ManualMapsUtils.DEFAULT_CONTEXT),
@@ -148,6 +169,7 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
     }
 
     private void removeCostMap(InstanceIdentifier<CostMap> mapIID, CostMap removed, final WriteTransaction wx) {
+        SimpleIrdUtils.deleteConfigEntry(removed.getResourceId(), wx);
         ManualMapsUtils.deleteResourceCostMap(new Uuid(ManualMapsUtils.DEFAULT_CONTEXT), removed.getResourceId(), wx);
         m_costmapServiceReg.unregisterPath(ServiceContext.class,
                 ResourcepoolUtils.getContextTagIID(new Uuid(ManualMapsUtils.DEFAULT_CONTEXT),
@@ -158,6 +180,7 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
     private void removeConfigContext(InstanceIdentifier<ConfigContext> iid, ConfigContext removed, final WriteTransaction wx) {
         ManualMapsUtils.deleteContext(removed.getContextId(), wx);
         removeMap(iid, wx);
+        // TODO: Consistency with SimpleIrd and NrbRecord
     }
 
     private void removeMap(InstanceIdentifier<?> mapIID, final WriteTransaction wx) {
@@ -174,6 +197,11 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
                 ResourcepoolUtils.getContextTagIID(new Uuid(ManualMapsUtils.DEFAULT_CONTEXT),
                         created.getResourceId(), created.getTag()));
         wx.put(LogicalDatastoreType.OPERATIONAL, createdIID, created);
+
+        String path = created.getResourceId().getValue();
+        AltoNbrNetworkmapUtils.createRecord(path, created.getResourceId(), wx);
+        SimpleIrdUtils.createConfigEntry(AltoNbrNetworkmapUtils.BASE_URL + "/" + path,
+                created.getResourceId(), new Uuid(ManualMapsUtils.DEFAULT_CONTEXT), wx);
     }
 
     private void createCostMap(CostMap created, InstanceIdentifier<CostMap> createdIID, final WriteTransaction wx) {
@@ -193,6 +221,11 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
                 ResourcepoolUtils.getContextTagIID(new Uuid(ManualMapsUtils.DEFAULT_CONTEXT),
                         created.getResourceId(), created.getTag()));
         wx.put(LogicalDatastoreType.OPERATIONAL, createdIID, created);
+
+        String path = created.getResourceId().getValue();
+        AltoNbrCostmapUtils.createRecord(path, created.getResourceId(), wx);
+        SimpleIrdUtils.createConfigEntry(AltoNbrCostmapUtils.BASE_URL + "/" + path,
+                created.getResourceId(), new Uuid(ManualMapsUtils.DEFAULT_CONTEXT), wx);
     }
 
     private void createConfigContext(ConfigContext created, InstanceIdentifier<ConfigContext> createdIID, final ReadWriteTransaction rwx) {

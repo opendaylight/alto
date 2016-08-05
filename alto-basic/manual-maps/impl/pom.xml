@@ -56,6 +56,24 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
             <artifactId>alto-northbound-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.opendaylight.alto.core</groupId>
+            <artifactId>alto-northbound-route-networkmap-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opendaylight.alto.core</groupId>
+            <artifactId>alto-northbound-route-costmap-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opendaylight.alto.basic</groupId>
+            <artifactId>alto-simple-ird-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Testing Dependencies -->
         <dependency>
             <groupId>junit</groupId>
