@@ -388,5 +388,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>alto-simple-ecs-api</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.alto.basic</groupId>
+      <artifactId>alto-auto-maps-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.basic</groupId>
+      <artifactId>alto-auto-maps-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

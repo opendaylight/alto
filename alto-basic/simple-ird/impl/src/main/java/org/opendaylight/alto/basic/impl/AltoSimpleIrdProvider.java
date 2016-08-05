@@ -7,34 +7,28 @@
  */
 package org.opendaylight.alto.basic.impl;
 
-import java.util.concurrent.ExecutionException;
-
 import org.opendaylight.alto.basic.simpleird.SimpleIrdUtils;
-
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
-
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
-
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.Information;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.InformationBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.IrdInstance;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.IrdInstanceConfiguration;
-
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.IrdInstanceConfigurationBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
-
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ExecutionException;
 
 public class AltoSimpleIrdProvider implements BindingAwareProvider, AutoCloseable {
 
@@ -76,6 +70,22 @@ public class AltoSimpleIrdProvider implements BindingAwareProvider, AutoCloseabl
         m_listener.register(m_dataBroker, m_iid);
     }
 
+    protected void createDefaultIrd() throws InterruptedException, ExecutionException {
+        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+
+        IrdInstanceConfigurationBuilder builder = new IrdInstanceConfigurationBuilder();
+        builder.setEntryContext(ResourcepoolUtils.getDefaultContextIID())
+                .setInstanceId(new ResourceId(SimpleIrdUtils.DEFAULT_IRD_RESOURCE));
+
+        InstanceIdentifier<IrdInstanceConfiguration> iicIID =
+        SimpleIrdUtils.getInstanceConfigurationIID(new ResourceId(SimpleIrdUtils.DEFAULT_IRD_RESOURCE));
+
+        wx.put(LogicalDatastoreType.CONFIGURATION, iicIID, builder.build());
+        wx.submit().get();
+
+        LOG.info("Create default IRD context for SimpleIrd");
+    }
+
     protected void deleteContext() throws InterruptedException, ExecutionException {
         WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
         ResourcepoolUtils.deleteContext(m_context, wx);
@@ -100,6 +110,7 @@ public class AltoSimpleIrdProvider implements BindingAwareProvider, AutoCloseabl
         try {
             createContext();
             setupListener();
+            createDefaultIrd();
         } catch (Exception e) {
             LOG.error("Failed to create top-level containers");
             e.printStackTrace();
