@@ -96,7 +96,7 @@ module alto-simple-ird {
             description
                 "The context of the resources managed by this IRD instance"
                 + "Should follow the format:"
-                + "/alto-resourcepool:context[alto-resourcepool:context-id='...'";
+                + "/alto-resourcepool:context[alto-resourcepool:context-id='...']";
         }
     }
 

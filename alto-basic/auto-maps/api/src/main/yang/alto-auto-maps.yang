@@ -1,0 +1,9 @@
+module alto-auto-maps {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:basic:auto:maps";
+    prefix "alto-auto-maps";
+
+    revision "2015-01-05" {
+        description "Initial revision of alto-auto-maps model";
+    }
+}

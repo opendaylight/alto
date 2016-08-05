@@ -120,7 +120,7 @@ public class ManualMapsUtils {
             WriteTransaction wx) {
         InstanceIdentifier<ResourceNetworkMap> iid = getResourceNetworkMapIID(rid);
         ResourceNetworkMapBuilder builder = new ResourceNetworkMapBuilder();
-        builder.setTag(new Tag(UUID.nameUUIDFromBytes(rid.getBytes()).toString()));
+        builder.setTag(new Tag(UUID.nameUUIDFromBytes(rid.getBytes()).toString().replaceAll("-", "")));
         builder.setResourceId(new ResourceId(rid));
         builder.setMap(networkMap);
         wx.put(LogicalDatastoreType.CONFIGURATION, iid, builder.build());
@@ -133,7 +133,7 @@ public class ManualMapsUtils {
             WriteTransaction wx) {
         InstanceIdentifier<ResourceCostMap> iid = getResourceCostMapIID(rid);
         ResourceCostMapBuilder builder = new ResourceCostMapBuilder();
-        builder.setTag(new Tag(UUID.nameUUIDFromBytes(rid.getBytes()).toString()));
+        builder.setTag(new Tag(UUID.nameUUIDFromBytes(rid.getBytes()).toString().replaceAll("-", "")));
         builder.setResourceId(new ResourceId(rid));
         builder.setMap(costMap);
         builder.setMeta(meta);

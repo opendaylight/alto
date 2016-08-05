@@ -26,6 +26,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <module>simple-ird</module>
     <module>manual-maps</module>
     <module>simple-ecs</module>
+    <module>auto-maps</module>
   </modules>
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
   <build>

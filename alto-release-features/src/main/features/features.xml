@@ -22,6 +22,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
           description='OpenDaylight :: alto :: Release'>
     <feature version='${project.version}'>odl-alto-core</feature>
     <feature version='${project.version}'>odl-alto-basic</feature>
+    <feature version='${project.version}'>odl-alto-extension</feature>
   </feature>
 
   <feature name='odl-alto-core' version='${project.version}'
@@ -39,6 +40,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-simpleird</feature>
     <feature version='${project.version}'>odl-alto-manual-maps</feature>
     <feature version='${project.version}'>odl-alto-hosttracker</feature>
+    <feature version='${project.version}'>odl-alto-auto-maps</feature>
   </feature>
 
   <feature name='odl-alto-extension' version='${project.version}'
@@ -183,7 +185,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-northbound</feature>
     <feature version='${project.version}'>odl-alto-resourcepool</feature>
     <feature version='${project.version}'>odl-alto-standard-service-models</feature>
+    <feature version='${project.version}'>odl-alto-simpleird</feature>
 
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-config-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}</bundle>
@@ -194,28 +199,31 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-hosttracker' version='${project.version}'
             description='OpenDaylight :: alto :: hosttracker'>
-    <conditional>
-      <condition>odl-l2switch-hosttracker</condition>
-      <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
-      <feature version='${project.version}'>odl-alto-core</feature>
+    <feature version='${l2switch.version}'>odl-l2switch-hosttracker</feature>
+    <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
+    <feature version='${project.version}'>odl-alto-core</feature>
 
-      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
-      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
-      <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
-        mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config
-      </configfile>
-    </conditional>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
+    <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
+      mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config
+    </configfile>
+  </feature>
 
-    <conditional>
-      <condition>odl-alto-spce</condition>
-      <feature version='${project.version}'>odl-alto-core</feature>
+  <feature name='odl-alto-auto-maps' version='${project.version}'
+            description='OpenDaylight :: alto :: auto-maps'>
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${l2switch.version}'>odl-l2switch-hosttracker</feature>
+    <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
 
-      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
-      <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
-      <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
-        mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config
-      </configfile>
-    </conditional>
+    <feature version='${project.version}'>odl-alto-northbound</feature>
+    <feature version='${project.version}'>odl-alto-resourcepool</feature>
+    <feature version='${project.version}'>odl-alto-standard-service-models</feature>
+    <feature version='${project.version}'>odl-alto-manual-maps</feature>
+
+    <bundle>mvn:org.opendaylight.alto.basic/alto-auto-maps-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto.basic/alto-auto-maps-impl/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-nonstandard-types' version='${project.version}'
