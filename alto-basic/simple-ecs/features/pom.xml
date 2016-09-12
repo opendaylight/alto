@@ -10,11 +10,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>features-parent</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.7.0-Boron</version>
     <relativePath/>
   </parent>
   <groupId>org.opendaylight.alto.basic</groupId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.3.0-Boron</version>
   <artifactId>alto-simple-ecs-features</artifactId>
   <name>${project.artifactId}</name>
   <modelVersion>4.0.0</modelVersion>
@@ -22,14 +22,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <maven>3.1.1</maven>
   </prerequisites>
   <properties>
-    <mdsal.model.version>0.9.0-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.4.0-SNAPSHOT</mdsal.version>
-    <restconf.version>1.4.0-SNAPSHOT</restconf.version>
-    <yangtools.version>1.0.0-SNAPSHOT</yangtools.version>
-    <dlux.version>0.4.0-SNAPSHOT</dlux.version>
+    <mdsal.model.version>0.9.0-Boron</mdsal.model.version>
+    <mdsal.version>1.4.0-Boron</mdsal.version>
+    <restconf.version>1.4.0-Boron</restconf.version>
+    <yangtools.version>1.0.0-Boron</yangtools.version>
+    <dlux.version>0.4.0-Boron</dlux.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
-    <l2switch.version>0.4.0-SNAPSHOT</l2switch.version>
-    <openflow.plugin.version>0.3.0-SNAPSHOT</openflow.plugin.version>
+    <l2switch.version>0.4.0-Boron</l2switch.version>
+    <openflow.plugin.version>0.3.0-Boron</openflow.plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
