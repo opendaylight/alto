@@ -12,17 +12,17 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>config-parent</artifactId>
-    <version>0.4.4-SNAPSHOT</version>
+    <version>0.4.4-Beryllium-SR4</version>
     <relativePath/>
   </parent>
 
   <properties>
-    <l2switch.version>0.3.4-SNAPSHOT</l2switch.version>
+    <l2switch.version>0.3.4-Beryllium-SR4</l2switch.version>
   </properties>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.spce.network</groupId>
   <artifactId>network-tracker-impl</artifactId>
-  <version>0.2.4-SNAPSHOT</version>
+  <version>0.2.4-Beryllium-SR4</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
