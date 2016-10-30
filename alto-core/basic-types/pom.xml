@@ -9,13 +9,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent</artifactId>
-    <version>1.7.1-SNAPSHOT</version>
+    <version>1.7.1-Boron-SR1</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto.core</groupId>
   <artifactId>alto-basic-types-aggregator</artifactId>
-  <version>0.3.1-SNAPSHOT</version>
+  <version>0.3.1-Boron-SR1</version>
   <name>alto-basic-types-aggregator</name>
   <packaging>pom</packaging>
   <modelVersion>4.0.0</modelVersion>

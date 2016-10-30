@@ -12,13 +12,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>config-parent</artifactId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.5.1-Boron-SR1</version>
     <relativePath/>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.basic</groupId>
-  <version>0.3.1-SNAPSHOT</version>
+  <version>0.3.1-Boron-SR1</version>
   <artifactId>alto-simple-ecs-impl</artifactId>
   <packaging>bundle</packaging>
   <dependencies>
@@ -69,12 +69,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.l2switch.hosttracker</groupId>
       <artifactId>hosttracker-model</artifactId>
-      <version>0.4.1-SNAPSHOT</version>
+      <version>0.4.1-Boron-SR1</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.l2switch.addresstracker</groupId>
       <artifactId>addresstracker-model</artifactId>
-      <version>0.4.1-SNAPSHOT</version>
+      <version>0.4.1-Boron-SR1</version>
     </dependency>
 
     <dependency>
@@ -87,7 +87,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.openflowplugin.model</groupId>
       <artifactId>model-flow-statistics</artifactId>
-      <version>0.3.1-SNAPSHOT</version>
+      <version>0.3.1-Boron-SR1</version>
     </dependency>
   </dependencies>
 
