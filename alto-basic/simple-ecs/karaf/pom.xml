@@ -9,12 +9,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>karaf-parent</artifactId>
-    <version>1.7.1-SNAPSHOT</version>
+    <version>1.7.2-SNAPSHOT</version>
     <relativePath/>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.basic</groupId>
-  <version>0.3.1-SNAPSHOT</version>
+  <version>0.3.2-SNAPSHOT</version>
   <artifactId>alto-simple-ecs-karaf</artifactId>
   <name>${project.artifactId}</name>
   <prerequisites>
