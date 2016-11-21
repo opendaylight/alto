@@ -39,7 +39,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
             description='OpenDaylight :: alto :: Basic'>
     <feature version='${project.version}'>odl-alto-simpleird</feature>
     <feature version='${project.version}'>odl-alto-manual-maps</feature>
-    <feature version='${project.version}'>odl-alto-hosttracker</feature>
+    <feature version='${project.version}'>odl-alto-simpleecs</feature>
     <feature version='${project.version}'>odl-alto-auto-maps</feature>
   </feature>
 
@@ -57,11 +57,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version="${openflow.plugin.version}">odl-openflowplugin-flow-services</feature>
     <feature version="${openflow.plugin.version}">odl-openflowplugin-southbound</feature>
-    <!-- The following top-level l2switch feature pulls in the following odl-l2switch-* features:
-    addresstracker, arphandler, hosttracker, loopremover, packethandler -->
-    <feature version="${l2switch.version}">odl-l2switch-switch</feature>
-    <!-- odl-l2switch-arphandler uses blueprint now, but we still attempt to write data to
-    the config subsystem in order to set is-proactive-flood-mode to false. -->
+
+    <feature version="${l2switch.version}">odl-l2switch-loopremover</feature>
+    <feature version="${l2switch.version}">odl-l2switch-hosttracker</feature>
+    <feature version="${l2switch.version}">odl-l2switch-arphandler</feature>
 
     <bundle>mvn:org.opendaylight.alto.spce.network/network-tracker-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.spce.network/network-tracker-impl/${project.version}</bundle>
@@ -77,13 +76,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-standard-types' version='${project.version}'
-            description='OpenDaylight :: alto :: standard-types'>
+            description='OpenDaylight :: alto :: Standard-types'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <bundle>mvn:org.opendaylight.alto.core/alto-basic-types/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-resourcepool' version='${project.version}'
-            description='OpenDaylight :: alto :: resourcepool'>
+            description='OpenDaylight :: alto :: Resourcepool'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <feature version='${mdsal.version}'>odl-mdsal-all</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
@@ -92,13 +91,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <bundle>mvn:org.opendaylight.alto.core/alto-resourcepool-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-resourcepool-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-resourcepool-impl.xml">
-      mvn:org.opendaylight.alto.core/alto-resourcepool-impl/${project.version}/xml/config
-    </configfile>
   </feature>
 
   <feature name='odl-alto-northbound' version='${project.version}'
-            description='OpenDaylight :: alto :: northbound'>
+            description='OpenDaylight :: alto :: Northbound'>
     <feature version="${restconf.version}">odl-restconf</feature>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
@@ -111,7 +107,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-standard-service-models' version='${project.version}'
-            description='OpenDaylight :: alto :: standard-service-model'>
+            description='OpenDaylight :: alto :: Standard-service-model'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
 
     <feature version='${project.version}'>odl-alto-standard-types</feature>
@@ -126,7 +122,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-standard-northbound-route' version='${project.version}'
-            description='OpenDaylight :: alto :: standard-northbound-route'>
+            description='OpenDaylight :: alto :: Standard-northbound-route'>
     <!-- TODO standard routes for network map/cost map/endpoint cost/endpoint property -->
     <feature version='${project.version}'>odl-alto-standard-service-models</feature>
     <feature version='${project.version}'>odl-alto-northbound</feature>
@@ -157,12 +153,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-standard-resource-translator' version='${project.version}'
-            description='OpenDaylight :: alto :: standard-resource-translator'>
+            description='OpenDaylight :: alto :: Standard-resource-translator'>
     <!-- Empty in this release -->
   </feature>
 
   <feature name='odl-alto-simpleird' version='${project.version}'
-            description='OpenDaylight :: alto :: Simple IRD'>
+            description='OpenDaylight :: alto :: Simple-IRD'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
 
@@ -178,7 +174,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-manual-maps' version='${project.version}'
-            description='OpenDaylight :: alto :: manual-maps'>
+            description='OpenDaylight :: alto :: Manual-maps'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
 
@@ -197,25 +193,23 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     </configfile>
   </feature>
 
-  <feature name='odl-alto-hosttracker' version='${project.version}'
-            description='OpenDaylight :: alto :: hosttracker'>
+  <feature name='odl-alto-simpleecs' version='${project.version}'
+            description='OpenDaylight :: alto :: Simple-ECS'>
     <feature version='${l2switch.version}'>odl-l2switch-hosttracker</feature>
-    <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
     <feature version='${project.version}'>odl-alto-core</feature>
 
     <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-hosttracker.xml">
+    <configfile finalname="${configfile.directory}/alto-simpleecs.xml">
       mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config
     </configfile>
   </feature>
 
   <feature name='odl-alto-auto-maps' version='${project.version}'
-            description='OpenDaylight :: alto :: auto-maps'>
+            description='OpenDaylight :: alto :: Auto-maps'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
     <feature version='${l2switch.version}'>odl-l2switch-hosttracker</feature>
-    <feature version='${l2switch.version}'>odl-l2switch-addresstracker</feature>
 
     <feature version='${project.version}'>odl-alto-northbound</feature>
     <feature version='${project.version}'>odl-alto-resourcepool</feature>
@@ -227,17 +221,17 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   </feature>
 
   <feature name='odl-alto-nonstandard-types' version='${project.version}'
-            description='OpenDaylight :: alto :: nonstandard-types'>
+            description='OpenDaylight :: alto :: Nonstandard-types'>
     <!-- Empty in this release -->
   </feature>
 
   <feature name='odl-alto-nonstandard-service-models' version='${project.version}'
-            description='OpenDaylight :: alto :: nonstandard-service-models'>
+            description='OpenDaylight :: alto :: Nonstandard-service-models'>
     <!-- Empty in this release -->
   </feature>
 
   <feature name='odl-alto-nonstandard-northbound-route' version='${project.version}'
-            description='OpenDaylight :: alto :: nonstandard-northbound-route'>
+            description='OpenDaylight :: alto :: Nonstandard-northbound-route'>
     <!-- Empty in this release -->
   </feature>
 

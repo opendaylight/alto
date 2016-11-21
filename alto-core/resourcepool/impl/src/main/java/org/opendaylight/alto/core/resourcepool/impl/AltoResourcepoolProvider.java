@@ -15,27 +15,18 @@ import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
-import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
-
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AltoResourcepoolProvider implements BindingAwareProvider, AutoCloseable {
+public class AltoResourcepoolProvider implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoResourcepoolProvider.class);
 
-    private DataBroker m_dataBroker = null;
+    private DataBroker broker = null;
 
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
-        LOG.info("AltoResourcesProvider Session Initiated");
-
-        m_dataBroker = session.getSALService(DataBroker.class);
-        assert m_dataBroker != null;
-
+    public void init() {
         try {
             createDefaultContext();
         } catch (Exception e) {
@@ -45,7 +36,7 @@ public class AltoResourcepoolProvider implements BindingAwareProvider, AutoClose
 
     protected void createDefaultContext()
             throws InterruptedException, ExecutionException, TransactionCommitFailedException  {
-        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+        WriteTransaction wx = broker.newWriteOnlyTransaction();
 
         ResourcepoolUtils.createContext(ResourcepoolUtils.DEFAULT_CONTEXT, wx);
 
@@ -53,7 +44,7 @@ public class AltoResourcepoolProvider implements BindingAwareProvider, AutoClose
     }
 
     protected void deleteDefaultContext() throws Exception {
-        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+        WriteTransaction wx = broker.newWriteOnlyTransaction();
 
         ResourcepoolUtils.deleteContext(ResourcepoolUtils.DEFAULT_CONTEXT, wx);
 
@@ -68,5 +59,9 @@ public class AltoResourcepoolProvider implements BindingAwareProvider, AutoClose
             /* Exit anyway */
         }
         LOG.info("AltoResourcesProvider Closed");
+    }
+
+    public void setBroker(DataBroker broker) {
+        this.broker = broker;
     }
 }
