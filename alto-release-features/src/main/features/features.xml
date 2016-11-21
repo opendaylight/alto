@@ -92,9 +92,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <bundle>mvn:org.opendaylight.alto.core/alto-resourcepool-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-resourcepool-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-resourcepool-impl.xml">
-      mvn:org.opendaylight.alto.core/alto-resourcepool-impl/${project.version}/xml/config
-    </configfile>
   </feature>
 
   <feature name='odl-alto-northbound' version='${project.version}'
