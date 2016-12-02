@@ -8,7 +8,7 @@
 
 package org.opendaylight.alto.core.service.model.endpointcost;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostMetric;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.CostMetric;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.context.resource.capabilities.CostType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.context.resource.capabilities.CostTypeBuilder;

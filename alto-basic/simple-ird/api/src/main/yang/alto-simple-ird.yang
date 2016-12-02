@@ -1,7 +1,7 @@
 module alto-simple-ird {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:basic:simple:ird";
+    namespace "urn:alto:simple:ird";
 
     prefix "alto-simple-ird";
 

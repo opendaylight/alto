@@ -1,7 +1,7 @@
 module alto-northbound {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:core:northbound";
+    namespace "urn:alto:northbound";
 
     prefix "alto-northbound";
 

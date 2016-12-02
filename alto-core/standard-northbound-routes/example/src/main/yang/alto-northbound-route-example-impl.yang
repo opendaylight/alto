@@ -1,6 +1,6 @@
 module alto-northbound-route-example-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:core:northbound:route:example:impl";
+    namespace "urn:alto:northbound:route:example:impl";
     prefix "alto-northbound-router-example-impl";
 
     import alto-northbound { prefix alto-northbound; revision-date 2015-10-21; }

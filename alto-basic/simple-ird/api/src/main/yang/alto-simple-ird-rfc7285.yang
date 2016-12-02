@@ -1,7 +1,7 @@
 module alto-simple-ird-rfc7285 {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:basic:simple:ird:rfc7285";
+    namespace "urn:alto:simple:ird:rfc7285";
 
     prefix "simple-ird-rfc7285";
 

@@ -1,7 +1,7 @@
 module alto-nbr-networkmap {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:core:northbound:route:networkmap";
+    namespace "urn:alto:northbound:route:networkmap";
 
     prefix "alto-nbr-networkmap";
 

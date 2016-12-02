@@ -1,7 +1,7 @@
 module alto-nbr-costmap {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:core:northbound:route:costmap";
+    namespace "urn:alto:northbound:route:costmap";
 
     prefix "alto-nbr-costmap";
 

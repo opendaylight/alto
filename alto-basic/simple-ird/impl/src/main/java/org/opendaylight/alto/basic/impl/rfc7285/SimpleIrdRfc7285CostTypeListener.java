@@ -22,22 +22,22 @@ import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataCh
 import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.IrdInstance;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.ird.entry.data.EntryCapabilities;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.ird.instance.IrdEntry;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstance;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.entry.data.EntryCapabilities;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntry;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.Rfc7285CostTypeCapabilities;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.Rfc7285CostTypeCapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadata;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadataBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.ird.instance.MetaBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.rfc7285.ird.meta.CostType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.rfc7285.ird.meta.CostTypeBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285CostTypeCapabilities;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285CostTypeCapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadata;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadataBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.ird.instance.MetaBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.rfc7285.ird.meta.CostType;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.rfc7285.ird.meta.CostTypeBuilder;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.Resource;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.CostTypeData;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.CostTypeData;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
 
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeFilteredCostmap;

@@ -27,22 +27,22 @@ import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RoutedRpcR
 
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ResourceType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ServiceContext;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.Context;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ContextBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.ContextKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.Resource;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.ResourceBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.ResourceKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.resource.Capabilities;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.resource.CapabilitiesBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.resource.ContextTag;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.resource.ContextTagBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.resourcepool.rev150921.context.resource.ContextTagKey;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ResourceType;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ServiceContext;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.Context;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ContextKey;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.ResourceBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.ResourceKey;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.Capabilities;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.CapabilitiesBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTagBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTagKey;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.Tag;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.Tag;
 
 import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;

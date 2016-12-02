@@ -1,7 +1,7 @@
 module alto-manual-maps {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:basic:manual:maps";
+    namespace "urn:alto:manual:maps";
 
     prefix "alto-manual-maps";
 

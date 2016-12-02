@@ -1,7 +1,7 @@
 module alto-endpointcost-config {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:basic:manual:maps:endpointcost";
+    namespace "urn:alto:manual:maps:endpointcost";
 
     prefix "alto-endpointcost-config";
 

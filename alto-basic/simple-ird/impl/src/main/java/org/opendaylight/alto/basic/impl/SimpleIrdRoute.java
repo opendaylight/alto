@@ -24,17 +24,17 @@ import javax.ws.rs.core.Response;
 
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.IrdInstance;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.ird.entry.configuration.data.location.FixedUrl;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.ird.entry.configuration.data.location.RelativePath;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.ird.entry.data.EntryCapabilities;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rev151021.ird.instance.IrdEntry;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.Rfc7285CostTypeCapabilities;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.Rfc7285IrdMeta;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadata;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.simple.ird.rfc7285.rev151021.rfc7285.ird.meta.CostType;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstance;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.entry.configuration.data.location.FixedUrl;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.entry.configuration.data.location.RelativePath;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.entry.data.EntryCapabilities;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntry;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285CostTypeCapabilities;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285IrdMeta;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadata;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.rfc7285.ird.meta.CostType;
 
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
 
 @Path("/")
 public class SimpleIrdRoute implements AltoNorthboundRoute {

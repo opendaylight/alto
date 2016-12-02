@@ -1,7 +1,7 @@
 module alto-endpointproperty-config {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:basic:manual:maps:endpointproperty";
+    namespace "urn:alto:manual:maps:endpointproperty";
 
     prefix "alto-endpointproperty-config";
 

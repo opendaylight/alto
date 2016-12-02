@@ -9,8 +9,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <snapshot>
   <required-capabilities>
-      <capability>urn:opendaylight:alto:core:northbound?module=alto-northbound&amp;revision=2015-10-21</capability>
-      <capability>urn:opendaylight:alto:core:northbound:impl?module=alto-northbound-impl&amp;revision=2015-10-21</capability>
+      <capability>urn:alto:northbound?module=alto-northbound&amp;revision=2015-10-21</capability>
+      <capability>urn:alto:northbound:impl?module=alto-northbound-impl&amp;revision=2015-10-21</capability>
       <capability>urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding?module=opendaylight-md-sal-binding&amp;revision=2013-10-28</capability>
   </required-capabilities>
   <configuration>
@@ -18,7 +18,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
       <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
         <module>
-          <type xmlns:prefix="urn:opendaylight:alto:core:northbound:impl">prefix:alto-northbound</type>
+          <type xmlns:prefix="urn:alto:northbound:impl">prefix:alto-northbound</type>
           <name>alto-northbound-default</name>
           <broker>
             <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-broker-osgi-registry</type>
@@ -29,7 +29,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
       <services xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
         <service>
-          <type xmlns:alto-northbound="urn:opendaylight:alto:core:northbound">alto-northbound:alto-northbound-router</type>
+          <type xmlns:alto-northbound="urn:alto:northbound">alto-northbound:alto-northbound-router</type>
           <instance>
             <name>alto-northbound-router</name>
             <provider>/modules/module[type='alto-northbound'][name='alto-northbound-default']</provider>

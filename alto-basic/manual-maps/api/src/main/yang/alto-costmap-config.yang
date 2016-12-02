@@ -1,7 +1,7 @@
 module alto-costmap-config {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:basic:manual:maps:costmap";
+    namespace "urn:alto:manual:maps:costmap";
 
     prefix "alto-costmap-config";
 

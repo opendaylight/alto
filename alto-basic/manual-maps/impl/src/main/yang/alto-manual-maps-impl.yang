@@ -1,6 +1,6 @@
 module alto-manual-maps-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:basic:manual:maps:impl";
+    namespace "urn:alto:manual:maps:impl";
     prefix "alto-manual-maps";
 
     import alto-northbound { prefix alto-northbound; revision-date 2015-10-21; }

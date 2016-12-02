@@ -1,7 +1,7 @@
 module alto-networkmap-config {
     yang-version 1;
 
-    namespace "urn:opendaylight:alto:basic:manual:maps:networkmap";
+    namespace "urn:alto:manual:maps:networkmap";
 
     prefix "alto-networkmap-config";
 

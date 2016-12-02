@@ -1,6 +1,6 @@
 module alto-northbound-route-networkmap-impl {
     yang-version 1;
-    namespace "urn:opendaylight:alto:core:northbound:route:networkmap:impl";
+    namespace "urn:alto:northbound:route:networkmap:impl";
     prefix "alto-northbound-router-networkmap-impl";
 
     import alto-northbound { prefix alto-northbound; revision-date 2015-10-21; }

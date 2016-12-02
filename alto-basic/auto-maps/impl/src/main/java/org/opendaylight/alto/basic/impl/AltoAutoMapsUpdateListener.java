@@ -18,10 +18,10 @@ import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpPrefix;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.address.tracker.rev140617.address.node.connector.Addresses;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.networkmap.rev151021.EndpointAddressType;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.networkmap.rev151021.endpoint.address.group.EndpointAddressGroup;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.networkmap.rev151021.endpoint.address.group.EndpointAddressGroupBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.PidName;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.networkmap.rev151021.EndpointAddressType;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.networkmap.rev151021.endpoint.address.group.EndpointAddressGroup;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.networkmap.rev151021.endpoint.address.group.EndpointAddressGroupBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.PidName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.host.tracker.rev140624.HostNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.NetworkTopology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.TopologyId;
@@ -124,11 +124,11 @@ public class AltoAutoMapsUpdateListener implements DataChangeListener, AutoClose
     }
 
     private void mergeAddressesListToDefaultNetworkMap(List<Addresses> addressesList, final WriteTransaction wx) {
-        List<org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic
+        List<org.opendaylight.yang.gen.v1.urn.alto
                 .manual.maps.networkmap.rev151021.network.map.Map> networkMap = new LinkedList<>();
-        org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic
+        org.opendaylight.yang.gen.v1.urn.alto
                 .manual.maps.networkmap.rev151021.network.map.MapBuilder builder =
-                new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic
+                new org.opendaylight.yang.gen.v1.urn.alto
                         .manual.maps.networkmap.rev151021.network.map.MapBuilder();
 
         List<IpPrefix> prefixList = aggregateAddressesList(addressesList);

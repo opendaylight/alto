@@ -11,19 +11,19 @@ package org.opendaylight.alto.basic.manual.maps;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.costmap.rev151021.cost.map.Meta;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.networkmap.rev151021.network.map.Map;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.ConfigContext;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.ConfigContextBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.ConfigContextKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.config.context.ResourceCostMap;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.config.context.ResourceCostMapBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.config.context.ResourceCostMapKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.config.context.ResourceNetworkMap;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.config.context.ResourceNetworkMapBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.rev151021.config.context.ResourceNetworkMapKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.Tag;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.costmap.rev151021.cost.map.Meta;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.networkmap.rev151021.network.map.Map;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.ConfigContext;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.ConfigContextBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.ConfigContextKey;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.context.ResourceCostMap;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.context.ResourceCostMapBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.context.ResourceCostMapKey;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.context.ResourceNetworkMap;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.context.ResourceNetworkMapBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.context.ResourceNetworkMapKey;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.Tag;
 import org.opendaylight.yangtools.yang.binding.ChildOf;
 import org.opendaylight.yangtools.yang.binding.Identifiable;
 import org.opendaylight.yangtools.yang.binding.Identifier;
@@ -129,7 +129,7 @@ public class ManualMapsUtils {
 
     public static InstanceIdentifier<ResourceCostMap> createResourceCostMap(String rid,
             Meta meta,
-            List<org.opendaylight.yang.gen.v1.urn.opendaylight.alto.basic.manual.maps.costmap.rev151021.cost.map.Map> costMap,
+            List<org.opendaylight.yang.gen.v1.urn.alto.manual.maps.costmap.rev151021.cost.map.Map> costMap,
             WriteTransaction wx) {
         InstanceIdentifier<ResourceCostMap> iid = getResourceCostMapIID(rid);
         ResourceCostMapBuilder builder = new ResourceCostMapBuilder();

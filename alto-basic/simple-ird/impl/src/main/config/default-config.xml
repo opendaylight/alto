@@ -9,23 +9,23 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <snapshot>
   <required-capabilities>
-      <capability>urn:opendaylight:alto:basic:simple:ird:impl?module=alto-simple-ird-impl&amp;revision=2015-10-21</capability>
+      <capability>urn:alto:simple:ird:impl?module=alto-simple-ird-impl&amp;revision=2015-10-21</capability>
       <capability>urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding?module=opendaylight-md-sal-binding&amp;revision=2013-10-28</capability>
-      <capability>urn:opendaylight:alto:core:northbound?module=alto-northbound&amp;revision=2015-10-21</capability>
+      <capability>urn:alto:northbound?module=alto-northbound&amp;revision=2015-10-21</capability>
   </required-capabilities>
   <configuration>
 
     <data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
       <modules xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">
         <module>
-          <type xmlns:prefix="urn:opendaylight:alto:basic:simple:ird:impl">prefix:alto-simple-ird</type>
+          <type xmlns:prefix="urn:alto:simple:ird:impl">prefix:alto-simple-ird</type>
           <name>alto-simple-ird-default</name>
           <broker>
             <type xmlns:binding="urn:opendaylight:params:xml:ns:yang:controller:md:sal:binding">binding:binding-broker-osgi-registry</type>
             <name>binding-osgi-broker</name>
           </broker>
           <alto-northbound-router>
-            <type xmlns:alto-northbound-router="urn:opendaylight:alto:core:northbound">alto-northbound-router:alto-northbound-router</type>
+            <type xmlns:alto-northbound-router="urn:alto:northbound">alto-northbound-router:alto-northbound-router</type>
             <name>alto-northbound-router</name>
           </alto-northbound-router>
         </module>

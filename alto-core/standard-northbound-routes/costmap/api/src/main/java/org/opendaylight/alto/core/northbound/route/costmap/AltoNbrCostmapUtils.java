@@ -12,11 +12,11 @@ import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.northbound.route.costmap.rev151021.Records;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.northbound.route.costmap.rev151021.records.Record;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.northbound.route.costmap.rev151021.records.RecordBuilder;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.northbound.route.costmap.rev151021.records.RecordKey;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.core.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.alto.northbound.route.costmap.rev151021.Records;
+import org.opendaylight.yang.gen.v1.urn.alto.northbound.route.costmap.rev151021.records.Record;
+import org.opendaylight.yang.gen.v1.urn.alto.northbound.route.costmap.rev151021.records.RecordBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.northbound.route.costmap.rev151021.records.RecordKey;
+import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 
 public class AltoNbrCostmapUtils {
