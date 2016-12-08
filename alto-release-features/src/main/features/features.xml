@@ -235,4 +235,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <!-- Empty in this release -->
   </feature>
 
+  <feature name='odl-alto-multicost' version='${project.version}'
+           description='OpenDaylight :: alto :: Mutlicost support'>
+    <!-- new feature in Carbon -->
+  </feature>
+
+  <feature name='odl-alto-iupd' version='${project.version}'
+           description='OpenDaylight :: alto :: Incremental update'>
+    <!-- new feature in Carbon -->
+  </feature>
+
+  <feature name='odl-alto-rsabs' version='${project.version}'
+           description='OpenDaylight :: alto :: Routing state abstraction'>
+    <!-- new feature in Carbon -->
+  </feature>
+
 </features>
