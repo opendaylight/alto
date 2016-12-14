@@ -14,7 +14,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <repository>mvn:org.opendaylight.controller/features-mdsal/${mdsal.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.mdsal.model/features-mdsal-model/${mdsal.model.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.netconf/features-restconf/${restconf.version}/xml/features</repository>
-  <repository>mvn:org.opendaylight.dlux/features-dlux/${dlux.version}/xml/features</repository>
+  <repository>mvn:org.opendaylight.dluxapps/features-dluxapps/${dluxapps.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.alto.core/alto-resourcepool-features/${project.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.alto.core/alto-northbound-features/${project.version}/xml/features</repository>
   <repository>mvn:org.opendaylight.alto.core/alto-service-model-networkmap-features/${project.version}/xml/features</repository>
@@ -47,7 +47,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version="${project.version}">odl-alto-simple-ird-rest</feature>
     <feature version="${restconf.version}">odl-mdsal-apidocs</feature>
     <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
-    <feature version="${dlux.version}">odl-dlux-yangui</feature>
+    <feature version="${dluxapps.version}">odl-dluxapps-yangman</feature>
   </feature>
 
 </features>
