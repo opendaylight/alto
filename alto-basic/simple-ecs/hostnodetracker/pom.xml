@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.opendaylight.controller</groupId>
         <artifactId>config-parent</artifactId>
-        <version>0.5.2-SNAPSHOT</version>
+        <version>0.5.2-Boron-SR2</version>
         <relativePath/>
     </parent>
 
@@ -13,7 +13,7 @@
 
     <groupId>org.opendaylight.alto.basic</groupId>
     <artifactId>hostnodetracker</artifactId>
-    <version>0.3.2-SNAPSHOT</version>
+    <version>0.3.2-Boron-SR2</version>
     <build>
         <plugins>
             <plugin>
@@ -32,30 +32,30 @@
         <dependency>
             <groupId>org.opendaylight.l2switch.hosttracker</groupId>
             <artifactId>hosttracker-model</artifactId>
-            <version>0.5.2-SNAPSHOT</version>
+            <version>0.5.2-Boron-SR2</version>
         </dependency>
 
         <dependency>
             <groupId>org.opendaylight.l2switch.addresstracker</groupId>
             <artifactId>addresstracker-model</artifactId>
-            <version>0.5.2-SNAPSHOT</version>
+            <version>0.5.2-Boron-SR2</version>
         </dependency>
 
         <dependency>
             <groupId>org.opendaylight.alto.core</groupId>
             <artifactId>alto-service-model-base-api</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.2-Boron-SR2</version>
         </dependency>
         <dependency>
             <groupId>org.opendaylight.alto.core</groupId>
             <artifactId>alto-service-model-endpointcost-api</artifactId>
-            <version>0.3.2-SNAPSHOT</version>
+            <version>0.3.2-Boron-SR2</version>
         </dependency>
 
         <dependency>
             <groupId>org.opendaylight.controller</groupId>
             <artifactId>sal-binding-api</artifactId>
-            <version>1.5.2-SNAPSHOT</version>
+            <version>1.5.2-Boron-SR2</version>
         </dependency>
     </dependencies>
 
