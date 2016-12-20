@@ -12,20 +12,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>mdsal-it-parent</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto.basic</groupId>
   <artifactId>alto-auto-maps-it</artifactId>
-  <version>0.3.2-SNAPSHOT</version>
+  <version>0.3.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <properties>
     <skipITs>false</skipITs>
     <karaf.distro.groupId>org.opendaylight.alto.basic</karaf.distro.groupId>
     <karaf.distro.artifactId>alto-auto-maps-karaf</karaf.distro.artifactId>
-    <karaf.distro.version>0.1.2-SNAPSHOT</karaf.distro.version>
+    <karaf.distro.version>0.1.3-SNAPSHOT</karaf.distro.version>
     <karaf.distro.type>zip</karaf.distro.type>
   </properties>
 
