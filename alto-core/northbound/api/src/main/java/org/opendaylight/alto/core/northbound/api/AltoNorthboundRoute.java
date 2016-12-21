@@ -9,6 +9,6 @@ package org.opendaylight.alto.core.northbound.api;
 
 public interface AltoNorthboundRoute {
 
-    public static final String ALTO_ERROR = "application/alto-error+json";
+    String ALTO_ERROR = "application/alto-error+json";
 
 }

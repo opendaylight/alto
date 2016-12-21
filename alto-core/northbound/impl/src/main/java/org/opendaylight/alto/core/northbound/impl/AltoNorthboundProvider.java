@@ -10,23 +10,19 @@ package org.opendaylight.alto.core.northbound.impl;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
 
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
-import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AltoNorthboundProvider implements BindingAwareProvider, AutoCloseable, AltoNorthboundRouter{
+public class AltoNorthboundProvider implements AltoNorthboundRouter{
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoNorthboundProvider.class);
 
     private AltoNorthboundRouterImpl router = AltoNorthboundRouterImpl.getInstance();
 
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
+    public void init() {
         LOG.info("AltoNorthboundProvider Session Initiated");
     }
 
-    @Override
     public void close() throws Exception {
         LOG.info("AltoNorthboundProvider Closed");
     }

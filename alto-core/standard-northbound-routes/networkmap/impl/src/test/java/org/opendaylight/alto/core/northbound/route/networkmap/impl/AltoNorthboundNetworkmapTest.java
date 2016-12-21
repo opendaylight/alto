@@ -22,7 +22,6 @@ import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionChainListener;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv6Prefix;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
@@ -85,17 +84,15 @@ public class AltoNorthboundNetworkmapTest {
     @Test
     public void testprepareInput() throws JsonProcessingException{
 
-
         //configure the mock
         AltoNorthboundRouteNetworkmap networkmap = new AltoNorthboundRouteNetworkmap();
         AltoNorthboundRouteNetworkmap networkmapSpy = spy(networkmap);
 
-        BindingAwareBroker.ProviderContext session = mock(BindingAwareBroker.ProviderContext.class);
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
         doReturn(ctagIID).when(networkmapSpy).getResourceByPath(eq(path), (ReadOnlyTransaction) anyObject());
         doReturn( AddressTypeIpv4.class).when(networkmapSpy).getAddressTypeByName(eq("ipv4"), eq(path), (ReadOnlyTransaction)anyObject());
         doReturn( AddressTypeIpv6.class).when(networkmapSpy).getAddressTypeByName(eq("ipv6"), eq(path), (ReadOnlyTransaction)anyObject());
-        when(session.getSALService(DataBroker.class)).thenReturn(new DataBroker() {
+        networkmapSpy.setDataBroker(new DataBroker() {
             @Override
             public ReadOnlyTransaction newReadOnlyTransaction() {
                 return null;
@@ -127,14 +124,13 @@ public class AltoNorthboundNetworkmapTest {
                 return null;
             }
         });
-        when(session.getRpcService(AltoModelNetworkmapService.class)).thenReturn(new AltoModelNetworkmapService() {
+        networkmapSpy.setMapService(new AltoModelNetworkmapService() {
             @Override
             public Future<RpcResult<QueryOutput>> query(QueryInput queryInput) {
                 return null;
             }
         });
 
-        networkmapSpy.onSessionInitiated(session);
         QueryInput input = networkmapSpy.prepareInput(path, pids, addressTypes);
         NetworkmapRequest request = (NetworkmapRequest)input.getRequest();
         PidName pid1 = request.getNetworkmapFilter().getPid().get(0);
@@ -153,7 +149,6 @@ public class AltoNorthboundNetworkmapTest {
         AltoNorthboundRouteNetworkmap networkmap = new AltoNorthboundRouteNetworkmap();
         AltoNorthboundRouteNetworkmap networkmapSpy = spy(networkmap);
 
-        BindingAwareBroker.ProviderContext session = mock(BindingAwareBroker.ProviderContext.class);
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
         doReturn(ctagIID).when(networkmapSpy).getResourceByPath(eq(path), (ReadOnlyTransaction) anyObject());
         doReturn( AddressTypeIpv4.class).when(networkmapSpy).getAddressTypeByName(eq("ipv4"), eq(path), (ReadOnlyTransaction)anyObject());
@@ -209,8 +204,8 @@ public class AltoNorthboundNetworkmapTest {
         when(rpcResult.getResult()).thenReturn(queryOutputBuilder.build());
         when(future.get()).thenReturn(rpcResult);
         when(networkmapService.query((QueryInput)anyObject())).thenReturn(future);
-        when(session.getRpcService(AltoModelNetworkmapService.class)).thenReturn(networkmapService);
-        when(session.getSALService(DataBroker.class)).thenReturn(new DataBroker() {
+        networkmapSpy.setMapService(networkmapService);
+        networkmapSpy.setDataBroker(new DataBroker() {
             @Override
             public ReadOnlyTransaction newReadOnlyTransaction() {
                 return null;
@@ -245,7 +240,7 @@ public class AltoNorthboundNetworkmapTest {
 
         doReturn(new RFC7285NetworkMap.Meta()).when(networkmapSpy).buildMeta((InstanceIdentifier<?>)anyObject());
         //start test
-        networkmapSpy.onSessionInitiated(session);
+        networkmapSpy.init();
         Response response = networkmapSpy.getFilteredMap(path, filter);
         String surex = response.getEntity().toString();
         ObjectMapper mapper = new ObjectMapper();

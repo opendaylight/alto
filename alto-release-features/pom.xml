@@ -129,14 +129,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-impl</artifactId>
-      <version>${project.version}</version>
-      <type>xml</type>
-      <classifier>config</classifier>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
       <artifactId>alto-northbound-route-networkmap-api</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -145,14 +137,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.alto.core</groupId>
       <artifactId>alto-northbound-route-networkmap-impl</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-networkmap-impl</artifactId>
-      <version>${project.version}</version>
-      <type>xml</type>
-      <classifier>config</classifier>
     </dependency>
 
     <dependency>
@@ -169,14 +153,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-costmap-impl</artifactId>
-      <version>${project.version}</version>
-      <type>xml</type>
-      <classifier>config</classifier>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
       <artifactId>alto-northbound-route-endpointcost-api</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -189,14 +165,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-endpointcost-impl</artifactId>
-      <version>${project.version}</version>
-      <type>xml</type>
-      <classifier>config</classifier>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
       <artifactId>alto-northbound-route-endpointproperty-api</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -205,14 +173,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.alto.core</groupId>
       <artifactId>alto-northbound-route-endpointproperty-impl</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-endpointproperty-impl</artifactId>
-      <version>${project.version}</version>
-      <type>xml</type>
-      <classifier>config</classifier>
     </dependency>
 
     <dependency>

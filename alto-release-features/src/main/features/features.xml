@@ -101,9 +101,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-northbound.xml">
-      mvn:org.opendaylight.alto.core/alto-northbound-impl/${project.version}/xml/config
-    </configfile>
   </feature>
 
   <feature name='odl-alto-standard-service-models' version='${project.version}'
@@ -129,27 +126,15 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-northbound-route-networkmap.xml">
-        mvn:org.opendaylight.alto.core/alto-northbound-route-networkmap-impl/${project.version}/xml/config
-    </configfile>
 
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-northbound-route-costmap.xml">
-      mvn:org.opendaylight.alto.core/alto-northbound-route-costmap-impl/${project.version}/xml/config
-    </configfile>
 
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-northbound-route-endpointcost.xml">
-      mvn:org.opendaylight.alto.core/alto-northbound-route-endpointcost-impl/${project.version}/xml/config
-    </configfile>
 
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-northbound-route-endpointproperty.xml">
-      mvn:org.opendaylight.alto.core/alto-northbound-route-endpointproperty-impl/${project.version}/xml/config
-    </configfile>
   </feature>
 
   <feature name='odl-alto-standard-resource-translator' version='${project.version}'

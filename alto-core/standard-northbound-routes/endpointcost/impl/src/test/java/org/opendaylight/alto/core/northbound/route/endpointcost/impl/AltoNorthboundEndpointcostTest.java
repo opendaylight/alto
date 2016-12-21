@@ -114,12 +114,11 @@ public class AltoNorthboundEndpointcostTest {
         AltoNorthboundRouteEndpointcost endpointcost = new AltoNorthboundRouteEndpointcost();
         AltoNorthboundRouteEndpointcost endpointcostSpy = spy(endpointcost);
 
-        BindingAwareBroker.ProviderContext session = mock(BindingAwareBroker.ProviderContext.class);
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
 
         //configure mock
         doReturn(ctagIID).when(endpointcostSpy).getResourceByPath(eq(path),(ReadOnlyTransaction) anyObject());
-        when(session.getSALService(DataBroker.class)).thenReturn(new DataBroker() {
+        endpointcostSpy.setDataBroker(new DataBroker() {
             @Override
             public ReadOnlyTransaction newReadOnlyTransaction() {
                 return null;
@@ -151,7 +150,7 @@ public class AltoNorthboundEndpointcostTest {
                 return null;
             }
         });
-        when(session.getRpcService(AltoModelEndpointcostService.class)).thenReturn(new AltoModelEndpointcostService() {
+        endpointcostSpy.setMapService(new AltoModelEndpointcostService() {
             @Override
             public Future<RpcResult<QueryOutput>> query(QueryInput queryInput) {
                 return null;
@@ -159,7 +158,7 @@ public class AltoNorthboundEndpointcostTest {
         });
 
         //start test
-        endpointcostSpy.onSessionInitiated(session);
+        endpointcostSpy.init();
         QueryInput input = endpointcostSpy.prepareInput(path,costmode,costmetri,endpoints_source,endpoints_destination);
         EndpointcostRequest request = (EndpointcostRequest)input.getRequest();
         EndpointcostParams params = request.getEndpointcostParams();
@@ -219,7 +218,6 @@ public class AltoNorthboundEndpointcostTest {
         //mock config
         AltoNorthboundRouteEndpointcost endpointcost = new AltoNorthboundRouteEndpointcost();
         AltoNorthboundRouteEndpointcost endpointcostSpy = spy(endpointcost);
-        BindingAwareBroker.ProviderContext session = mock(BindingAwareBroker.ProviderContext.class);
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
 
         AltoModelEndpointcostService endpointcostService = mock(AltoModelEndpointcostService.class);
@@ -283,7 +281,7 @@ public class AltoNorthboundEndpointcostTest {
         when(future.get()).thenReturn(rpcResult);
         when(endpointcostService.query((QueryInput)anyObject())).thenReturn(future);
 
-        when(session.getSALService(DataBroker.class)).thenReturn(new DataBroker() {
+        endpointcostSpy.setDataBroker(new DataBroker() {
             @Override
             public ReadOnlyTransaction newReadOnlyTransaction() {
                 return null;
@@ -315,12 +313,12 @@ public class AltoNorthboundEndpointcostTest {
                 return null;
             }
         });
-        when(session.getRpcService(AltoModelEndpointcostService.class)).thenReturn(endpointcostService);
+        endpointcostSpy.setMapService(endpointcostService);
 
         doReturn(ctagIID).when(endpointcostSpy).getResourceByPath(eq(path), (ReadOnlyTransaction)anyObject());
 
         //start test
-        endpointcostSpy.onSessionInitiated(session);
+        endpointcostSpy.init();
         Response response = endpointcostSpy.getFilteredMap(path, filter);
         String surex = response.getEntity().toString();
         ObjectMapper mapper = new ObjectMapper();
