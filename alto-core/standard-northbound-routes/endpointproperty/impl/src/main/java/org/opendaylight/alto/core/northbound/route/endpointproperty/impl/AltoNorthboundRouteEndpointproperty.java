@@ -8,6 +8,9 @@
 
 package org.opendaylight.alto.core.northbound.route.endpointproperty.impl;
 
+
+import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +18,7 @@ import com.google.common.base.Optional;
 import org.opendaylight.alto.core.northbound.api.exception.AltoErrorInvalidFieldValue;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285EndpointPropertyMap;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285VersionTag;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
@@ -81,7 +84,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-public class AltoNorthboundRouteEndpointproperty implements BindingAwareProvider, AutoCloseable, AltoNorthboundRoute {
+public class AltoNorthboundRouteEndpointproperty implements AltoNorthboundRoute {
     public static final String ALTO_ENDPOINTPROPERTY_FILTER = "application/alto-endpointpropparams+json";
     public static final String ALTO_ENDPOINTPROPERTY = "application/alto-endpointprop+json";
     public static final String FIELD_PROPERTIES = "properties";
@@ -92,17 +95,26 @@ public class AltoNorthboundRouteEndpointproperty implements BindingAwareProvider
 
     private ObjectMapper mapper = new ObjectMapper();
     private static final Logger LOG = LoggerFactory.getLogger(AltoNorthboundRouteEndpointproperty.class);
-    private static DataBroker m_dataBroker = null;
+
+    private DataBroker dataBroker = null;
+
     private AltoNorthboundRouter m_router = null;
 
     private  static AltoModelEndpointpropertyService mapService = null;
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
-        m_dataBroker = session.getSALService(DataBroker.class);
-        if (m_dataBroker == null) {
+    public void setDataBroker(DataBroker dataBroker) {
+        this.dataBroker = dataBroker;
+    }
+
+    public void setMapService(final AltoModelEndpointpropertyService mapService) {
+        this.mapService = mapService;
+    }
+
+    public void init() {
+
+        if (dataBroker == null) {
             LOG.error("Failed to init: data broker is null");
         }
-        mapService = session.getRpcService(AltoModelEndpointpropertyService.class);
+
         LOG.info("AltoNorthboundRouteEndpointProperty initiated");
     }
 
@@ -111,7 +123,6 @@ public class AltoNorthboundRouteEndpointproperty implements BindingAwareProvider
         m_router.addRoute("endpointproperty", new AltoNorthboundRouteEndpointproperty());
     }
 
-    @Override
     public void close() {
         m_router.removeRoute("endpointproperty");
     }
@@ -233,7 +244,7 @@ public class AltoNorthboundRouteEndpointproperty implements BindingAwareProvider
     }
 
     protected QueryInput prepareInput(String path, Iterator<JsonNode> properties, Iterator<JsonNode> endpoints) {
-        ReadOnlyTransaction rtx = m_dataBroker.newReadOnlyTransaction();
+        ReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
         InstanceIdentifier<ContextTag> ctagIID = getResourceByPath(path, rtx);
         if(ctagIID == null){
             return null;

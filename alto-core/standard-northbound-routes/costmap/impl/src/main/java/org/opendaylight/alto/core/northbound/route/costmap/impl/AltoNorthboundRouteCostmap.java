@@ -8,6 +8,9 @@
 
 package org.opendaylight.alto.core.northbound.route.costmap.impl;
 
+
+import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +21,7 @@ import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285CostMap;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285CostType;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285VersionTag;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -69,7 +72,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-public class AltoNorthboundRouteCostmap implements BindingAwareProvider, AutoCloseable, AltoNorthboundRoute {
+public class AltoNorthboundRouteCostmap implements AltoNorthboundRoute {
     public static final String COSTMAP_ROUTE = "costmap";
 
     public static final String ALTO_COSTMAP_FILTER = "application/alto-costmapfilter+json";
@@ -84,18 +87,27 @@ public class AltoNorthboundRouteCostmap implements BindingAwareProvider, AutoClo
 
     private ObjectMapper mapper = new ObjectMapper();
     private static final Logger LOG = LoggerFactory.getLogger(AltoNorthboundRouteCostmap.class);
-    private static DataBroker m_dataBroker = null;
+
+    private DataBroker dataBroker = null;
+
     private AltoNorthboundRouter m_router = null;
 
     private  static AltoModelCostmapService mapService = null;
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
-        m_dataBroker = session.getSALService(DataBroker.class);
-        if (m_dataBroker == null) {
+    public void setDataBroker(DataBroker dataBroker) {
+        this.dataBroker = dataBroker;
+    }
+
+    public void setMapService(final AltoModelCostmapService mapService) {
+        this.mapService = mapService;
+    }
+
+    public void init() {
+
+        if (dataBroker == null) {
             LOG.error("Failed to init: data broker is null");
         }
 
-        mapService = session.getRpcService(AltoModelCostmapService.class);
+
         LOG.info("AltoNorthboundRouteCostmap initiated");
 
     }
@@ -105,7 +117,6 @@ public class AltoNorthboundRouteCostmap implements BindingAwareProvider, AutoClo
         m_router.addRoute("costmap", new AltoNorthboundRouteCostmap());
     }
 
-    @Override
     public void close() {
         m_router.removeRoute("costmap");
     }
@@ -300,7 +311,7 @@ public class AltoNorthboundRouteCostmap implements BindingAwareProvider, AutoClo
 
         costmapRequestBuilder.setCostmapParams(costmapParamsBuilder.build());
 
-        ReadOnlyTransaction rtx = m_dataBroker.newReadOnlyTransaction();
+        ReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
         InstanceIdentifier<ContextTag> ctagIID = getResourceByPath(path, rtx);
         if(ctagIID == null){
             return null;

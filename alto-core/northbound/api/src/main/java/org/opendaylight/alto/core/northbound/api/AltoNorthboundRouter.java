@@ -11,10 +11,10 @@ public interface AltoNorthboundRouter {
 
     /*
      * @return The relative path of the route if successful or null if failing */
-    public String addRoute(String routeName, AltoNorthboundRoute route);
+    String addRoute(String routeName, AltoNorthboundRoute route);
 
-    public void removeRoute(String routeName);
+    void removeRoute(String routeName);
 
-    public AltoNorthboundRoute getRoute(String routeName);
+    AltoNorthboundRoute getRoute(String routeName);
 
 }

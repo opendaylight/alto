@@ -8,6 +8,9 @@
 
 package org.opendaylight.alto.core.northbound.route.endpointcost.impl;
 
+
+import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +20,7 @@ import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285CostType;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285Endpoint;
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -84,7 +87,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-public class AltoNorthboundRouteEndpointcost implements BindingAwareProvider, AutoCloseable, AltoNorthboundRoute {
+public class AltoNorthboundRouteEndpointcost implements AltoNorthboundRoute {
     public static final String ENDPOINTCOST_ROUTE = "endpointcost";
 
     public static final String ALTO_ENDPOINTCOST_FILTER = "application/alto-endpointcostfilter+json";
@@ -99,18 +102,27 @@ public class AltoNorthboundRouteEndpointcost implements BindingAwareProvider, Au
 
     private ObjectMapper mapper = new ObjectMapper();
     private static final Logger LOG = LoggerFactory.getLogger(AltoNorthboundRouteEndpointcost.class);
-    private static DataBroker m_dataBroker = null;
+
+    private DataBroker dataBroker = null;
+
     private AltoNorthboundRouter m_router = null;
 
     private  static AltoModelEndpointcostService mapService = null;
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
-        m_dataBroker = session.getSALService(DataBroker.class);
-        if (m_dataBroker == null) {
+    public void setDataBroker(DataBroker dataBroker) {
+        this.dataBroker = dataBroker;
+    }
+
+    public void setMapService(final AltoModelEndpointcostService mapService) {
+        this.mapService = mapService;
+    }
+
+    public void init() {
+
+        if (dataBroker == null) {
             LOG.error("Failed to init: data broker is null");
         }
 
-        mapService = session.getRpcService(AltoModelEndpointcostService.class);
+
         LOG.info("AltoNorthboundRouteEndpointcost initiated");
 
     }
@@ -120,7 +132,6 @@ public class AltoNorthboundRouteEndpointcost implements BindingAwareProvider, Au
         m_router.addRoute("endpointcost", new AltoNorthboundRouteEndpointcost());
     }
 
-    @Override
     public void close() {
         m_router.removeRoute("endpointcost");
     }
@@ -296,7 +307,7 @@ public class AltoNorthboundRouteEndpointcost implements BindingAwareProvider, Au
         endpointcostRequestBuilder.setEndpointcostParams(endpointcostParamsBuilder.build());
 
         //create servicereference by getting contexttag from resourcepool
-        ReadOnlyTransaction rtx = m_dataBroker.newReadOnlyTransaction();
+        ReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
         InstanceIdentifier<ContextTag> ctagIID = getResourceByPath(path, rtx);
         if(ctagIID == null){
             return null;

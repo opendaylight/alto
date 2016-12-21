@@ -8,6 +8,9 @@
 
 package org.opendaylight.alto.core.northbound.route.networkmap.impl;
 
+
+import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,7 +41,7 @@ import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285Endpoint.AddressGroup;
 
-import org.opendaylight.controller.md.sal.binding.api.DataBroker;
+
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
@@ -78,7 +81,7 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AltoNorthboundRouteNetworkmap implements BindingAwareProvider, AutoCloseable, AltoNorthboundRoute {
+public class AltoNorthboundRouteNetworkmap implements AltoNorthboundRoute {
     public static final String NETWORKMAP_ROUTE = "networkmap";
 
     public static final String ALTO_NETWORKMAP_FILTER = "application/alto-networkmapfilter+json";
@@ -89,17 +92,26 @@ public class AltoNorthboundRouteNetworkmap implements BindingAwareProvider, Auto
 
     private ObjectMapper mapper = new ObjectMapper();
     private static final Logger LOG = LoggerFactory.getLogger(AltoNorthboundRouteNetworkmap.class);
-    private static DataBroker m_dataBroker = null;
+
+    private DataBroker dataBroker = null;
+
     private AltoNorthboundRouter m_router = null;
 
     private  static AltoModelNetworkmapService mapService = null;
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
-        m_dataBroker = session.getSALService(DataBroker.class);
-        if (m_dataBroker == null) {
+    public void setDataBroker(DataBroker dataBroker) {
+        this.dataBroker = dataBroker;
+    }
+
+    public void setMapService(final AltoModelNetworkmapService mapService) {
+        this.mapService = mapService;
+    }
+
+    public void init() {
+
+        if (dataBroker == null) {
             LOG.error("Failed to init: data broker is null");
         }
-        mapService = session.getRpcService(AltoModelNetworkmapService.class);
+
         LOG.info("AltoNorthboundRouteNetworkmap initiated");
     }
 
@@ -108,7 +120,6 @@ public class AltoNorthboundRouteNetworkmap implements BindingAwareProvider, Auto
         m_router.addRoute("networkmap", new AltoNorthboundRouteNetworkmap());
     }
 
-    @Override
     public void close() {
         m_router.removeRoute("networkmap");
     }
@@ -216,7 +227,7 @@ public class AltoNorthboundRouteNetworkmap implements BindingAwareProvider, Auto
         //TODO
         QueryInputBuilder queryInputBuilder = new QueryInputBuilder();
 
-        ReadOnlyTransaction rtx = m_dataBroker.newReadOnlyTransaction();
+        ReadOnlyTransaction rtx = dataBroker.newReadOnlyTransaction();
         InstanceIdentifier<ContextTag> ctagIID = getResourceByPath(path, rtx);
         if(ctagIID == null){
             return null;

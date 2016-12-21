@@ -91,13 +91,11 @@ public class AltoNorthboundCostmapTest {
         AltoNorthboundRouteCostmap costmap = new AltoNorthboundRouteCostmap();
         AltoNorthboundRouteCostmap costmapSpy = spy(costmap);
         AltoModelCostmapService mapService = mock(AltoModelCostmapService.class);
-        BindingAwareBroker.ProviderContext session = mock(BindingAwareBroker.ProviderContext.class);
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
-//        doReturn("").when(mapService).query()
 
         //configure mock
         doReturn(ctagIID).when(costmapSpy).getResourceByPath(eq(path),(ReadOnlyTransaction) anyObject());
-        when(session.getSALService(DataBroker.class)).thenReturn(new DataBroker() {
+        costmapSpy.setDataBroker(new DataBroker() {
             @Override
             public ReadOnlyTransaction newReadOnlyTransaction() {
                 return null;
@@ -129,7 +127,7 @@ public class AltoNorthboundCostmapTest {
                 return null;
             }
         });
-        when(session.getRpcService(AltoModelCostmapService.class)).thenReturn(new AltoModelCostmapService() {
+        costmapSpy.setMapService(new AltoModelCostmapService() {
             @Override
             public Future<RpcResult<QueryOutput>> query(QueryInput queryInput) {
                 return null;
@@ -137,7 +135,7 @@ public class AltoNorthboundCostmapTest {
         });
 
         //start test
-        costmapSpy.onSessionInitiated(session);
+        costmapSpy.init();
         QueryInput input = costmapSpy.prepareInput(path,costmode,costmetri,pid_source,pid_destination);
 
         CostmapRequest request = (CostmapRequest)input.getRequest();
@@ -173,7 +171,6 @@ public class AltoNorthboundCostmapTest {
         //mock config
         final AltoNorthboundRouteCostmap costmap = new AltoNorthboundRouteCostmap();
         AltoNorthboundRouteCostmap costmapSpy = spy(costmap);
-        BindingAwareBroker.ProviderContext session = mock(BindingAwareBroker.ProviderContext.class);
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
 
         AltoModelCostmapService costmapService = mock(AltoModelCostmapService.class);
@@ -212,9 +209,9 @@ public class AltoNorthboundCostmapTest {
         when(future.get()).thenReturn(rpcResult);
         when(costmapService.query((QueryInput) anyObject())).thenReturn(future);
 
-        when(session.getRpcService(AltoModelCostmapService.class)).thenReturn(costmapService);
+        costmapSpy.setMapService(costmapService);
 
-        when(session.getSALService(DataBroker.class)).thenReturn(new DataBroker() {
+        costmapSpy.setDataBroker(new DataBroker() {
             @Override
             public ReadOnlyTransaction newReadOnlyTransaction() {
                 return null;
@@ -255,7 +252,7 @@ public class AltoNorthboundCostmapTest {
         doReturn(meta).when(costmapSpy).buildMeta((InstanceIdentifier<?>) anyObject(), (RFC7285CostType)anyObject());
 
         //start test
-        costmapSpy.onSessionInitiated(session);
+        costmapSpy.init();
         Response response = costmapSpy.getFilteredMap(path,filter);
         String responseStr = response.getEntity().toString();
         ObjectMapper mapper = new ObjectMapper();

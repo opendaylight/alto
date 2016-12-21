@@ -104,7 +104,6 @@ public class AltoNorthboundRouteEndpointpropertyTest {
     public void testPrepareInput() {
 
         AltoNorthboundRouteEndpointproperty anbreSpy = spy(anbre);
-        BindingAwareBroker.ProviderContext session = mock(BindingAwareBroker.ProviderContext.class);
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
         JsonNode filterNode = EndpointpropertyRouteChecker.checkJsonSyntax(ENDPOINTPROPERTY_FILTER);
         JsonNode _properties = filterNode.get(AltoNorthboundRouteEndpointproperty.FIELD_PROPERTIES);
@@ -113,7 +112,7 @@ public class AltoNorthboundRouteEndpointpropertyTest {
         doReturn(ctagIID)
             .when(anbreSpy)
             .getResourceByPath(eq(PATH), (ReadOnlyTransaction) anyObject());
-        when(session.getSALService(DataBroker.class)).thenReturn(new DataBroker() {
+        anbreSpy.setDataBroker(new DataBroker() {
             @Override public ReadOnlyTransaction newReadOnlyTransaction() {
                 return null;
             }
@@ -144,7 +143,7 @@ public class AltoNorthboundRouteEndpointpropertyTest {
             }
         });
 
-        anbreSpy.onSessionInitiated(session);
+        anbreSpy.init();
         QueryInput input = anbreSpy.prepareInput(PATH, _properties.elements(), _endpoints.elements());
         EndpointpropertyRequest request = (EndpointpropertyRequest)input.getRequest();
         EndpointpropertyParams params = request.getEndpointpropertyParams();
@@ -190,7 +189,6 @@ public class AltoNorthboundRouteEndpointpropertyTest {
     @Test
     public void testBuildOutput() throws IOException, ExecutionException, InterruptedException{
         AltoNorthboundRouteEndpointproperty anbreSpy = spy(anbre);
-        BindingAwareBroker.ProviderContext session = mock(BindingAwareBroker.ProviderContext.class);
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
 
         AltoModelEndpointpropertyService epService = mock(AltoModelEndpointpropertyService.class);
@@ -269,8 +267,8 @@ public class AltoNorthboundRouteEndpointpropertyTest {
         when(rpcResult.getResult()).thenReturn(queryOutputBuilder.build());
         when(future.get()).thenReturn(rpcResult);
         when(epService.query((QueryInput) anyObject())).thenReturn(future);
-        when(session.getRpcService(AltoModelEndpointpropertyService.class)).thenReturn(epService);
-        when(session.getSALService(DataBroker.class)).thenReturn(new DataBroker() {
+        anbreSpy.setMapService(epService);
+        anbreSpy.setDataBroker(new DataBroker() {
             @Override public ReadOnlyTransaction newReadOnlyTransaction() {
                 return null;
             }
@@ -309,7 +307,7 @@ public class AltoNorthboundRouteEndpointpropertyTest {
         meta.netmap_tags.add(vtag);
         doReturn(meta).when(anbreSpy).buildMeta((InstanceIdentifier<?>) anyObject());
 
-        anbreSpy.onSessionInitiated(session);
+        anbreSpy.init();
         Response response = anbreSpy.getEndpointProperty(PATH, ENDPOINTPROPERTY_FILTER);
         String stringResponse = response.getEntity().toString();
         ObjectMapper mapper = new ObjectMapper();
