@@ -40,7 +40,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-alto-service-model-endpointcost-ui' version='${project.version}' description='OpenDaylight :: alto-service-model-endpointcost :: UI'>
     <feature version="${project.version}">odl-alto-service-model-endpointcost-rest</feature>
     <feature version="${restconf.version}">odl-mdsal-apidocs</feature>
-    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature version="${dluxapps.version}">odl-dluxapps-yangman</feature>
   </feature>
 

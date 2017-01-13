@@ -51,7 +51,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-network-tracker-ui' version='${project.version}' description='OpenDaylight :: network-tracker :: UI'>
     <feature version="${project.version}">odl-network-tracker-rest</feature>
     <feature version="${restconf.version}">odl-mdsal-apidocs</feature>
-    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature version="${dluxapps.version}">odl-dluxapps-yangman</feature>
   </feature>
 
@@ -75,7 +74,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-alto-spce-ui' version='${project.version}' description='OpenDaylight :: alto-spce :: UI'>
     <feature version="${project.version}">odl-alto-spce-rest</feature>
     <feature version="${restconf.version}">odl-mdsal-apidocs</feature>
-    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature version="${dluxapps.version}">odl-dluxapps-yangman</feature>
   </feature>
 
