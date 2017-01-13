@@ -31,7 +31,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-alto-auto-maps-ui' version='${project.version}' description='OpenDaylight :: alto-auto-maps :: UI'>
     <feature version="${project.version}">odl-alto-auto-maps-rest</feature>
     <feature version="${restconf.version}">odl-mdsal-apidocs</feature>
-    <feature version="${mdsal.version}">odl-mdsal-xsql</feature>
     <feature version="${dlux.version}">odl-dlux-yangui</feature>
   </feature>
   <feature name='odl-alto-auto-maps-cli' version='${project.version}' description='OpenDaylight :: alto-auto-maps :: CLI'>
