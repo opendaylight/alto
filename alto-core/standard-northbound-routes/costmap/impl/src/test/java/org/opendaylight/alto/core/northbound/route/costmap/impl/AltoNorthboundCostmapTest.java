@@ -23,7 +23,6 @@ import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionChainListener;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.PidName;
