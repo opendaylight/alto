@@ -21,9 +21,7 @@ import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285VersionTag
 
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv6Address;

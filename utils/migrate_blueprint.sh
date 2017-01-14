@@ -93,7 +93,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     for rpc in $RPC_CONSUME_LIST; do
         SERV_NAME=$(echo $rpc | sed 's/^.*,//')
         SERV_CLASS=$(grep "^import .*\.$SERV_NAME;" $PROVIDER | sed 's/^import \(.*\);$/\1/')
-        if [[ $SERV_CLASS ]]; then
+        if [[ ! $SERV_CLASS ]]; then
             SERV_CLASS="$PACKAGE.$SERV_NAME"
         fi
         SERV_ID=$(echo ${SERV_NAME:0:1} | tr '[:upper:]' '[:lower:]')${SERV_NAME:1}
