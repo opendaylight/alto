@@ -16,7 +16,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <groupId>org.opendaylight.alto.ext</groupId>
   <artifactId>alto-spce-features</artifactId>
   <version>0.4.0-SNAPSHOT</version>
-  <name>${project.artifactId}</name>
+  <name>ODL :: alto :: ${project.artifactId}</name>
   <modelVersion>4.0.0</modelVersion>
   <prerequisites>
     <maven>3.1.1</maven>
