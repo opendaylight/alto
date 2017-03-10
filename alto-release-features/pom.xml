@@ -351,5 +351,41 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <artifactId>alto-auto-maps-api</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.alto</groupId>
+      <artifactId>multicost-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.alto</groupId>
+      <artifactId>multicost-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.alto</groupId>
+      <artifactId>incremental-update-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.alto</groupId>
+      <artifactId>incremental-update-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.alto</groupId>
+      <artifactId>rsade-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opendaylight.alto</groupId>
+      <artifactId>rsade-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>

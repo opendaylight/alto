@@ -1,0 +1,30 @@
+module alto-multicost {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:multicost";
+    prefix "alto-multicost";
+
+    revision "2017-03-02" {
+        description "Initial revision of multicost model";
+    }
+
+    description
+      "The multicost is a draft to provide multicost support for ALTO cost map \
+      It is implemented in an incompatible way with previous ALTO service models.";
+
+    list multicost-data {
+        key "request-id";
+
+        leaf request-id {
+            type string;
+        }
+
+        leaf request-body {
+            type string;
+        }
+
+        leaf response-body {
+            config false;
+            type string;
+        }
+    }
+}
