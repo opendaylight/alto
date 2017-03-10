@@ -77,11 +77,5 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         </plugins>
     </build>
 
-    <scm>
-        <connection>scm:git:ssh://git.opendaylight.org:29418/alto-simple-ird.git</connection>
-        <developerConnection>scm:git:ssh://git.opendaylight.org:29418/alto-simple-ird.git</developerConnection>
-        <tag>HEAD</tag>
-        <url>https://wiki.opendaylight.org/view/alto-simple-ird:Main</url>
-    </scm>
 </project>
 

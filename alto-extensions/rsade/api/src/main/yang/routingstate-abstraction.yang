@@ -1,0 +1,30 @@
+module alto-rsade {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:rsade";
+    prefix "alto-rsade";
+
+    revision "2017-03-02" {
+        description "Initial revision of routingstate-abstraction model";
+    }
+
+    description
+        "RSADE is short for routing state abstraction based on declarative \
+        equivalence. It is a draft to provide virtual network information \
+        to ALTO clients.";
+
+    list rsade-data {
+        key request-id;
+
+        leaf request-id {
+            type string;
+        }
+
+        leaf request-body {
+            type string;
+        }
+
+        leaf response-body {
+            type string;
+        }
+    }
+}

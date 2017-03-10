@@ -49,6 +49,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-nonstandard-service-models</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-northbound-route</feature>
     <feature version='${project.version}'>odl-alto-spce</feature>
+
+    <bundle>mvn:org.opendaylight.alto/multicost-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/multicost-impl/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/incremental-update-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/incremental-update-impl/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/rsade-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/rsade-impl/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-spce' version='${project.version}'

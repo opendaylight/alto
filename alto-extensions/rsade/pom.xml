@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright © 2016 SNLAB and others. All rights reserved.
+Copyright © 2017 Yale University and others. All rights reserved.
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
@@ -15,15 +15,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <relativePath/>
   </parent>
 
-  <groupId>org.opendaylight.alto.basic</groupId>
-  <artifactId>alto-auto-maps-aggregator</artifactId>
+  <groupId>org.opendaylight.alto</groupId>
+  <artifactId>routingstate-abstraction-aggregator</artifactId>
   <version>0.4.0-SNAPSHOT</version>
-  <name>ODL :: alto :: ${project.artifactId}</name>
+  <name>routingstate-abstraction</name> <!-- DO NOT CHANGE - Used by Sonar to set project name -->
   <packaging>pom</packaging>
 
-  <prerequisites>
-    <maven>3.1.1</maven>
-  </prerequisites>
+  <modules>
+    <module>api</module>
+    <module>impl</module>
+  </modules>
 
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
   <build>
@@ -47,44 +48,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <profiles>
     <profile>
-      <id>minimal</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>api</module>
-        <module>impl</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-dev</id>
-      <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>features</module>
-        <module>artifacts</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-test</id>
-      <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>features</module>
-        <module>artifacts</module>
-        <module>karaf</module>
-        <!--<module>it</module>-->
-      </modules>
-    </profile>
-
-    <profile>
       <!--
           This profile is to ensure we only build javadocs reports
           when we plan to deploy Maven site for our project.
       -->
       <id>maven-site</id>
+      <activation>
+        <file>
+          <exists>${user.dir}/deploy-site.xml</exists>
+        </file>
+      </activation>
 
       <build>
         <plugins>
@@ -99,8 +72,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
                   <goal>aggregate</goal>
                 </goals>
                 <phase>package</phase>
-            </execution>
+              </execution>
             </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <configuration>
+              <failsOnError>true</failsOnError>
+            </configuration>
           </plugin>
         </plugins>
       </build>

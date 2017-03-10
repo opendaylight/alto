@@ -50,10 +50,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </plugins>
   </build>
 
-  <scm>
-    <connection>scm:git:ssh://git.opendaylight.org:29418/network-tracker.git</connection>
-    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/network-tracker.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://wiki.opendaylight.org/view/network-tracker:Main</url>
-  </scm>
 </project>
