@@ -1,0 +1,58 @@
+module alto-incremental-update {
+    yang-version 1;
+    namespace "urn:opendaylight:alto:incrementalupdate";
+    prefix "alto-incremental-update";
+
+    revision "2017-03-02" {
+        description "Initial revision of incremental-update model";
+    }
+
+    description
+        "This module provides the capability of updating ALTO maps incrementally \
+        as introduced in: \
+        https://datatracker.ietf.org/doc/draft-ietf-alto-incr-update-sse/ \
+        Only the support for network map and cost map are supported and the
+        implementation is incompatible with the standard service models.";
+
+    list incr-data {
+        key "request-id";
+
+        leaf request-id {
+            type string;
+        }
+
+        leaf map-name {
+            type string;
+            config false;
+            description "The name of the map to be incrementally updated.";
+        }
+
+        leaf map-type {
+            type string;
+            config false;
+            description "The type of the map to be incrementally updated.";
+        }
+
+        leaf request-body {
+            type string;
+            description "Content of the incremental update request.";
+        }
+
+        list update-history {
+            key "seq";
+
+            config false;
+
+            leaf seq {
+                type int64;
+                description "A sequence number that is self-incremented to reference the partial update.";
+            }
+
+            leaf update-body {
+                type string;
+
+                description "Content of a given inremental update.";
+            }
+        }
+    }
+}
