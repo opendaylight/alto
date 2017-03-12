@@ -37,17 +37,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-extension' version='${project.version}'
             description='OpenDaylight :: alto :: Extension'>
+    <feature version='${project.version}'>odl-alto-northbound</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-types</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-service-models</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-northbound-route</feature>
     <feature version='${project.version}'>odl-alto-spce</feature>
-
-    <bundle>mvn:org.opendaylight.alto/multicost-api/${project.version}</bundle>
-    <bundle>mvn:org.opendaylight.alto/multicost-impl/${project.version}</bundle>
-    <bundle>mvn:org.opendaylight.alto/incremental-update-api/${project.version}</bundle>
-    <bundle>mvn:org.opendaylight.alto/incremental-update-impl/${project.version}</bundle>
-    <bundle>mvn:org.opendaylight.alto/rsade-api/${project.version}</bundle>
-    <bundle>mvn:org.opendaylight.alto/rsade-impl/${project.version}</bundle>
+    <feature version='${project.version}'>odl-alto-multicost</feature>
+    <feature version='${project.version}'>odl-alto-iupd</feature>
+    <feature version='${project.version}'>odl-alto-rsabs</feature>
   </feature>
 
   <feature name='odl-alto-spce' version='${project.version}'
@@ -207,17 +204,30 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
   <feature name='odl-alto-multicost' version='${project.version}'
            description='OpenDaylight :: alto :: Mutlicost support'>
-    <!-- new feature in Carbon -->
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+    <feature version='${project.version}'>odl-alto-northbound</feature>
+
+    <bundle>mvn:org.opendaylight.alto/multicost-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/multicost-impl/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-iupd' version='${project.version}'
            description='OpenDaylight :: alto :: Incremental update'>
-    <!-- new feature in Carbon -->
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+
+    <bundle>mvn:org.opendaylight.alto/incremental-update-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/incremental-update-impl/${project.version}</bundle>
   </feature>
 
   <feature name='odl-alto-rsabs' version='${project.version}'
            description='OpenDaylight :: alto :: Routing state abstraction'>
-    <!-- new feature in Carbon -->
+    <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
+    <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
+
+    <bundle>mvn:org.opendaylight.alto/rsade-api/${project.version}</bundle>
+    <bundle>mvn:org.opendaylight.alto/rsade-impl/${project.version}</bundle>
   </feature>
 
 </features>

@@ -27,6 +27,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-northbound</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>odl-alto-nonstandard-types</artifactId>
       <version>${project.version}</version>
       <type>xml</type>
@@ -54,34 +61,25 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <classifier>features</classifier>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>multicost-api</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-multicost</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>multicost-impl</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-iupd</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>incremental-update-api</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-rsabs</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>incremental-update-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>rsade-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>rsade-impl</artifactId>
-      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
   </dependencies>
 </project>
