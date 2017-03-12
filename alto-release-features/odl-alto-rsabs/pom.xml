@@ -24,7 +24,37 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <name>OpenDaylight :: alto :: Routing state abstraction</name>
 
+  <properties>
+    <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
+    <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
+    <mdsal.model.version>0.10.0-SNAPSHOT</mdsal.model.version>
+    <mdsal.version>1.5.0-SNAPSHOT</mdsal.version>
+  </properties>
+
   <dependencies>
-    <!-- new feature in Carbon -->
+    <dependency>
+      <groupId>${mdsal.model.groupId}</groupId>
+      <artifactId>odl-mdsal-models</artifactId>
+      <version>${mdsal.model.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${mdsal.groupId}</groupId>
+      <artifactId>odl-mdsal-broker</artifactId>
+      <version>${mdsal.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto</groupId>
+      <artifactId>rsade-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto</groupId>
+      <artifactId>rsade-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
