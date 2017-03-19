@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="odl-alto-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0">
+  <feature name="odl-alto-simpleecs" version="${project.version}">
+    <configfile finalname="${configfile.directory}/alto-simpleecs.xml"> mvn:org.opendaylight.alto.basic/alto-simple-ecs-impl/${project.version}/xml/config </configfile>
+  </feature>
+</features>

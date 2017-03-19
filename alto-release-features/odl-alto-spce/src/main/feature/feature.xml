@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="odl-alto-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0">
+  <feature name="odl-alto-spce" version="${project.version}">
+    <configfile finalname="${configfile.directory}/network-tracker.xml"> mvn:org.opendaylight.alto.spce.network/network-tracker-impl/${project.version}/xml/config </configfile>
+    <configfile finalname="${configfile.directory}/alto-spce.xml"> mvn:org.opendaylight.alto.ext/alto-spce-impl/${project.version}/xml/config </configfile>
+  </feature>
+</features>
