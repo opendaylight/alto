@@ -227,14 +227,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
     <dependency>
       <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-simple-ird-impl</artifactId>
-      <version>${project.version}</version>
-      <type>xml</type>
-      <classifier>config</classifier>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
       <artifactId>alto-simple-ird-api</artifactId>
       <version>${project.version}</version>
     </dependency>

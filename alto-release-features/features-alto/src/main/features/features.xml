@@ -149,9 +149,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
     <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ird-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.basic/alto-simple-ird-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-simple-ird.xml">
-      mvn:org.opendaylight.alto.basic/alto-simple-ird-impl/${project.version}/xml/config
-    </configfile>
   </feature>
 
   <feature name='odl-alto-manual-maps' version='${project.version}'
