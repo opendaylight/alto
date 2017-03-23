@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015 Yale University and others.  All rights reserved.
+ * Copyright © 2017 SNLab and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -26,18 +26,8 @@ import org.slf4j.LoggerFactory;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class AltoSimpleIRDIT extends AbstractMdsalTestBase {
-    private static final Logger LOG = LoggerFactory.getLogger(AltoSimpleIRDIT.class);
-
-    @Override
-    public String getModuleName() {
-        return "alto-simple-ird";
-    }
-
-    @Override
-    public String getInstanceName() {
-        return "alto-simple-ird-default";
-    }
+public class AltoSimpleIrdIT extends AbstractMdsalTestBase {
+    private static final Logger LOG = LoggerFactory.getLogger(AltoSimpleIrdIT.class);
 
     @Override
     public MavenUrlReference getFeatureRepo() {
@@ -57,7 +47,7 @@ public class AltoSimpleIRDIT extends AbstractMdsalTestBase {
     @Override
     public Option getLoggingOption() {
         Option option = editConfigurationFilePut(ORG_OPS4J_PAX_LOGGING_CFG,
-                logConfiguration(AltoSimpleIRDIT.class),
+                logConfiguration(AltoSimpleIrdIT.class),
                 LogLevel.INFO.name());
         option = composite(option, super.getLoggingOption());
         return option;
