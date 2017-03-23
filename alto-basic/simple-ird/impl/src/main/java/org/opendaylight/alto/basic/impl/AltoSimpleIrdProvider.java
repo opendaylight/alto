@@ -1,5 +1,5 @@
 /*
- * Copyright © 2015 Yale University and others.  All rights reserved.
+ * Copyright © 2017 SNLab and others.  All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
@@ -15,29 +15,27 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
-import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.Information;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.InformationBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstance;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfiguration;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfigurationBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutionException;
 
-public class AltoSimpleIrdProvider implements BindingAwareProvider, AutoCloseable {
+public class AltoSimpleIrdProvider {
 
     public static final String ROOT_INSTANCE = "root";
     public static final String SIMPLE_IRD_ROUTE_NAME = "simpleird";
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoSimpleIrdProvider.class);
 
-    private DataBroker m_dataBroker = null;
+    private final DataBroker m_dataBroker;
 
     InstanceIdentifier<IrdInstanceConfiguration> m_iid = null;
     InstanceIdentifier<IrdInstance> m_rootIID = null;
@@ -78,7 +76,7 @@ public class AltoSimpleIrdProvider implements BindingAwareProvider, AutoCloseabl
                 .setInstanceId(new ResourceId(SimpleIrdUtils.DEFAULT_IRD_RESOURCE));
 
         InstanceIdentifier<IrdInstanceConfiguration> iicIID =
-        SimpleIrdUtils.getInstanceConfigurationIID(new ResourceId(SimpleIrdUtils.DEFAULT_IRD_RESOURCE));
+                SimpleIrdUtils.getInstanceConfigurationIID(new ResourceId(SimpleIrdUtils.DEFAULT_IRD_RESOURCE));
 
         wx.put(LogicalDatastoreType.CONFIGURATION, iicIID, builder.build());
         wx.submit().get();
@@ -99,11 +97,14 @@ public class AltoSimpleIrdProvider implements BindingAwareProvider, AutoCloseabl
         }
     }
 
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
-        LOG.info("AltoSimpleIrdProvider Session Initiated");
+    public AltoSimpleIrdProvider(final DataBroker dataBroker) {
+        this.m_dataBroker = dataBroker;
+    }
 
-        m_dataBroker = session.getSALService(DataBroker.class);
+    /**
+     * Method called when the blueprint container is created.
+     */
+    public void init() {
         m_iid = SimpleIrdUtils.getInstanceConfigurationListIID();
         m_rootIID = SimpleIrdUtils.getInstanceIID(ROOT_INSTANCE);
 
@@ -115,10 +116,13 @@ public class AltoSimpleIrdProvider implements BindingAwareProvider, AutoCloseabl
             LOG.error("Failed to create top-level containers");
             e.printStackTrace();
         }
+        LOG.info("AltoSimpleIrdProvider Session Initiated");
     }
 
-    @Override
-    public void close() throws Exception {
+    /**
+     * Method called when the blueprint container is destroyed.
+     */
+    public void close() {
         try {
             if (m_router != null) {
                 m_router.removeRoute(SIMPLE_IRD_ROUTE_NAME);

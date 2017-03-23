@@ -153,7 +153,7 @@ public class SimpleIrdEntryListenerTest {
     public void isValidResource() throws Exception {
         ResourceBuilder rb = new ResourceBuilder()
                 .setKey(new ResourceKey(new ResourceId("test")))
-                 .setType(null);
+                .setType(null);
         assertEquals(simpleIrdEntryListener.isValidResource(rb.build()), false);
     }
 
@@ -173,8 +173,7 @@ public class SimpleIrdEntryListenerTest {
                 .setEntryId(new ResourceId("THE_FIRST_ENTRY_ID"))
                 .setInstance(instanceIID)
                 .setLocation(new FixedUrlBuilder()
-                .setUri(new Uri("http://alto.example.com/first_instance"))
-                .build());
+                    .setUri(new Uri("http://alto.example.com/first_instance")).build());
         configs.add(configBuilder.build());
         Map<IrdConfigurationEntry, Resource> result = simpleIrdEntryListener.readEntries(configs, rwx);
         assertEquals(result, null);
@@ -210,8 +209,7 @@ public class SimpleIrdEntryListenerTest {
                 .setEntryId(new ResourceId("THE_FIRST_ENTRY_ID"))
                 .setInstance(instanceIID)
                 .setLocation(new FixedUrlBuilder()
-                        .setUri(new Uri("http://alto.example.com/first_instance"))
-                        .build());
+                    .setUri(new Uri("http://alto.example.com/first_instance")).build());
         configs.add(configBuilder.build());
         IrdInstanceConfigurationBuilder iicb = new IrdInstanceConfigurationBuilder()
                 .setIrdConfigurationEntry(configs);

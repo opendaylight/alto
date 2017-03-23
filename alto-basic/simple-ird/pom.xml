@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright © 2015 Yale University and others. All rights reserved.
+Copyright © 2017 SNLab and others. All rights reserved.
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
@@ -17,12 +17,29 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <groupId>org.opendaylight.alto.basic</groupId>
   <artifactId>alto-simple-ird-aggregator</artifactId>
   <version>0.4.0-SNAPSHOT</version>
-  <name>ODL :: alto :: ${project.artifactId}</name>
+  <name>ODL :: alto :: ${project.artifactId}</name> <!-- DO NOT CHANGE - Used by Sonar to set project name -->
   <packaging>pom</packaging>
   <modelVersion>4.0.0</modelVersion>
-  <prerequisites>
-    <maven>3.1.1</maven>
-  </prerequisites>
+  <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
   <profiles>
     <profile>
       <id>minimal</id>
@@ -56,25 +73,58 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <module>it</module>
       </modules>
     </profile>
-  </profiles>
-  <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+    <profile>
+      <!--
+          This profile is to ensure we only build javadocs reports
+          when we plan to deploy Maven site for our project.
+      -->
+      <id>maven-site</id>
+      <activation>
+        <file>
+          <exists>${user.dir}/deploy-site.xml</exists>
+        </file>
+      </activation>
 
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <inherited>false</inherited>
+            <executions>
+              <execution>
+                <id>aggregate</id>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <configuration>
+              <failsOnError>true</failsOnError>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <!--
+      Maven Site Configuration
+
+      The following configuration is necessary for maven-site-plugin to
+      correctly identify the correct deployment path for OpenDaylight Maven
+      sites.
+  -->
+  <url>${odl.site.url}/${project.groupId}/${stream}/</url>
+
+  <distributionManagement>
+    <site>
+      <id>opendaylight-site</id>
+      <url>${nexus.site.url}/</url>
+    </site>
+  </distributionManagement>
 </project>
