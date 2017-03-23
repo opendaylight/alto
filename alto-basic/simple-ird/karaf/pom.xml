@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-Copyright © 2015 Yale University and others. All rights reserved.
+Copyright © 2017 SNLab and others. All rights reserved.
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>karaf-parent</artifactId>
     <version>1.8.0-SNAPSHOT</version>
-    <relativePath/>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
+
   <groupId>org.opendaylight.alto.basic</groupId>
   <artifactId>alto-simple-ird-karaf</artifactId>
   <version>0.4.0-SNAPSHOT</version>
+  <!-- <name> formatting is used by autorelease to parse and notify projects on
+       build failure. Please do not modify this unless you have a good reason. -->
   <name>ODL :: alto :: ${project.artifactId}</name>
-  <prerequisites>
-    <maven>3.1.1</maven>
-  </prerequisites>
+
   <properties>
     <karaf.localFeature>odl-alto-simple-ird-ui</karaf.localFeature>
   </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -34,6 +38,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <dependencies>
     <dependency>
       <!-- scope is compile so all features (there is only one) are installed
@@ -51,9 +56,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <scope>runtime</scope>
     </dependency>
   </dependencies>
-  <!-- DO NOT install or deploy the karaf artifact -->
+
   <build>
     <plugins>
+      <!-- DO NOT deploy the karaf artifact -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
