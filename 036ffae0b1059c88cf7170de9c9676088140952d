@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fafc7978_9e8625da",
+        "filename": "alto-basic/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T05:43:52Z",
+      "side": 1,
+      "message": "Useless comment?",
+      "revId": "036ffae0b1059c88cf7170de9c9676088140952d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_de670d50",
+        "filename": "alto-basic/simple-ird/artifacts/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T05:43:52Z",
+      "side": 1,
+      "message": "org.opendaylight.alto.basic -\u003e alto",
+      "revId": "036ffae0b1059c88cf7170de9c9676088140952d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_3e773904",
+        "filename": "alto-basic/simple-ird/features/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T05:43:52Z",
+      "side": 1,
+      "message": "Same issue",
+      "revId": "036ffae0b1059c88cf7170de9c9676088140952d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_1e723511",
+        "filename": "alto-basic/simple-ird/impl/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T05:43:52Z",
+      "side": 1,
+      "message": "Same issue",
+      "revId": "036ffae0b1059c88cf7170de9c9676088140952d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_5e631d41",
+        "filename": "alto-basic/simple-ird/it/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T05:43:52Z",
+      "side": 1,
+      "message": "Same issue",
+      "revId": "036ffae0b1059c88cf7170de9c9676088140952d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_be5a0981",
+        "filename": "alto-basic/simple-ird/it/pom.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T05:43:52Z",
+      "side": 1,
+      "message": "What does this mean?",
+      "revId": "036ffae0b1059c88cf7170de9c9676088140952d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_1e4995b7",
+        "filename": "alto-release-features/odl-alto-simpleird/src/main/feature/feature.xml",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T05:43:52Z",
+      "side": 1,
+      "message": "Since this feature is empty, why not delete this file?",
+      "revId": "036ffae0b1059c88cf7170de9c9676088140952d",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
