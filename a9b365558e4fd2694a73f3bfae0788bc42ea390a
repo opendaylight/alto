@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fafc7978_44f22a9b",
+        "filename": "alto-basic/simple-ird/impl/src/test/java/org/opendaylight/alto/basic/impl/SimpleIrdEntryListenerTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T11:45:01Z",
+      "side": 1,
+      "message": "They are not in the same level. Why align the indent?",
+      "revId": "a9b365558e4fd2694a73f3bfae0788bc42ea390a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_24d606f2",
+        "filename": "alto-basic/simple-ird/pom.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T11:45:01Z",
+      "side": 1,
+      "message": "What\u0027s this???",
+      "revId": "a9b365558e4fd2694a73f3bfae0788bc42ea390a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_c4fe1a6b",
+        "filename": "alto-basic/simple-ird/pom.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T11:45:01Z",
+      "side": 1,
+      "message": "Indent alignment...",
+      "revId": "a9b365558e4fd2694a73f3bfae0788bc42ea390a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fafc7978_a401566c",
+        "filename": "alto-basic/simple-ird/pom.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T11:45:01Z",
+      "side": 1,
+      "message": "Why 0.1.0?",
+      "revId": "a9b365558e4fd2694a73f3bfae0788bc42ea390a",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
