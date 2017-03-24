@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fafc7978_19b40f34",
+        "filename": "alto-basic/simple-ird/impl/src/test/java/org/opendaylight/alto/basic/simpleird/SimpleIrdUtilsTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-03-24T08:26:34Z",
+      "side": 1,
+      "message": "Shall we move this test to api/ directory?",
+      "revId": "810189da6cff8f41b637c33f8faf6e42961f6c13",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
