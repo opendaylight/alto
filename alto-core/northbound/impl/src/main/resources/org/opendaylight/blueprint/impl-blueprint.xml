@@ -14,4 +14,5 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     class="org.opendaylight.alto.core.northbound.impl.AltoNorthboundProvider"
     init-method="init" destroy-method="close">
   </bean>
+  <service ref="provider" interface="org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter"/>
 </blueprint>

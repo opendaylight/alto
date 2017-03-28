@@ -37,6 +37,8 @@ public class AltoSimpleIrdProvider {
 
     private final DataBroker m_dataBroker;
 
+    private final AltoNorthboundRouter router;
+
     InstanceIdentifier<IrdInstanceConfiguration> m_iid = null;
     InstanceIdentifier<IrdInstance> m_rootIID = null;
 
@@ -97,8 +99,13 @@ public class AltoSimpleIrdProvider {
         }
     }
 
-    public AltoSimpleIrdProvider(final DataBroker dataBroker) {
+    public AltoSimpleIrdProvider(final DataBroker dataBroker, final AltoNorthboundRouter router) {
         this.m_dataBroker = dataBroker;
+        this.router = router;
+        if (this.router == null) {
+            System.out.println("Could not find AltoNorthboundRouter");
+            LOG.info("Could not find AltoNorthBoundRouter");
+        }
     }
 
     /**
@@ -112,6 +119,7 @@ public class AltoSimpleIrdProvider {
             createContext();
             setupListener();
             createDefaultIrd();
+            setupRoute(this.router);
         } catch (Exception e) {
             LOG.error("Failed to create top-level containers");
             e.printStackTrace();
@@ -148,6 +156,8 @@ public class AltoSimpleIrdProvider {
     public void setupRoute(AltoNorthboundRouter router) {
         AltoNorthboundRoute route = new SimpleIrdRoute(this);
         String base_url = router.addRoute(SIMPLE_IRD_ROUTE_NAME, route);
+        LOG.info("setupRoute is called and base url is :" + base_url);
+        System.out.print("setupRoute is called and base url is :" + base_url);
         if (base_url == null) {
             LOG.error("Failed to register route for AltoSimpleIrd");
             return;
