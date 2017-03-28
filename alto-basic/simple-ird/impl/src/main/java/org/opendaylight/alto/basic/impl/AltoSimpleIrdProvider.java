@@ -97,8 +97,9 @@ public class AltoSimpleIrdProvider {
         }
     }
 
-    public AltoSimpleIrdProvider(final DataBroker dataBroker) {
+    public AltoSimpleIrdProvider(final DataBroker dataBroker, final AltoNorthboundRouter router) {
         this.m_dataBroker = dataBroker;
+        this.m_router = router;
     }
 
     /**
@@ -112,6 +113,7 @@ public class AltoSimpleIrdProvider {
             createContext();
             setupListener();
             createDefaultIrd();
+            setupRoute(m_router);
         } catch (Exception e) {
             LOG.error("Failed to create top-level containers");
             e.printStackTrace();
@@ -165,7 +167,6 @@ public class AltoSimpleIrdProvider {
 
             wx.submit().get();
 
-            m_router = router;
             m_route = route;
         } catch (Exception e) {
             LOG.error("Failed to reigster route");

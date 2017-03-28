@@ -14,11 +14,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <reference id="dataBroker"
     interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"
     odl:type="default" />
+  <reference id="router"
+             interface="org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter"/>
 
   <bean id="altoSimpleIrdProvider"
     class="org.opendaylight.alto.basic.impl.AltoSimpleIrdProvider"
     init-method="init" destroy-method="close">
     <argument ref="dataBroker" />
+    <argument ref="router" />
   </bean>
 
 </blueprint>
