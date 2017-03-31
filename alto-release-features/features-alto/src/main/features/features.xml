@@ -83,7 +83,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <feature name='odl-alto-resourcepool' version='${project.version}'
             description='OpenDaylight :: alto :: Resourcepool'>
     <feature version='${mdsal.model.version}'>odl-mdsal-models</feature>
-    <feature version='${mdsal.version}'>odl-mdsal-all</feature>
     <feature version='${mdsal.version}'>odl-mdsal-broker</feature>
 
     <feature version='${project.version}'>odl-alto-standard-types</feature>
