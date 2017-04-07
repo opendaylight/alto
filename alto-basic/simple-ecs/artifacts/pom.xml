@@ -14,12 +14,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.alto</groupId>
     <artifactId>alto-parent</artifactId>
-    <version>0.3.3-SNAPSHOT</version>
+    <version>0.3.4-SNAPSHOT</version>
     <relativePath>../../../</relativePath>
   </parent>
 
   <groupId>org.opendaylight.alto.basic</groupId>
-  <version>0.3.3-SNAPSHOT</version>
+  <version>0.3.4-SNAPSHOT</version>
   <artifactId>alto-simple-ecs-artifacts</artifactId>
   <packaging>pom</packaging>
 
