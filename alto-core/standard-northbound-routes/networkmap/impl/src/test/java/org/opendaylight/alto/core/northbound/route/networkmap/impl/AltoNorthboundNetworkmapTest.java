@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
+import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285NetworkMap;
 import org.opendaylight.controller.md.sal.binding.api.BindingTransactionChain;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -130,6 +132,22 @@ public class AltoNorthboundNetworkmapTest {
                 return null;
             }
         });
+        networkmapSpy.setRouter(new AltoNorthboundRouter() {
+            @Override
+            public String addRoute(String routeName, AltoNorthboundRoute route) {
+                return null;
+            }
+
+            @Override
+            public void removeRoute(String routeName) {
+
+            }
+
+            @Override
+            public AltoNorthboundRoute getRoute(String routeName) {
+                return null;
+            }
+        });
 
         QueryInput input = networkmapSpy.prepareInput(path, pids, addressTypes);
         NetworkmapRequest request = (NetworkmapRequest)input.getRequest();
@@ -234,6 +252,22 @@ public class AltoNorthboundNetworkmapTest {
             @Nonnull
             @Override
             public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(@Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
+                return null;
+            }
+        });
+        networkmapSpy.setRouter(new AltoNorthboundRouter() {
+            @Override
+            public String addRoute(String routeName, AltoNorthboundRoute route) {
+                return null;
+            }
+
+            @Override
+            public void removeRoute(String routeName) {
+
+            }
+
+            @Override
+            public AltoNorthboundRoute getRoute(String routeName) {
                 return null;
             }
         });
