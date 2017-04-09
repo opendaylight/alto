@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da01753e_6125c2c1",
+        "filename": "alto-basic/manual-maps/impl/src/main/java/org/opendaylight/alto/basic/impl/AltoManualMapsProvider.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2017-04-09T16:14:06Z",
+      "side": 1,
+      "message": "You removed BindingAwareProvider (DI client interface). But I do not see you define the new DI (e.g. blueprint) anywhere.",
+      "revId": "c9a86c3d1b161f3770814cea899936f8657a70ae",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
