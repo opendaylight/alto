@@ -14,9 +14,9 @@ import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
-import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
 
+
+import org.opendaylight.controller.sal.binding.api.RpcProviderRegistry;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.config.rev151021.AltoModelConfigService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.AltoModelCostmapService;
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AltoManualMapsProvider implements BindingAwareProvider, AutoCloseable {
+public class AltoManualMapsProvider {
     public static final String RESOURCE_CONFIG_ROUTE_NAME = "config";
     public static final String RESOURCE_CONFIG_CONTEXT_NAME = "alto-manual-maps";
 
@@ -39,8 +39,47 @@ public class AltoManualMapsProvider implements BindingAwareProvider, AutoCloseab
     private BindingAwareBroker.RoutedRpcRegistration<AltoModelNetworkmapService> altoModelNetworkmapService = null;
     private BindingAwareBroker.RoutedRpcRegistration<AltoModelCostmapService> altoModelCostmapService = null;
 
-    private AltoNorthboundRouter m_router = null;
+    private RpcProviderRegistry rpcProviderRegistry = null;
+
+    private AltoNorthboundRouter altoNorthboundRouter = null;
     private List<Uuid> m_contexts = null;
+
+    private AltoModelNetworkmapService m_AltoModelNetworkmapService = null;
+
+    public void setRpcProviderRegistry(RpcProviderRegistry rpr) {
+        this.rpcProviderRegistry = rpr;
+    }
+
+    public void setDataBroker(DataBroker db) {
+        this.dataBroker = db;
+    }
+
+    public void setAltoNorthboundRouter(AltoNorthboundRouter anr) {
+        this.altoNorthboundRouter = anr;
+    }
+
+    public void setAltoModelNetworkmapService(AltoManualNetworkmapServiceImpl ansi) {
+        this.m_AltoModelNetworkmapService = ansi;
+    }
+    /**
+     * Method called when the blueprint container is created.
+     */
+    public void init() {
+        this.rpcProviderRegistry.addRpcImplementation(AltoModelConfigService.class,
+                new AltoModelConfigImpl(dataBroker));
+        altoModelNetworkmapService = this.rpcProviderRegistry.addRoutedRpcImplementation(AltoModelNetworkmapService.class,
+                new AltoManualNetworkmapServiceImpl(dataBroker));
+        this.rpcProviderRegistry.addRoutedRpcImplementation(AltoModelCostmapService.class,
+                new AltoManualCostmapServiceImpl(dataBroker));
+        try {
+            setupListener();
+            initializeConfigContext();
+        } catch (Exception e) {
+            LOG.error("Failed to create top-level containers");
+            e.printStackTrace();
+        }
+        LOG.info("AltoManualMapsProvider Session Initiated");
+    }
 
     protected void setupListener() {
         manualMapsListener = new ManualMapsListener();
@@ -70,31 +109,10 @@ public class AltoManualMapsProvider implements BindingAwareProvider, AutoCloseab
         wx.submit().get();
     }
 
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
-        LOG.info("AltoManualMapsProvider Session Initiated");
-
-        dataBroker = session.getSALService(DataBroker.class);
-        altoModelConfigService = session.addRpcImplementation(AltoModelConfigService.class,
-                new AltoModelConfigImpl(dataBroker));
-        altoModelNetworkmapService = session.addRoutedRpcImplementation(AltoModelNetworkmapService.class,
-                new AltoManualNetworkmapServiceImpl(dataBroker));
-        altoModelCostmapService = session.addRoutedRpcImplementation(AltoModelCostmapService.class,
-                new AltoManualCostmapServiceImpl(dataBroker));
-        try {
-            setupListener();
-            initializeConfigContext();
-        } catch (Exception e) {
-            LOG.error("Failed to create top-level containers");
-            e.printStackTrace();
-        }
-    }
-
-    @Override
     public void close() throws Exception {
         try {
-            if (m_router != null) {
-                m_router.removeRoute(RESOURCE_CONFIG_ROUTE_NAME);
+            if (altoNorthboundRouter != null) {
+                altoNorthboundRouter.removeRoute(RESOURCE_CONFIG_ROUTE_NAME);
             }
             clearConfigContext();
             closeListener();
@@ -122,7 +140,7 @@ public class AltoManualMapsProvider implements BindingAwareProvider, AutoCloseab
         }
 
         try {
-            m_router = router;
+            altoNorthboundRouter = router;
         } catch (Exception e) {
             LOG.error("Failed to reigster route");
         }

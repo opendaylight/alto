@@ -103,22 +103,30 @@ public class AltoNorthboundRouteNetworkmap implements AltoNorthboundRoute {
         this.mapService = mapService;
     }
 
+    public  void setRouter (AltoNorthboundRouter altoNorthboundRouter) {
+        this.m_router = altoNorthboundRouter;
+    }
+
     public void init() {
 
-        if (dataBroker == null) {
+        if (this.dataBroker == null) {
             LOG.error("Failed to init: data broker is null");
         }
-
+        if (mapService == null) {
+            LOG.error("Failed to init: network map service is null");
+        }
+        register(this.m_router);
         LOG.info("AltoNorthboundRouteNetworkmap initiated");
     }
 
     public void register(AltoNorthboundRouter router) {
         m_router = router;
-        m_router.addRoute("networkmap", new AltoNorthboundRouteNetworkmap());
+        m_router.addRoute("networkmap", this);
     }
 
     public void close() {
         m_router.removeRoute("networkmap");
+        LOG.info("AltoNorthboundRouteNetworkmap closed");
     }
 
     @Path("{path}")
