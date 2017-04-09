@@ -108,7 +108,9 @@ public class AltoNorthboundRouteNetworkmap implements AltoNorthboundRoute {
         if (dataBroker == null) {
             LOG.error("Failed to init: data broker is null");
         }
-
+        if (mapService == null) {
+            LOG.error("Failed to init: network map service is null");
+        }
         LOG.info("AltoNorthboundRouteNetworkmap initiated");
     }
 
