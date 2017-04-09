@@ -158,9 +158,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <bundle>mvn:org.opendaylight.alto.core/alto-service-model-config-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-api/${project.version}</bundle>
     <bundle>mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}</bundle>
-    <configfile finalname="${configfile.directory}/alto-manual-maps.xml">
-      mvn:org.opendaylight.alto.basic/alto-manual-maps-impl/${project.version}/xml/config
-    </configfile>
   </feature>
 
   <feature name='odl-alto-simpleecs' version='${project.version}'
