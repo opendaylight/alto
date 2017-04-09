@@ -8,11 +8,15 @@ terms of the Eclipse Public License v1.0 which accompanies this distribution,
 and is available at http://www.eclipse.org/legal/epl-v10.html
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-  xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
-  odl:use-default-for-reference-types="true">
+           xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+           odl:use-default-for-reference-types="true">
   <bean id="provider"
-    class="org.opendaylight.alto.core.northbound.impl.AltoNorthboundProvider"
-    init-method="init" destroy-method="close">
+        class="org.opendaylight.alto.core.northbound.impl.AltoNorthboundProvider"
+        init-method="init" destroy-method="close">
   </bean>
-  <service ref="provider" interface="org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter"/>
+
+  <service ref="provider"
+           interface="org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter"
+           odl:type="default"/>
+
 </blueprint>
