@@ -80,9 +80,11 @@ module alto-manual-maps {
     augment "alto-cfg:query/alto-cfg:output/alto-cfg:response/alto-cfg:config-response/"
           + "alto-cfg:config-response-message/alto-cfg:config-response-data" {
         container "config-networkmap-response-data" {
+            presence "Indicates response data being present";
             uses networkmap-config:network-map;
         }
         container "config-costmap-response-data" {
+            presence "Indicates response data being present";
             uses costmap-config:cost-map;
         }
     }
