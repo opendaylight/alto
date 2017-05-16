@@ -42,9 +42,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <feature version='${project.version}'>odl-alto-nonstandard-service-models</feature>
     <feature version='${project.version}'>odl-alto-nonstandard-northbound-route</feature>
     <feature version='${project.version}'>odl-alto-spce</feature>
+    <!--
     <feature version='${project.version}'>odl-alto-multicost</feature>
     <feature version='${project.version}'>odl-alto-iupd</feature>
     <feature version='${project.version}'>odl-alto-rsabs</feature>
+    -->
   </feature>
 
   <feature name='odl-alto-spce' version='${project.version}'
