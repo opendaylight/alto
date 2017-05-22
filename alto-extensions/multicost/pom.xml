@@ -11,13 +11,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>odlparent</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.8.0-Carbon</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>multicost-aggregator</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0-Carbon</version>
   <name>alto-multicost</name> <!-- DO NOT CHANGE - Used by Sonar to set project name -->
   <packaging>pom</packaging>
 

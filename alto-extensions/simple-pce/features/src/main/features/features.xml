@@ -39,7 +39,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <!-- odl-l2switch-arphandler uses blueprint now, but we still attempt to write data to
     the config subsystem in order to set is-proactive-flood-mode to false. -->
 <!--    <configfile finalname="${configfile.directory}/54-alto-arphandler.xml">
-      mvn:org.opendaylight.alto.spce.network/network-tracker-config/0.5.0-SNAPSHOT/xml/config
+      mvn:org.opendaylight.alto.spce.network/network-tracker-config/0.5.0-Carbon/xml/config
     </configfile>-->
   </feature>
 

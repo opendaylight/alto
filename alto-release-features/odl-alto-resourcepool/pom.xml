@@ -13,13 +13,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.8.0-Carbon</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-resourcepool</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
+  <version>0.4.0-Carbon</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Resourcepool</name>
@@ -27,8 +27,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <properties>
     <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
     <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
-    <mdsal.model.version>0.10.0-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.5.0-SNAPSHOT</mdsal.version>
+    <mdsal.model.version>0.10.0-Carbon</mdsal.model.version>
+    <mdsal.version>1.5.0-Carbon</mdsal.version>
   </properties>
 
   <dependencies>
