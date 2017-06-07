@@ -35,7 +35,7 @@ module alto-costmap-config {
             type alto-types:resource-id;
         }
         leaf tag {
-            mandatory ture;
+            mandatory true;
             type alto-types:tag;
         }
 
