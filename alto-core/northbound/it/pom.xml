@@ -12,21 +12,21 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>mdsal-it-parent</artifactId>
-    <version>1.4.4-SNAPSHOT</version>
+    <version>1.4.4-Boron-SR4</version>
     <relativePath/>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.core</groupId>
   <artifactId>alto-northbound-it</artifactId>
-  <version>0.3.4-SNAPSHOT</version>
+  <version>0.3.4-Boron-SR4</version>
   <packaging>bundle</packaging>
 
   <properties>
     <skipITs>false</skipITs>
     <karaf.distro.groupId>org.opendaylight.alto.core</karaf.distro.groupId>
     <karaf.distro.artifactId>alto-northbound-karaf</karaf.distro.artifactId>
-    <karaf.distro.version>0.3.4-SNAPSHOT</karaf.distro.version>
+    <karaf.distro.version>0.3.4-Boron-SR4</karaf.distro.version>
     <karaf.distro.type>zip</karaf.distro.type>
   </properties>
 
