@@ -9,357 +9,156 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
-    <artifactId>features-parent</artifactId>
-    <version>1.9.0</version>
+    <artifactId>feature-repo-parent</artifactId>
+    <version>2.0.0</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
-  <artifactId>features-alto-release</artifactId>
+  <artifactId>features4-alto</artifactId>
   <version>0.5.0-SNAPSHOT</version>
-  <name>OpenDaylight :: alto :: ${project.artifactId}</name>
-
-  <properties>
-    <mdsal.model.version>0.11.0-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.6.0-SNAPSHOT</mdsal.version>
-    <restconf.version>1.6.0-SNAPSHOT</restconf.version>
-    <configfile.directory>etc/opendaylight/karaf</configfile.directory>
-    <l2switch.version>0.6.0-SNAPSHOT</l2switch.version>
-    <openflow.plugin.version>0.5.0-SNAPSHOT</openflow.plugin.version>
-  </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <!-- project specific dependencies -->
-      <dependency>
-        <groupId>org.opendaylight.alto</groupId>
-        <artifactId>alto-parent</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.opendaylight.controller</groupId>
-        <artifactId>mdsal-artifacts</artifactId>
-        <version>${mdsal.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.opendaylight.netconf</groupId>
-        <artifactId>restconf-artifacts</artifactId>
-        <version>${restconf.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  <packaging>feature</packaging>
 
   <dependencies>
     <dependency>
-      <groupId>org.opendaylight.mdsal.model</groupId>
-      <artifactId>features-mdsal-model</artifactId>
-      <version>${mdsal.model.version}</version>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-release</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
       <classifier>features</classifier>
-      <type>xml</type>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.controller</groupId>
-      <artifactId>features-mdsal</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-core</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
       <classifier>features</classifier>
-      <type>xml</type>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.netconf</groupId>
-      <artifactId>features-restconf</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-basic</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
       <classifier>features</classifier>
-      <type>xml</type>
-      <scope>runtime</scope>
     </dependency>
-
     <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-basic-types</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-resourcepool-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-resourcepool-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-networkmap-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-networkmap-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-costmap-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-costmap-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-endpointcost-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-endpointcost-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-endpointproperty-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-northbound-route-endpointproperty-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-service-model-ird-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-service-model-base-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-service-model-networkmap-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-service-model-endpointcost-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-service-model-endpointproperty-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-service-model-costmap-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.core</groupId>
-      <artifactId>alto-service-model-config-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-simple-ird-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-manual-maps-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-manual-maps-impl</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-extension</artifactId>
       <version>${project.version}</version>
       <type>xml</type>
-      <classifier>config</classifier>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-manual-maps-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-simple-ird-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.openflowplugin</groupId>
-      <artifactId>features-openflowplugin</artifactId>
       <classifier>features</classifier>
-      <version>${openflow.plugin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-spce</artifactId>
+      <version>${project.version}</version>
       <type>xml</type>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.openflowplugin.model</groupId>
-      <artifactId>model-flow-statistics</artifactId>
-      <version>${openflow.plugin.version}</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.l2switch</groupId>
-      <artifactId>features-l2switch</artifactId>
       <classifier>features</classifier>
-      <version>${l2switch.version}</version>
-      <type>xml</type>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto.spce.network</groupId>
-      <artifactId>network-tracker-config</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-resourcepool</artifactId>
       <version>${project.version}</version>
       <type>xml</type>
-      <classifier>config</classifier>
+      <classifier>features</classifier>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto.spce.network</groupId>
-      <artifactId>network-tracker-impl</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.alto.spce.network</groupId>
-      <artifactId>network-tracker-impl</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-northbound</artifactId>
       <version>${project.version}</version>
       <type>xml</type>
-      <classifier>config</classifier>
-      <scope>runtime</scope>
+      <classifier>features</classifier>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto.spce.network</groupId>
-      <artifactId>network-tracker-api</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.alto.ext</groupId>
-      <artifactId>alto-spce-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.alto.ext</groupId>
-      <artifactId>alto-spce-impl</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-standard-service-models</artifactId>
       <version>${project.version}</version>
       <type>xml</type>
-      <classifier>config</classifier>
+      <classifier>features</classifier>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto.ext</groupId>
-      <artifactId>alto-spce-api</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}.basic</groupId>
-      <artifactId>alto-simple-ecs-impl</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}.basic</groupId>
-      <artifactId>alto-simple-ecs-impl</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-standard-northbound-route</artifactId>
       <version>${project.version}</version>
       <type>xml</type>
-      <classifier>config</classifier>
+      <classifier>features</classifier>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}.basic</groupId>
-      <artifactId>alto-simple-ecs-api</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-standard-resource-translator</artifactId>
       <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-auto-maps-impl</artifactId>
-      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-auto-maps-api</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-simpleird</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
-
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>multicost-api</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-manual-maps</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
-
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>multicost-impl</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-simpleecs</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
-
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>incremental-update-api</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-auto-maps</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
-
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>incremental-update-impl</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-nonstandard-types</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
-
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>rsade-api</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-nonstandard-service-models</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
-
     <dependency>
-      <groupId>org.opendaylight.alto</groupId>
-      <artifactId>rsade-impl</artifactId>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-nonstandard-northbound-route</artifactId>
       <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-multicost</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-iupd</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>odl-alto-rsabs</artifactId>
+      <version>${project.version}</version>
+      <type>xml</type>
+      <classifier>features</classifier>
     </dependency>
   </dependencies>
 </project>
