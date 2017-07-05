@@ -20,6 +20,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <name>ODL :: alto :: ${project.artifactId}</name> <!-- DO NOT CHANGE - Used by Sonar to set project name -->
   <packaging>pom</packaging>
   <modelVersion>4.0.0</modelVersion>
+
+  <modules>
+    <module>api</module>
+    <module>impl</module>
+  </modules>
+
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
   <build>
     <plugins>
@@ -40,91 +46,4 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>minimal</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>api</module>
-        <module>impl</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-dev</id>
-      <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>features</module>
-        <module>artifacts</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-test</id>
-      <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>features</module>
-        <module>artifacts</module>
-        <module>karaf</module>
-        <module>it</module>
-      </modules>
-    </profile>
-    <profile>
-      <!--
-          This profile is to ensure we only build javadocs reports
-          when we plan to deploy Maven site for our project.
-      -->
-      <id>maven-site</id>
-      <activation>
-        <file>
-          <exists>${user.dir}/deploy-site.xml</exists>
-        </file>
-      </activation>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <inherited>false</inherited>
-            <executions>
-              <execution>
-                <id>aggregate</id>
-                <goals>
-                  <goal>aggregate</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <configuration>
-              <failsOnError>true</failsOnError>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
-  <!--
-      Maven Site Configuration
-
-      The following configuration is necessary for maven-site-plugin to
-      correctly identify the correct deployment path for OpenDaylight Maven
-      sites.
-  -->
-  <url>${odl.site.url}/${project.groupId}/${stream}/</url>
-
-  <distributionManagement>
-    <site>
-      <id>opendaylight-site</id>
-      <url>${nexus.site.url}/</url>
-    </site>
-  </distributionManagement>
 </project>
