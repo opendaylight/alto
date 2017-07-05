@@ -23,42 +23,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <maven>3.1.1</maven>
   </prerequisites>
 
-  <profiles>
-    <profile>
-      <id>minimal</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>network-tracker</module>
-        <module>api</module>
-        <module>impl</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-dev</id>
-      <modules>
-        <module>network-tracker</module>
-        <module>api</module>
-        <module>impl</module>
-        <module>features</module>
-        <module>artifacts</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-test</id>
-      <modules>
-        <module>network-tracker</module>
-        <module>api</module>
-        <module>impl</module>
-        <module>features</module>
-        <module>artifacts</module>
-        <module>karaf</module>
-      </modules>
-    </profile>
-  </profiles>
+  <modules>
+    <module>network-tracker</module>
+    <module>api</module>
+    <module>impl</module>
+  </modules>
 
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
   <build>

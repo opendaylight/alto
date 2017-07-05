@@ -23,41 +23,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <maven>3.1.1</maven>
   </prerequisites>
 
-  <profiles>
-    <profile>
-      <id>minimal</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <modules>
-        <module>networkmap</module>
-        <module>costmap</module>
-        <module>endpointcost</module>
-        <module>endpointproperty</module>
-      </modules>
-    </profile>
+  <modules>
+    <module>networkmap</module>
+    <module>costmap</module>
+    <module>endpointcost</module>
+    <module>endpointproperty</module>
+  </modules>
 
-    <profile>
-      <id>alto-dev</id>
-      <modules>
-        <module>example</module>
-        <module>networkmap</module>
-        <module>costmap</module>
-        <module>endpointcost</module>
-        <module>endpointproperty</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-test</id>
-      <modules>
-        <module>example</module>
-        <module>networkmap</module>
-        <module>costmap</module>
-        <module>endpointcost</module>
-      </modules>
-    </profile>
-  </profiles>
   <!-- DO NOT install or deploy the repo root pom as it's only needed to initiate a build -->
   <build>
     <plugins>

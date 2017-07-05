@@ -22,7 +22,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <version>0.5.0-SNAPSHOT</version>
   <packaging>feature</packaging>
 
-  <name>OpenDaylight :: alto :: SPCE</name>
+  <name>OpenDaylight :: alto :: Simple Path Computation Engine</name>
 
   <properties>
     <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
