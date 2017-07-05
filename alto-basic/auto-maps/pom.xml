@@ -58,28 +58,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     </profile>
 
     <profile>
-      <id>alto-dev</id>
-      <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>features</module>
-        <module>artifacts</module>
-      </modules>
-    </profile>
-
-    <profile>
-      <id>alto-test</id>
-      <modules>
-        <module>api</module>
-        <module>impl</module>
-        <module>features</module>
-        <module>artifacts</module>
-        <module>karaf</module>
-        <!--<module>it</module>-->
-      </modules>
-    </profile>
-
-    <profile>
       <!--
           This profile is to ensure we only build javadocs reports
           when we plan to deploy Maven site for our project.
