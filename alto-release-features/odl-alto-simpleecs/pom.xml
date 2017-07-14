@@ -13,13 +13,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>1.8.1-SNAPSHOT</version>
+    <version>1.8.2-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-simpleecs</artifactId>
-  <version>0.4.1-SNAPSHOT</version>
+  <version>0.4.2-SNAPSHOT</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Simple-ECS</name>
@@ -27,7 +27,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <properties>
     <l2switch.groupId>org.opendaylight.l2switch</l2switch.groupId>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
-    <l2switch.version>0.5.1-SNAPSHOT</l2switch.version>
+    <l2switch.version>0.5.2-SNAPSHOT</l2switch.version>
   </properties>
 
   <dependencies>
