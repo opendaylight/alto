@@ -17,28 +17,36 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>features-aggregator</artifactId>
   <version>0.5.0-SNAPSHOT</version>
+  <name>ODL :: alto :: ${project.artifactId}</name>
   <packaging>pom</packaging>
 
   <modules>
+    <!-- Top features -->
     <module>features-alto</module>
     <module>odl-alto-release</module>
     <module>odl-alto-core</module>
     <module>odl-alto-basic</module>
     <module>odl-alto-extension</module>
-    <module>odl-alto-spce</module>
+
+    <!-- ALTO core features -->
     <module>odl-alto-standard-types</module>
     <module>odl-alto-resourcepool</module>
     <module>odl-alto-northbound</module>
     <module>odl-alto-standard-service-models</module>
     <module>odl-alto-standard-northbound-route</module>
     <module>odl-alto-standard-resource-translator</module>
+    <module>odl-alto-nonstandard-types</module>
+    <module>odl-alto-nonstandard-service-models</module>
+    <module>odl-alto-nonstandard-northbound-route</module>
+
+    <!-- ALTO basic features -->
     <module>odl-alto-simpleird</module>
     <module>odl-alto-manual-maps</module>
     <module>odl-alto-simpleecs</module>
     <module>odl-alto-auto-maps</module>
-    <module>odl-alto-nonstandard-types</module>
-    <module>odl-alto-nonstandard-service-models</module>
-    <module>odl-alto-nonstandard-northbound-route</module>
+
+    <!-- ALTO extension features -->
+    <module>odl-alto-spce</module>
     <module>odl-alto-multicost</module>
     <module>odl-alto-iupd</module>
     <module>odl-alto-rsabs</module>

@@ -36,19 +36,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
         <dependency>
             <groupId>org.opendaylight.alto.core</groupId>
-            <artifactId>alto-service-model-ird-api</artifactId>
+            <artifactId>alto-service-model-ird</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.opendaylight.alto.core</groupId>
-            <artifactId>alto-service-model-networkmap-api</artifactId>
+            <artifactId>alto-service-model-networkmap</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.opendaylight.alto.core</groupId>
-            <artifactId>alto-service-model-costmap-api</artifactId>
+            <artifactId>alto-service-model-costmap</artifactId>
             <version>${project.version}</version>
         </dependency>
 

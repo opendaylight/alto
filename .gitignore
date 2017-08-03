@@ -9,7 +9,8 @@
 *.ipr
 *.iws
 *.swp
-*.swp
+*.old
+*.bak
 *.xmi
 *~
 .DS_STORE
