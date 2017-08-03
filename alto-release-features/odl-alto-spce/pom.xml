@@ -97,6 +97,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.opendaylight.alto.spce.network</groupId>
+      <artifactId>network-tracker-impl</artifactId>
+      <version>${project.version}</version>
+      <classifier>config</classifier>
+      <type>xml</type>
+    </dependency>
+    <dependency>
       <groupId>org.opendaylight.alto.ext</groupId>
       <artifactId>alto-spce-api</artifactId>
       <version>${project.version}</version>
@@ -105,6 +112,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.alto.ext</groupId>
       <artifactId>alto-spce-impl</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opendaylight.alto.ext</groupId>
+      <artifactId>alto-spce-impl</artifactId>
+      <version>${project.version}</version>
+      <classifier>config</classifier>
+      <type>xml</type>
     </dependency>
     <!-- FIXME: Replace with odl-alto-spce from alto-spce-features feature repository. -->
   </dependencies>
