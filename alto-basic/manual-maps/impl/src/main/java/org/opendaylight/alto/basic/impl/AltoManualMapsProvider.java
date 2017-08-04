@@ -7,52 +7,54 @@
  */
 package org.opendaylight.alto.basic.impl;
 
+import java.util.LinkedList;
+import java.util.List;
 import org.opendaylight.alto.basic.manual.maps.ManualMapsUtils;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
-import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.ProviderContext;
-import org.opendaylight.controller.sal.binding.api.BindingAwareProvider;
-
+import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RoutedRpcRegistration;
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.config.rev151021.AltoModelConfigService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.AltoModelCostmapService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AltoModelNetworkmapService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-
-public class AltoManualMapsProvider implements BindingAwareProvider, AutoCloseable {
+public class AltoManualMapsProvider implements AutoCloseable {
     public static final String RESOURCE_CONFIG_ROUTE_NAME = "config";
     public static final String RESOURCE_CONFIG_CONTEXT_NAME = "alto-manual-maps";
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoManualMapsProvider.class);
 
-    private DataBroker dataBroker = null;
-    private ManualMapsListener manualMapsListener = null;
-    private BindingAwareBroker.RpcRegistration<AltoModelConfigService> altoModelConfigService = null;
-    private BindingAwareBroker.RoutedRpcRegistration<AltoModelNetworkmapService> altoModelNetworkmapService = null;
-    private BindingAwareBroker.RoutedRpcRegistration<AltoModelCostmapService> altoModelCostmapService = null;
+    private final DataBroker dataBroker;
+    private final AltoNorthboundRouter router;
+    private final ManualMapsListener manualMapsListener = new ManualMapsListener();
+    private final BindingAwareBroker.RoutedRpcRegistration<AltoModelNetworkmapService> altoModelNetworkmapService;
+    private final BindingAwareBroker.RoutedRpcRegistration<AltoModelCostmapService> altoModelCostmapService;
 
     private AltoNorthboundRouter m_router = null;
     private List<Uuid> m_contexts = null;
 
+    public AltoManualMapsProvider(DataBroker dataBroker,
+            AltoNorthboundRouter router,
+            RoutedRpcRegistration<AltoModelNetworkmapService> altoModelNetworkmapService,
+            RoutedRpcRegistration<AltoModelCostmapService> altoModelCostmapService) {
+        this.dataBroker = dataBroker;
+        this.router = router;
+        this.altoModelNetworkmapService = altoModelNetworkmapService;
+        this.altoModelCostmapService = altoModelCostmapService;
+    }
+
     protected void setupListener() {
-        manualMapsListener = new ManualMapsListener();
         manualMapsListener.register(dataBroker);
         manualMapsListener.setNetworkmapServiceReg(altoModelNetworkmapService);
         manualMapsListener.setCostmapServiceReg(altoModelCostmapService);
     }
 
     protected void closeListener() throws Exception {
-        if (manualMapsListener != null) {
-            manualMapsListener.close();
-        }
+        manualMapsListener.close();
     }
 
     protected void initializeConfigContext() throws Exception {
@@ -70,24 +72,17 @@ public class AltoManualMapsProvider implements BindingAwareProvider, AutoCloseab
         wx.submit().get();
     }
 
-    @Override
-    public void onSessionInitiated(ProviderContext session) {
-        LOG.info("AltoManualMapsProvider Session Initiated");
-
-        dataBroker = session.getSALService(DataBroker.class);
-        altoModelConfigService = session.addRpcImplementation(AltoModelConfigService.class,
-                new AltoModelConfigImpl(dataBroker));
-        altoModelNetworkmapService = session.addRoutedRpcImplementation(AltoModelNetworkmapService.class,
-                new AltoManualNetworkmapServiceImpl(dataBroker));
-        altoModelCostmapService = session.addRoutedRpcImplementation(AltoModelCostmapService.class,
-                new AltoManualCostmapServiceImpl(dataBroker));
+    public void init() {
         try {
             setupListener();
             initializeConfigContext();
         } catch (Exception e) {
-            LOG.error("Failed to create top-level containers");
-            e.printStackTrace();
+            LOG.error("Failed to create top-level containers", e);
         }
+
+        setupRoute();
+
+        LOG.info("AltoManualMapsProvider Session Initiated");
     }
 
     @Override
@@ -101,19 +96,11 @@ public class AltoManualMapsProvider implements BindingAwareProvider, AutoCloseab
         } catch (Exception e) {
             LOG.error("Failed to remove route");
         }
-        if (altoModelConfigService != null) {
-            altoModelConfigService.close();
-        }
-        if (altoModelNetworkmapService != null) {
-            altoModelNetworkmapService.close();
-        }
-        if (altoModelCostmapService != null) {
-            altoModelCostmapService.close();
-        }
+
         LOG.info("AltoManualMapsProvider Closed");
     }
 
-    public void setupRoute(AltoNorthboundRouter router) {
+    private void setupRoute() {
         AltoNorthboundRoute route = new ManualMapsRoute(this);
         String base_url = router.addRoute(RESOURCE_CONFIG_ROUTE_NAME, route);
         if (base_url == null) {

@@ -31,7 +31,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <openflow.plugin.groupId>org.opendaylight.openflowplugin</openflow.plugin.groupId>
     <mdsal.model.version>0.11.0-SNAPSHOT</mdsal.model.version>
     <mdsal.version>1.6.0-SNAPSHOT</mdsal.version>
-    <configfile.directory>etc/opendaylight/karaf</configfile.directory>
     <l2switch.version>0.6.0-SNAPSHOT</l2switch.version>
     <openflow.plugin.version>0.5.0-SNAPSHOT</openflow.plugin.version>
   </properties>
@@ -97,13 +96,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.opendaylight.alto.spce.network</groupId>
-      <artifactId>network-tracker-impl</artifactId>
-      <version>${project.version}</version>
-      <classifier>config</classifier>
-      <type>xml</type>
-    </dependency>
-    <dependency>
       <groupId>org.opendaylight.alto.ext</groupId>
       <artifactId>alto-spce-api</artifactId>
       <version>${project.version}</version>
@@ -112,13 +104,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.alto.ext</groupId>
       <artifactId>alto-spce-impl</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.alto.ext</groupId>
-      <artifactId>alto-spce-impl</artifactId>
-      <version>${project.version}</version>
-      <classifier>config</classifier>
-      <type>xml</type>
     </dependency>
     <!-- FIXME: Replace with odl-alto-spce from alto-spce-features feature repository. -->
   </dependencies>

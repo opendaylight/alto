@@ -7,12 +7,17 @@
  */
 package org.opendaylight.alto.basic.endpointcostservice.suportservice.impl;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import org.opendaylight.alto.basic.endpointcostservice.helper.DataStoreHelper;
 import org.opendaylight.alto.basic.endpointcostservice.suportservice.exception.ReadDataFailedException;
 import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.LinkService;
 import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkElementService;
 import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkFlowCapableNodeService;
 import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkHostNodeService;
-import org.opendaylight.alto.basic.endpointcostservice.helper.DataStoreHelper;
 import org.opendaylight.alto.basic.endpointcostservice.util.InstanceIdentifierUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
@@ -29,25 +34,19 @@ import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 public class NetworkElementImpl implements NetworkElementService, DataChangeListener, AutoCloseable {
     private static final Logger log = LoggerFactory
             .getLogger(NetworkElementImpl.class);
     private static final int CPUS = Runtime.getRuntime().availableProcessors();
-    private ExecutorService exec = Executors.newFixedThreadPool(CPUS);
+    private final ExecutorService exec = Executors.newFixedThreadPool(CPUS);
 
-    private DataBroker dataBroker;
+    private final DataBroker dataBroker;
     private ListenerRegistration<DataChangeListener> hostNodeListRegistration;
     private ListenerRegistration<DataChangeListener> linkListRegistration;
 
-    private NetworkHostNodeService hostNodeService;
-    private LinkService linkService;
-    private NetworkFlowCapableNodeService flowCapableNodeService;
+    private final NetworkHostNodeService hostNodeService;
+    private final LinkService linkService;
+    private final NetworkFlowCapableNodeService flowCapableNodeService;
 
 
     public NetworkElementImpl(DataBroker dataBroker) {
@@ -70,8 +69,7 @@ public class NetworkElementImpl implements NetworkElementService, DataChangeList
             addExistingHostNodes(topology);
             addExistingLinks(topology);
         } catch (ReadDataFailedException e) {
-            e.printMessage("Read topology failed");
-            e.printStackTrace();
+            log.error("Read topology failed", e);
         }
     }
     private void addExistingHostNodes(Topology topology) {

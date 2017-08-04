@@ -11,9 +11,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.opendaylight.controller</groupId>
-    <artifactId>config-parent</artifactId>
-    <version>0.7.0-SNAPSHOT</version>
+    <groupId>org.opendaylight.mdsal</groupId>
+    <artifactId>binding-parent</artifactId>
+    <version>0.11.0-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
@@ -24,7 +24,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <packaging>bundle</packaging>
 
   <properties>
-    <mdsal.version>1.6.0-SNAPSHOT</mdsal.version>
     <l2switch.version>0.6.0-SNAPSHOT</l2switch.version>
   </properties>
 
@@ -52,13 +51,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <artifactId>alto-service-model-costmap</artifactId>
       <version>${project.version}</version>
     </dependency>
-
+<!--
     <dependency>
       <groupId>org.opendaylight.controller.model</groupId>
       <artifactId>model-topology</artifactId>
-      <version>${mdsal.version}</version>
     </dependency>
-
+-->
     <dependency>
       <groupId>org.opendaylight.l2switch.hosttracker</groupId>
       <artifactId>hosttracker-model</artifactId>

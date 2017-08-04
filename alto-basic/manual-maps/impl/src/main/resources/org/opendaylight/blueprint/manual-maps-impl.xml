@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+           xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
+    odl:use-default-for-reference-types="true">
+
+  <reference id="dataBroker" interface="org.opendaylight.controller.md.sal.binding.api.DataBroker"/>
+  <reference id="altoNorthboundRouter" interface="org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter"/>
+
+  <bean id="altoModelConfig" class="org.opendaylight.alto.basic.impl.AltoModelConfigImpl">
+    <argument ref="dataBroker"/>
+  </bean>
+
+  <odl:rpc-implementation ref="altoModelConfig"/>
+
+  <bean id="altoManualCostmapService" class="org.opendaylight.alto.basic.impl.AltoManualCostmapServiceImpl">
+    <argument ref="dataBroker"/>
+  </bean>
+
+  <odl:routed-rpc-implementation id="altoManualCostmapServiceReg" ref="altoManualCostmapService"/>
+
+  <bean id="altoManualNetworkmapService" class="org.opendaylight.alto.basic.impl.AltoManualNetworkmapServiceImpl">
+    <argument ref="dataBroker"/>
+  </bean>
+
+  <odl:routed-rpc-implementation id="altoManualNetworkmapServiceReg" ref="altoManualNetworkmapService"/>
+
+  <bean id="altoManualMapsProvider" class="org.opendaylight.alto.basic.impl.AltoManualMapsProvider"
+      init-method="init" destroy-method="close">
+    <argument ref="dataBroker"/>
+    <argument ref="altoNorthboundRouter"/>
+    <argument ref="altoManualNetworkmapServiceReg"/>
+    <argument ref="altoManualCostmapServiceReg"/>
+  </bean>
+</blueprint>

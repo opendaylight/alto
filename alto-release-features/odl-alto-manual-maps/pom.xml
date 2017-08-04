@@ -29,7 +29,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
     <mdsal.model.version>0.11.0-SNAPSHOT</mdsal.model.version>
     <mdsal.version>1.6.0-SNAPSHOT</mdsal.version>
-    <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
   <dependencies>
@@ -78,13 +77,6 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
       <groupId>org.opendaylight.alto.basic</groupId>
       <artifactId>alto-manual-maps-impl</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.opendaylight.alto.basic</groupId>
-      <artifactId>alto-manual-maps-impl</artifactId>
-      <version>${project.version}</version>
-      <classifier>config</classifier>
-      <type>xml</type>
     </dependency>
   </dependencies>
 </project>

@@ -3,7 +3,6 @@ module alto-nbr-endpointproperty {
     namespace "urn:alto:northbound:route:endpointproperty";
     prefix "alto-nbr-endpointproperty";
 
-    import config { prefix config; revision-date 2013-04-05; }
     import ietf-inet-types { prefix ietf-inet; revision-date 2013-07-15; }
 
     organization "Yale University";
