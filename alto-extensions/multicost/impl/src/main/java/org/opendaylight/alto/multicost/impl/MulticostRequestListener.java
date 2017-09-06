@@ -8,13 +8,11 @@
 package org.opendaylight.alto.multicost.impl;
 
 import java.util.Collection;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.multicost.rev170302.MulticostData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.multicost.rev170302.MulticostDataBuilder;
@@ -29,7 +27,7 @@ class MulticostRequestListener implements DataTreeChangeListener<MulticostData> 
 
     private final DataBroker db;
 
-    private MulticostService service;
+    private final MulticostService service;
 
     public MulticostRequestListener(final DataBroker db, final MulticostService service) {
         this.db = db;

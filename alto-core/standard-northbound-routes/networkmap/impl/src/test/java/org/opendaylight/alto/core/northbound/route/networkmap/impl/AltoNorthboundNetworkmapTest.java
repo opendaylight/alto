@@ -7,25 +7,32 @@
  */
 package org.opendaylight.alto.core.northbound.route.networkmap.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import javax.ws.rs.core.Response;
 import org.junit.Test;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285NetworkMap;
-import org.opendaylight.controller.md.sal.binding.api.BindingTransactionChain;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionChainListener;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv6Prefix;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.PidName;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv6Prefix;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AddressTypeBase;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AddressTypeIpv4;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AddressTypeIpv6;
@@ -42,27 +49,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkm
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rfc7285.rev151021.Ipv4PrefixListBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rfc7285.rev151021.Ipv6PrefixList;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rfc7285.rev151021.Ipv6PrefixListBuilder;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
-
-import javax.annotation.Nonnull;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.anyObject;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 public class AltoNorthboundNetworkmapTest {
     String path = "test-model-networkmap";
     String filter = "{\n" +
@@ -92,44 +80,9 @@ public class AltoNorthboundNetworkmapTest {
         doReturn(ctagIID).when(networkmapSpy).getResourceByPath(eq(path), (ReadOnlyTransaction) anyObject());
         doReturn( AddressTypeIpv4.class).when(networkmapSpy).getAddressTypeByName(eq("ipv4"), eq(path), (ReadOnlyTransaction)anyObject());
         doReturn( AddressTypeIpv6.class).when(networkmapSpy).getAddressTypeByName(eq("ipv6"), eq(path), (ReadOnlyTransaction)anyObject());
-        networkmapSpy.setDataBroker(new DataBroker() {
-            @Override
-            public ReadOnlyTransaction newReadOnlyTransaction() {
-                return null;
-            }
+        networkmapSpy.setDataBroker(mock(DataBroker.class));
 
-            @Override
-            public ReadWriteTransaction newReadWriteTransaction() {
-                return null;
-            }
-
-            @Override
-            public WriteTransaction newWriteOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ListenerRegistration<DataChangeListener> registerDataChangeListener(LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<?> instanceIdentifier, DataChangeListener dataChangeListener, DataChangeScope dataChangeScope) {
-                return null;
-            }
-
-            @Override
-            public BindingTransactionChain createTransactionChain(TransactionChainListener transactionChainListener) {
-                return null;
-            }
-
-            @Nonnull
-            @Override
-            public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(@Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
-                return null;
-            }
-        });
-        networkmapSpy.setMapService(new AltoModelNetworkmapService() {
-            @Override
-            public Future<RpcResult<QueryOutput>> query(QueryInput queryInput) {
-                return null;
-            }
-        });
+        networkmapSpy.setMapService(queryInput -> null);
 
         QueryInput input = networkmapSpy.prepareInput(path, pids, addressTypes);
         NetworkmapRequest request = (NetworkmapRequest)input.getRequest();
@@ -173,7 +126,7 @@ public class AltoNorthboundNetworkmapTest {
             partitionBuilder.setPid(new PidName(pid));
 
             if (types.contains(AddressTypeIpv4.class)) {
-                LinkedList<Ipv4Prefix> ipv4List = new LinkedList<Ipv4Prefix>();
+                LinkedList<Ipv4Prefix> ipv4List = new LinkedList<>();
                 ipv4List.add(new Ipv4Prefix("192.168." + index + ".0/24"));
 
                 Ipv4PrefixListBuilder v4Builder = new Ipv4PrefixListBuilder();
@@ -182,7 +135,7 @@ public class AltoNorthboundNetworkmapTest {
                 partitionBuilder.addAugmentation(Ipv4PrefixList.class, v4Builder.build());
             }
             if (types.contains(AddressTypeIpv6.class)) {
-                LinkedList<Ipv6Prefix> ipv6List = new LinkedList<Ipv6Prefix>();
+                LinkedList<Ipv6Prefix> ipv6List = new LinkedList<>();
                 ipv6List.add(new Ipv6Prefix("2001:b8:ca2:" + index + "::0/64"));
 
                 Ipv6PrefixListBuilder v6Builder = new Ipv6PrefixListBuilder();
@@ -205,38 +158,7 @@ public class AltoNorthboundNetworkmapTest {
         when(future.get()).thenReturn(rpcResult);
         when(networkmapService.query((QueryInput)anyObject())).thenReturn(future);
         networkmapSpy.setMapService(networkmapService);
-        networkmapSpy.setDataBroker(new DataBroker() {
-            @Override
-            public ReadOnlyTransaction newReadOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ReadWriteTransaction newReadWriteTransaction() {
-                return null;
-            }
-
-            @Override
-            public WriteTransaction newWriteOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ListenerRegistration<DataChangeListener> registerDataChangeListener(LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<?> instanceIdentifier, DataChangeListener dataChangeListener, DataChangeScope dataChangeScope) {
-                return null;
-            }
-
-            @Override
-            public BindingTransactionChain createTransactionChain(TransactionChainListener transactionChainListener) {
-                return null;
-            }
-
-            @Nonnull
-            @Override
-            public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(@Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
-                return null;
-            }
-        });
+        networkmapSpy.setDataBroker(mock(DataBroker.class));
 
         doReturn(new RFC7285NetworkMap.Meta()).when(networkmapSpy).buildMeta((InstanceIdentifier<?>)anyObject());
         //start test

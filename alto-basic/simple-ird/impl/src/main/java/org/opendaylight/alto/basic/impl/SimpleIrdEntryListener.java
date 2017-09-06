@@ -7,56 +7,46 @@
  */
 package org.opendaylight.alto.basic.impl;
 
+import com.google.common.base.Optional;
+import com.google.common.util.concurrent.SettableFuture;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
-
-import com.google.common.base.Optional;
-import com.google.common.util.concurrent.SettableFuture;
-
 import org.opendaylight.alto.basic.simpleird.SimpleIrdUtils;
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
-
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstance;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceBuilder;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfiguration;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntry;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntryBuilder;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.configuration.IrdConfigurationEntry;
-
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.Context;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ContextKey;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.ResourceKey;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTagKey;
-
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstance;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfiguration;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntry;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntryBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.configuration.IrdConfigurationEntry;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.Tag;
-
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.ird.rev151021.ResourceTypeIrd;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeFilteredCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.ird.rev151021.ResourceTypeIrd;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeFilteredNetworkmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeNetworkmap;
-
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,13 +58,12 @@ import org.slf4j.LoggerFactory;
  * listener to it's resource list.
  *
  * */
-public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener {
+public class SimpleIrdEntryListener implements AutoCloseable, DataTreeChangeListener<IrdConfigurationEntry> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleIrdEntryListener.class);
 
     private DataBroker m_dataBroker = null;
-    private ListenerRegistration<DataChangeListener> m_reg = null;
-    private Map<InstanceIdentifier<?>, ListenerRegistration<DataChangeListener>> m_regs = null;
+    private ListenerRegistration<?> m_reg = null;
     private InstanceIdentifier<IrdConfigurationEntry> m_iid = null;
 
     private Uuid m_context = null;
@@ -86,17 +75,14 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
         m_context = instance.firstKeyOf(Context.class).getContextId();
         m_resource = instance.firstKeyOf(Resource.class).getResourceId();
         m_entryContext = entryContext;
-        m_regs = new HashMap<InstanceIdentifier<?>, ListenerRegistration<DataChangeListener>>();
     }
 
     public void register(DataBroker dataBroker, InstanceIdentifier<IrdConfigurationEntry> iid) {
         m_dataBroker = dataBroker;
         m_iid = iid;
 
-        m_reg = m_dataBroker.registerDataChangeListener(
-                LogicalDatastoreType.CONFIGURATION, m_iid,
-                this, DataChangeScope.SUBTREE
-        );
+        m_reg = m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+                LogicalDatastoreType.CONFIGURATION, m_iid), this);
 
         LOG.info("SimpleIrdEntryListener registered");
     }
@@ -116,7 +102,7 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
         ResourceKey resourceKey = new ResourceKey(rid);
 
         ContextKey iidContextKey = iid.firstKeyOf(Context.class);
-        if ((contextKey.equals(iidContextKey)) || (entryContextKey.equals(iidContextKey))) {
+        if (contextKey.equals(iidContextKey) || entryContextKey.equals(iidContextKey)) {
             if (resourceKey.equals(iid.firstKeyOf(Resource.class))) {
                 return rx.read(LogicalDatastoreType.OPERATIONAL, iid);
             }
@@ -129,16 +115,14 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
     }
 
     @Override
-    public synchronized void onDataChanged(
-                final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
+    public synchronized void onDataTreeChanged(Collection<DataTreeModification<IrdConfigurationEntry>> changes) {
         /*
          * We examine the dependencies and check whether the services are self-contained
-         * */
+         */
 
         ReadWriteTransaction rwx = m_dataBroker.newReadWriteTransaction();
 
-        InstanceIdentifier<IrdInstanceConfiguration> configIID;
-        configIID =SimpleIrdUtils.getInstanceConfigurationIID(m_resource);
+        InstanceIdentifier<IrdInstanceConfiguration> configIID = SimpleIrdUtils.getInstanceConfigurationIID(m_resource);
 
         Optional<IrdInstanceConfiguration> config;
         try {
@@ -173,13 +157,13 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
     protected Map<IrdConfigurationEntry, Resource> readEntries(
                     List<IrdConfigurationEntry> configs, ReadWriteTransaction rwx) {
         Map<IrdConfigurationEntry, Future<Optional<Resource>>> futures;
-        futures = new HashMap<IrdConfigurationEntry, Future<Optional<Resource>>>();
+        futures = new HashMap<>();
 
         for (IrdConfigurationEntry entry: configs) {
             ResourceId expected = entry.getEntryId();
             try {
                 InstanceIdentifier<?> iid = entry.getInstance();
-                if ((iid == null) || (!iid.getTargetType().equals(Resource.class))) {
+                if (iid == null || !iid.getTargetType().equals(Resource.class)) {
                     LOG.error("Invalid instance identifier for {}", expected.getValue());
                     return null;
                 }
@@ -198,7 +182,7 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
         }
 
         Map<IrdConfigurationEntry, Resource> resources;
-        resources = new HashMap<IrdConfigurationEntry, Resource>();
+        resources = new HashMap<>();
 
         for (Map.Entry<IrdConfigurationEntry, Future<Optional<Resource>>> entry: futures.entrySet()) {
             try {
@@ -224,16 +208,16 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
 
     protected Map<ResourceId, List<ResourceId>> resolveDependency(
                     Map<IrdConfigurationEntry, Resource> resources) {
-        Map<ResourceId, Tag> resourceMap = new HashMap<ResourceId, Tag>();
+        Map<ResourceId, Tag> resourceMap = new HashMap<>();
         for (Resource resource: resources.values()) {
             resourceMap.put(resource.getResourceId(), resource.getDefaultTag());
         }
 
         Map<ResourceId, List<ResourceId>> dependencyMap;
-        dependencyMap = new HashMap<ResourceId, List<ResourceId>>();
+        dependencyMap = new HashMap<>();
 
         for (Resource resource: resources.values()) {
-            if ((resource.getContextTag() == null) || (resource.getContextTag().isEmpty())) {
+            if (resource.getContextTag() == null || resource.getContextTag().isEmpty()) {
                 continue;
             }
 
@@ -267,7 +251,7 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
                 ResourceId resourceId = iid.firstKeyOf(Resource.class).getResourceId();
                 Tag contextTag = iid.firstKeyOf(ContextTag.class).getTag();
 
-                if ((contextId == null) || (resourceId == null) || (contextTag == null)) {
+                if (contextId == null || resourceId == null || contextTag == null) {
                     LOG.error("Depends on a resource that doesn't exist!");
                     return null;
                 }
@@ -390,14 +374,7 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataChangeListener
         } catch (Exception e) {
             LOG.info("Error while closing the registration");
         }
-        try {
-            for (ListenerRegistration<DataChangeListener> reg: m_regs.values()) {
-                reg.close();
-            }
-            m_regs.clear();
-        } catch (Exception e) {
-            LOG.info("Error while closing the registrations");
-        }
+
         LOG.info("SimpleIrdEntryListener closed");
     }
 }

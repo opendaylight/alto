@@ -7,23 +7,30 @@
  */
 package org.opendaylight.alto.core.northbound.route.endpointcost.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
-import org.opendaylight.controller.md.sal.binding.api.BindingTransactionChain;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionChainListener;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.AltoModelEndpointcostService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryOutput;
@@ -49,27 +56,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpoint
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.EndpointCostmapDataBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.cost.OrdinalBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.typed.address.data.Address;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
-
-import javax.annotation.Nonnull;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.anyObject;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 public class AltoNorthboundEndpointcostTest {
 
@@ -117,44 +105,8 @@ public class AltoNorthboundEndpointcostTest {
 
         //configure mock
         doReturn(ctagIID).when(endpointcostSpy).getResourceByPath(eq(path),(ReadOnlyTransaction) anyObject());
-        endpointcostSpy.setDataBroker(new DataBroker() {
-            @Override
-            public ReadOnlyTransaction newReadOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ReadWriteTransaction newReadWriteTransaction() {
-                return null;
-            }
-
-            @Override
-            public WriteTransaction newWriteOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ListenerRegistration<DataChangeListener> registerDataChangeListener(LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<?> instanceIdentifier, DataChangeListener dataChangeListener, DataChangeScope dataChangeScope) {
-                return null;
-            }
-
-            @Override
-            public BindingTransactionChain createTransactionChain(TransactionChainListener transactionChainListener) {
-                return null;
-            }
-
-            @Nonnull
-            @Override
-            public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(@Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
-                return null;
-            }
-        });
-        endpointcostSpy.setMapService(new AltoModelEndpointcostService() {
-            @Override
-            public Future<RpcResult<QueryOutput>> query(QueryInput queryInput) {
-                return null;
-            }
-        });
+        endpointcostSpy.setDataBroker(mock(DataBroker.class));
+        endpointcostSpy.setMapService(queryInput -> null);
 
         //start test
         endpointcostSpy.init();
@@ -222,8 +174,8 @@ public class AltoNorthboundEndpointcostTest {
         AltoModelEndpointcostService endpointcostService = mock(AltoModelEndpointcostService.class);
         Future<RpcResult<QueryOutput>> future = mock(Future.class);
         RpcResult<QueryOutput> rpcResult = mock(RpcResult.class);
-        List<Source> sources = new ArrayList<Source>();
-        List<Destination> destinations = new ArrayList<Destination>();
+        List<Source> sources = new ArrayList<>();
+        List<Destination> destinations = new ArrayList<>();
 
         for(String source : endpoints_source_ipv4){
             SourceBuilder sourceBuilder = new SourceBuilder();
@@ -245,7 +197,7 @@ public class AltoNorthboundEndpointcostTest {
         List<? extends TypedAddressData> destination = destinations;
 
         int order = 0;
-        LinkedList<EndpointCost> ecList = new LinkedList<EndpointCost>();
+        LinkedList<EndpointCost> ecList = new LinkedList<>();
         for (TypedAddressData src: source) {
             for (TypedAddressData dst: destination) {
                 org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.SourceBuilder srcBuilder = new org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.endpointcostmap.response.data.endpoint.cost.map.endpoint.cost.SourceBuilder();
@@ -280,38 +232,7 @@ public class AltoNorthboundEndpointcostTest {
         when(future.get()).thenReturn(rpcResult);
         when(endpointcostService.query((QueryInput)anyObject())).thenReturn(future);
 
-        endpointcostSpy.setDataBroker(new DataBroker() {
-            @Override
-            public ReadOnlyTransaction newReadOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ReadWriteTransaction newReadWriteTransaction() {
-                return null;
-            }
-
-            @Override
-            public WriteTransaction newWriteOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ListenerRegistration<DataChangeListener> registerDataChangeListener(LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<?> instanceIdentifier, DataChangeListener dataChangeListener, DataChangeScope dataChangeScope) {
-                return null;
-            }
-
-            @Override
-            public BindingTransactionChain createTransactionChain(TransactionChainListener transactionChainListener) {
-                return null;
-            }
-
-            @Nonnull
-            @Override
-            public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(@Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
-                return null;
-            }
-        });
+        endpointcostSpy.setDataBroker(mock(DataBroker.class));
         endpointcostSpy.setMapService(endpointcostService);
 
         doReturn(ctagIID).when(endpointcostSpy).getResourceByPath(eq(path), (ReadOnlyTransaction)anyObject());

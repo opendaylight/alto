@@ -7,39 +7,29 @@
  */
 package org.opendaylight.alto.basic.impl.rfc7285;
 
-import java.util.concurrent.ExecutionException;
-
 import com.google.common.base.Optional;
-
+import java.util.Collection;
+import java.util.concurrent.ExecutionException;
 import org.opendaylight.alto.basic.simpleird.SimpleIrdUtils;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfiguration;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntry;
-
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285IrdConfigurationMetadata;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadata;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadataBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.ird.instance.MetaBuilder;
-
-import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
-
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
-
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeNetworkmap;
-
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,54 +42,55 @@ import org.slf4j.LoggerFactory;
  *
  * */
 public final class SimpleIrdRfc7285DefaultNetworkMapListener
-                    implements AutoCloseable, DataChangeListener {
+                    implements AutoCloseable, DataTreeChangeListener<Rfc7285IrdConfigurationMetadata> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleIrdRfc7285DefaultNetworkMapListener.class);
 
     private DataBroker m_dataBroker = null;
-    private ListenerRegistration<DataChangeListener> m_reg = null;
-    private InstanceIdentifier<IrdInstanceConfiguration> m_iid = null;
+    private ListenerRegistration<?> m_reg = null;
     private ResourceId m_instance = null;
 
     public void register(DataBroker dataBroker, ResourceId instanceId) {
         m_dataBroker = dataBroker;
         m_instance = instanceId;
-        m_iid = SimpleIrdUtils.getInstanceConfigurationIID(instanceId);
 
-        m_reg = m_dataBroker.registerDataChangeListener(
-                LogicalDatastoreType.CONFIGURATION, m_iid,
-                this, DataChangeScope.SUBTREE
-        );
+        m_reg = m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+            LogicalDatastoreType.CONFIGURATION, SimpleIrdUtils.getInstanceConfigurationIID(instanceId)
+                .augmentation(Rfc7285IrdConfigurationMetadata.class)), this);
 
         LOG.info("SimpleIrdRfc7285DefaultNetworkMapListener registered");
     }
 
     @Override
-    public void onDataChanged(final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-        ResourceId defaultNetworkmap = null;
+    public void onDataTreeChanged(Collection<DataTreeModification<Rfc7285IrdConfigurationMetadata>> changes) {
+        for (DataTreeModification<Rfc7285IrdConfigurationMetadata> change: changes) {
+            final DataObjectModification<Rfc7285IrdConfigurationMetadata> rootNode = change.getRootNode();
+            switch (rootNode.getModificationType()) {
+                case WRITE:
+                case SUBTREE_MODIFIED:
+                    Rfc7285IrdConfigurationMetadata metadata = rootNode.getDataAfter();
 
-        try {
-            ReadWriteTransaction rwx = m_dataBroker.newReadWriteTransaction();
-            defaultNetworkmap = onConfigurationChanged(change, rwx);
+                    ReadWriteTransaction rwx = m_dataBroker.newReadWriteTransaction();
+                    ResourceId defaultNetworkmap = onConfigurationChanged(metadata, rwx);
 
-            setDefaultNetworkMap(m_instance, defaultNetworkmap, rwx);
-            rwx.submit();
-        } catch (Exception e) {
-            LOG.error("Failed to update the default-network-map");
+                    if (defaultNetworkmap != null) {
+                        setDefaultNetworkMap(m_instance, defaultNetworkmap, rwx);
+                        rwx.submit();
+                    } else {
+                        rwx.cancel();
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
-    synchronized ResourceId onConfigurationChanged(
-                final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change,
-                ReadTransaction rx) throws InterruptedException, ExecutionException {
+    private ResourceId onConfigurationChanged(
+                final Rfc7285IrdConfigurationMetadata metadata, ReadTransaction rx) {
         /**
          * Check if the resource exists and is a network map
          * */
-        IrdInstanceConfiguration config;
-        config = (IrdInstanceConfiguration)change.getUpdatedSubtree();
-
-        Rfc7285IrdConfigurationMetadata metadata;
-        metadata = config.getAugmentation(Rfc7285IrdConfigurationMetadata.class);
 
         ResourceId defaultNetworkMapId = metadata.getMetaConfiguration()
                                                     .getDefaultNetworkMap();
@@ -112,22 +103,27 @@ public final class SimpleIrdRfc7285DefaultNetworkMapListener
         InstanceIdentifier<IrdEntry> iid;
         iid = SimpleIrdUtils.getEntryIID(m_instance, defaultNetworkMapId);
 
-        Optional<IrdEntry> entry = rx.read(LogicalDatastoreType.OPERATIONAL, iid).get();
-        if (entry.isPresent()) {
-            if (entry.get().getInstance().getTargetType().equals(Resource.class)) {
-                InstanceIdentifier<Resource> resourceIID;
-                resourceIID = (InstanceIdentifier<Resource>)entry.get().getInstance();
+        try {
+            Optional<IrdEntry> entry = rx.read(LogicalDatastoreType.OPERATIONAL, iid).get();
+            if (entry.isPresent()) {
+                if (entry.get().getInstance().getTargetType().equals(Resource.class)) {
+                    InstanceIdentifier<Resource> resourceIID;
+                    resourceIID = (InstanceIdentifier<Resource>)entry.get().getInstance();
 
-                Resource resource = rx.read(LogicalDatastoreType.OPERATIONAL, resourceIID).get().get();
-                if (resource.getType().equals(ResourceTypeNetworkmap.class)) {
-                    return defaultNetworkMapId;
+                    Resource resource = rx.read(LogicalDatastoreType.OPERATIONAL, resourceIID).get().get();
+                    if (resource.getType().equals(ResourceTypeNetworkmap.class)) {
+                        return defaultNetworkMapId;
+                    }
                 }
-            }
 
-            LOG.error("{} is not a network map!", defaultNetworkMapId);
-        } else {
-            LOG.error("{} doesn't exist", defaultNetworkMapId);
+                LOG.error("{} is not a network map!", defaultNetworkMapId);
+            } else {
+                LOG.error("{} doesn't exist", defaultNetworkMapId);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to read the default-network-map", e);
         }
+
         return null;
     }
 

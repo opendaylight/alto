@@ -7,22 +7,29 @@
  */
 package org.opendaylight.alto.core.northbound.route.costmap.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import javax.ws.rs.core.Response;
 import org.junit.Test;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285CostMap;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285CostType;
-import org.opendaylight.controller.md.sal.binding.api.BindingTransactionChain;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionChainListener;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.PidName;
@@ -44,27 +51,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rfc7285.rev151021.costmap.filter.data.CostmapFilter;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rfc7285.rev151021.query.input.request.costmap.request.costmap.params.filter.CostmapFilterData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rfc7285.rev151021.query.output.response.costmap.response.costmap.response.data.costmap.source.costmap.destination.cost.OrdinalBuilder;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
-
-import javax.annotation.Nonnull;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.anyObject;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 public class AltoNorthboundCostmapTest {
 
     String filter = "{\"cost-type\": {\"cost-metric\": \"routingcost\",  \"cost-mode\": \"numerical\"}, \"pids\": {\"dsts\": [ \"PID1\",  \"PID2\", \"PID3\"   ],   \"srcs\": [  \"PID1\"   ] }}";
@@ -94,44 +82,9 @@ public class AltoNorthboundCostmapTest {
 
         //configure mock
         doReturn(ctagIID).when(costmapSpy).getResourceByPath(eq(path),(ReadOnlyTransaction) anyObject());
-        costmapSpy.setDataBroker(new DataBroker() {
-            @Override
-            public ReadOnlyTransaction newReadOnlyTransaction() {
-                return null;
-            }
+        costmapSpy.setDataBroker(mock(DataBroker.class));
 
-            @Override
-            public ReadWriteTransaction newReadWriteTransaction() {
-                return null;
-            }
-
-            @Override
-            public WriteTransaction newWriteOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ListenerRegistration<DataChangeListener> registerDataChangeListener(LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<?> instanceIdentifier, DataChangeListener dataChangeListener, DataChangeScope dataChangeScope) {
-                return null;
-            }
-
-            @Override
-            public BindingTransactionChain createTransactionChain(TransactionChainListener transactionChainListener) {
-                return null;
-            }
-
-            @Nonnull
-            @Override
-            public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(@Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
-                return null;
-            }
-        });
-        costmapSpy.setMapService(new AltoModelCostmapService() {
-            @Override
-            public Future<RpcResult<QueryOutput>> query(QueryInput queryInput) {
-                return null;
-            }
-        });
+        costmapSpy.setMapService(queryInput -> null);
 
         //start test
         costmapSpy.init();
@@ -141,12 +94,12 @@ public class AltoNorthboundCostmapTest {
         CostmapParams params = request.getCostmapParams();
         CostmapFilter costmapFilter=((CostmapFilterData)params.getFilter()).getCostmapFilter();
         CostType costType = params.getCostType();
-        List<PidName> pidNames1 = new LinkedList<PidName>();
+        List<PidName> pidNames1 = new LinkedList<>();
         for (String pid:pid_source){
             PidName p = new PidName(pid);
             pidNames1.add(p);
         }
-        List<PidName> pidNames2 = new LinkedList<PidName>();
+        List<PidName> pidNames2 = new LinkedList<>();
         for (String pid:pid_destination){
             PidName p = new PidName(pid);
             pidNames2.add(p);
@@ -177,9 +130,9 @@ public class AltoNorthboundCostmapTest {
         RpcResult<QueryOutput> rpcResult = mock(RpcResult.class);
         //build QueryOutput
         int order = 0;
-        LinkedList<CostmapSource> costmapSources = new LinkedList<CostmapSource>();
+        LinkedList<CostmapSource> costmapSources = new LinkedList<>();
         for(String src:pid_source){
-            LinkedList<CostmapDestination> costmapDestinations= new LinkedList<CostmapDestination>();
+            LinkedList<CostmapDestination> costmapDestinations= new LinkedList<>();
 
             for (String dst : pid_destination){
                 CostmapDestinationBuilder costmapDestinationBuilder= new CostmapDestinationBuilder();
@@ -210,38 +163,8 @@ public class AltoNorthboundCostmapTest {
 
         costmapSpy.setMapService(costmapService);
 
-        costmapSpy.setDataBroker(new DataBroker() {
-            @Override
-            public ReadOnlyTransaction newReadOnlyTransaction() {
-                return null;
-            }
+        costmapSpy.setDataBroker(mock(DataBroker.class));
 
-            @Override
-            public ReadWriteTransaction newReadWriteTransaction() {
-                return null;
-            }
-
-            @Override
-            public WriteTransaction newWriteOnlyTransaction() {
-                return null;
-            }
-
-            @Override
-            public ListenerRegistration<DataChangeListener> registerDataChangeListener(LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<?> instanceIdentifier, DataChangeListener dataChangeListener, DataChangeScope dataChangeScope) {
-                return null;
-            }
-
-            @Override
-            public BindingTransactionChain createTransactionChain(TransactionChainListener transactionChainListener) {
-                return null;
-            }
-
-            @Nonnull
-            @Override
-            public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(@Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
-                return null;
-            }
-        });
         doReturn(ctagIID).when(costmapSpy).getResourceByPath(eq(path),(ReadOnlyTransaction) anyObject());
         RFC7285CostMap.Meta meta = new RFC7285CostMap.Meta();
         RFC7285CostType rfc7285costType = new RFC7285CostType();

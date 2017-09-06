@@ -7,62 +7,69 @@
  */
 package org.opendaylight.alto.basic.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import org.opendaylight.alto.basic.manual.maps.ManualMapsUtils;
 import org.opendaylight.alto.basic.simpleird.SimpleIrdUtils;
 import org.opendaylight.alto.core.northbound.route.costmap.AltoNbrCostmapUtils;
 import org.opendaylight.alto.core.northbound.route.networkmap.AltoNbrNetworkmapUtils;
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.costmap.rev151021.CostMap;
 import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.networkmap.rev151021.NetworkMap;
 import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.ConfigContext;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.context.ResourceCostMap;
+import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.context.ResourceNetworkMap;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ServiceContext;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.config.rev151021.ResourceTypeConfig;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.AltoModelCostmapService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AltoModelNetworkmapService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeNetworkmap;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
-public class ManualMapsListener implements AutoCloseable, DataChangeListener {
+public class ManualMapsListener implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ManualMapsListener.class);
 
     private DataBroker m_dataBroker = null;
-    private InstanceIdentifier<ConfigContext> m_iid = null;
-    private ListenerRegistration<DataChangeListener> m_reg = null;
+    private final List<ListenerRegistration<?>> m_regs = new ArrayList<>();;
     private BindingAwareBroker.RoutedRpcRegistration<AltoModelNetworkmapService> m_networkmapServiceReg = null;
     private BindingAwareBroker.RoutedRpcRegistration<AltoModelCostmapService> m_costmapServiceReg = null;
 
     public ManualMapsListener() {
-        m_iid = ManualMapsUtils.getContextListIID();
     }
 
     public void register(DataBroker dataBroker) {
         m_dataBroker = dataBroker;
 
-        m_reg = m_dataBroker.registerDataChangeListener(
-                LogicalDatastoreType.CONFIGURATION, m_iid,
-                this, AsyncDataBroker.DataChangeScope.SUBTREE
-        );
+        final InstanceIdentifier<ConfigContext> contextListIID = ManualMapsUtils.getContextListIID();
+
+        m_regs.add(m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+                LogicalDatastoreType.CONFIGURATION, contextListIID), changes -> onConfigContextChanged(changes)));
+
+        m_regs.add(m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+            LogicalDatastoreType.CONFIGURATION, contextListIID.child(ResourceNetworkMap.class)),
+            changes -> onNetworkMapChanged(changes)));
+
+        m_regs.add(m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+            LogicalDatastoreType.CONFIGURATION, contextListIID.child(ResourceCostMap.class)),
+            changes -> onCostMapChanged(changes)));
     }
 
     public void setNetworkmapServiceReg(BindingAwareBroker.RoutedRpcRegistration<AltoModelNetworkmapService> reg) {
@@ -75,72 +82,99 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
 
     @Override
     public void close() throws Exception {
-        try {
-            if (m_reg != null) {
-                m_reg.close();
-            }
-        } catch (Exception e) {
-            LOG.info("Error while closing the registration");
+        for (ListenerRegistration<?> reg: m_regs) {
+            reg.close();
         }
     }
 
-    @Override
-    public void onDataChanged(AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
+    private void onConfigContextChanged(Collection<DataTreeModification<ConfigContext>> changes) {
         final ReadWriteTransaction rwx = m_dataBroker.newReadWriteTransaction();
 
-        Map<InstanceIdentifier<?>, DataObject> original = change.getOriginalData();
-
-        for (Map.Entry<InstanceIdentifier<?>, DataObject> entry : change.getUpdatedData().entrySet()) {
-            DataObject origin = original.get(entry.getKey());
-            InstanceIdentifier<?> updatedIID = entry.getKey();
-            DataObject updated = entry.getValue();
-
-            if (updated instanceof NetworkMap) {
-                updateNetworkMap((NetworkMap) origin, (NetworkMap) updated,
-                        (InstanceIdentifier<NetworkMap>) updatedIID, rwx);
-                LOG.info("Update NetworkMap data from OPERATIONAL");
-            } else if (updated instanceof CostMap) {
-                updateCostMap((CostMap) origin, (CostMap) updated,
-                        (InstanceIdentifier<CostMap>) updatedIID, rwx);
-                LOG.info("Update CostMap data from OPERATIONAL");
-            }
-        }
-
-        for (InstanceIdentifier<?> iid : change.getRemovedPaths()) {
-            DataObject removed = original.get(iid);
-
-            if (removed instanceof NetworkMap) {
-                removeNetworkMap((InstanceIdentifier<NetworkMap>) iid, (NetworkMap) removed, rwx);
-                LOG.info("Remove NetworkMap data from OPERATIONAL");
-            } else if (removed instanceof CostMap) {
-                removeCostMap((InstanceIdentifier<CostMap>) iid, (CostMap) removed, rwx);
-                LOG.info("Remove CostMap data from OPERATIONAL");
-            } else if (removed instanceof ConfigContext) {
-                removeConfigContext((InstanceIdentifier<ConfigContext>) iid, (ConfigContext) removed, rwx);
-                LOG.info("Remove ConfigContext data from OPERATIONAL");
-            }
-        }
-
-        for (Map.Entry<InstanceIdentifier<?>, DataObject> entry : change.getCreatedData().entrySet()) {
-            InstanceIdentifier<?> createdIID = entry.getKey();
-            DataObject created = entry.getValue();
-
-            if (created instanceof NetworkMap) {
-                createNetworkMap((NetworkMap) created, (InstanceIdentifier<NetworkMap>) createdIID, rwx);
-                LOG.info("Create new NetworkMap data into OPERATIONAL");
-            } else if (created instanceof CostMap) {
-                createCostMap((CostMap) created, (InstanceIdentifier<CostMap>) createdIID, rwx);
-                LOG.info("Create new CostMap data into OPERATIONAL");
-            } else if (created instanceof ConfigContext) {
-                createConfigContext((ConfigContext) created, (InstanceIdentifier<ConfigContext>) createdIID, rwx);
-                LOG.info("Create new ConfigContext data into OPERATIONAL");
+        for (DataTreeModification<ConfigContext> change: changes) {
+            final DataObjectModification<ConfigContext> rootNode = change.getRootNode();
+            final InstanceIdentifier<ConfigContext> identifier = change.getRootPath().getRootIdentifier();
+            switch (rootNode.getModificationType()) {
+                case WRITE:
+                    if (rootNode.getDataBefore() == null) {
+                        createConfigContext(rootNode.getDataAfter(), identifier, rwx);
+                        LOG.info("Create new ConfigContext data into OPERATIONAL");
+                    }
+                    break;
+                case DELETE:
+                    removeConfigContext(identifier, rootNode.getDataBefore(), rwx);
+                    LOG.info("Remove ConfigContext data from OPERATIONAL");
+                    break;
+                default:
+                    break;
             }
         }
 
         rwx.submit();
     }
 
-    private void updateNetworkMap(NetworkMap origin, NetworkMap updated, InstanceIdentifier<NetworkMap> updatedIID,
+    private void onCostMapChanged(Collection<DataTreeModification<ResourceCostMap>> changes) {
+        final ReadWriteTransaction rwx = m_dataBroker.newReadWriteTransaction();
+
+        for (DataTreeModification<ResourceCostMap> change: changes) {
+            final DataObjectModification<ResourceCostMap> rootNode = change.getRootNode();
+            final InstanceIdentifier<ResourceCostMap> identifier = change.getRootPath().getRootIdentifier();
+            switch (rootNode.getModificationType()) {
+                case WRITE:
+                case SUBTREE_MODIFIED:
+                    final ResourceCostMap original = rootNode.getDataBefore();
+                    final ResourceCostMap updated = rootNode.getDataAfter();
+                    if (original == null) {
+                        createCostMap(updated, identifier, rwx);
+                        LOG.info("Create new CostMap data into OPERATIONAL");
+                    } else {
+                        updateCostMap(original, updated, identifier, rwx);
+                        LOG.info("Update CostMap data from OPERATIONAL");
+                    }
+                    break;
+                case DELETE:
+                    removeCostMap(identifier, rootNode.getDataBefore(), rwx);
+                    LOG.info("Remove CostMap data from OPERATIONAL");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        rwx.submit();
+    }
+
+    private void onNetworkMapChanged(Collection<DataTreeModification<ResourceNetworkMap>> changes) {
+        final ReadWriteTransaction rwx = m_dataBroker.newReadWriteTransaction();
+
+        for (DataTreeModification<ResourceNetworkMap> change: changes) {
+            final DataObjectModification<ResourceNetworkMap> rootNode = change.getRootNode();
+            final InstanceIdentifier<ResourceNetworkMap> identifier = change.getRootPath().getRootIdentifier();
+            switch (rootNode.getModificationType()) {
+                case WRITE:
+                case SUBTREE_MODIFIED:
+                    final ResourceNetworkMap original = rootNode.getDataBefore();
+                    final ResourceNetworkMap updated = rootNode.getDataAfter();
+                    if (original == null) {
+                        createNetworkMap(updated, identifier, rwx);
+                        LOG.info("Create new NetworkMap data into OPERATIONAL");
+                    } else {
+                        updateNetworkMap(original, updated, identifier, rwx);
+                        LOG.info("Update NetworkMap data from OPERATIONAL");
+                    }
+                    break;
+                case DELETE:
+                    removeNetworkMap(identifier, rootNode.getDataBefore(), rwx);
+                    LOG.info("Remove NetworkMap data from OPERATIONAL");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        rwx.submit();
+    }
+
+    private <T extends NetworkMap> void updateNetworkMap(T origin, T updated, InstanceIdentifier<T> updatedIID,
                                   final WriteTransaction wx) {
         ResourceId rid = updated.getResourceId();
 
@@ -148,7 +182,7 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
         createNetworkMap(updated, updatedIID, wx);
     }
 
-    private void updateCostMap(CostMap origin, CostMap updated, InstanceIdentifier<CostMap> updatedIID,
+    private <T extends CostMap> void updateCostMap(T origin, T updated, InstanceIdentifier<T> updatedIID,
                                final WriteTransaction wx) {
         ResourceId rid = updated.getResourceId();
 
@@ -156,7 +190,7 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
         createCostMap(updated, updatedIID, wx);
     }
 
-    private void removeNetworkMap(InstanceIdentifier<NetworkMap> mapIID, NetworkMap removed, final WriteTransaction wx) {
+    private <T extends NetworkMap> void removeNetworkMap(InstanceIdentifier<T> mapIID, T removed, final WriteTransaction wx) {
         SimpleIrdUtils.deleteConfigEntry(removed.getResourceId(), wx);
         String path = removed.getResourceId().getValue();
         AltoNbrNetworkmapUtils.deleteRecord(path, wx);
@@ -168,7 +202,7 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
         removeMap(mapIID, wx);
     }
 
-    private void removeCostMap(InstanceIdentifier<CostMap> mapIID, CostMap removed, final WriteTransaction wx) {
+    private <T extends CostMap> void removeCostMap(InstanceIdentifier<T> mapIID, T removed, final WriteTransaction wx) {
         SimpleIrdUtils.deleteConfigEntry(removed.getResourceId(), wx);
         ManualMapsUtils.deleteResourceCostMap(new Uuid(ManualMapsUtils.DEFAULT_CONTEXT), removed.getResourceId(), wx);
         m_costmapServiceReg.unregisterPath(ServiceContext.class,
@@ -187,7 +221,7 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
         wx.delete(LogicalDatastoreType.OPERATIONAL, mapIID);
     }
 
-    private void createNetworkMap(NetworkMap created, InstanceIdentifier<NetworkMap> createdIID, final WriteTransaction wx) {
+    private <T extends NetworkMap> void createNetworkMap(T created, InstanceIdentifier<T> createdIID, final WriteTransaction wx) {
         ResourcepoolUtils.createResource(ManualMapsUtils.DEFAULT_CONTEXT,
                 created.getResourceId().getValue(),
                 ResourceTypeNetworkmap.class, wx);
@@ -204,7 +238,7 @@ public class ManualMapsListener implements AutoCloseable, DataChangeListener {
                 created.getResourceId(), new Uuid(ManualMapsUtils.DEFAULT_CONTEXT), wx);
     }
 
-    private void createCostMap(CostMap created, InstanceIdentifier<CostMap> createdIID, final WriteTransaction wx) {
+    private <T extends CostMap> void createCostMap(T created, InstanceIdentifier<T> createdIID, final WriteTransaction wx) {
         ResourcepoolUtils.createResource(ManualMapsUtils.DEFAULT_CONTEXT,
                 created.getResourceId().getValue(),
                 ResourceTypeCostmap.class, wx);

@@ -7,43 +7,35 @@
  */
 package org.opendaylight.alto.basic.impl;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.opendaylight.alto.basic.impl.rfc7285.SimpleIrdRfc7285CostTypeListener;
 import org.opendaylight.alto.basic.impl.rfc7285.SimpleIrdRfc7285DefaultNetworkMapListener;
 import org.opendaylight.alto.basic.simpleird.SimpleIrdUtils;
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
-
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
-
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.Context;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ContextKey;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstance;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfiguration;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntry;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.configuration.IrdConfigurationEntry;
-
-import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.Context;
-import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ContextKey;
-import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
-
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
-
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.ird.rev151021.ResourceTypeIrd;
-
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,12 +47,12 @@ import org.slf4j.LoggerFactory;
  * listener to it's resource list.
  *
  * */
-public class SimpleIrdListener implements AutoCloseable, DataChangeListener {
+public class SimpleIrdListener implements AutoCloseable, DataTreeChangeListener<IrdInstanceConfiguration> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleIrdListener.class);
 
     private DataBroker m_dataBroker = null;
-    private ListenerRegistration<DataChangeListener> m_reg = null;
+    private ListenerRegistration<?> m_reg = null;
     private InstanceIdentifier<IrdInstanceConfiguration> m_iid = null;
     private Uuid m_context = null;
 
@@ -69,9 +61,9 @@ public class SimpleIrdListener implements AutoCloseable, DataChangeListener {
     private Map<ResourceId, SimpleIrdRfc7285CostTypeListener> m_ctListeners = null;
 
     public SimpleIrdListener(Uuid context) {
-        m_listeners = new HashMap<ResourceId, SimpleIrdEntryListener>();
-        m_rfcListeners = new HashMap<ResourceId, SimpleIrdRfc7285DefaultNetworkMapListener>();
-        m_ctListeners = new HashMap<ResourceId, SimpleIrdRfc7285CostTypeListener>();
+        m_listeners = new HashMap<>();
+        m_rfcListeners = new HashMap<>();
+        m_ctListeners = new HashMap<>();
         m_context = context;
     }
 
@@ -79,68 +71,44 @@ public class SimpleIrdListener implements AutoCloseable, DataChangeListener {
         m_dataBroker = dataBroker;
         m_iid = iid;
 
-        m_reg = m_dataBroker.registerDataChangeListener(
-                LogicalDatastoreType.CONFIGURATION, m_iid,
-                this, DataChangeScope.ONE
-        );
+        m_reg = m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+                LogicalDatastoreType.CONFIGURATION, m_iid), this);
 
         LOG.info("SimpleIrdListener registered");
     }
 
     @Override
-    public synchronized void onDataChanged(
-                final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-        /**
-         * Update the operational data store according to the configurations.
+    public synchronized void onDataTreeChanged(Collection<DataTreeModification<IrdInstanceConfiguration>> changes) {
+        /* Update the operational data store according to the configurations.
          *
          * 1. Ignore resource updates because the registered resource are
          *    managed by another listener.  Report error when path/uuid changes.
          *
          * 2. Try to accept removals and try to accept the created.
          *
-         * */
+         */
 
         WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
 
-        Map<InstanceIdentifier<?>, DataObject> original = change.getOriginalData();
-
-        for (Map.Entry<InstanceIdentifier<?>, DataObject> entry: change.getUpdatedData().entrySet()) {
-            DataObject _origin = original.get(entry.getKey());
-            DataObject _updated = entry.getValue();
-
-            if (!(_origin instanceof IrdInstanceConfiguration)) {
-                continue;
+        for (DataTreeModification<IrdInstanceConfiguration> change: changes) {
+            final DataObjectModification<IrdInstanceConfiguration> rootNode = change.getRootNode();
+            switch (rootNode.getModificationType()) {
+                case WRITE:
+                case SUBTREE_MODIFIED:
+                    final IrdInstanceConfiguration original = rootNode.getDataBefore();
+                    final IrdInstanceConfiguration updated = rootNode.getDataAfter();
+                    if (original == null) {
+                        createIrd(updated, wx);
+                    } else {
+                        updateIrd(original, updated, wx);
+                    }
+                    break;
+                case DELETE:
+                    removeIrd(rootNode.getDataBefore(), wx);
+                    break;
+                default:
+                    break;
             }
-            if (!(_updated instanceof IrdInstanceConfiguration)) {
-                continue;
-            }
-
-            IrdInstanceConfiguration origin = (IrdInstanceConfiguration)_origin;
-            IrdInstanceConfiguration updated = (IrdInstanceConfiguration)_updated;
-
-            updateIrd(origin, updated, wx);
-        }
-
-        for (InstanceIdentifier<?> iid: change.getRemovedPaths()) {
-            DataObject _removed = original.get(iid);
-
-            if (!(_removed instanceof IrdInstanceConfiguration)) {
-                continue;
-            }
-
-            IrdInstanceConfiguration removed = (IrdInstanceConfiguration)_removed;
-            removeIrd(removed, wx);
-        }
-
-        for (Map.Entry<InstanceIdentifier<?>, DataObject> entry: change.getCreatedData().entrySet()) {
-            DataObject _created = entry.getValue();
-
-            if (!(_created instanceof IrdInstanceConfiguration)) {
-                continue;
-            }
-
-            IrdInstanceConfiguration created = (IrdInstanceConfiguration)_created;
-            createIrd(created, wx);
         }
 
         wx.submit();
@@ -235,7 +203,7 @@ public class SimpleIrdListener implements AutoCloseable, DataChangeListener {
 
         List<IrdConfigurationEntry> entries = cfg.getIrdConfigurationEntry();
 
-        if ((entries != null) && (!entries.isEmpty())) {
+        if (entries != null && !entries.isEmpty()) {
             LOG.warn("Do not support adding resources while create Ird, will be ignored");
         }
 

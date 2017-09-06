@@ -7,27 +7,34 @@
  */
 package org.opendaylight.alto.basic.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.Futures;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Future;
 import org.junit.Before;
 import org.junit.Test;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.ReadFailedException;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfiguration;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfigurationBuilder;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfigurationKey;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.entry.configuration.data.location.FixedUrlBuilder;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.configuration.IrdConfigurationEntry;
-import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.configuration.IrdConfigurationEntryBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.Context;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ContextKey;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
@@ -35,31 +42,23 @@ import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Reso
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.ResourceKey;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTagBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfiguration;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfigurationBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstanceConfigurationKey;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.entry.configuration.data.location.FixedUrlBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.configuration.IrdConfigurationEntry;
+import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.configuration.IrdConfigurationEntryBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.Tag;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Uri;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeFilteredCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.ird.rev151021.ResourceTypeIrd;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeFilteredNetworkmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.ResourceTypeNetworkmap;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.Future;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class SimpleIrdEntryListenerTest {
 
@@ -67,23 +66,21 @@ public class SimpleIrdEntryListenerTest {
     private static final String DEFAULT_POOL_RESOURCE = "DEFAULT_RESOURCE";
     private static final String DEFAULT_IRD_CONFIGURATION_KEY = "DEFAULT_IRD_CONFIGURATION";
 
-    private DataBroker m_dataBroker = mock(DataBroker.class);
-    private  ListenerRegistration<DataChangeListener> m_reg = mock(ListenerRegistration.class);
-    private InstanceIdentifier<Context> contextIId = InstanceIdentifier.builder(Context.class, new ContextKey(new Uuid(DEFAULT_CONTEXT_UUID))).build();
-    private InstanceIdentifier<Resource> resourceIID = contextIId.child(Resource.class, new ResourceKey(new ResourceId(DEFAULT_POOL_RESOURCE)));
+    private final DataBroker m_dataBroker = mock(DataBroker.class);
+    private final  ListenerRegistration<?> m_reg = mock(ListenerRegistration.class);
+    private final InstanceIdentifier<Context> contextIId = InstanceIdentifier.builder(Context.class, new ContextKey(new Uuid(DEFAULT_CONTEXT_UUID))).build();
+    private final InstanceIdentifier<Resource> resourceIID = contextIId.child(Resource.class, new ResourceKey(new ResourceId(DEFAULT_POOL_RESOURCE)));
     private static final Uuid ecUuid = new Uuid(DEFAULT_CONTEXT_UUID);
-    private SimpleIrdEntryListener simpleIrdEntryListener = new SimpleIrdEntryListener(resourceIID, ecUuid);
-    private ReadTransaction rx = mock(ReadTransaction.class);
-    private ReadWriteTransaction rwx = mock(ReadWriteTransaction.class);
-    private MockDataChangedEvent dataChangedEvent = new MockDataChangedEvent();
+    private final SimpleIrdEntryListener simpleIrdEntryListener = new SimpleIrdEntryListener(resourceIID, ecUuid);
+    private final ReadTransaction rx = mock(ReadTransaction.class);
+    private final ReadWriteTransaction rwx = mock(ReadWriteTransaction.class);
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
-        when(m_dataBroker.registerDataChangeListener(
-                any(LogicalDatastoreType.class),
-                any(InstanceIdentifier.class),
-                any(DataChangeListener.class),
-                any(AsyncDataBroker.DataChangeScope.class)))
+        when(m_dataBroker.registerDataTreeChangeListener(
+                any(DataTreeIdentifier.class),
+                any(DataTreeChangeListener.class)))
                 .thenReturn(m_reg);
 
         InstanceIdentifier<IrdConfigurationEntry> iiceIID = InstanceIdentifier.builder(IrdInstanceConfiguration.class
@@ -94,19 +91,12 @@ public class SimpleIrdEntryListenerTest {
 
     @Test
     public void register() throws Exception {
-        when(m_dataBroker.registerDataChangeListener(
-                any(LogicalDatastoreType.class),
-                any(InstanceIdentifier.class),
-                any(DataChangeListener.class),
-                any(AsyncDataBroker.DataChangeScope.class)))
-                .thenReturn(m_reg);
-
         InstanceIdentifier<IrdConfigurationEntry> iiceIID = InstanceIdentifier.builder(IrdInstanceConfiguration.class
                 , new IrdInstanceConfigurationKey(new ResourceId(DEFAULT_IRD_CONFIGURATION_KEY)))
                 .child(IrdConfigurationEntry.class).build();
         simpleIrdEntryListener.register(m_dataBroker, iiceIID);
-        verify(m_dataBroker,times(2)).registerDataChangeListener(LogicalDatastoreType.CONFIGURATION, iiceIID
-                , this.simpleIrdEntryListener, AsyncDataBroker.DataChangeScope.SUBTREE);
+        verify(m_dataBroker,times(2)).registerDataTreeChangeListener(new DataTreeIdentifier<>(
+                LogicalDatastoreType.CONFIGURATION, iiceIID), this.simpleIrdEntryListener);
     }
 
     @Test
@@ -127,6 +117,7 @@ public class SimpleIrdEntryListenerTest {
         assertEquals(opReFuture, result);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void onDataChanged() throws Exception {
         InstanceIdentifier<IrdConfigurationEntry> iiceIID = InstanceIdentifier.builder(IrdInstanceConfiguration.class
@@ -140,11 +131,16 @@ public class SimpleIrdEntryListenerTest {
         when(m_dataBroker.newReadWriteTransaction()).thenReturn(rwx);
 
         Optional<IrdInstanceConfiguration> iicOp = Optional.of(new IrdInstanceConfigurationBuilder().build());
-        final CheckedFuture<Optional<IrdInstanceConfiguration>,  ReadFailedException> iicOpFu;
-        iicOpFu = Futures.immediateCheckedFuture(iicOp);
+        final CheckedFuture<Optional<IrdInstanceConfiguration>,  ReadFailedException> iicOpFu =
+                Futures.immediateCheckedFuture(iicOp);
 
         when(rwx.read(LogicalDatastoreType.CONFIGURATION, configIID)).thenReturn(iicOpFu);
-        simpleIrdEntryListener.onDataChanged(dataChangedEvent);
+
+        DataTreeModification<IrdConfigurationEntry> mockDataTreeModification = mock(DataTreeModification.class);
+        DataObjectModification<IrdConfigurationEntry> mockModification = mock(DataObjectModification.class);
+        doReturn(mockModification).when(mockDataTreeModification).getRootNode();
+
+        simpleIrdEntryListener.onDataTreeChanged(Collections.singletonList(mockDataTreeModification));
 
         verify(rwx).read(any(LogicalDatastoreType.class), any(InstanceIdentifier.class));
     }
@@ -254,41 +250,4 @@ public class SimpleIrdEntryListenerTest {
         simpleIrdEntryListener.close();
         verify(m_reg).close();
     }
-
-    static class MockDataChangedEvent implements AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> {
-        Map<InstanceIdentifier<?>,DataObject> created = new HashMap<>();
-        Map<InstanceIdentifier<?>,DataObject> updated = new HashMap<>();
-        Set<InstanceIdentifier<?>> removed = new HashSet<>();
-
-        @Override
-        public Map<InstanceIdentifier<?>, DataObject> getCreatedData() {
-            return created;
-        }
-
-        @Override
-        public Map<InstanceIdentifier<?>, DataObject> getUpdatedData() {
-            return updated;
-        }
-
-        @Override
-        public Set<InstanceIdentifier<?>> getRemovedPaths() {
-            return removed;
-        }
-
-        @Override
-        public Map<InstanceIdentifier<?>, DataObject> getOriginalData() {
-            throw new UnsupportedOperationException("Not implemented by mock");
-        }
-
-        @Override
-        public DataObject getOriginalSubtree() {
-            throw new UnsupportedOperationException("Not implemented by mock");
-        }
-
-        @Override
-        public DataObject getUpdatedSubtree() {
-            throw new UnsupportedOperationException("Not implemented by mock");
-        }
-    }
-
 }

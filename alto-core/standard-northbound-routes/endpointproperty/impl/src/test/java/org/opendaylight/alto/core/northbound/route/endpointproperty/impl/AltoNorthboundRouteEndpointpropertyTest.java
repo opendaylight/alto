@@ -7,26 +7,32 @@
  */
 package org.opendaylight.alto.core.northbound.route.endpointproperty.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import javax.ws.rs.core.Response;
 import org.junit.Test;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285EndpointPropertyMap;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285VersionTag;
-import org.opendaylight.controller.md.sal.binding.api.BindingTransactionChain;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
-import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
-import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
-import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.controller.md.sal.common.api.data.TransactionChainListener;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.GlobalEndpointProperty;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.PidName;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.SpecificEndpointProperty;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.AltoModelEndpointpropertyService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.QueryInput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.QueryOutput;
@@ -55,27 +61,8 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpoint
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.endpoint.propertymap.data.endpoint.property.map.endpoint.property.properties.property.container.property.OutputGlobalPropertyBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.endpoint.propertymap.data.endpoint.property.map.endpoint.property.properties.property.container.property.OutputResourceSpecificPropertyBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.endpoint.propertymap.data.endpoint.property.map.endpoint.property.properties.property.value.PidNameBuilder;
-import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.common.RpcResult;
-
-import javax.annotation.Nonnull;
-import javax.ws.rs.core.Response;
-
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.anyObject;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class AltoNorthboundRouteEndpointpropertyTest {
     static String ENDPOINTPROPERTY_FILTER = "{\"properties\" : [ \"my-default-networkmap.pid\","
@@ -111,36 +98,7 @@ public class AltoNorthboundRouteEndpointpropertyTest {
         doReturn(ctagIID)
             .when(anbreSpy)
             .getResourceByPath(eq(PATH), (ReadOnlyTransaction) anyObject());
-        anbreSpy.setDataBroker(new DataBroker() {
-            @Override public ReadOnlyTransaction newReadOnlyTransaction() {
-                return null;
-            }
-
-            @Override public ReadWriteTransaction newReadWriteTransaction() {
-                return null;
-            }
-
-            @Override public WriteTransaction newWriteOnlyTransaction() {
-                return null;
-            }
-
-            @Override public ListenerRegistration<DataChangeListener> registerDataChangeListener(
-                LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<?> instanceIdentifier,
-                DataChangeListener dataChangeListener, DataChangeScope dataChangeScope) {
-                return null;
-            }
-
-            @Override public BindingTransactionChain createTransactionChain(
-                TransactionChainListener transactionChainListener) {
-                return null;
-            }
-
-            @Nonnull @Override
-            public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(
-                @Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
-                return null;
-            }
-        });
+        anbreSpy.setDataBroker(mock(DataBroker.class));
 
         anbreSpy.init();
         QueryInput input = anbreSpy.prepareInput(PATH, _properties.elements(), _endpoints.elements());
@@ -267,36 +225,8 @@ public class AltoNorthboundRouteEndpointpropertyTest {
         when(future.get()).thenReturn(rpcResult);
         when(epService.query((QueryInput) anyObject())).thenReturn(future);
         anbreSpy.setMapService(epService);
-        anbreSpy.setDataBroker(new DataBroker() {
-            @Override public ReadOnlyTransaction newReadOnlyTransaction() {
-                return null;
-            }
+        anbreSpy.setDataBroker(mock(DataBroker.class));
 
-            @Override public ReadWriteTransaction newReadWriteTransaction() {
-                return null;
-            }
-
-            @Override public WriteTransaction newWriteOnlyTransaction() {
-                return null;
-            }
-
-            @Override public ListenerRegistration<DataChangeListener> registerDataChangeListener(
-                LogicalDatastoreType logicalDatastoreType, InstanceIdentifier<?> instanceIdentifier,
-                DataChangeListener dataChangeListener, DataChangeScope dataChangeScope) {
-                return null;
-            }
-
-            @Override public BindingTransactionChain createTransactionChain(
-                TransactionChainListener transactionChainListener) {
-                return null;
-            }
-
-            @Nonnull @Override
-            public <T extends DataObject, L extends DataTreeChangeListener<T>> ListenerRegistration<L> registerDataTreeChangeListener(
-                @Nonnull DataTreeIdentifier<T> dataTreeIdentifier, @Nonnull L l) {
-                return null;
-            }
-        });
         doReturn(ctagIID).when(anbreSpy).getResourceByPath(eq(PATH), (ReadOnlyTransaction) anyObject());
         RFC7285EndpointPropertyMap.Meta meta = new RFC7285EndpointPropertyMap.Meta();
         RFC7285VersionTag vtag = new RFC7285VersionTag();

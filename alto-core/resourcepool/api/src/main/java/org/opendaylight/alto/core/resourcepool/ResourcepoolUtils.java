@@ -8,30 +8,25 @@
 
 package org.opendaylight.alto.core.resourcepool;
 
+import com.google.common.base.Optional;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-
-import com.google.common.base.Optional;
-
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RoutedRpcRegistration;
-
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
-
-import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ResourceType;
-import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ServiceContext;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.Context;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ContextBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ContextKey;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ResourceType;
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.ServiceContext;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.ResourceBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.ResourceKey;
@@ -40,11 +35,9 @@ import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.reso
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTagBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTagKey;
-
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.Tag;
-
-import org.opendaylight.yangtools.yang.binding.DataObject;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.yang.types.rev130715.Uuid;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.opendaylight.yangtools.yang.binding.RpcService;
 
@@ -128,7 +121,7 @@ public class ResourcepoolUtils {
         Optional<Context> context;
         context = rx.read(LogicalDatastoreType.OPERATIONAL, getContextIID(key)).get();
 
-        return (context.isPresent());
+        return context.isPresent();
     }
 
     public static Uuid createRandomContext(final WriteTransaction wx) {
@@ -173,7 +166,7 @@ public class ResourcepoolUtils {
         Optional<Resource> resource;
         resource = rx.read(LogicalDatastoreType.OPERATIONAL, iid).get();
 
-        return (resource.isPresent());
+        return resource.isPresent();
     }
 
     public static ResourceId createResource(String cid, String rid,
@@ -259,7 +252,7 @@ public class ResourcepoolUtils {
          * Unfortunately the resources must handle the dependency resolving themselves
          * */
         if (dependencies == null) {
-            dependencies = new LinkedList<InstanceIdentifier<?>>();
+            dependencies = new LinkedList<>();
         }
         ctBuilder.setDependency(dependencies);
 
@@ -300,7 +293,7 @@ public class ResourcepoolUtils {
         return UUID.nameUUIDFromBytes(name.getBytes()).toString();
     }
 
-    public static final class ContextTagListener implements DataChangeListener {
+    public static final class ContextTagListener implements DataTreeChangeListener<ContextTag> {
 
         private RoutedRpcRegistration<? extends RpcService> m_registration = null;
         private InstanceIdentifier<Resource> m_iid = null;
@@ -312,22 +305,26 @@ public class ResourcepoolUtils {
         }
 
         @Override
-        public void onDataChanged(final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-            for (InstanceIdentifier<?> path: change.getRemovedPaths()) {
-                if (path.getTargetType().equals(ContextTag.class)) {
-                    if (m_iid.contains(path)) {
-                        // Only manage resource's own context tag
-                        m_registration.unregisterPath(ServiceContext.class, path);
-                    }
+        public void onDataTreeChanged(Collection<DataTreeModification<ContextTag>> changes) {
+            for (DataTreeModification<ContextTag> change: changes) {
+                final DataObjectModification<ContextTag> rootNode = change.getRootNode();
+                final InstanceIdentifier<ContextTag> identifier = change.getRootPath().getRootIdentifier();
+                if (!m_iid.contains(identifier)) {
+                    // Only manage resource's own context tag
+                    continue;
                 }
-            }
 
-            for (InstanceIdentifier<?> path: change.getCreatedData().keySet()) {
-                if (path.getTargetType().equals(ContextTag.class)) {
-                    if (m_iid.contains(path)) {
-                        // Only manage resource's own context tag
-                        m_registration.registerPath(ServiceContext.class, path);
-                    }
+                switch (rootNode.getModificationType()) {
+                    case WRITE:
+                        if (rootNode.getDataBefore() == null) {
+                            m_registration.registerPath(ServiceContext.class, identifier);
+                        }
+                        break;
+                    case DELETE:
+                        m_registration.unregisterPath(ServiceContext.class, identifier);
+                        break;
+                    default:
+                        break;
                 }
             }
         }

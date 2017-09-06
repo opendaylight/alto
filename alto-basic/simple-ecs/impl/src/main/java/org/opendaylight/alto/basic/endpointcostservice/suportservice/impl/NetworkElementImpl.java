@@ -7,9 +7,8 @@
  */
 package org.opendaylight.alto.basic.endpointcostservice.suportservice.impl;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.opendaylight.alto.basic.endpointcostservice.helper.DataStoreHelper;
@@ -20,29 +19,27 @@ import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.Net
 import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkHostNodeService;
 import org.opendaylight.alto.basic.endpointcostservice.util.InstanceIdentifierUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
+import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.host.tracker.rev140624.HostNode;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.Topology;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Link;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Node;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
-import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NetworkElementImpl implements NetworkElementService, DataChangeListener, AutoCloseable {
+public class NetworkElementImpl implements NetworkElementService, AutoCloseable {
     private static final Logger log = LoggerFactory
             .getLogger(NetworkElementImpl.class);
     private static final int CPUS = Runtime.getRuntime().availableProcessors();
     private final ExecutorService exec = Executors.newFixedThreadPool(CPUS);
 
     private final DataBroker dataBroker;
-    private ListenerRegistration<DataChangeListener> hostNodeListRegistration;
-    private ListenerRegistration<DataChangeListener> linkListRegistration;
+    private ListenerRegistration<?> hostNodeListRegistration;
+    private ListenerRegistration<?> linkListRegistration;
 
     private final NetworkHostNodeService hostNodeService;
     private final LinkService linkService;
@@ -99,85 +96,49 @@ public class NetworkElementImpl implements NetworkElementService, DataChangeList
         }
     }
     @Override
-    public void close() throws Exception {
+    public void close() {
         this.hostNodeListRegistration.close();
         this.linkListRegistration.close();
     }
 
-    @Override
-    public void onDataChanged(final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-        exec.submit(new Runnable() {
-            @Override
-            public void run() {
-                if (change == null) {
-                    log.info("In onDataChanged: Change event is null.");
-                    return;
-                }
-                onDataUpdated(change);
-                onDataCreated(change);
-                onDataDeleted(change);
-            }
-
-            private void onDataUpdated(
-                    AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-                Map<InstanceIdentifier<?>, DataObject> updatedData = change
-                        .getUpdatedData();
-                if (updatedData.size() > 0) {
-                    log.info("In onDataUpdated");
-                    processUpdatedOrCreatedData(updatedData);
-                }
-            }
-
-            private void onDataCreated(
-                    AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-                Map<InstanceIdentifier<?>, DataObject> createdData = change
-                        .getCreatedData();
-                if (createdData.size() > 0) {
-                    log.info("In onDataCreated");
-                    processUpdatedOrCreatedData(createdData);
-                }
-            }
-
-            private void processUpdatedOrCreatedData(
-                    Map<InstanceIdentifier<?>, DataObject> data) {
-                for (Map.Entry<InstanceIdentifier<?>, DataObject> entrySet : data
-                        .entrySet()) {
-                    final DataObject dataObject = entrySet.getValue();
-                    if (dataObject instanceof HostNode) {
+    private void onHostNodeChanged(Collection<DataTreeModification<HostNode>> changes) {
+        exec.submit(() -> {
+            for (DataTreeModification<HostNode> change: changes) {
+                final DataObjectModification<HostNode> rootNode = change.getRootNode();
+                switch (rootNode.getModificationType()) {
+                    case WRITE:
+                    case SUBTREE_MODIFIED:
                         log.info("Mapping host nodes to switch");
-                        hostNodeService.addHostNode((HostNode) dataObject);
-                    } else if (dataObject instanceof Link) {
-                        log.info("Updating Links");
-                        linkService.addLink((Link) dataObject);
-                    }
-                }
-            }
-
-            private void onDataDeleted(
-                    AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
-                Map<InstanceIdentifier<?>, DataObject> originalData = change
-                        .getOriginalData();
-                Set<InstanceIdentifier<?>> deletedData = change
-                        .getRemovedPaths();
-                if (deletedData.size() > 0) {
-                    log.info("In onDataDeleted");
-                    processDeletedData(originalData, deletedData);
-                }
-            }
-
-            private void processDeletedData(
-                    Map<InstanceIdentifier<?>, DataObject> originalData,
-                    Set<InstanceIdentifier<?>> deletedData) {
-                for (InstanceIdentifier<?> iid : deletedData) {
-                    if (iid.getTargetType().equals(HostNode.class)) {
-                        hostNodeService.deleteHostNode((HostNode) originalData.get(iid));
-                    } else if (iid.getTargetType().equals(Link.class)) {
-                        linkService.deleteLink((Link) originalData.get(iid));
-                    }
+                        hostNodeService.addHostNode(rootNode.getDataAfter());
+                        break;
+                    case DELETE:
+                        hostNodeService.deleteHostNode(rootNode.getDataBefore());
+                        break;
+                    default:
+                        break;
                 }
             }
         });
+    }
 
+    private void onLinkChanged(Collection<DataTreeModification<Link>> changes) {
+        exec.submit(() -> {
+            for (DataTreeModification<Link> change: changes) {
+                final DataObjectModification<Link> rootNode = change.getRootNode();
+                switch (rootNode.getModificationType()) {
+                    case WRITE:
+                    case SUBTREE_MODIFIED:
+                        log.info("Updating Links");
+                        linkService.addLink(rootNode.getDataAfter());
+                        break;
+                    case DELETE:
+                        linkService.deleteLink(rootNode.getDataBefore());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -196,9 +157,13 @@ public class NetworkElementImpl implements NetworkElementService, DataChangeList
     }
 
     private void registerHostNodeListener() {
-        this.hostNodeListRegistration = this.dataBroker.registerDataChangeListener(LogicalDatastoreType.OPERATIONAL, InstanceIdentifierUtils.HOSTNODE, this, AsyncDataBroker.DataChangeScope.BASE);
+        this.hostNodeListRegistration = this.dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+            LogicalDatastoreType.OPERATIONAL, InstanceIdentifierUtils.HOSTNODE),
+            changes -> onHostNodeChanged(changes));
     }
+
     private void registerLinkListener() {
-        this.linkListRegistration = this.dataBroker.registerDataChangeListener(LogicalDatastoreType.OPERATIONAL,InstanceIdentifierUtils.LINK,this, AsyncDataBroker.DataChangeScope.BASE);
+        this.linkListRegistration = this.dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+                LogicalDatastoreType.OPERATIONAL, InstanceIdentifierUtils.LINK), changes -> onLinkChanged(changes));
     }
 }

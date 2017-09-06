@@ -7,25 +7,24 @@
  */
 package org.opendaylight.alto.basic.impl.rfc7285;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
 import org.opendaylight.alto.basic.simpleird.SimpleIrdUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
-import org.opendaylight.controller.md.sal.binding.api.DataChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeChangeListener;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
+import org.opendaylight.controller.md.sal.binding.api.DataTreeModification;
 import org.opendaylight.controller.md.sal.binding.api.ReadWriteTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataBroker.DataChangeScope;
-import org.opendaylight.controller.md.sal.common.api.data.AsyncDataChangeEvent;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-
+import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.IrdInstance;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.entry.data.EntryCapabilities;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rev151021.ird.instance.IrdEntry;
-
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285CostTypeCapabilities;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285CostTypeCapabilitiesBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc7285IrdMetadata;
@@ -33,22 +32,14 @@ import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.Rfc728
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.ird.instance.MetaBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.rfc7285.ird.meta.CostType;
 import org.opendaylight.yang.gen.v1.urn.alto.simple.ird.rfc7285.rev151021.rfc7285.ird.meta.CostTypeBuilder;
-
-import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
-
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.CostTypeData;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
-
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeCostmap;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.ResourceTypeFilteredCostmap;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
-
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.CapabilitiesCostType;
-
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
-import org.opendaylight.yangtools.yang.binding.DataObject;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,30 +52,28 @@ import org.slf4j.LoggerFactory;
  *
  * */
 public final class SimpleIrdRfc7285CostTypeListener
-                    implements AutoCloseable, DataChangeListener {
+                    implements AutoCloseable, DataTreeChangeListener<IrdEntry> {
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleIrdRfc7285CostTypeListener.class);
 
     private DataBroker m_dataBroker = null;
-    private ListenerRegistration<DataChangeListener> m_reg = null;
-    private InstanceIdentifier<IrdEntry> m_iid = null;
+    private ListenerRegistration<?> m_reg = null;
+    private final InstanceIdentifier<IrdEntry> m_iid = null;
     private ResourceId m_instance = null;
 
     public void register(DataBroker dataBroker, ResourceId instanceId) {
         m_dataBroker = dataBroker;
         m_instance = instanceId;
-        m_iid = SimpleIrdUtils.getInstanceIID(instanceId).child(IrdEntry.class);
 
-        m_reg = m_dataBroker.registerDataChangeListener(
-                LogicalDatastoreType.OPERATIONAL, m_iid,
-                this, DataChangeScope.SUBTREE
-        );
+        m_reg = m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+                LogicalDatastoreType.OPERATIONAL, SimpleIrdUtils.getInstanceIID(instanceId).child(IrdEntry.class)),
+                this);
 
         LOG.info("SimpleIrdRfc7285CostTypeListener registered");
     }
 
     @Override
-    public void onDataChanged(final AsyncDataChangeEvent<InstanceIdentifier<?>, DataObject> change) {
+    public void onDataTreeChanged(Collection<DataTreeModification<IrdEntry>> changes) {
         final ReadWriteTransaction rwx = m_dataBroker.newReadWriteTransaction();
 
         try {
@@ -93,9 +82,8 @@ public final class SimpleIrdRfc7285CostTypeListener
             setCostTypes(m_instance, costTypeList, rwx);
 
             rwx.submit();
-        } catch (Exception e) {
-            LOG.error("Failed to update cost-types {}", m_instance);
-            e.printStackTrace();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error("Failed to update cost-types {}", m_instance, e);
         }
     }
 
@@ -104,7 +92,7 @@ public final class SimpleIrdRfc7285CostTypeListener
         InstanceIdentifier<IrdInstance> iid = SimpleIrdUtils.getInstanceIID(m_instance);
         IrdInstance instance = rwx.read(LogicalDatastoreType.OPERATIONAL, iid).get().get();
 
-        Map<String, CostType> result = new HashMap<String, CostType>();
+        Map<String, CostType> result = new HashMap<>();
         for (IrdEntry entry: instance.getIrdEntry()) {
             InstanceIdentifier<Resource> resourceIID;
             resourceIID = (InstanceIdentifier<Resource>)entry.getInstance();
@@ -117,8 +105,8 @@ public final class SimpleIrdRfc7285CostTypeListener
                 capabilities = resource.getCapabilities()
                     .getAugmentation(CapabilitiesCostType.class);
 
-                if ((capabilities == null) || (capabilities.getCostType() == null)
-                        || (capabilities.getCostType().isEmpty())) {
+                if (capabilities == null || capabilities.getCostType() == null
+                        || capabilities.getCostType().isEmpty()) {
                     LOG.warn("Missing cost-type information in {}", resource.getResourceId());
                     continue;
                 }
