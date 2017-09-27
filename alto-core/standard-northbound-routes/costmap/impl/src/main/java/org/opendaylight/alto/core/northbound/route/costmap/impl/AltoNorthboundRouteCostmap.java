@@ -88,9 +88,10 @@ public class AltoNorthboundRouteCostmap implements AltoNorthboundRoute {
 
     private DataBroker dataBroker = null;
 
-    private AltoNorthboundRouter m_router = null;
+    private AltoNorthboundRouter router = null;
 
-    private  static AltoModelCostmapService mapService = null;
+    private static AltoModelCostmapService mapService = null;
+
     public void setDataBroker(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
     }
@@ -111,12 +112,12 @@ public class AltoNorthboundRouteCostmap implements AltoNorthboundRoute {
     }
 
     public void register(AltoNorthboundRouter router) {
-        m_router = router;
-        m_router.addRoute("costmap", new AltoNorthboundRouteCostmap());
+        this.router = router;
+        this.router.addRoute(COSTMAP_ROUTE, new AltoNorthboundRouteCostmap());
     }
 
     public void close() {
-        m_router.removeRoute("costmap");
+        router.removeRoute(COSTMAP_ROUTE);
     }
 
     @Path("{path}")

@@ -8,6 +8,7 @@
 package org.opendaylight.alto.basic.endpointcostservice.impl;
 
 import java.util.concurrent.ExecutionException;
+
 import org.opendaylight.alto.core.resourcepool.ResourcepoolUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataTreeIdentifier;
@@ -18,7 +19,6 @@ import org.opendaylight.controller.sal.binding.api.BindingAwareBroker;
 import org.opendaylight.controller.sal.binding.api.BindingAwareBroker.RoutedRpcRegistration;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
-import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.AltoModelEndpointcostService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.ResourceTypeEndpointcost;
 import org.opendaylight.yangtools.concepts.ListenerRegistration;
@@ -30,24 +30,24 @@ public class EndpointcostserviceProvider implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(EndpointcostserviceProvider.class);
 
-    private final DataBroker m_dataBroker;
-    private final BindingAwareBroker.RoutedRpcRegistration<AltoModelEndpointcostService> m_serviceReg;
-    private ListenerRegistration<?> m_listener;
+    private final DataBroker dataBroker;
+    private final BindingAwareBroker.RoutedRpcRegistration<AltoModelEndpointcostService> serviceReg;
+    private ListenerRegistration<?> listenerReg;
 
     private static final String SERVICE_ENDPOINTCOST_NAME = "service-endpointcost";
-    private static final ResourceId SERVICE_ENDPOINTCOST_RID = new ResourceId(SERVICE_ENDPOINTCOST_NAME);
-    private final InstanceIdentifier<Resource> m_testIID = ResourcepoolUtils.getResourceIID(ResourcepoolUtils.DEFAULT_CONTEXT,
+    // private static final ResourceId SERVICE_ENDPOINTCOST_RID = new ResourceId(SERVICE_ENDPOINTCOST_NAME);
+    private final InstanceIdentifier<Resource> testIID = ResourcepoolUtils.getResourceIID(ResourcepoolUtils.DEFAULT_CONTEXT,
             SERVICE_ENDPOINTCOST_NAME);
 
-    public EndpointcostserviceProvider(DataBroker m_dataBroker,
-            RoutedRpcRegistration<AltoModelEndpointcostService> m_serviceReg) {
-        this.m_dataBroker = m_dataBroker;
-        this.m_serviceReg = m_serviceReg;
+    public EndpointcostserviceProvider(DataBroker dataBroker,
+            RoutedRpcRegistration<AltoModelEndpointcostService> serviceReg) {
+        this.dataBroker = dataBroker;
+        this.serviceReg = serviceReg;
     }
 
     protected void createContextTag()
             throws InterruptedException, ExecutionException, TransactionCommitFailedException {
-        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+        WriteTransaction wx = dataBroker.newWriteOnlyTransaction();
 
         ResourcepoolUtils.createResourceWithCapabilities(ResourcepoolUtils.DEFAULT_CONTEXT,
                 SERVICE_ENDPOINTCOST_NAME,
@@ -62,7 +62,7 @@ public class EndpointcostserviceProvider implements AutoCloseable {
 
     protected void removeContextTag()
             throws InterruptedException, ExecutionException, TransactionCommitFailedException  {
-        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+        WriteTransaction wx = dataBroker.newWriteOnlyTransaction();
 
         ResourcepoolUtils.deleteResource(ResourcepoolUtils.DEFAULT_CONTEXT,
                 SERVICE_ENDPOINTCOST_NAME, wx);
@@ -71,11 +71,12 @@ public class EndpointcostserviceProvider implements AutoCloseable {
     }
 
     protected void setupListener() {
-        ResourcepoolUtils.ContextTagListener listener = new ResourcepoolUtils.ContextTagListener(m_testIID, m_serviceReg);
-        m_listener = m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(LogicalDatastoreType.OPERATIONAL,
-                m_testIID.child(ContextTag.class)), listener);
+        ResourcepoolUtils.ContextTagListener listener = new ResourcepoolUtils.ContextTagListener(testIID, serviceReg);
+        listenerReg = dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(LogicalDatastoreType.OPERATIONAL,
+                testIID.child(ContextTag.class)), listener);
 
-        assert m_listener != null;
+        assert listenerReg != null;
+        LOG.info("Setup listener for Endpointcostservice successfully!");
     }
 
     public void init() {

@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RFC7285VersionTag {
 
+    private final static char ILLEGAL = '$';
+
     @JsonProperty("resource-id")
     public String rid;
 
@@ -32,8 +34,6 @@ public class RFC7285VersionTag {
         return (rid == null) || (tag == null) || (rid == "") || (tag == "");
     }
 
-    private static char ILLEGAL = '$';
-
     @Override
     public int hashCode() {
         return (rid + ILLEGAL + tag).hashCode();
@@ -41,14 +41,18 @@ public class RFC7285VersionTag {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
         if (obj == null)
             return false;
 
+        if (this.getClass() != obj.getClass())
+            return false;
+
+        if (this == obj)
+            return true;
+
         RFC7285VersionTag other = (RFC7285VersionTag)obj;
-        boolean _rid = (rid == null ? (other.rid == null) : rid.equals(other.rid));
-        boolean _tag = (tag == null ? (other.tag == null) : tag.equals(other.tag));
-        return (_rid && _tag);
+        boolean ridTest = (rid == null ? (other.rid == null) : rid.equals(other.rid));
+        boolean tagTest = (tag == null ? (other.tag == null) : tag.equals(other.tag));
+        return (ridTest && tagTest);
     }
 }

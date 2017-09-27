@@ -15,12 +15,10 @@ public class AltoAutoMapsProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoAutoMapsProvider.class);
 
-    private final DataBroker dataBroker;
-    private AltoAutoMapsUpdateListener m_listener;
+    private AltoAutoMapsUpdateListener listener;
 
     public AltoAutoMapsProvider(final DataBroker dataBroker) {
-        this.dataBroker = dataBroker;
-        this.m_listener = new AltoAutoMapsUpdateListener(dataBroker);
+        this.listener = new AltoAutoMapsUpdateListener(dataBroker);
     }
 
     /**
@@ -33,7 +31,14 @@ public class AltoAutoMapsProvider {
     /**
      * Method called when the blueprint container is destroyed.
      */
-    public void close() {
+    public void close() throws Exception {
+        closeListener();
         LOG.info("AltoAutoMapsProvider Closed");
+    }
+
+    private void closeListener() throws Exception {
+        if (listener != null) {
+            this.listener.close();
+        }
     }
 }

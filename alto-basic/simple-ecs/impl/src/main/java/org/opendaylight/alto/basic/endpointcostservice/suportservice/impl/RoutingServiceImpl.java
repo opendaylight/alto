@@ -37,8 +37,8 @@ public class RoutingServiceImpl implements RoutingService {
     private NetworkFlowCapableNodeService flowCapableNodeService;
 
     private FlowTableMatcher flowTableMatcher = new FlowTableMatcher();
-    private List<LinkNode> pathStack = new ArrayList<LinkNode>();
-    private Map<String, LinkNode> visitedInPort = new HashMap<String, LinkNode>();
+    private List<LinkNode> pathStack = new ArrayList<>();
+    private Map<String, LinkNode> visitedInPort = new HashMap<>();
 
     public RoutingServiceImpl(NetworkElementService networkService) {
         this.linkService = networkService.getLinkService();
