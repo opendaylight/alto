@@ -9,6 +9,8 @@ package org.opendaylight.alto.basic.impl;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 import org.opendaylight.alto.basic.manual.maps.ManualMapsUtils;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
@@ -34,8 +36,8 @@ public class AltoManualMapsProvider implements AutoCloseable {
     private final BindingAwareBroker.RoutedRpcRegistration<AltoModelNetworkmapService> altoModelNetworkmapService;
     private final BindingAwareBroker.RoutedRpcRegistration<AltoModelCostmapService> altoModelCostmapService;
 
-    private AltoNorthboundRouter m_router = null;
-    private List<Uuid> m_contexts = null;
+    private AltoNorthboundRouter mRouter = null;
+    private List<Uuid> mContexts = null;
 
     public AltoManualMapsProvider(DataBroker dataBroker,
             AltoNorthboundRouter router,
@@ -57,16 +59,16 @@ public class AltoManualMapsProvider implements AutoCloseable {
         manualMapsListener.close();
     }
 
-    protected void initializeConfigContext() throws Exception {
-        m_contexts = new LinkedList<>();
+    protected void initializeConfigContext() throws ExecutionException, InterruptedException {
+        mContexts = new LinkedList<>();
         WriteTransaction wx = dataBroker.newWriteOnlyTransaction();
-        m_contexts.add(ManualMapsUtils.createContext(wx));
+        mContexts.add(ManualMapsUtils.createContext(wx));
         wx.submit().get();
     }
 
-    protected void clearConfigContext() throws Exception {
+    protected void clearConfigContext() throws ExecutionException, InterruptedException {
         WriteTransaction wx = dataBroker.newWriteOnlyTransaction();
-        for (Uuid context : m_contexts) {
+        for (Uuid context : mContexts) {
             ManualMapsUtils.deleteContext(context, wx);
         }
         wx.submit().get();
@@ -88,13 +90,13 @@ public class AltoManualMapsProvider implements AutoCloseable {
     @Override
     public void close() throws Exception {
         try {
-            if (m_router != null) {
-                m_router.removeRoute(RESOURCE_CONFIG_ROUTE_NAME);
+            if (mRouter != null) {
+                mRouter.removeRoute(RESOURCE_CONFIG_ROUTE_NAME);
             }
             clearConfigContext();
             closeListener();
         } catch (Exception e) {
-            LOG.error("Failed to remove route");
+            LOG.error("Failed to remove route", e);
         }
 
         LOG.info("AltoManualMapsProvider Closed");
@@ -102,16 +104,16 @@ public class AltoManualMapsProvider implements AutoCloseable {
 
     private void setupRoute() {
         AltoNorthboundRoute route = new ManualMapsRoute(this);
-        String base_url = router.addRoute(RESOURCE_CONFIG_ROUTE_NAME, route);
-        if (base_url == null) {
+        String baseUrl = router.addRoute(RESOURCE_CONFIG_ROUTE_NAME, route);
+        if (baseUrl == null) {
             LOG.error("Failed to register route for AltoManualMaps");
             return;
         }
 
         try {
-            m_router = router;
+            mRouter = router;
         } catch (Exception e) {
-            LOG.error("Failed to reigster route");
+            LOG.error("Failed to reigster route", e);
         }
     }
 }

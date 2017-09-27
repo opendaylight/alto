@@ -35,24 +35,24 @@ public class AltoSimpleIrdProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(AltoSimpleIrdProvider.class);
 
-    private final DataBroker m_dataBroker;
+    private final DataBroker mDataBroker;
 
-    InstanceIdentifier<IrdInstanceConfiguration> m_iid = null;
-    InstanceIdentifier<IrdInstance> m_rootIID = null;
+    InstanceIdentifier<IrdInstanceConfiguration> mIID = null;
+    InstanceIdentifier<IrdInstance> mRootIID = null;
 
-    private String m_context = null;
-    private SimpleIrdListener m_listener = null;
-    private AltoNorthboundRouter m_router = null;
-    private AltoNorthboundRoute m_route = null;
+    private String mContext = null;
+    private SimpleIrdListener mListener = null;
+    private AltoNorthboundRouter mRouter = null;
+    private AltoNorthboundRoute mRoute = null;
 
     protected void createContext() throws InterruptedException, ExecutionException {
-        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+        WriteTransaction wx = mDataBroker.newWriteOnlyTransaction();
 
-        m_context = ResourcepoolUtils.getUUID(SIMPLE_IRD_ROUTE_NAME);
-        ResourcepoolUtils.createContext(m_context, wx);
+        mContext = ResourcepoolUtils.getUUID(SIMPLE_IRD_ROUTE_NAME);
+        ResourcepoolUtils.createContext(mContext, wx);
 
         InformationBuilder builder = new InformationBuilder();
-        builder.setContextId(new Uuid(m_context));
+        builder.setContextId(new Uuid(mContext));
 
         InstanceIdentifier<Information> infoIID;
         infoIID = InstanceIdentifier.builder(Information.class).build();
@@ -60,16 +60,16 @@ public class AltoSimpleIrdProvider {
         wx.put(LogicalDatastoreType.OPERATIONAL, infoIID, builder.build());
         wx.submit().get();
 
-        LOG.info("Registered context {} for SimpleIrd", m_context);
+        LOG.info("Registered context {} for SimpleIrd", mContext);
     }
 
     protected void setupListener() {
-        m_listener = new SimpleIrdListener(new Uuid(m_context));
-        m_listener.register(m_dataBroker, m_iid);
+        mListener = new SimpleIrdListener(new Uuid(mContext));
+        mListener.register(mDataBroker, mIID);
     }
 
     protected void createDefaultIrd() throws InterruptedException, ExecutionException {
-        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+        WriteTransaction wx = mDataBroker.newWriteOnlyTransaction();
 
         IrdInstanceConfigurationBuilder builder = new IrdInstanceConfigurationBuilder();
         builder.setEntryContext(ResourcepoolUtils.getDefaultContextIID())
@@ -85,35 +85,35 @@ public class AltoSimpleIrdProvider {
     }
 
     protected void deleteContext() throws InterruptedException, ExecutionException {
-        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
-        ResourcepoolUtils.deleteContext(m_context, wx);
+        WriteTransaction wx = mDataBroker.newWriteOnlyTransaction();
+        ResourcepoolUtils.deleteContext(mContext, wx);
 
         wx.submit().get();
     }
 
     protected void closeListener() throws Exception {
-        if (m_listener != null) {
-            m_listener.close();
+        if (mListener != null) {
+            mListener.close();
         }
     }
 
     public AltoSimpleIrdProvider(final DataBroker dataBroker, final AltoNorthboundRouter router) {
-        this.m_dataBroker = dataBroker;
-        this.m_router = router;
+        this.mDataBroker = dataBroker;
+        this.mRouter = router;
     }
 
     /**
      * Method called when the blueprint container is created.
      */
     public void init() {
-        m_iid = SimpleIrdUtils.getInstanceConfigurationListIID();
-        m_rootIID = SimpleIrdUtils.getInstanceIID(ROOT_INSTANCE);
+        mIID = SimpleIrdUtils.getInstanceConfigurationListIID();
+        mRootIID = SimpleIrdUtils.getInstanceIID(ROOT_INSTANCE);
 
         try {
             createContext();
             setupListener();
             createDefaultIrd();
-            setupRoute(m_router);
+            setupRoute(mRouter);
         } catch (Exception e) {
             LOG.error("Failed to create top-level containers");
             e.printStackTrace();
@@ -126,8 +126,8 @@ public class AltoSimpleIrdProvider {
      */
     public void close() {
         try {
-            if (m_router != null) {
-                m_router.removeRoute(SIMPLE_IRD_ROUTE_NAME);
+            if (mRouter != null) {
+                mRouter.removeRoute(SIMPLE_IRD_ROUTE_NAME);
             }
 
             closeListener();
@@ -138,7 +138,7 @@ public class AltoSimpleIrdProvider {
     }
 
     IrdInstance getInstance(ResourceId rid) {
-        ReadTransaction rx = m_dataBroker.newReadOnlyTransaction();
+        ReadTransaction rx = mDataBroker.newReadOnlyTransaction();
 
         try {
             return SimpleIrdUtils.readInstance(rid, rx);
@@ -156,7 +156,7 @@ public class AltoSimpleIrdProvider {
         }
 
         try {
-            WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+            WriteTransaction wx = mDataBroker.newWriteOnlyTransaction();
 
             InstanceIdentifier<Information> infoIID;
             infoIID = InstanceIdentifier.builder(Information.class).build();
@@ -167,7 +167,7 @@ public class AltoSimpleIrdProvider {
 
             wx.submit().get();
 
-            m_route = route;
+            mRoute = route;
         } catch (Exception e) {
             LOG.error("Failed to reigster route");
         }

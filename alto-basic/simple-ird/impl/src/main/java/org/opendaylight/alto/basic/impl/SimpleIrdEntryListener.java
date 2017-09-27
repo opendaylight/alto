@@ -62,33 +62,33 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataTreeChangeList
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleIrdEntryListener.class);
 
-    private DataBroker m_dataBroker = null;
-    private ListenerRegistration<?> m_reg = null;
-    private InstanceIdentifier<IrdConfigurationEntry> m_iid = null;
+    private DataBroker mDataBroker = null;
+    private ListenerRegistration<?> mReg = null;
+    private InstanceIdentifier<IrdConfigurationEntry> mIID = null;
 
-    private Uuid m_context = null;
-    private ResourceId m_resource = null;
+    private Uuid mContext = null;
+    private ResourceId mResource = null;
 
-    private Uuid m_entryContext = null;
+    private Uuid mEntryContext = null;
 
     public SimpleIrdEntryListener(InstanceIdentifier<Resource> instance, Uuid entryContext) {
-        m_context = instance.firstKeyOf(Context.class).getContextId();
-        m_resource = instance.firstKeyOf(Resource.class).getResourceId();
-        m_entryContext = entryContext;
+        mContext = instance.firstKeyOf(Context.class).getContextId();
+        mResource = instance.firstKeyOf(Resource.class).getResourceId();
+        mEntryContext = entryContext;
     }
 
     public void register(DataBroker dataBroker, InstanceIdentifier<IrdConfigurationEntry> iid) {
-        m_dataBroker = dataBroker;
-        m_iid = iid;
+        mDataBroker = dataBroker;
+        mIID = iid;
 
-        m_reg = m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
-                LogicalDatastoreType.CONFIGURATION, m_iid), this);
+        mReg = mDataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+                LogicalDatastoreType.CONFIGURATION, mIID), this);
 
         LOG.info("SimpleIrdEntryListener registered");
     }
 
     protected boolean isAcceptableContext(Uuid context) {
-        if (m_entryContext.equals(context) || m_context.equals(context)) {
+        if (mEntryContext.equals(context) || mContext.equals(context)) {
             return true;
         }
         return false;
@@ -97,8 +97,8 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataTreeChangeList
     protected Future<Optional<Resource>> getValidResource(ResourceId rid,
                                                             InstanceIdentifier<Resource> iid,
                                                             ReadTransaction rx) {
-        ContextKey contextKey = new ContextKey(m_context);
-        ContextKey entryContextKey = new ContextKey(m_entryContext);
+        ContextKey contextKey = new ContextKey(mContext);
+        ContextKey entryContextKey = new ContextKey(mEntryContext);
         ResourceKey resourceKey = new ResourceKey(rid);
 
         ContextKey iidContextKey = iid.firstKeyOf(Context.class);
@@ -120,9 +120,10 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataTreeChangeList
          * We examine the dependencies and check whether the services are self-contained
          */
 
-        ReadWriteTransaction rwx = m_dataBroker.newReadWriteTransaction();
+        ReadWriteTransaction rwx = mDataBroker.newReadWriteTransaction();
 
-        InstanceIdentifier<IrdInstanceConfiguration> configIID = SimpleIrdUtils.getInstanceConfigurationIID(m_resource);
+        InstanceIdentifier<IrdInstanceConfiguration> configIID = SimpleIrdUtils.getInstanceConfigurationIID(
+            mResource);
 
         Optional<IrdInstanceConfiguration> config;
         try {
@@ -132,7 +133,7 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataTreeChangeList
             return;
         }
 
-        LOG.info("Finished reading data for {}", m_resource.getValue());
+        LOG.info("Finished reading data for {}", mResource.getValue());
 
         if (config.isPresent()) {
             IrdInstanceConfiguration cfg = config.get();
@@ -345,10 +346,10 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataTreeChangeList
         builder.fieldsFrom(cfg);
         builder.setIrdEntry(entries);
 
-        InstanceIdentifier<IrdInstance> iid = SimpleIrdUtils.getInstanceIID(m_resource);
+        InstanceIdentifier<IrdInstance> iid = SimpleIrdUtils.getInstanceIID(mResource);
         rwx.put(LogicalDatastoreType.OPERATIONAL, iid, builder.build());
 
-        ResourcepoolUtils.updateResource(m_context, m_resource, dependencies, rwx);
+        ResourcepoolUtils.updateResource(mContext, mResource, dependencies, rwx);
     }
 
     protected void cleanupIrdInstance(IrdInstanceConfiguration cfg,
@@ -362,14 +363,14 @@ public class SimpleIrdEntryListener implements AutoCloseable, DataTreeChangeList
 
         rwx.put(LogicalDatastoreType.OPERATIONAL, iid, builder.build());
 
-        ResourcepoolUtils.updateResource(m_context, m_resource, null, rwx);
+        ResourcepoolUtils.updateResource(mContext, mResource, null, rwx);
     }
 
     @Override
     public synchronized void close() throws Exception {
         try {
-            if (m_reg != null) {
-                m_reg.close();
+            if (mReg != null) {
+                mReg.close();
             }
         } catch (Exception e) {
             LOG.info("Error while closing the registration");
