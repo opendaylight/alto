@@ -10,6 +10,7 @@ package org.opendaylight.alto.basic.impl;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.opendaylight.alto.basic.manual.maps.ManualMapsUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
@@ -45,8 +46,8 @@ public class AltoAutoMapsUpdateListener implements DataTreeChangeListener<Topolo
 
     private static final String TOPOLOGY_NAME = "flow:1";
     private static final String DEFAULT_AUTO_NETWORKMAP = "default-auto-networkmap";
-    private static final String DEFAULT_AUTO_COSTMAP = "default-auto-costmap";
-    private static final String DEFAULT_PID = "PID0";
+    // private static final String DEFAULT_AUTO_COSTMAP = "default-auto-costmap";
+    // private static final String DEFAULT_PID = "PID0";
 
     public AltoAutoMapsUpdateListener(final DataBroker dataBroker) {
         this.dataBroker = dataBroker;
@@ -62,28 +63,14 @@ public class AltoAutoMapsUpdateListener implements DataTreeChangeListener<Topolo
     @Override
     public void onDataTreeChanged(Collection<DataTreeModification<Topology>> changes) {
         WriteTransaction writeTx = null;
-        for (DataTreeModification<Topology> change: changes) {
+        for (DataTreeModification<Topology> change : changes) {
             final DataObjectModification<Topology> rootNode = change.getRootNode();
             switch (rootNode.getModificationType()) {
                 case WRITE:
-                    if (writeTx == null) {
-                        writeTx = dataBroker.newWriteOnlyTransaction();
-                    }
-
-                    if (rootNode.getDataBefore() == null) {
-                        createDefaultAutoNetworkMap(rootNode.getDataAfter(), writeTx);
-                        LOG.info("Create default auto networkmap");
-                    } else {
-                        updateDefaultAutoNetworkMap(rootNode.getDataAfter(), writeTx);
-                        LOG.info("Update default auto networkmap");
-                    }
+                    writeTx = handleDataWrite(rootNode, writeTx);
                     break;
                 case DELETE:
-                    if (writeTx == null) {
-                        writeTx = dataBroker.newWriteOnlyTransaction();
-                    }
-
-                    emptyDefaultAutoNetworkMap(writeTx);
+                    writeTx = handleDataDelete(writeTx);
                     LOG.info("Empty default auto networkmap");
                     break;
                 default:
@@ -94,6 +81,30 @@ public class AltoAutoMapsUpdateListener implements DataTreeChangeListener<Topolo
         if (writeTx != null) {
             writeTx.submit();
         }
+    }
+
+    private WriteTransaction handleDataWrite(DataObjectModification<Topology> rootNode, WriteTransaction writeTx) {
+        if (writeTx == null) {
+            writeTx = dataBroker.newWriteOnlyTransaction();
+        }
+
+        if (rootNode.getDataBefore() == null) {
+            createDefaultAutoNetworkMap(rootNode.getDataAfter(), writeTx);
+            LOG.info("Create default auto networkmap");
+        } else {
+            updateDefaultAutoNetworkMap(rootNode.getDataAfter(), writeTx);
+            LOG.info("Update default auto networkmap");
+        }
+        return writeTx;
+    }
+
+    private WriteTransaction handleDataDelete(WriteTransaction writeTx) {
+        if (writeTx == null) {
+            writeTx = dataBroker.newWriteOnlyTransaction();
+        }
+
+        emptyDefaultAutoNetworkMap(writeTx);
+        return writeTx;
     }
 
     private void createDefaultAutoNetworkMap(Topology topology, final WriteTransaction wx) {
@@ -156,7 +167,13 @@ public class AltoAutoMapsUpdateListener implements DataTreeChangeListener<Topolo
 
     @Override
     public void close() throws Exception {
-        registration.close();
+        closeRegistration();
         LOG.info("AltoAutoMapsUpdateListener Closed");
+    }
+
+    private void closeRegistration() {
+        if (registration != null) {
+            registration.close();
+        }
     }
 }

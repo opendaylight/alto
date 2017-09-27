@@ -41,21 +41,21 @@ public class SimpleIrdRoute implements AltoNorthboundRoute {
 
     public static final String ALTO_IRD = "application/alto-directory+json";
 
-    private AltoSimpleIrdProvider m_provider = null;
+    private AltoSimpleIrdProvider provider = null;
 
     public SimpleIrdRoute(AltoSimpleIrdProvider provider) {
-        m_provider = provider;
+        this.provider = provider;
     }
 
     @Path("{path:.+}")
     @GET
     @Produces({ALTO_IRD, ALTO_ERROR})
     public Response route(@Context HttpServletRequest req, @PathParam("path") String path) {
-        if (m_provider == null) {
+        if (provider == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        IrdInstance ird = m_provider.getInstance(new ResourceId(path));
+        IrdInstance ird = provider.getInstance(new ResourceId(path));
         if (ird == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

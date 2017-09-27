@@ -42,13 +42,11 @@ public class ManualMapsUtils {
     }
 
     public static InstanceIdentifier<ConfigContext> getContextIID(String cid) {
-        Uuid _cid = new Uuid(cid);
-        return getContextIID(_cid);
+        return getContextIID(new Uuid(cid));
     }
 
     public static InstanceIdentifier<ConfigContext> getContextIID(Uuid cid) {
-        ConfigContextKey key = new ConfigContextKey(cid);
-        return getContextIID(key);
+        return getContextIID(new ConfigContextKey(cid));
     }
 
     public static InstanceIdentifier<ConfigContext> getContextIID(ConfigContextKey key) {
@@ -64,15 +62,12 @@ public class ManualMapsUtils {
     }
 
     public static InstanceIdentifier<ResourceNetworkMap> getResourceNetworkMapIID(String cid, String rid) {
-        Uuid _cid = new Uuid(cid);
-        ResourceId _rid = new ResourceId(rid);
-        return getResourceNetworkMapIID(_cid, _rid);
+        return getResourceNetworkMapIID(new Uuid(cid), new ResourceId(rid));
     }
 
     public static InstanceIdentifier<ResourceNetworkMap> getResourceNetworkMapIID(Uuid cid, ResourceId rid) {
-        ConfigContextKey ckey = new ConfigContextKey(cid);
-        ResourceNetworkMapKey rkey = new ResourceNetworkMapKey(rid);
-        return getResourceIID(ckey, rkey, ResourceNetworkMap.class);
+        return getResourceIID(new ConfigContextKey(cid), new ResourceNetworkMapKey(rid),
+            ResourceNetworkMap.class);
     }
 
     public static InstanceIdentifier<ResourceCostMap> getResourceCostMapIID(String rid) {
@@ -80,15 +75,14 @@ public class ManualMapsUtils {
     }
 
     public static InstanceIdentifier<ResourceCostMap> getResourceCostMapIID(String cid, String rid) {
-        Uuid _cid = new Uuid(cid);
-        ResourceId _rid = new ResourceId(rid);
-        return getResourceCostMapIID(_cid, _rid);
+        return getResourceCostMapIID(new Uuid(cid), new ResourceId(rid));
     }
 
     public static InstanceIdentifier<ResourceCostMap> getResourceCostMapIID(Uuid cid, ResourceId rid) {
         ConfigContextKey ckey = new ConfigContextKey(cid);
         ResourceCostMapKey rkey = new ResourceCostMapKey(rid);
-        return getResourceIID(ckey, rkey, ResourceCostMap.class);
+        return getResourceIID(new ConfigContextKey(cid), new ResourceCostMapKey(rid),
+            ResourceCostMap.class);
     }
 
     public static <T extends Identifiable<K> & ChildOf<? super ConfigContext>, K extends Identifier<T>>
@@ -108,8 +102,8 @@ public class ManualMapsUtils {
     public static Uuid createContext(Uuid cid, final WriteTransaction wx) {
         ConfigContextBuilder builder = new ConfigContextBuilder();
         builder.setContextId(cid);
-        builder.setResourceNetworkMap(new LinkedList<ResourceNetworkMap>());
-        builder.setResourceCostMap(new LinkedList<ResourceCostMap>());
+        builder.setResourceNetworkMap(new LinkedList<>());
+        builder.setResourceCostMap(new LinkedList<>());
 
         wx.put(LogicalDatastoreType.CONFIGURATION, getContextIID(cid), builder.build());
         return cid;
@@ -119,10 +113,12 @@ public class ManualMapsUtils {
             List<Map> networkMap,
             WriteTransaction wx) {
         InstanceIdentifier<ResourceNetworkMap> iid = getResourceNetworkMapIID(rid);
-        ResourceNetworkMapBuilder builder = new ResourceNetworkMapBuilder();
-        builder.setTag(new Tag(UUID.nameUUIDFromBytes(rid.getBytes()).toString().replaceAll("-", "")));
-        builder.setResourceId(new ResourceId(rid));
-        builder.setMap(networkMap);
+        ResourceNetworkMapBuilder builder = new ResourceNetworkMapBuilder()
+            .setTag(new Tag(UUID.nameUUIDFromBytes(rid.getBytes())
+                .toString()
+                .replaceAll("-", "")))
+            .setResourceId(new ResourceId(rid))
+            .setMap(networkMap);
         wx.put(LogicalDatastoreType.CONFIGURATION, iid, builder.build());
         return iid;
     }
@@ -132,11 +128,13 @@ public class ManualMapsUtils {
             List<org.opendaylight.yang.gen.v1.urn.alto.manual.maps.costmap.rev151021.cost.map.Map> costMap,
             WriteTransaction wx) {
         InstanceIdentifier<ResourceCostMap> iid = getResourceCostMapIID(rid);
-        ResourceCostMapBuilder builder = new ResourceCostMapBuilder();
-        builder.setTag(new Tag(UUID.nameUUIDFromBytes(rid.getBytes()).toString().replaceAll("-", "")));
-        builder.setResourceId(new ResourceId(rid));
-        builder.setMap(costMap);
-        builder.setMeta(meta);
+        ResourceCostMapBuilder builder = new ResourceCostMapBuilder()
+            .setTag(new Tag(UUID.nameUUIDFromBytes(rid.getBytes())
+                .toString()
+                .replaceAll("-", "")))
+            .setResourceId(new ResourceId(rid))
+            .setMap(costMap)
+            .setMeta(meta);
         wx.put(LogicalDatastoreType.CONFIGURATION, iid, builder.build());
         return iid;
     }
@@ -158,7 +156,8 @@ public class ManualMapsUtils {
         deleteResourceNetworkMap(new Uuid(cid), new ResourceId(cid), wx);
     }
 
-    public static void deleteResourceNetworkMap(Uuid cid, ResourceId rid, final WriteTransaction wx) {
+    public static void deleteResourceNetworkMap(Uuid cid, ResourceId rid,
+            final WriteTransaction wx) {
         wx.delete(LogicalDatastoreType.CONFIGURATION, getResourceNetworkMapIID(cid, rid));
     }
 
