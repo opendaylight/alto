@@ -51,28 +51,28 @@ public class SimpleIrdListener implements AutoCloseable, DataTreeChangeListener<
 
     private static final Logger LOG = LoggerFactory.getLogger(SimpleIrdListener.class);
 
-    private DataBroker m_dataBroker = null;
-    private ListenerRegistration<?> m_reg = null;
-    private InstanceIdentifier<IrdInstanceConfiguration> m_iid = null;
-    private Uuid m_context = null;
+    private DataBroker mDataBroker = null;
+    private ListenerRegistration<?> mReg = null;
+    private InstanceIdentifier<IrdInstanceConfiguration> mIID = null;
+    private Uuid mContext = null;
 
-    private Map<ResourceId, SimpleIrdEntryListener> m_listeners = null;
-    private Map<ResourceId, SimpleIrdRfc7285DefaultNetworkMapListener> m_rfcListeners = null;
-    private Map<ResourceId, SimpleIrdRfc7285CostTypeListener> m_ctListeners = null;
+    private Map<ResourceId, SimpleIrdEntryListener> mListeners = null;
+    private Map<ResourceId, SimpleIrdRfc7285DefaultNetworkMapListener> mRfcListeners = null;
+    private Map<ResourceId, SimpleIrdRfc7285CostTypeListener> mCostTypeListeners = null;
 
     public SimpleIrdListener(Uuid context) {
-        m_listeners = new HashMap<>();
-        m_rfcListeners = new HashMap<>();
-        m_ctListeners = new HashMap<>();
-        m_context = context;
+        mListeners = new HashMap<>();
+        mRfcListeners = new HashMap<>();
+        mCostTypeListeners = new HashMap<>();
+        mContext = context;
     }
 
     public void register(DataBroker dataBroker, InstanceIdentifier<IrdInstanceConfiguration> iid) {
-        m_dataBroker = dataBroker;
-        m_iid = iid;
+        mDataBroker = dataBroker;
+        mIID = iid;
 
-        m_reg = m_dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
-                LogicalDatastoreType.CONFIGURATION, m_iid), this);
+        mReg = mDataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(
+                LogicalDatastoreType.CONFIGURATION, mIID), this);
 
         LOG.info("SimpleIrdListener registered");
     }
@@ -88,7 +88,7 @@ public class SimpleIrdListener implements AutoCloseable, DataTreeChangeListener<
          *
          */
 
-        WriteTransaction wx = m_dataBroker.newWriteOnlyTransaction();
+        WriteTransaction wx = mDataBroker.newWriteOnlyTransaction();
 
         for (DataTreeModification<IrdInstanceConfiguration> change: changes) {
             final DataObjectModification<IrdInstanceConfiguration> rootNode = change.getRootNode();
@@ -97,11 +97,7 @@ public class SimpleIrdListener implements AutoCloseable, DataTreeChangeListener<
                 case SUBTREE_MODIFIED:
                     final IrdInstanceConfiguration original = rootNode.getDataBefore();
                     final IrdInstanceConfiguration updated = rootNode.getDataAfter();
-                    if (original == null) {
-                        createIrd(updated, wx);
-                    } else {
-                        updateIrd(original, updated, wx);
-                    }
+                    handleSubtreeModefication(original, updated, wx);
                     break;
                 case DELETE:
                     removeIrd(rootNode.getDataBefore(), wx);
@@ -114,12 +110,21 @@ public class SimpleIrdListener implements AutoCloseable, DataTreeChangeListener<
         wx.submit();
     }
 
+    protected void handleSubtreeModefication(IrdInstanceConfiguration original,
+            IrdInstanceConfiguration updated, WriteTransaction wx) {
+        if (original == null) {
+            createIrd(updated, wx);
+        } else {
+            updateIrd(original, updated, wx);
+        }
+    }
+
     protected void updateIrd(IrdInstanceConfiguration original,
                                 IrdInstanceConfiguration updated, WriteTransaction wx) {
         ResourceId rid = updated.getInstanceId();
 
         LOG.info("Updating Ird: " + "\n\tResource ID: " + rid.getValue());
-        SimpleIrdEntryListener listener = m_listeners.get(rid);
+        SimpleIrdEntryListener listener = mListeners.get(rid);
         if (listener != null) {
             if (original.getEntryContext().equals(updated.getEntryContext())) {
                 // Changes in resources is managed by another listener
@@ -144,28 +149,28 @@ public class SimpleIrdListener implements AutoCloseable, DataTreeChangeListener<
 
         LOG.info("Removing Ird: " + "\n\tResource ID: " + rid.getValue());
 
-        SimpleIrdEntryListener listener = m_listeners.get(rid);
+        SimpleIrdEntryListener listener = mListeners.get(rid);
         if (listener == null) {
             LOG.error("{} is not a valid Ird instance", rid.getValue());
             return;
         }
-        m_listeners.remove(rid);
+        mListeners.remove(rid);
 
-        SimpleIrdRfc7285DefaultNetworkMapListener rfcListener = m_rfcListeners.get(rid);
-        m_rfcListeners.remove(rid);
+        SimpleIrdRfc7285DefaultNetworkMapListener rfcListener = mRfcListeners.get(rid);
+        mRfcListeners.remove(rid);
 
-        SimpleIrdRfc7285CostTypeListener ctListener = m_ctListeners.get(rid);
-        m_ctListeners.remove(rid);
+        SimpleIrdRfc7285CostTypeListener ctListener = mCostTypeListeners.get(rid);
+        mCostTypeListeners.remove(rid);
 
         try {
             listener.close();
             rfcListener.close();
             ctListener.close();
         } catch (Exception e) {
-            LOG.error("Error while closing listener");
+            LOG.error("Error while closing listener", e);
         }
 
-        ResourcepoolUtils.deleteResource(m_context, rid, wx);
+        ResourcepoolUtils.deleteResource(mContext, rid, wx);
 
         InstanceIdentifier<IrdInstance> iid = SimpleIrdUtils.getInstanceIID(rid);
         wx.delete(LogicalDatastoreType.OPERATIONAL, iid);
@@ -196,6 +201,7 @@ public class SimpleIrdListener implements AutoCloseable, DataTreeChangeListener<
         ContextKey key = entryContextIID.firstKeyOf(Context.class);
         if (key == null) {
             LOG.error("Failed to create Ird: The entry-context must point to a certain context");
+            return;
         }
         Uuid entryContext = key.getContextId();
 
@@ -214,43 +220,43 @@ public class SimpleIrdListener implements AutoCloseable, DataTreeChangeListener<
 
         wx.put(LogicalDatastoreType.OPERATIONAL, iid, builder.build());
 
-        ResourcepoolUtils.createResource(m_context, rid, ResourceTypeIrd.class, wx);
-        ResourcepoolUtils.lazyUpdateResource(m_context, rid, wx);
+        ResourcepoolUtils.createResource(mContext, rid, ResourceTypeIrd.class, wx);
+        ResourcepoolUtils.lazyUpdateResource(mContext, rid, wx);
 
-        InstanceIdentifier<Resource> resourceIID = ResourcepoolUtils.getResourceIID(m_context, rid);
+        InstanceIdentifier<Resource> resourceIID = ResourcepoolUtils.getResourceIID(mContext, rid);
 
         SimpleIrdEntryListener listener;
         listener = new SimpleIrdEntryListener(resourceIID, entryContext);
-        listener.register(m_dataBroker, SimpleIrdUtils.getConfigEntryListIID(rid));
-        m_listeners.put(rid, listener);
+        listener.register(mDataBroker, SimpleIrdUtils.getConfigEntryListIID(rid));
+        mListeners.put(rid, listener);
 
         SimpleIrdRfc7285DefaultNetworkMapListener rfcListener;
         rfcListener = new SimpleIrdRfc7285DefaultNetworkMapListener();
-        rfcListener.register(m_dataBroker, rid);
-        m_rfcListeners.put(rid, rfcListener);
+        rfcListener.register(mDataBroker, rid);
+        mRfcListeners.put(rid, rfcListener);
 
         SimpleIrdRfc7285CostTypeListener ctListener;
         ctListener = new SimpleIrdRfc7285CostTypeListener();
-        ctListener.register(m_dataBroker, rid);
-        m_ctListeners.put(rid, ctListener);
+        ctListener.register(mDataBroker, rid);
+        mCostTypeListeners.put(rid, ctListener);
     }
 
     @Override
     public synchronized void close() throws Exception {
         try {
-            if (m_reg != null) {
-                m_reg.close();
+            if (mReg != null) {
+                mReg.close();
             }
         } catch (Exception e) {
-            LOG.info("Error while closing the registration");
+            LOG.info("Error while closing the registration", e);
         }
         try {
-            for (SimpleIrdEntryListener listener: m_listeners.values()) {
+            for (SimpleIrdEntryListener listener: mListeners.values()) {
                 listener.close();
             }
-            m_listeners.clear();
+            mListeners.clear();
         } catch (Exception e) {
-            LOG.info("Error while closing the registration");
+            LOG.info("Error while closing the registration", e);
         }
         LOG.info("SimpleIrdListener closed");
     }

@@ -113,7 +113,7 @@ public abstract class BaseECSImplementation {
 
     /**
      * @param input is the input of ECS.
-     * @return true if input is validate.
+     * @return true if input is valid.
      */
     public boolean checkInput(QueryInput input) {
         request = (EndpointcostRequest)input.getRequest();
