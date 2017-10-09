@@ -12,14 +12,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>config-parent</artifactId>
-    <version>0.6.2-SNAPSHOT</version>
+    <version>0.6.2-Carbon</version>
     <relativePath/>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.core</groupId>
   <artifactId>alto-service-model-config-impl</artifactId>
-  <version>0.4.2-SNAPSHOT</version>
+  <version>0.4.2-Carbon</version>
   <packaging>bundle</packaging>
   <dependencies>
     <dependency>
