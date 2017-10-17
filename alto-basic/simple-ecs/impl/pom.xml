@@ -12,13 +12,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>config-parent</artifactId>
-    <version>0.6.2-SNAPSHOT</version>
+    <version>0.6.3-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.basic</groupId>
-  <version>0.4.2-SNAPSHOT</version>
+  <version>0.4.3-SNAPSHOT</version>
   <artifactId>alto-simple-ecs-impl</artifactId>
   <name>ODL :: alto :: ${project.artifactId}</name>
   <packaging>bundle</packaging>
@@ -70,12 +70,12 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.l2switch.hosttracker</groupId>
       <artifactId>hosttracker-model</artifactId>
-      <version>0.5.2-SNAPSHOT</version>
+      <version>0.5.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.opendaylight.l2switch.addresstracker</groupId>
       <artifactId>addresstracker-model</artifactId>
-      <version>0.5.2-SNAPSHOT</version>
+      <version>0.5.3-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -88,7 +88,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
     <dependency>
       <groupId>org.opendaylight.openflowplugin.model</groupId>
       <artifactId>model-flow-statistics</artifactId>
-      <version>0.4.2-SNAPSHOT</version>
+      <version>0.4.3-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
