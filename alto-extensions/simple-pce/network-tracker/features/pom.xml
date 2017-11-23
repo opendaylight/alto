@@ -15,20 +15,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   </parent>
   <groupId>org.opendaylight.alto.spce.network</groupId>
   <artifactId>network-tracker-features</artifactId>
-  <version>0.5.1-SNAPSHOT</version>
+  <version>0.5.1</version>
   <name>ODL :: alto :: ${project.artifactId}</name>
   <modelVersion>4.0.0</modelVersion>
   <prerequisites>
     <maven>3.1.1</maven>
   </prerequisites>
   <properties>
-    <mdsal.model.version>0.11.1-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.6.1-SNAPSHOT</mdsal.version>
-    <restconf.version>1.6.1-SNAPSHOT</restconf.version>
-    <yangtools.version>0.11.1-SNAPSHOT</yangtools.version>
-    <dluxapps.version>0.6.1-SNAPSHOT</dluxapps.version>
+    <mdsal.model.version>0.11.1</mdsal.model.version>
+    <mdsal.version>1.6.1</mdsal.version>
+    <restconf.version>1.6.1</restconf.version>
+    <yangtools.version>0.11.1</yangtools.version>
+    <dluxapps.version>0.6.1</dluxapps.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
-    <l2switch.version>0.6.1-SNAPSHOT</l2switch.version>
+    <l2switch.version>0.6.1</l2switch.version>
   </properties>
   <dependencyManagement>
     <dependencies>
