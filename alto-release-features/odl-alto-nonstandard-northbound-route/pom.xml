@@ -19,7 +19,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-nonstandard-northbound-route</artifactId>
-  <version>0.5.1-SNAPSHOT</version>
+  <version>0.5.2-SNAPSHOT</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Nonstandard Northbound Route</name>

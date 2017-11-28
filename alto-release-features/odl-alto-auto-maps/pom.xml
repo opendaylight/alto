@@ -19,7 +19,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-auto-maps</artifactId>
-  <version>0.5.1-SNAPSHOT</version>
+  <version>0.5.2-SNAPSHOT</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Auto Maps</name>
@@ -28,9 +28,9 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
     <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
     <l2switch.groupId>org.opendaylight.l2switch</l2switch.groupId>
-    <mdsal.model.version>0.11.1-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.6.1-SNAPSHOT</mdsal.version>
-    <l2switch.version>0.6.1-SNAPSHOT</l2switch.version>
+    <mdsal.model.version>0.11.2-SNAPSHOT</mdsal.model.version>
+    <mdsal.version>1.6.2-SNAPSHOT</mdsal.version>
+    <l2switch.version>0.6.2-SNAPSHOT</l2switch.version>
   </properties>
 
   <dependencyManagement>

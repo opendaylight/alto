@@ -13,13 +13,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>0.11.1-SNAPSHOT</version>
+    <version>0.11.2-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto.basic</groupId>
   <artifactId>alto-auto-maps-cli</artifactId>
-  <version>0.5.1-SNAPSHOT</version>
+  <version>0.5.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <dependencyManagement>
@@ -27,7 +27,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <dependency>
         <groupId>org.opendaylight.controller</groupId>
         <artifactId>mdsal-artifacts</artifactId>
-        <version>1.6.1-SNAPSHOT</version>
+        <version>1.6.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
