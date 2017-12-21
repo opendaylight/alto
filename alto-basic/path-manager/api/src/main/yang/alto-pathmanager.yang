@@ -1,0 +1,82 @@
+module alto-pathmanager {
+    yang-version 1;
+    namespace "urn:alto:pathmanager";
+    prefix "alto-pathmanager";
+
+    revision "2015-01-05" {
+        description "Initial revision of alto-pathmanager model";
+    }
+
+    import ietf-inet-types {
+        prefix "ietf-inet";
+    }
+    import ietf-yang-types {
+        prefix "ietf-yang-types";
+    }
+    import network-topology {
+        prefix "network-topology";
+    }
+    import opendaylight-match-types {
+        prefix "match";
+    }
+
+    typedef protocol {
+        type enumeration {
+            enum tcp;
+            enum udp;
+            enum sctp;
+        }
+    }
+
+    container path-manager {
+        list path {
+            key id;
+            leaf id {
+                type uint32;
+            }
+
+            leaf priority {
+                type uint32;
+                mandatory true;
+                default 100;
+            }
+
+            container flow-desc {
+                uses alto-flow-desc;
+            }
+
+            list links {
+                key link;
+                leaf link {
+                    type network-topology:link-id;
+                }
+            }
+        }
+    }
+
+    grouping alto-flow-desc {
+        leaf src-ip {
+            type ietf-inet:ipv4-prefix;
+        }
+        leaf dst-ip {
+            type ietf-inet:ipv4-prefix;
+            mandatory true;
+        }
+        leaf src-port {
+            type ietf-inet:port-number;
+        }
+        leaf dst-port {
+            type ietf-inet:port-number;
+        }
+        leaf protocol {
+            type protocol;
+        }
+        leaf src-mac {
+            type ietf-yang-types:mac-address;
+        }
+        leaf dst-mac {
+            type ietf-yang-types:mac-address;
+        }
+    }
+}
+
