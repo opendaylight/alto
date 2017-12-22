@@ -1,0 +1,70 @@
+module alto-bwmonitor {
+    yang-version 1;
+    namespace "urn:alto:bwmonitor";
+    prefix "alto-bwmonitor";
+
+    revision "2015-01-05" {
+        description "Get real time bandwidth of specific port";
+    }
+
+    rpc bwmonitor-query {
+        input {
+            leaf-list port-id {
+                type string;
+            }
+        }
+        output {
+            list port-speed {
+                key port-id;
+                leaf port-id { type string; }
+
+                leaf rx-speed { type uint64; }
+                leaf tx-speed { type uint64; }
+                leaf capacity { type uint32; }
+                leaf avail-bw { type uint32; }
+            }
+        }
+    }
+
+    rpc bwmonitor-subscribe {
+        input {
+            leaf-list port-id { type string; }
+        }
+        output {
+            leaf result { type boolean; }
+        }
+    }
+
+    rpc bwmonitor-unsubscribe {
+        input {
+            leaf-list port-id { type string; }
+        }
+        output {
+            leaf result { type boolean; }
+        }
+    }
+
+    container speeds {
+        list port {
+            key port-id;
+            leaf port-id { type string; }
+
+            leaf rx-speed { type uint64; }
+            leaf tx-speed { type uint64; }
+            leaf avail-bw { type uint32; }
+            leaf capacity { type uint32; }
+        }
+    }
+
+    container config-capacity {
+        list capacity {
+            key port-id;
+            leaf port-id { type string; }
+
+            leaf capacity {
+                mandatory true;
+                type uint32;
+            }
+        }
+    }
+}
