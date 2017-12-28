@@ -31,7 +31,7 @@ module alto-spce {
             enum SETTING_UP_METER_ERROR;
             enum UNDEFINED_ERROR;
             enum REMOVING_ROUTE_ERROR;
-            enum REMOVING_METTER_ERROR;
+            enum REMOVING_METER_ERROR;
             enum MISSING_ROUTE_ERROR;
             enum UPDATING_RATE_LIMITING_ERROR;
             enum INVALID_INPUT;
@@ -62,7 +62,7 @@ module alto-spce {
 
     rpc setup-route {
         description "Given the endpoints, this service computes a route
-           satisfying the constraints; among those satisfying the constraints, 
+           satisfying the constraints; among those satisfying the constraints,
            it computes the one with the best object metrics. If a route is
            found, the service will setup the route by installing flow rules
            in FRM. This service does not handle the complexity of re-route.";

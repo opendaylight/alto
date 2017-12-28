@@ -133,15 +133,7 @@ public class RouteManager {
                     LOG.info("Remove a flow from the switch" + InstanceIdentifierUtils.generateNodeInstanceIdentifier(ncr).firstKeyOf(Node.class).getId().getValue());
                     this.flowManager.removeFlow(srcMac, dstMac, new NodeConnectorRef(ncid));
                 }
-                if (routeInfoValue.getLimitedRate() > 0 && routeInfoValue.getBurstSize() > 0) {
-                    try {
-                        this.meterManager.removeMeterFromSwitch(endpoints, ncr, routeInfoValue.getLimitedRate(), routeInfoValue.getBurstSize());
-                    } catch (Exception e) {
-                        LOG.info("Exception occurs when remove the meter from " +
-                                InstanceIdentifierUtils.generateNodeInstanceIdentifier(ncr).firstKeyOf(Node.class).getId().getValue());
-                        return ErrorCodeType.REMOVINGMETTERERROR;
-                    }
-                }
+                if (! removeMeter(endpoints, routeInfoValue, ncr)) return ErrorCodeType.REMOVINGMETERERROR;
             }
         } catch (Exception e) {
             LOG.info("Exception occurs when setup a route: " + e.getMessage());
@@ -150,6 +142,19 @@ public class RouteManager {
 
         this.routeInfo.remove(routeInfoKey);
         return ErrorCodeType.OK;
+    }
+
+    private boolean removeMeter(Endpoints endpoints, RouteInfoValue routeInfoValue, NodeConnectorRef ncr) {
+        if (routeInfoValue.getLimitedRate() > 0 && routeInfoValue.getBurstSize() > 0) {
+            try {
+                this.meterManager.removeMeterFromSwitch(endpoints, ncr, routeInfoValue.getLimitedRate(), routeInfoValue.getBurstSize());
+            } catch (Exception e) {
+                LOG.info("Exception occurs when remove the meter from " +
+                        InstanceIdentifierUtils.generateNodeInstanceIdentifier(ncr).firstKeyOf(Node.class).getId().getValue());
+                return false;
+            }
+        }
+        return true;
     }
 
     public ErrorCodeType removeRateLimiting(Endpoints endpoints) {
@@ -190,20 +195,11 @@ public class RouteManager {
                     } catch (Exception e) {
                         LOG.info("Exception occurs when remove the meter from " +
                                 InstanceIdentifierUtils.generateNodeInstanceIdentifier(ncr).firstKeyOf(Node.class).getId().getValue());
-                        return ErrorCodeType.REMOVINGMETTERERROR;
+                        return ErrorCodeType.REMOVINGMETERERROR;
                     }
 
-                    try {
-                        if (flowLayer == FlowType.L3) {
-                            this.flowManager.writeFlow(srcIp, dstIp, new NodeConnectorRef(ncid), NO_METER_SPECIFIED);
-                        } else if (flowLayer == FlowType.L2) {
-                            this.flowManager.writeFlow(srcMac, dstMac, new NodeConnectorRef(ncid), NO_METER_SPECIFIED);
-                        }
-                    } catch (Exception e) {
-                        LOG.info("Exception occurs when update the flow in " +
-                                InstanceIdentifierUtils.generateNodeInstanceIdentifier(ncr).firstKeyOf(Node.class).getId().getValue());
+                    if (! writeFlow(srcIp, dstIp, srcMac, dstMac, flowLayer, ncid, ncr, NO_METER_SPECIFIED))
                         return ErrorCodeType.SETTINGUPROUTEERROR;
-                    }
                 }
             } catch (Exception e) {
                 LOG.info("Exception occurs when remove a rate limiting: " + e.getMessage());
@@ -250,15 +246,7 @@ public class RouteManager {
                                     new NodeConnectorKey(new NodeConnectorId(nc_value)))
                             .build();
                     NodeConnectorRef ncr = new NodeConnectorRef(ncid);
-                    if (routeInfoValue.getLimitedRate() > 0 && routeInfoValue.getBurstSize() > 0) {
-                        try {
-                            this.meterManager.removeMeterFromSwitch(endpoints, ncr, routeInfoValue.getLimitedRate(), routeInfoValue.getBurstSize());
-                        } catch (Exception e) {
-                            LOG.info("Exception occurs when remove the meter from " +
-                                    InstanceIdentifierUtils.generateNodeInstanceIdentifier(ncr).firstKeyOf(Node.class).getId().getValue());
-                            return ErrorCodeType.REMOVINGMETTERERROR;
-                        }
-                    }
+                    if (! removeMeter(endpoints, routeInfoValue, ncr)) return ErrorCodeType.REMOVINGMETERERROR;
 
                     long meterId = NO_METER_SPECIFIED;
                     if (limitedRate > 0 && burstSize > 0) {
@@ -271,17 +259,8 @@ public class RouteManager {
                         }
                     }
 
-                    try {
-                        if (flowLayer == FlowType.L3) {
-                            this.flowManager.writeFlow(srcIp, dstIp, new NodeConnectorRef(ncid), meterId);
-                        } else if (flowLayer == FlowType.L2) {
-                            this.flowManager.writeFlow(srcMac, dstMac, new NodeConnectorRef(ncid), meterId);
-                        }
-                    } catch (Exception e) {
-                        LOG.info("Exception occurs when update the flow in " +
-                                InstanceIdentifierUtils.generateNodeInstanceIdentifier(ncr).firstKeyOf(Node.class).getId().getValue());
+                    if (! writeFlow(srcIp, dstIp, srcMac, dstMac, flowLayer, ncid, ncr, meterId))
                         return ErrorCodeType.SETTINGUPROUTEERROR;
-                    }
                 }
             } catch (Exception e) {
                 LOG.info("Exception occurs when update a rate limiting: " + e.getMessage());
@@ -291,6 +270,21 @@ public class RouteManager {
             this.routeInfo.put(routeInfoKey, routeInfoValueNew);
             return ErrorCodeType.OK;
         }
+    }
+
+    private boolean writeFlow(Ipv4Address srcIp, Ipv4Address dstIp, MacAddress srcMac, MacAddress dstMac, FlowType flowLayer, InstanceIdentifier<NodeConnector> ncid, NodeConnectorRef ncr, long meterId) {
+        try {
+            if (flowLayer == FlowType.L3) {
+                this.flowManager.writeFlow(srcIp, dstIp, new NodeConnectorRef(ncid), meterId);
+            } else if (flowLayer == FlowType.L2) {
+                this.flowManager.writeFlow(srcMac, dstMac, new NodeConnectorRef(ncid), meterId);
+            }
+        } catch (Exception e) {
+            LOG.info("Exception occurs when update the flow in " +
+                    InstanceIdentifierUtils.generateNodeInstanceIdentifier(ncr).firstKeyOf(Node.class).getId().getValue());
+            return false;
+        }
+        return true;
     }
 
 

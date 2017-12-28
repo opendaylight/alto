@@ -29,7 +29,7 @@ public class PathComputationTest {
 
     @Test
     public void onTestMaxBandwidth() {
-        Graph<String, RouteViewer.Path> networkGraph = new SparseMultigraph<>();
+        Graph<String, RouteViewerPath> networkGraph = new SparseMultigraph<>();
         for (int i = 0; i < 5; ++i) {
             networkGraph.addVertex("openflow:"+i);
         }
@@ -40,7 +40,7 @@ public class PathComputationTest {
         addEdge(networkGraph, getTp(4, 1), getTp(5, 0), (long) 10);
         addEdge(networkGraph, getTp(1, 2), getTp(6, 0), (long) 5);
         addEdge(networkGraph, getTp(6, 1), getTp(4, 2), (long) 5);
-        List<RouteViewer.Path> output
+        List<RouteViewerPath> output
                 = pathComputer.maxBandwidth(networkGraph, getNode(0), getNode(5), (long) 4);
         LinkedList<String> result = new LinkedList<>();
         result.add(getTp(0, 0));
@@ -61,15 +61,15 @@ public class PathComputationTest {
         return "openflow:" + i;
     }
 
-    private RouteViewer.Path addEdge (Graph<String, RouteViewer.Path> networkGraph,
-                          String src, String dst, Long bw) {
-        RouteViewer.Path p = new RouteViewer.Path();
+    private RouteViewerPath addEdge (Graph<String, RouteViewerPath> networkGraph,
+                                                 String src, String dst, Long bw) {
+        RouteViewerPath p = new RouteViewerPath();
         p.src = TpId.getDefaultInstance(src);
         p.dst = TpId.getDefaultInstance(dst);
         p.bandwidth = bw;
         networkGraph.addEdge(p, PathComputation.extractNodeId(src), PathComputation.extractNodeId(dst),
                 EdgeType.DIRECTED);
-        p = new RouteViewer.Path();
+        p = new RouteViewerPath();
         p.src = TpId.getDefaultInstance(dst);
         p.dst = TpId.getDefaultInstance(src);
         p.bandwidth = bw;

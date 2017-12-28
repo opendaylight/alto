@@ -14,33 +14,16 @@ import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class RouteViewer {
-    static public interface RouteChecker {
-        boolean isStop(List<Path> pathList);
-        List<Path> getResult();
-    }
-
-    static public class Path {
-        TpId src;
-        TpId dst;
-        Long bandwidth;
-
-        @Override
-        public String toString() {
-            return "" + src + "->" + dst + "@" + bandwidth;
-        }
-    }
-
     private RouteChecker routeChecker;
     private Map<String, Boolean> hasVisited;
-    private Graph<String, Path> networkGraph;
-    private LinkedList<Path> route;
+    private Graph<String, RouteViewerPath> networkGraph;
+    private LinkedList<RouteViewerPath> route;
 
-    RouteViewer(Graph<String, Path> networkGraph, RouteChecker routeChecker) {
+    RouteViewer(Graph<String, RouteViewerPath> networkGraph, RouteChecker routeChecker) {
         this.networkGraph = networkGraph;
         this.routeChecker = routeChecker;
     }
@@ -63,7 +46,7 @@ public class RouteViewer {
         }
         else {
             hasVisited.put(srcNode, true);
-            for (Path eachPath : this.networkGraph.getOutEdges(srcNode)) {
+            for (RouteViewerPath eachPath : this.networkGraph.getOutEdges(srcNode)) {
                 route.addLast(eachPath);
                 if (visitor(extractNodeId(eachPath.dst), dstNode))
                     return true;
