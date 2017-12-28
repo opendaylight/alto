@@ -50,59 +50,18 @@ public class PathComputation {
 
     public List<TpId> shortestPath(TpId srcTpId, TpId dstTpId, Topology topology,
                                    final List<ConstraintMetric> constraintMetrics) {
-        final RouteViewer.Path finalPath = new RouteViewer.Path();
+        final RouteViewerPath finalPath = new RouteViewerPath();
         finalPath.src = dstTpId;
         finalPath.bandwidth = getBandwidthByTp(dstTpId.getValue()).longValue();
-        RouteViewer.RouteChecker checker = new RouteViewer.RouteChecker() {
-            private List<RouteViewer.Path> result;
-            private long hopcount = Long.MAX_VALUE;
-            @Override
-            public boolean isStop(List<RouteViewer.Path> pathList) {
-                LinkedList<RouteViewer.Path> tmp = new LinkedList<>(pathList);
-                tmp.add(finalPath);
-                long hopcount = tmp.size();
-                long bandwidth = getBandwidth(tmp);
-                if (constraintMetrics != null) {
-                    for (ConstraintMetric eachConstraint : constraintMetrics) {
-                        if (eachConstraint.getMetric() == null) {
-                            continue;
-                        }
-                        long max = (eachConstraint.getMax() != null) ?
-                                eachConstraint.getMax().longValue() : Long.MAX_VALUE;
-                        long min = (eachConstraint.getMin() != null) ?
-                                eachConstraint.getMin().longValue() : 0;
-                        long value = 0;
-                        if (eachConstraint.getMetric().equals(AltoSpceMetric.Bandwidth)) {
-                            value = bandwidth;
-                        } else {
-                            value = hopcount;
-                        }
-                        if (value < min || value > max) {
-                            return false;
-                        }
-                    }
-                }
-                if (hopcount < this.hopcount) {
-                    this.hopcount = hopcount;
-                    result = tmp;
-                }
-                return false;
-            }
-
-            @Override
-            public List<RouteViewer.Path> getResult() {
-                return result;
-            }
-        };
-
+        RouteChecker checker = new ShortestPathRouteChecker(finalPath, constraintMetrics);
         RouteViewer rv = new RouteViewer(getGraphFromTopology(topology, (long) 0), checker);
-        List<RouteViewer.Path> result = rv.viewRoutes(
+        List<RouteViewerPath> result = rv.viewRoutes(
                     RouteViewer.extractNodeId(srcTpId),
                     RouteViewer.extractNodeId(dstTpId))
                 .getResult();
         logger.info(result.toString());
         List<TpId> output = new LinkedList<>();
-        for (RouteViewer.Path eachPath : result) {
+        for (RouteViewerPath eachPath : result) {
             output.add(eachPath.src);
         }
         return output;
@@ -110,70 +69,21 @@ public class PathComputation {
 
     public List<TpId> maxBandwidthPath(TpId srcTpId, TpId dstTpId, Topology topology,
                                        final List<ConstraintMetric> constraintMetrics) {
-        final RouteViewer.Path finalPath = new RouteViewer.Path();
+        final RouteViewerPath finalPath = new RouteViewerPath();
         finalPath.src = dstTpId;
         finalPath.bandwidth = getBandwidthByTp(dstTpId.getValue()).longValue();
-        RouteViewer.RouteChecker checker = new RouteViewer.RouteChecker() {
-            private List<RouteViewer.Path> result;
-            private long bandwidth = 0;
-            @Override
-            public boolean isStop(List<RouteViewer.Path> pathList) {
-                LinkedList<RouteViewer.Path> tmp = new LinkedList<>(pathList);
-                tmp.add(finalPath);
-                long hopcount = tmp.size();
-                long bandwidth = getBandwidth(tmp);
-                if (constraintMetrics != null) {
-                    for (ConstraintMetric eachConstraint : constraintMetrics) {
-                        if (eachConstraint.getMetric() == null) {
-                            continue;
-                        }
-                        long max = (eachConstraint.getMax() != null) ?
-                                eachConstraint.getMax().longValue() : Long.MAX_VALUE;
-                        long min = (eachConstraint.getMin() != null) ?
-                                eachConstraint.getMin().longValue() : 0;
-                        long value = 0;
-                        if (eachConstraint.getMetric().equals(AltoSpceMetric.Bandwidth)) {
-                            value = bandwidth;
-                        } else {
-                            value = hopcount;
-                        }
-                        if (value < min || value > max) {
-                            return false;
-                        }
-                    }
-                }
-                if (bandwidth > this.bandwidth) {
-                    this.bandwidth = bandwidth;
-                    result = tmp;
-                }
-                return false;
-            }
-
-            @Override
-            public List<RouteViewer.Path> getResult() {
-                return result;
-            }
-        };
-
+        RouteChecker checker = new MaxBandwidthPathRouteChecker(finalPath, constraintMetrics);
         RouteViewer rv = new RouteViewer(getGraphFromTopology(topology, (long) 0), checker);
-        List<RouteViewer.Path> result = rv.viewRoutes(
+        List<RouteViewerPath> result = rv.viewRoutes(
                 RouteViewer.extractNodeId(srcTpId),
                 RouteViewer.extractNodeId(dstTpId))
                 .getResult();
 
         List<TpId> output = new LinkedList<>();
-        for (RouteViewer.Path eachPath : result) {
+        for (RouteViewerPath eachPath : result) {
             output.add(eachPath.src);
         }
         return output;
-    }
-
-    long getBandwidth(List<RouteViewer.Path> pathList) {
-        Long result = Long.MAX_VALUE;
-        for (RouteViewer.Path eachPath : pathList) {
-            result = (result < eachPath.bandwidth) ? result : eachPath.bandwidth;
-        }
-        return result;
     }
 
     public List<TpId> shortestPathOpti(TpId srcTpId, TpId dstTpId, Topology topology, List<ConstraintMetric> constraintMetrics) {
@@ -186,11 +96,11 @@ public class PathComputation {
                         minBw : eachConstraint.getMin().longValue();
             }
         }
-        Graph<String, RouteViewer.Path> networkGraph = getGraphFromTopology(topology, minBw);
-        DijkstraShortestPath<String, RouteViewer.Path> shortestPath = new DijkstraShortestPath<>(networkGraph);
-        List<RouteViewer.Path> path = shortestPath.getPath(extractNodeId(src), extractNodeId(dst));
+        Graph<String, RouteViewerPath> networkGraph = getGraphFromTopology(topology, minBw);
+        DijkstraShortestPath<String, RouteViewerPath> shortestPath = new DijkstraShortestPath<>(networkGraph);
+        List<RouteViewerPath> path = shortestPath.getPath(extractNodeId(src), extractNodeId(dst));
         List<TpId> output = new LinkedList<>();
-        for (RouteViewer.Path eachPath : path) {
+        for (RouteViewerPath eachPath : path) {
             output.add(eachPath.src);
         }
         return output;
@@ -199,7 +109,7 @@ public class PathComputation {
     public List<TpId> maxBandwidthPathOpti(TpId srcTpId, TpId dstTpId, Topology topology, List<ConstraintMetric> constraintMetrics) {
         String src = srcTpId.getValue();
         String dst = dstTpId.getValue();
-        Graph<String, RouteViewer.Path> networkGraph = getGraphFromTopology(topology, null);
+        Graph<String, RouteViewerPath> networkGraph = getGraphFromTopology(topology, null);
         Long maxHop = Long.MAX_VALUE;
         for (ConstraintMetric eachConstraint : constraintMetrics) {
             if (AltoSpceMetric.Hopcount == eachConstraint.getMetric() && eachConstraint.getMax() != null) {
@@ -207,9 +117,9 @@ public class PathComputation {
                         maxHop : eachConstraint.getMax().longValue();
             }
         }
-        List<RouteViewer.Path> path = maxBandwidth(networkGraph, extractNodeId(src), extractNodeId(dst), maxHop);
+        List<RouteViewerPath> path = maxBandwidth(networkGraph, extractNodeId(src), extractNodeId(dst), maxHop);
         List<TpId> output = new LinkedList<>();
-        for (RouteViewer.Path eachPath : path) {
+        for (RouteViewerPath eachPath : path) {
             output.add(eachPath.src);
         }
         return output;
@@ -220,22 +130,22 @@ public class PathComputation {
      **       return this route;
      ** (3) else: continue the adding.
      **/
-    public List<RouteViewer.Path> maxBandwidth(Graph<String, RouteViewer.Path> networkGraph, String src, String dst, Long maxHop) {
+    public List<RouteViewerPath> maxBandwidth(Graph<String, RouteViewerPath> networkGraph, String src, String dst, Long maxHop) {
         Map<String, Long> hopCount = new HashMap<>();
-        Map<String, RouteViewer.Path> pre = new HashMap<>();
+        Map<String, RouteViewerPath> pre = new HashMap<>();
         hopCount.put(src, (long) 0);
-        List<RouteViewer.Path> paths = new ArrayList<>(networkGraph.getEdges());
-        Collections.sort(paths, new Comparator<RouteViewer.Path>() {
+        List<RouteViewerPath> paths = new ArrayList<>(networkGraph.getEdges());
+        Collections.sort(paths, new Comparator<RouteViewerPath>() {
             @Override
-            public int compare(RouteViewer.Path x, RouteViewer.Path y) {
+            public int compare(RouteViewerPath x, RouteViewerPath y) {
                 return (Objects.equals(x.bandwidth, y.bandwidth) ? 0 : (x.bandwidth > y.bandwidth ? -1 : 1));
             }
         });
-        Graph<String, RouteViewer.Path> graph = new SparseMultigraph<>();
+        Graph<String, RouteViewerPath> graph = new SparseMultigraph<>();
         // add every node into the graph
         for (String eachNode : networkGraph.getVertices())
             graph.addVertex(eachNode);
-        for (RouteViewer.Path eachPath : paths) {
+        for (RouteViewerPath eachPath : paths) {
             String srcNode = extractNodeId(eachPath.src.getValue());
             String dstNode = extractNodeId(eachPath.dst.getValue());
             graph.addEdge(eachPath, srcNode, dstNode, EdgeType.DIRECTED);
@@ -246,7 +156,7 @@ public class PathComputation {
                 while (!queue.isEmpty()) {
                     srcNode = queue.pop();
                     if (graph.getOutEdges(srcNode) != null) {
-                        for (RouteViewer.Path outPath : graph.getOutEdges(srcNode)) {
+                        for (RouteViewerPath outPath : graph.getOutEdges(srcNode)) {
                             dstNode = extractNodeId(outPath.dst.getValue());
                             if (!hopCount.containsKey(dstNode) ||
                                     (hopCount.get(dstNode) > hopCount.get(srcNode) + 1)) {
@@ -259,7 +169,7 @@ public class PathComputation {
                 }
                 if (hopCount.containsKey(dst) && hopCount.get(dst) <= maxHop) {
                     // finally, build the route
-                    List<RouteViewer.Path> output = new LinkedList<>();
+                    List<RouteViewerPath> output = new LinkedList<>();
                     output.add(0, pre.get(dst));
                     while (!extractNodeId(output.get(0).src.getValue()).equals(src)) {
                         dst = extractNodeId(output.get(0).src.getValue());
@@ -272,8 +182,8 @@ public class PathComputation {
         return null;
     }
 
-    private Graph<String, RouteViewer.Path> getGraphFromTopology(Topology topology, Long minBw) {
-        Graph<String, RouteViewer.Path> networkGraph = new SparseMultigraph();
+    private Graph<String, RouteViewerPath> getGraphFromTopology(Topology topology, Long minBw) {
+        Graph<String, RouteViewerPath> networkGraph = new SparseMultigraph();
         if (minBw == null) {
             minBw = (long) 0;
         }
@@ -288,7 +198,7 @@ public class PathComputation {
             }
             TpId linkSrcTp = eachLink.getSource().getSourceTp();
             TpId linkDstTp = eachLink.getDestination().getDestTp();
-            RouteViewer.Path srcPath = new RouteViewer.Path();
+            RouteViewerPath srcPath = new RouteViewerPath();
             srcPath.src = linkSrcTp;
             srcPath.dst = linkDstTp;
             srcPath.bandwidth = getBandwidthByTp(srcPath.src.getValue()).longValue();
