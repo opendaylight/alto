@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.alto.basic.endpointcostservice.suportservice.service;
+package org.opendaylight.alto.basic.endpointcostservice.supportservice.service;
 
 import org.opendaylight.alto.basic.endpointcostservice.util.LinkNode;
 import org.opendaylight.alto.basic.endpointcostservice.flow.MatchFields;

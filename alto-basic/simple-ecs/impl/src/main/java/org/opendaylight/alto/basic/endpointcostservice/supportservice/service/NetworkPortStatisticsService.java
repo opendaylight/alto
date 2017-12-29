@@ -5,12 +5,13 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.alto.basic.endpointcostservice.suportservice.service;
+package org.opendaylight.alto.basic.endpointcostservice.supportservice.service;
 
-public interface NetworkElementService {
-    public LinkService getLinkService();
+public interface NetworkPortStatisticsService {
 
-    public NetworkHostNodeService getHostNodeService();
+    Long getCurrentTxSpeed(String tpId, Metric metric);
 
-    public NetworkFlowCapableNodeService getFlowCapableNodeService();
+    Long getCurrentRxSpeed(String tpId, Metric metric);
+
+    enum Metric {BITSPERSECOND, BYTESPERSECOND};
 }

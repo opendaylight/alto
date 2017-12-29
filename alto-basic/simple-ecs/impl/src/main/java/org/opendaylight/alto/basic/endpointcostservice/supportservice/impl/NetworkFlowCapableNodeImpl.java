@@ -5,11 +5,11 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.alto.basic.endpointcostservice.suportservice.impl;
+package org.opendaylight.alto.basic.endpointcostservice.supportservice.impl;
 
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.exception.ReadDataFailedException;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkFlowCapableNodeService;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkPortStatisticsService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.exception.ReadDataFailedException;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.NetworkFlowCapableNodeService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.NetworkPortStatisticsService;
 import org.opendaylight.alto.basic.endpointcostservice.helper.DataStoreHelper;
 import org.opendaylight.alto.basic.endpointcostservice.util.InstanceIdentifierUtils;
 import org.opendaylight.alto.basic.endpointcostservice.util.NameConverter;

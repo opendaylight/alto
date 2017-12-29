@@ -5,14 +5,14 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.alto.basic.endpointcostservice.suportservice.impl;
+package org.opendaylight.alto.basic.endpointcostservice.supportservice.impl;
 
 import org.opendaylight.alto.basic.endpointcostservice.flow.FlowTableMatcher;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.LinkService;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkElementService;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkFlowCapableNodeService;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkHostNodeService;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.RoutingService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.LinkService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.NetworkElementService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.NetworkFlowCapableNodeService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.NetworkHostNodeService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.RoutingService;
 import org.opendaylight.alto.basic.endpointcostservice.util.LinkNode;
 import org.opendaylight.alto.basic.endpointcostservice.flow.MatchFields;
 import org.opendaylight.alto.basic.endpointcostservice.util.NameConverter;

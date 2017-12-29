@@ -8,7 +8,7 @@
 package org.opendaylight.alto.basic.endpointcostservice.helper;
 
 import com.google.common.base.Optional;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.exception.ReadDataFailedException;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.exception.ReadDataFailedException;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
