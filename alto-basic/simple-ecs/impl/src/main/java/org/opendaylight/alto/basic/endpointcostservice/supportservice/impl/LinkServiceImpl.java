@@ -5,9 +5,9 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.alto.basic.endpointcostservice.suportservice.impl;
+package org.opendaylight.alto.basic.endpointcostservice.supportservice.impl;
 
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.LinkService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.LinkService;
 import org.opendaylight.yang.gen.v1.urn.tbd.params.xml.ns.yang.network.topology.rev131021.network.topology.topology.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

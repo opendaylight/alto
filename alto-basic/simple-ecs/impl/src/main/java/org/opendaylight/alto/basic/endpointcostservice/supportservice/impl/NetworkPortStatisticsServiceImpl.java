@@ -5,14 +5,14 @@
  * terms of the Eclipse Public License v1.0 which accompanies this distribution,
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
-package org.opendaylight.alto.basic.endpointcostservice.suportservice.impl;
+package org.opendaylight.alto.basic.endpointcostservice.supportservice.impl;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.opendaylight.alto.basic.endpointcostservice.suportservice.service.NetworkPortStatisticsService;
+import org.opendaylight.alto.basic.endpointcostservice.supportservice.service.NetworkPortStatisticsService;
 import org.opendaylight.alto.basic.endpointcostservice.util.InstanceIdentifierUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.DataObjectModification;
