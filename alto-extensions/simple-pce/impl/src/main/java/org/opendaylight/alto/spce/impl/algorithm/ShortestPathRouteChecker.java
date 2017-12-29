@@ -27,29 +27,13 @@ public class ShortestPathRouteChecker extends RouteChecker {
 
     @Override
     public boolean isStop(List<RouteViewerPath> pathList) {
-        LinkedList<RouteViewerPath> tmp = new LinkedList<>(pathList);
+        List<RouteViewerPath> tmp = new LinkedList<>(pathList);
         tmp.add(finalPath);
         long hopcount = tmp.size();
         long bandwidth = getBandwidth(pathList);
         List<ConstraintMetric> constraintMetrics = this.constraintMetrics;
-        if (constraintMetrics != null) {
-            for (ConstraintMetric eachConstraint : constraintMetrics) {
-                if (eachConstraint.getMetric() == null) continue;
-                long max = (eachConstraint.getMax() != null) ?
-                        eachConstraint.getMax().longValue() : Long.MAX_VALUE;
-                long min = (eachConstraint.getMin() != null) ?
-                        eachConstraint.getMin().longValue() : 0;
-                long value = 0;
-                if (eachConstraint.getMetric().equals(AltoSpceMetric.Bandwidth)) {
-                    value = bandwidth;
-                } else {
-                    value = hopcount;
-                }
-                if (value < min || value > max) {
-                    return false;
-                }
-            }
-        }
+        if(! this.checkConstraint(constraintMetrics, bandwidth, hopcount))
+            return false;
         if (hopcount < this.hopcount) {
             this.hopcount = hopcount;
             result = tmp;
