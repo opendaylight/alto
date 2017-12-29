@@ -8,6 +8,9 @@
 
 package org.opendaylight.alto.spce.impl.algorithm;
 
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.AltoSpceMetric;
+import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.spce.rev160718.setup.route.input.ConstraintMetric;
+
 import java.util.List;
 
 public abstract class RouteChecker {
@@ -20,5 +23,26 @@ public abstract class RouteChecker {
             result = (result < eachPath.bandwidth) ? result : eachPath.bandwidth;
         }
         return result;
+    }
+
+    protected boolean checkConstraint(List<ConstraintMetric> constraintMetrics, long bandwidth, long hopcount){
+        if (constraintMetrics != null) {
+            for (ConstraintMetric eachConstraint : constraintMetrics) {
+                if (eachConstraint.getMetric() == null) continue;
+                long max = (eachConstraint.getMax() != null) ?
+                        eachConstraint.getMax().longValue() : Long.MAX_VALUE;
+                long min = (eachConstraint.getMin() != null) ?
+                        eachConstraint.getMin().longValue() : 0;
+                long value = 0;
+                if (eachConstraint.getMetric().equals(AltoSpceMetric.Bandwidth))
+                    value = bandwidth;
+                else
+                    value = hopcount;
+                if (value < min || value > max) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
