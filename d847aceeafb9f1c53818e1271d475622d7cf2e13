@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "997d46b4_8cc98e7d",
+        "filename": "alto-basic/alto-bwmonitor/impl/src/main/java/org/opendaylight/alto/basic/impl/LoggingFuturesCallBack.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2018-01-02T01:58:08Z",
+      "side": 1,
+      "message": "This class can be moved to a common module.",
+      "revId": "d847aceeafb9f1c53818e1271d475622d7cf2e13",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72c67cfa_4d9b2b68",
+        "filename": "alto-basic/alto-bwmonitor/impl/src/test/java/org/opendaylight/alto/basic/impl/LoggingFuturesCallBackTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 4327
+      },
+      "writtenOn": "2018-01-02T01:58:08Z",
+      "side": 1,
+      "message": "As well as the test.",
+      "revId": "d847aceeafb9f1c53818e1271d475622d7cf2e13",
+      "serverId": "7fc14799-209e-464c-9743-7a06c2c21a81",
+      "unresolved": false
+    }
+  ]
+}
