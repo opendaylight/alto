@@ -24,8 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NetworkFlowCapableNodeImpl implements NetworkFlowCapableNodeService{
-    private static final Logger log = LoggerFactory
-            .getLogger(NetworkFlowCapableNodeImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NetworkFlowCapableNodeImpl.class);
     private DataBroker dataBroker;
     private NetworkPortStatisticsService portStatistics;
 
@@ -44,37 +43,37 @@ public class NetworkFlowCapableNodeImpl implements NetworkFlowCapableNodeService
 
     @Override
     public FlowCapableNode getFlowCapableNode(String nodeId) {
-        log.info("Reading flow capable node for " + nodeId);
+        LOG.debug("Reading flow capable node for {}", nodeId);
         try {
             return DataStoreHelper.readOperational(dataBroker,
                     InstanceIdentifierUtils.flowCapableNode(nodeId));
         } catch (ReadDataFailedException e) {
-            e.printStackTrace();
+            LOG.info("Error occurs when reading flow capable node!", e);
         }
         return null;
     }
 
     @Override
     public FlowCapableNodeConnector getFlowCapableNodeConnector(String tpId) {
-        log.info("Reading flow capable node connector for " + tpId);
+        LOG.debug("Reading flow capable node connector for {}", tpId);
         try {
             return DataStoreHelper.readOperational(dataBroker,
                     InstanceIdentifierUtils.flowCapableNodeConnector(tpId));
         } catch (ReadDataFailedException e) {
-            e.printStackTrace();
+            LOG.info("Error occurs when reading flow capable node connector!", e);
         }
         return null;
     }
 
     @Override
     public FlowCapableNodeConnectorStatistics getFlowCapableNodeConnectorStatistics(String tpId) {
-        log.info("Reading flow capable node connector statistics data for + " + tpId);
+        LOG.debug("Reading flow capable node connector statistics data for {}", tpId);
         try {
             return DataStoreHelper.readOperational(dataBroker,
                     InstanceIdentifierUtils.flowCapableNodeConnectorStatisticsData(tpId))
                     .getFlowCapableNodeConnectorStatistics();
         } catch (ReadDataFailedException e) {
-            e.printStackTrace();
+            LOG.info("Error occurs when reading flow capable node connector statistics data!", e);
         }
         return null;
     }
@@ -95,8 +94,8 @@ public class NetworkFlowCapableNodeImpl implements NetworkFlowCapableNodeService
         FlowCapableNodeConnector nodeConnector = getFlowCapableNodeConnector(tpId);
         Long capacity = getCapacity(nodeConnector, readMeter(tpId, meterId));
         Long consumedBandwidth = getConsumedBandwidth(tpId, isHalfDuplex(nodeConnector));
-        log.info("capacity: " + capacity);
-        log.info("consumedBandwidth: " + consumedBandwidth);
+        LOG.info("capacity: " + capacity);
+        LOG.info("consumedBandwidth: " + consumedBandwidth);
         if (capacity == null || consumedBandwidth == null) return null;
         return capacity - consumedBandwidth;
     }
@@ -115,14 +114,14 @@ public class NetworkFlowCapableNodeImpl implements NetworkFlowCapableNodeService
 
     private Long getConsumedBandwidth(String tpId, boolean isHalfDuplex) {
         Long transmitted,received;
-        if(portStatistics.getCurrentRxSpeed(tpId,NetworkPortStatisticsService.Metric.BITSPERSECOND) != null){
+        if (portStatistics.getCurrentRxSpeed(tpId,NetworkPortStatisticsService.Metric.BITSPERSECOND) != null) {
             transmitted = portStatistics.getCurrentTxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND)
                     / 1000;
         }
         else {
             transmitted = 0L;
         }
-        if(portStatistics.getCurrentRxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND) != null){
+        if (portStatistics.getCurrentRxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND) != null) {
             received = portStatistics.getCurrentRxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND)
                     / 1000;
         }

@@ -49,10 +49,9 @@ public class BasicECSImplementation extends BaseECSImplementation{
 
     @Override
     protected Cost computeCost(TypedAddressData src, TypedAddressData dst, CostTypeData costType) {
-        NumericalBuilder numericalBuilder = new NumericalBuilder();
         if (validSourceAndDest(src, dst)) {
                 if (isAddressEqual(src,dst)) {
-                return numericalBuilder.setCost(new BigDecimal(0)).build();
+                return new NumericalBuilder().setCost(new BigDecimal(0)).build();
             }
             MatchFields matchFields = createMatchField(src,dst);
             LinkNode head = routingService.buildRoutePath(matchFields);
@@ -68,16 +67,17 @@ public class BasicECSImplementation extends BaseECSImplementation{
         if (hasLoop(head, new HashMap<LinkNode, Integer>())) {
             return null;
         }
-        if(costMetric.getValue().toString().equals(new String("hopcount"))){
+        if (costMetric.getValue().toString().equals(new String("hopcount"))) {
             log.info("hopcpunt");
             Numerical cost = computeHopCountECS(head);
             return (cost == null) ? null : cost;
-        }else if(costMetric.getValue().toString().equals(new String("routingcost"))){
+        } else if(costMetric.getValue().toString().equals(new String("routingcost"))) {
             log.info("routingcost");
-//            Numerical cost = computeRoutingcostECS(head);
-//            return (cost == null) ? null : cost;
+            // TODO: Any issue?
+            // Numerical cost = computeRoutingcostECS(head);
+            // return (cost == null) ? null : cost;
             return null;
-        }else if(costMetric.getValue().toString().equals(new String("bandwidth"))){
+        } else if(costMetric.getValue().toString().equals(new String("bandwidth"))) {
              log.info("bandwidth");
             Numerical cost = computeBandwidthECS(head);
             return (cost == null) ? null : cost;
