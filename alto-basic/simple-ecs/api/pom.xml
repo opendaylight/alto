@@ -10,13 +10,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>0.10.3-SNAPSHOT</version>
+    <version>0.10.3-Carbon</version>
     <relativePath/>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.basic</groupId>
-  <version>0.4.3-SNAPSHOT</version>
+  <version>0.4.3-Carbon</version>
   <artifactId>alto-simple-ecs-api</artifactId>
   <name>ODL :: alto :: ${project.artifactId}</name>
   <packaging>bundle</packaging>

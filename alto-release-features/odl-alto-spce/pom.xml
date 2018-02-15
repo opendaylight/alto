@@ -13,13 +13,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>1.8.3-SNAPSHOT</version>
+    <version>1.8.3-Carbon</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-spce</artifactId>
-  <version>0.4.3-SNAPSHOT</version>
+  <version>0.4.3-Carbon</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: SPCE</name>
@@ -29,11 +29,11 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
     <l2switch.groupId>org.opendaylight.l2switch</l2switch.groupId>
     <openflow.plugin.groupId>org.opendaylight.openflowplugin</openflow.plugin.groupId>
-    <mdsal.model.version>0.10.3-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.5.3-SNAPSHOT</mdsal.version>
+    <mdsal.model.version>0.10.3-Carbon</mdsal.model.version>
+    <mdsal.version>1.5.3-Carbon</mdsal.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
-    <l2switch.version>0.5.3-SNAPSHOT</l2switch.version>
-    <openflow.plugin.version>0.4.3-SNAPSHOT</openflow.plugin.version>
+    <l2switch.version>0.5.3-Carbon</l2switch.version>
+    <openflow.plugin.version>0.4.3-Carbon</openflow.plugin.version>
   </properties>
 
   <dependencies>
