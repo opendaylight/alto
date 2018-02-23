@@ -13,13 +13,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>1.8.3-SNAPSHOT</version>
+    <version>1.8.4-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-manual-maps</artifactId>
-  <version>0.4.3-SNAPSHOT</version>
+  <version>0.4.4-SNAPSHOT</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Manual-maps</name>
@@ -27,8 +27,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <properties>
     <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
     <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
-    <mdsal.model.version>0.10.3-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.5.3-SNAPSHOT</mdsal.version>
+    <mdsal.model.version>0.10.4-SNAPSHOT</mdsal.model.version>
+    <mdsal.version>1.5.4-SNAPSHOT</mdsal.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 

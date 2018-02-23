@@ -12,13 +12,13 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>mdsal-it-parent</artifactId>
-    <version>1.5.3-SNAPSHOT</version>
+    <version>1.5.4-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.basic</groupId>
-  <version>0.4.3-SNAPSHOT</version>
+  <version>0.4.4-SNAPSHOT</version>
   <artifactId>alto-simple-ecs-it</artifactId>
   <name>ODL :: alto :: ${project.artifactId}</name>
   <packaging>bundle</packaging>
@@ -26,7 +26,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <properties>
     <skipITs>false</skipITs>
     <karaf.distro.groupId>org.opendaylight.alto.basic</karaf.distro.groupId>
-    <karaf.distro.version>0.4.3-SNAPSHOT</karaf.distro.version>
+    <karaf.distro.version>0.4.4-SNAPSHOT</karaf.distro.version>
     <karaf.distro.artifactId>alto-simple-ecs-karaf</karaf.distro.artifactId>
     <karaf.distro.type>zip</karaf.distro.type>
   </properties>
