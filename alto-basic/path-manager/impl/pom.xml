@@ -15,20 +15,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>0.12.0-SNAPSHOT</version>
+    <version>0.12.1-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>alto-pathmanager-impl</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.1-SNAPSHOT</version>
   <!-- <name> formatting is used by autorelease to parse and notify projects on
        build failure. Please do not modify this unless you have a good reason. -->
   <name>ODL :: alto :: ${project.artifactId}</name>
   <packaging>bundle</packaging>
 
   <properties>
-    <openflowplugin.version>0.6.0-SNAPSHOT</openflowplugin.version>
+    <openflowplugin.version>0.6.1-SNAPSHOT</openflowplugin.version>
   </properties>
 
   <dependencyManagement>
@@ -36,7 +36,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <dependency>
         <groupId>org.opendaylight.controller</groupId>
         <artifactId>mdsal-artifacts</artifactId>
-        <version>1.7.0-SNAPSHOT</version>
+        <version>1.7.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
