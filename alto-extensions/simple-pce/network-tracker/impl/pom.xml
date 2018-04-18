@@ -12,17 +12,17 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>0.12.1-SNAPSHOT</version>
+    <version>0.12.1</version>
     <relativePath/>
   </parent>
 
   <properties>
-    <l2switch.version>0.7.1-SNAPSHOT</l2switch.version>
+    <l2switch.version>0.7.1</l2switch.version>
   </properties>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.opendaylight.alto.spce.network</groupId>
   <artifactId>network-tracker-impl</artifactId>
-  <version>0.6.1-SNAPSHOT</version>
+  <version>0.6.1</version>
   <name>ODL :: alto :: ${project.artifactId}</name>
   <packaging>bundle</packaging>
 
@@ -31,7 +31,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
       <dependency>
         <groupId>org.opendaylight.controller</groupId>
         <artifactId>mdsal-artifacts</artifactId>
-        <version>1.7.1-SNAPSHOT</version>
+        <version>1.7.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
