@@ -13,18 +13,18 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
   <parent>
     <groupId>org.opendaylight.controller</groupId>
     <artifactId>config-parent</artifactId>
-    <version>0.6.4-SNAPSHOT</version>
+    <version>0.6.4-Carbon</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto.basic</groupId>
   <artifactId>alto-auto-maps-impl</artifactId>
-  <version>0.4.4-SNAPSHOT</version>
+  <version>0.4.4-Carbon</version>
   <packaging>bundle</packaging>
 
   <properties>
-    <mdsal.version>1.5.4-SNAPSHOT</mdsal.version>
-    <l2switch.version>0.5.4-SNAPSHOT</l2switch.version>
+    <mdsal.version>1.5.4-Carbon</mdsal.version>
+    <l2switch.version>0.5.4-Carbon</l2switch.version>
   </properties>
 
   <dependencies>

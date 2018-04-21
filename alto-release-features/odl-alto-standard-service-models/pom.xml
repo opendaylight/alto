@@ -13,20 +13,20 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <parent>
     <groupId>org.opendaylight.odlparent</groupId>
     <artifactId>single-feature-parent</artifactId>
-    <version>1.8.4-SNAPSHOT</version>
+    <version>1.8.4-Carbon</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-standard-service-models</artifactId>
-  <version>0.4.4-SNAPSHOT</version>
+  <version>0.4.4-Carbon</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Standard-service-model</name>
 
   <properties>
     <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
-    <mdsal.model.version>0.10.4-SNAPSHOT</mdsal.model.version>
+    <mdsal.model.version>0.10.4-Carbon</mdsal.model.version>
   </properties>
 
   <dependencies>
