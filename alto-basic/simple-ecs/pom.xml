@@ -14,7 +14,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <relativePath/>
   </parent>
 
-  <version>0.6.1-SNAPSHOT</version>
+  <version>0.6.2-SNAPSHOT</version>
   <groupId>org.opendaylight.alto.basic</groupId>
   <artifactId>alto-simple-ecs-aggregator</artifactId>
   <name>ODL :: alto :: ${project.artifactId}</name>
