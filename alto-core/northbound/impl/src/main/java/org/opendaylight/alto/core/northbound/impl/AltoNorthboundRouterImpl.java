@@ -9,22 +9,18 @@
 package org.opendaylight.alto.core.northbound.impl;
 
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 import org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AltoNorthboundRouterImpl implements AltoNorthboundRouter {
+    private static final Logger LOG = LoggerFactory.getLogger(AltoNorthboundRouterImpl.class);
 
-    private ConcurrentHashMap<String, AltoNorthboundRoute> routes;
+    private final ConcurrentHashMap<String, AltoNorthboundRoute> routes = new ConcurrentHashMap<>();
 
-    private static AltoNorthboundRouterImpl singleton = new AltoNorthboundRouterImpl();
-
-    protected AltoNorthboundRouterImpl() {
-        routes = new ConcurrentHashMap<String, AltoNorthboundRoute>();
-    }
-
-    public static AltoNorthboundRouterImpl getInstance() {
-        return singleton;
+    public AltoNorthboundRouterImpl() {
+        LOG.info("AltoNorthboundRouterImpl created");
     }
 
     @Override

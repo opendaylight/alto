@@ -8,14 +8,18 @@
 
 package org.opendaylight.alto.core.northbound.impl;
 
-import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import org.opendaylight.alto.core.northbound.api.AltoNorthboundRoute;
 
 @Path("/")
 public class AltoNorthbound {
 
-    private AltoNorthboundRouterImpl router = AltoNorthboundRouterImpl.getInstance();
+    private final AltoNorthboundRouterImpl router;
+
+    public AltoNorthbound(AltoNorthboundRouterImpl router) {
+        this.router = router;
+    }
 
     @Path("{routeName}")
     public AltoNorthboundRoute route(@PathParam("routeName") String routeName) {
