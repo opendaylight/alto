@@ -10,12 +10,31 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
            xmlns:odl="http://opendaylight.org/xmlns/blueprint/v1.0.0"
            odl:use-default-for-reference-types="true">
-  <bean id="provider"
-        class="org.opendaylight.alto.core.northbound.impl.AltoNorthboundProvider"
-        init-method="init" destroy-method="close">
+
+  <reference id="webServer" interface="org.opendaylight.aaa.web.WebServer" />
+  <reference id="webContextSecurer" interface="org.opendaylight.aaa.web.WebContextSecurer" />
+
+  <bean id="altoNorthboundRouter"
+        class="org.opendaylight.alto.core.northbound.impl.AltoNorthboundRouterImpl"/>
+
+  <bean id="altoNorthbound"
+        class="org.opendaylight.alto.core.northbound.impl.AltoNorthbound">
+    <argument ref="altoNorthboundRouter"/>
   </bean>
 
-  <service ref="provider"
+  <bean id="altoNorthboundApplication"
+        class="org.opendaylight.alto.core.northbound.impl.AltoNorthboundApplication">
+    <argument ref="altoNorthbound"/>
+  </bean>
+
+  <bean id="webInitializer" class="org.opendaylight.alto.core.northbound.impl.WebInitializer"
+          destroy-method="close">
+    <argument ref="webServer"/>
+    <argument ref="webContextSecurer"/>
+    <argument ref="altoNorthboundApplication"/>
+  </bean>
+
+  <service ref="altoNorthboundRouter"
            interface="org.opendaylight.alto.core.northbound.api.AltoNorthboundRouter"
            odl:type="default"/>
 

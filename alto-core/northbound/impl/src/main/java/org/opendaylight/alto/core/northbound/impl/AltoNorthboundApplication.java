@@ -8,16 +8,28 @@
 
 package org.opendaylight.alto.core.northbound.impl;
 
-import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
+import javax.ws.rs.core.Application;
 
 public class AltoNorthboundApplication extends Application {
+    private final AltoNorthbound northbound;
+
+    public AltoNorthboundApplication(AltoNorthbound northbound) {
+        this.northbound = northbound;
+    }
+
     @Override
     public Set<Class<?>> getClasses() {
-        Set<Class<?>> classes = new HashSet<Class<?>>();
-        classes.add(AltoNorthbound.class);
+        Set<Class<?>> classes = new HashSet<>();
         classes.add(AltoNorthboundExceptionHandler.class);
         return classes;
+    }
+
+    @Override
+    public Set<Object> getSingletons() {
+        Set<Object> singletons = new HashSet<>();
+        singletons.add(northbound);
+        return singletons;
     }
 }
