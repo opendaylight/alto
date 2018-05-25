@@ -8,6 +8,10 @@
 
 package org.opendaylight.alto.spce.impl;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import java.math.BigInteger;
+import java.util.LinkedList;
+import java.util.List;
 import org.opendaylight.alto.spce.impl.algorithm.PathComputation;
 import org.opendaylight.alto.spce.impl.util.FlowManager;
 import org.opendaylight.alto.spce.impl.util.InventoryReader;
@@ -46,19 +50,14 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigInteger;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.Future;
-
 public class AltoSpceImpl implements AltoSpceService {
 
     private static final Logger LOG = LoggerFactory.getLogger(FlowManager.class);
-    private FlowManager flowManager;
-    private MeterManager meterManager;
-    private InventoryReader inventoryReader;
-    private PathComputation pathComputation;
-    private RouteManager routeManager;
+    private final FlowManager flowManager;
+    private final MeterManager meterManager;
+    private final InventoryReader inventoryReader;
+    private final PathComputation pathComputation;
+    private final RouteManager routeManager;
 
     public AltoSpceImpl(SalMeterService salMeterService,
                         NetworkTrackerService networkTrackerService,
@@ -71,8 +70,9 @@ public class AltoSpceImpl implements AltoSpceService {
     }
 
     private List<ConstraintMetric> compressConstraint(List<ConstraintMetric> constraintMetrics) {
-        if (constraintMetrics == null)
+        if (constraintMetrics == null) {
             return null;
+        }
         List<ConstraintMetric> compressedConstraintMetrics = new LinkedList<>();
         BigInteger minHopcount = BigInteger.ZERO;
         BigInteger maxHopcount = BigInteger.valueOf(Long.MAX_VALUE);
@@ -118,7 +118,7 @@ public class AltoSpceImpl implements AltoSpceService {
     }
 
     @Override
-    public Future<RpcResult<UpdateRateLimitingOutput>> updateRateLimiting(UpdateRateLimitingInput input) {
+    public ListenableFuture<RpcResult<UpdateRateLimitingOutput>> updateRateLimiting(UpdateRateLimitingInput input) {
         ErrorCodeType errorCodeType = this.routeManager.updateRateLimiting(input.getEndpoints(), input.getLimitedRate(), input.getBurstSize());
         UpdateRateLimitingOutputBuilder builder = new UpdateRateLimitingOutputBuilder().setErrorCode(errorCodeType);
         if (errorCodeType==ErrorCodeType.OK) {
@@ -128,7 +128,7 @@ public class AltoSpceImpl implements AltoSpceService {
     }
 
     @Override
-    public Future<RpcResult<RemoveRateLimitingOutput>> removeRateLimiting(RemoveRateLimitingInput input) {
+    public ListenableFuture<RpcResult<RemoveRateLimitingOutput>> removeRateLimiting(RemoveRateLimitingInput input) {
         ErrorCodeType errorCodeType = this.routeManager.removeRateLimiting(input.getEndpoints());
         RemoveRateLimitingOutputBuilder builder = new RemoveRateLimitingOutputBuilder().setErrorCode(errorCodeType);
         if (errorCodeType==ErrorCodeType.OK) {
@@ -138,7 +138,7 @@ public class AltoSpceImpl implements AltoSpceService {
     }
 
     @Override
-    public Future<RpcResult<RemoveRouteOutput>> removeRoute(RemoveRouteInput input) {
+    public ListenableFuture<RpcResult<RemoveRouteOutput>> removeRoute(RemoveRouteInput input) {
         String route = input.getRoute();
         String src = route.substring(0, route.indexOf('|'));
         String dst = route.substring(route.lastIndexOf('|')+1);
@@ -155,7 +155,7 @@ public class AltoSpceImpl implements AltoSpceService {
     }
 
     @Override
-    public Future<RpcResult<SetupRouteOutput>> setupRoute(SetupRouteInput input) {
+    public ListenableFuture<RpcResult<SetupRouteOutput>> setupRoute(SetupRouteInput input) {
         if (null == input.getFlowLayer() || null == input.getEndpoints()) {
             SetupRouteOutputBuilder outputBuilder = new SetupRouteOutputBuilder();
             outputBuilder.setErrorCode(ErrorCodeType.INVALIDINPUT);
@@ -201,7 +201,7 @@ public class AltoSpceImpl implements AltoSpceService {
     }
 
     @Override
-    public Future<RpcResult<GetRouteOutput>> getRoute(GetRouteInput input) {
+    public ListenableFuture<RpcResult<GetRouteOutput>> getRoute(GetRouteInput input) {
         GetRouteOutputBuilder builder = new GetRouteOutputBuilder();
         if (null == input || null == input.getEndpoints()) {
             builder.setErrorCode(ErrorCodeType.INVALIDINPUT);

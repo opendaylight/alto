@@ -9,6 +9,9 @@ package org.opendaylight.alto.basic.impl;
 
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
+import com.google.common.util.concurrent.ListenableFuture;
+import java.util.Arrays;
+import java.util.List;
 import org.opendaylight.alto.basic.manual.maps.ManualMapsUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
@@ -40,10 +43,6 @@ import org.opendaylight.yangtools.yang.common.RpcResult;
 import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Future;
 
 public class AltoModelConfigImpl implements AltoModelConfigService {
 
@@ -138,8 +137,8 @@ public class AltoModelConfigImpl implements AltoModelConfigService {
     }
 
     @Override
-    public Future<RpcResult<QueryOutput>> query(QueryInput input) {
-        if (!(input.getType().equals(ResourceTypeConfig.class))) {
+    public ListenableFuture<RpcResult<QueryOutput>> query(QueryInput input) {
+        if (!input.getType().equals(ResourceTypeConfig.class)) {
             LOG.warn("Unsupported Request!");
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
         }

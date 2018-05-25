@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import javax.ws.rs.core.Response;
 import org.junit.Test;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285CostMap;
@@ -35,7 +34,6 @@ import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.CostMetric;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.PidName;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.AltoModelCostmapService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.QueryInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.QueryOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.QueryOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.alto.request.costmap.request.CostmapRequest;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rev151021.alto.response.costmap.response.CostmapResponseBuilder;
@@ -52,7 +50,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rfc7285.rev151021.query.input.request.costmap.request.costmap.params.filter.CostmapFilterData;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.costmap.rfc7285.rev151021.query.output.response.costmap.response.costmap.response.data.costmap.source.costmap.destination.cost.OrdinalBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 public class AltoNorthboundCostmapTest {
 
     String filter = "{\"cost-type\": {\"cost-metric\": \"routingcost\",  \"cost-mode\": \"numerical\"}, \"pids\": {\"dsts\": [ \"PID1\",  \"PID2\", \"PID3\"   ],   \"srcs\": [  \"PID1\"   ] }}";
@@ -126,8 +124,6 @@ public class AltoNorthboundCostmapTest {
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
 
         AltoModelCostmapService costmapService = mock(AltoModelCostmapService.class);
-        Future<RpcResult<QueryOutput>> future = mock(Future.class);
-        RpcResult<QueryOutput> rpcResult = mock(RpcResult.class);
         //build QueryOutput
         int order = 0;
         LinkedList<CostmapSource> costmapSources = new LinkedList<>();
@@ -155,11 +151,8 @@ public class AltoNorthboundCostmapTest {
         CostmapResponseBuilder costmapResponseBuilder= new CostmapResponseBuilder();
         costmapResponseBuilder.setCostmapResponseData(costmapResponseDataBuilder.build());
 
-        QueryOutputBuilder queryOutput = new QueryOutputBuilder();
-        queryOutput.setResponse(costmapResponseBuilder.build());
-        when(rpcResult.getResult()).thenReturn(queryOutput.build());
-        when(future.get()).thenReturn(rpcResult);
-        when(costmapService.query((QueryInput) anyObject())).thenReturn(future);
+        when(costmapService.query((QueryInput) anyObject())).thenReturn(RpcResultBuilder.success(
+                new QueryOutputBuilder().setResponse(costmapResponseBuilder.build()).build()).buildFuture());
 
         costmapSpy.setMapService(costmapService);
 

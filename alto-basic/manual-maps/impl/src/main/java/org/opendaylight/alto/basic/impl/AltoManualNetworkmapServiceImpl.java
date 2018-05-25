@@ -8,13 +8,14 @@
 package org.opendaylight.alto.basic.impl;
 
 import com.google.common.base.Optional;
+import com.google.common.util.concurrent.ListenableFuture;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.Future;
 import org.opendaylight.alto.basic.manual.maps.ManualMapsUtils;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadOnlyTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpPrefix;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
-import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv6Prefix;
 import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.networkmap.rev151021.EndpointAddressType;
 import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.networkmap.rev151021.endpoint.address.group.EndpointAddressGroup;
 import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.networkmap.rev151021.network.map.Map;
@@ -22,6 +23,9 @@ import org.opendaylight.yang.gen.v1.urn.alto.manual.maps.rev151021.config.contex
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.Resource;
 import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.resource.ContextTag;
 import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.ResourceId;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.IpPrefix;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Prefix;
+import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv6Prefix;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AddressTypeIpv4;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AddressTypeIpv6;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AltoModelNetworkmapService;
@@ -45,20 +49,16 @@ import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.Future;
-
 public class AltoManualNetworkmapServiceImpl implements AltoModelNetworkmapService {
     private static final Logger LOG = LoggerFactory.getLogger(AltoManualNetworkmapServiceImpl.class);
-    private DataBroker dataBroker;
+    private final DataBroker dataBroker;
 
     public AltoManualNetworkmapServiceImpl(DataBroker dataBroker) {
         this.dataBroker = dataBroker;
     }
 
     @Override
-    public Future<RpcResult<QueryOutput>> query(QueryInput input) {
+    public ListenableFuture<RpcResult<QueryOutput>> query(QueryInput input) {
         if (!input.getType().equals(ResourceTypeNetworkmap.class)) {
             return RpcResultBuilder.<QueryOutput>failed().buildFuture();
         }

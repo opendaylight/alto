@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,7 +32,6 @@ import org.opendaylight.yang.gen.v1.urn.alto.resourcepool.rev150921.context.reso
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.AltoModelEndpointcostService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.request.endpointcost.request.EndpointcostRequest;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.alto.response.endpointcost.response.EndpointcostResponseBuilder;
@@ -57,7 +55,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpoint
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.query.output.response.endpointcost.response.endpointcost.data.endpoint.costmap.data.endpoint.cost.map.endpoint.cost.cost.OrdinalBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rfc7285.rev151021.typed.address.data.Address;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
 public class AltoNorthboundEndpointcostTest {
 
@@ -172,8 +170,6 @@ public class AltoNorthboundEndpointcostTest {
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
 
         AltoModelEndpointcostService endpointcostService = mock(AltoModelEndpointcostService.class);
-        Future<RpcResult<QueryOutput>> future = mock(Future.class);
-        RpcResult<QueryOutput> rpcResult = mock(RpcResult.class);
         List<Source> sources = new ArrayList<>();
         List<Destination> destinations = new ArrayList<>();
 
@@ -228,9 +224,8 @@ public class AltoNorthboundEndpointcostTest {
         QueryOutputBuilder queryOutputBuilder = new QueryOutputBuilder();
         queryOutputBuilder.setResponse(ecrBuilder.build());
 
-        when(rpcResult.getResult()).thenReturn(queryOutputBuilder.build());
-        when(future.get()).thenReturn(rpcResult);
-        when(endpointcostService.query((QueryInput)anyObject())).thenReturn(future);
+        when(endpointcostService.query((QueryInput)anyObject())).thenReturn(RpcResultBuilder.success(
+                queryOutputBuilder.build()).buildFuture());
 
         endpointcostSpy.setDataBroker(mock(DataBroker.class));
         endpointcostSpy.setMapService(endpointcostService);

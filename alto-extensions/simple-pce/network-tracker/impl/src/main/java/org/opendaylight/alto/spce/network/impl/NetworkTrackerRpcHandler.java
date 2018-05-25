@@ -7,8 +7,8 @@
  */
 package org.opendaylight.alto.spce.network.impl;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import java.math.BigInteger;
-import java.util.concurrent.Future;
 import org.opendaylight.alto.spce.network.api.AddressConvertService;
 import org.opendaylight.alto.spce.network.api.NetworkPortStatisticsService;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
@@ -48,7 +48,7 @@ public class NetworkTrackerRpcHandler implements NetworkTrackerService {
     }
 
     @Override
-    public Future<RpcResult<AltoSpceGetRxSpeedOutput>> altoSpceGetRxSpeed(AltoSpceGetRxSpeedInput input) {
+    public ListenableFuture<RpcResult<AltoSpceGetRxSpeedOutput>> altoSpceGetRxSpeed(AltoSpceGetRxSpeedInput input) {
         String tpId = input.getTpId();
         AltoSpceGetRxSpeedOutput output = new AltoSpceGetRxSpeedOutputBuilder()
                 .setSpeed(BigInteger.valueOf(this.networkPortStatisticsService.getCurrentRxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND)))
@@ -57,7 +57,8 @@ public class NetworkTrackerRpcHandler implements NetworkTrackerService {
     }
 
     @Override
-    public Future<RpcResult<AltoSpceGetTxBandwidthOutput>> altoSpceGetTxBandwidth(AltoSpceGetTxBandwidthInput input) {
+    public ListenableFuture<RpcResult<AltoSpceGetTxBandwidthOutput>> altoSpceGetTxBandwidth(
+            AltoSpceGetTxBandwidthInput input) {
         String tpId = input.getTpId();
         AltoSpceGetTxBandwidthOutput output = new AltoSpceGetTxBandwidthOutputBuilder()
                 .setSpeed(BigInteger.valueOf(this.networkPortStatisticsService.getAvailableTxBandwidth(tpId, null)))
@@ -66,7 +67,7 @@ public class NetworkTrackerRpcHandler implements NetworkTrackerService {
     }
 
     @Override
-    public Future<RpcResult<AltoSpceGetTxSpeedOutput>> altoSpceGetTxSpeed(AltoSpceGetTxSpeedInput input) {
+    public ListenableFuture<RpcResult<AltoSpceGetTxSpeedOutput>> altoSpceGetTxSpeed(AltoSpceGetTxSpeedInput input) {
         String tpId = input.getTpId();
         AltoSpceGetTxSpeedOutput output = new AltoSpceGetTxSpeedOutputBuilder()
                 .setSpeed(BigInteger.valueOf(this.networkPortStatisticsService.getCurrentTxSpeed(tpId, NetworkPortStatisticsService.Metric.BITSPERSECOND)))
@@ -75,7 +76,7 @@ public class NetworkTrackerRpcHandler implements NetworkTrackerService {
     }
 
     @Override
-    public Future<RpcResult<AltoSpceGetIpByMacOutput>> altoSpceGetIpByMac(AltoSpceGetIpByMacInput input) {
+    public ListenableFuture<RpcResult<AltoSpceGetIpByMacOutput>> altoSpceGetIpByMac(AltoSpceGetIpByMacInput input) {
         String mac = input.getMacAddress();
         AltoSpceGetIpByMacOutput output = new AltoSpceGetIpByMacOutputBuilder()
                 .setIpAddress(this.addressConvertService.getIpByMac(mac)).build();
@@ -83,7 +84,7 @@ public class NetworkTrackerRpcHandler implements NetworkTrackerService {
     }
 
     @Override
-    public Future<RpcResult<AltoSpceGetMacByIpOutput>> altoSpceGetMacByIp(AltoSpceGetMacByIpInput input) {
+    public ListenableFuture<RpcResult<AltoSpceGetMacByIpOutput>> altoSpceGetMacByIp(AltoSpceGetMacByIpInput input) {
         String ip = input.getIpAddress();
         AltoSpceGetMacByIpOutput output = new AltoSpceGetMacByIpOutputBuilder()
                 .setMacAddress(this.addressConvertService.getMacByIp(ip)).build();

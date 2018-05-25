@@ -7,7 +7,7 @@
  */
 package org.opendaylight.alto.basic.endpointcostservice.impl;
 
-import java.util.concurrent.Future;
+import com.google.common.util.concurrent.ListenableFuture;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.AltoModelEndpointcostService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointcost.rev151021.QueryInput;
@@ -24,7 +24,7 @@ public class AltoModelEndpointcostServiceImpl implements AltoModelEndpointcostSe
 
 
     @Override
-    public Future<RpcResult<QueryOutput>> query(QueryInput input) {
+    public ListenableFuture<RpcResult<QueryOutput>> query(QueryInput input) {
         return basicEcsImpl.getECS(input);
     }
 }
