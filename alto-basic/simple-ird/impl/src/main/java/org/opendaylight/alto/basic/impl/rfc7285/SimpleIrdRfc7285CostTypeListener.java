@@ -103,7 +103,7 @@ public final class SimpleIrdRfc7285CostTypeListener
                     || resource.getType().equals(ResourceTypeFilteredCostmap.class)) {
                 CapabilitiesCostType capabilities;
                 capabilities = resource.getCapabilities()
-                    .getAugmentation(CapabilitiesCostType.class);
+                    .augmentation(CapabilitiesCostType.class);
 
                 if (capabilities == null || capabilities.getCostType() == null
                         || capabilities.getCostType().isEmpty()) {

@@ -148,7 +148,7 @@ public class SimpleIrdEntryListenerTest {
     @Test
     public void isValidResource() throws Exception {
         ResourceBuilder rb = new ResourceBuilder()
-                .setKey(new ResourceKey(new ResourceId("test")))
+                .withKey(new ResourceKey(new ResourceId("test")))
                 .setType(null);
         assertEquals(simpleIrdEntryListener.isValidResource(rb.build()), false);
     }
@@ -184,7 +184,7 @@ public class SimpleIrdEntryListenerTest {
         ResourceBuilder rb = new ResourceBuilder()
                 .setDefaultTag(new Tag("DEFAULT_CONTEXT_TAG_1"))
                 .setContextTag(contextTagList)
-                .setKey(new ResourceKey(new ResourceId("RESOURCE_1")));
+                .withKey(new ResourceKey(new ResourceId("RESOURCE_1")));
         resources.put(iicb.build(), rb.build());
         simpleIrdEntryListener.resolveDependency(resources);
     }
@@ -224,7 +224,7 @@ public class SimpleIrdEntryListenerTest {
                 .setEntryId(new ResourceId("test-ird-configuration-entry"))
                 .setInstance(instanceIID);
         ResourceBuilder rb = new ResourceBuilder()
-                .setKey(new ResourceKey(new ResourceId("test-resource-id")))
+                .withKey(new ResourceKey(new ResourceId("test-resource-id")))
                 .setType(ResourceTypeIrd.class);
         resources.put(iceb.build(), rb.build());
         rb.setType(ResourceTypeNetworkmap.class);

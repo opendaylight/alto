@@ -109,7 +109,7 @@ public class AltoAutoMapsUpdateListener implements DataTreeChangeListener<Topolo
 
     private void createDefaultAutoNetworkMap(Topology topology, final WriteTransaction wx) {
         for (Node node : topology.getNode()) {
-            HostNode hostNode = node.getAugmentation(HostNode.class);
+            HostNode hostNode = node.augmentation(HostNode.class);
             if (hostNode != null) {
                 List<Addresses> addressesList = hostNode.getAddresses();
                 mergeAddressesListToDefaultNetworkMap(addressesList, wx);

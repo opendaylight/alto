@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import javax.ws.rs.core.Response;
 import org.junit.Test;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285EndpointPropertyMap;
@@ -35,7 +34,6 @@ import org.opendaylight.yang.gen.v1.urn.alto.types.rev150921.SpecificEndpointPro
 import org.opendaylight.yang.gen.v1.urn.ietf.params.xml.ns.yang.ietf.inet.types.rev130715.Ipv4Address;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.AltoModelEndpointpropertyService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.QueryInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.QueryOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.QueryOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.ResourceTypeEndpointproperty;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rev151021.alto.request.endpointproperty.request.EndpointpropertyRequest;
@@ -62,7 +60,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpoint
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.endpoint.propertymap.data.endpoint.property.map.endpoint.property.properties.property.container.property.OutputResourceSpecificPropertyBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.endpointproperty.rfc7285.rev151021.query.output.response.endpointproperty.response.endpointproperty.data.endpoint.propertymap.data.endpoint.property.map.endpoint.property.properties.property.value.PidNameBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 
 public class AltoNorthboundRouteEndpointpropertyTest {
     static String ENDPOINTPROPERTY_FILTER = "{\"properties\" : [ \"my-default-networkmap.pid\","
@@ -149,8 +147,6 @@ public class AltoNorthboundRouteEndpointpropertyTest {
         InstanceIdentifier<ContextTag> ctagIID = InstanceIdentifier.create(ContextTag.class);
 
         AltoModelEndpointpropertyService epService = mock(AltoModelEndpointpropertyService.class);
-        Future<RpcResult<QueryOutput>> future = mock(Future.class);
-        RpcResult<QueryOutput> rpcResult =mock(RpcResult.class);
 
         LinkedList<EndpointProperty> eppist = new LinkedList<>();
 
@@ -221,9 +217,9 @@ public class AltoNorthboundRouteEndpointpropertyTest {
 
         QueryOutputBuilder queryOutputBuilder = new QueryOutputBuilder();
         queryOutputBuilder.setType(ResourceTypeEndpointproperty.class).setResponse(endpointpropertyResponseBuilder.build());
-        when(rpcResult.getResult()).thenReturn(queryOutputBuilder.build());
-        when(future.get()).thenReturn(rpcResult);
-        when(epService.query((QueryInput) anyObject())).thenReturn(future);
+        when(epService.query((QueryInput) anyObject())).thenReturn(RpcResultBuilder.success(
+                new QueryOutputBuilder().setType(ResourceTypeEndpointproperty.class)
+                    .setResponse(endpointpropertyResponseBuilder.build()).build()).buildFuture());
         anbreSpy.setMapService(epService);
         anbreSpy.setDataBroker(mock(DataBroker.class));
 

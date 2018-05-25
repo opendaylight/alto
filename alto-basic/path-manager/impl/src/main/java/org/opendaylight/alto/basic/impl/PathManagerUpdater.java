@@ -69,7 +69,7 @@ public class PathManagerUpdater {
         if (nodes != null && nodes.getNode() != null) {
             for (Node node : nodes.getNode()) {
                 String nodeId = node.getId().getValue();
-                FlowCapableNode flowNode = node.getAugmentation(FlowCapableNode.class);
+                FlowCapableNode flowNode = node.augmentation(FlowCapableNode.class);
                 if (flowNode != null && flowNode.getTable() != null) {
                     Table defaultTable = flowNode.getTable().get(DEFAULT_TABLE_ID);
                     if (defaultTable != null && defaultTable.getFlow() != null) {

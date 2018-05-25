@@ -130,7 +130,7 @@ public class BwFetchingService implements DataTreeChangeListener<NodeConnector> 
             InstanceIdentifier<NodeConnector> identifier,
             NodeConnector updatedPort) {
         FlowCapableNodeConnectorStatisticsData updatedStatistic = updatedPort
-                .getAugmentation(FlowCapableNodeConnectorStatisticsData.class);
+                .augmentation(FlowCapableNodeConnectorStatisticsData.class);
         Statistic statistic;
         String id = identifier.firstKeyOf(NodeConnector.class).getId().getValue();
         if (statisticData.containsKey(id)) {
@@ -162,14 +162,14 @@ public class BwFetchingService implements DataTreeChangeListener<NodeConnector> 
     }
 
     private Statistic updateAvailBw(NodeConnector updatedPort, Statistic statistic) {
-        String portId = updatedPort.getKey().getId().getValue();
+        String portId = updatedPort.key().getId().getValue();
         Long configuredCapacity = BwmonitorUtils.readConfiguredCapacity(portId, dataBroker);
         LOG.debug("Reading configured capacity of port {}", portId);
         if (configuredCapacity >= 0) {
             statistic.capacity = configuredCapacity;
             LOG.debug("Applied configured capacity");
         } else {
-            FlowCapableNodeConnector updatedFlowPort = updatedPort.getAugmentation(FlowCapableNodeConnector.class);
+            FlowCapableNodeConnector updatedFlowPort = updatedPort.augmentation(FlowCapableNodeConnector.class);
             if (updatedFlowPort != null) {
                 LOG.debug("Reading capacity of port {}", portId);
                 statistic.capacity = updatedFlowPort.getCurrentSpeed();

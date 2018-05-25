@@ -80,7 +80,7 @@ public class SimpleIrdRoute implements AltoNorthboundRoute {
     private Rfc7285Ird convert(IrdInstance ird, HttpServletRequest req) {
         Rfc7285Ird rfcIrd = new Rfc7285Ird();
 
-        Rfc7285IrdMetadata metadata = ird.getAugmentation(Rfc7285IrdMetadata.class);
+        Rfc7285IrdMetadata metadata = ird.augmentation(Rfc7285IrdMetadata.class);
         if (metadata != null) {
             Rfc7285IrdMeta meta = metadata.getMeta();
 
@@ -139,7 +139,7 @@ public class SimpleIrdRoute implements AltoNorthboundRoute {
                 Map<String, Object> capabilityMap = new HashMap<String, Object>();
 
                 Rfc7285CostTypeCapabilities costTypeCapabilities;
-                costTypeCapabilities = capabilities.getAugmentation(Rfc7285CostTypeCapabilities.class);
+                costTypeCapabilities = capabilities.augmentation(Rfc7285CostTypeCapabilities.class);
                 if (costTypeCapabilities != null) {
                     capabilityMap.put("cost-type-names", costTypeCapabilities.getCostTypeNames());
                     capabilityMap.put("cost-constraints", costTypeCapabilities.isCostConstraints());

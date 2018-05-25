@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import javax.ws.rs.core.Response;
 import org.junit.Test;
 import org.opendaylight.alto.core.northbound.api.utils.rfc7285.RFC7285NetworkMap;
@@ -38,7 +37,6 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkm
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AddressTypeIpv6;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.AltoModelNetworkmapService;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.QueryInput;
-import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.QueryOutput;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.QueryOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.alto.request.networkmap.request.NetworkmapRequest;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rev151021.alto.response.networkmap.response.NetworkmapResponseBuilder;
@@ -50,7 +48,7 @@ import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkm
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rfc7285.rev151021.Ipv6PrefixList;
 import org.opendaylight.yang.gen.v1.urn.opendaylight.alto.service.model.networkmap.rfc7285.rev151021.Ipv6PrefixListBuilder;
 import org.opendaylight.yangtools.yang.binding.InstanceIdentifier;
-import org.opendaylight.yangtools.yang.common.RpcResult;
+import org.opendaylight.yangtools.yang.common.RpcResultBuilder;
 public class AltoNorthboundNetworkmapTest {
     String path = "test-model-networkmap";
     String filter = "{\n" +
@@ -109,8 +107,6 @@ public class AltoNorthboundNetworkmapTest {
 
         AltoModelNetworkmapService networkmapService = mock(AltoModelNetworkmapService.class);
 
-        Future<RpcResult<QueryOutput>> future = mock(Future.class);
-        RpcResult<QueryOutput> rpcResult = mock(RpcResult.class);
         List<Class<? extends AddressTypeBase>> types = new ArrayList<Class<? extends AddressTypeBase>>(){
             {
                 add(AddressTypeIpv4.class);
@@ -152,11 +148,8 @@ public class AltoNorthboundNetworkmapTest {
         NetworkmapResponseBuilder nmrBuilder = new NetworkmapResponseBuilder();
         nmrBuilder.setNetworkMap(nmBuilder.build());
 
-        QueryOutputBuilder queryOutputBuilder = new QueryOutputBuilder();
-        queryOutputBuilder.setResponse(nmrBuilder.build());
-        when(rpcResult.getResult()).thenReturn(queryOutputBuilder.build());
-        when(future.get()).thenReturn(rpcResult);
-        when(networkmapService.query((QueryInput)anyObject())).thenReturn(future);
+        when(networkmapService.query((QueryInput)anyObject())).thenReturn(RpcResultBuilder.success(
+                new QueryOutputBuilder().setResponse(nmrBuilder.build()).build()).buildFuture());
         networkmapSpy.setMapService(networkmapService);
         networkmapSpy.setDataBroker(mock(DataBroker.class));
 

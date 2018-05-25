@@ -11,25 +11,25 @@ package org.opendaylight.alto.basic.impl;
 import com.google.common.base.Optional;
 import com.google.common.util.concurrent.CheckedFuture;
 import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.opendaylight.controller.md.sal.binding.api.ReadTransaction;
 import org.opendaylight.controller.md.sal.binding.api.WriteTransaction;
 import org.opendaylight.controller.md.sal.common.api.data.LogicalDatastoreType;
 import org.opendaylight.controller.md.sal.common.api.data.TransactionCommitFailedException;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.AltoBwmonitorService;
-import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorUnsubscribeInput;
-import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorUnsubscribeOutput;
-import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorUnsubscribeOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorQueryInput;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorQueryOutput;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorQueryOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorSubscribeInput;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorSubscribeOutput;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorSubscribeOutputBuilder;
+import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorUnsubscribeInput;
+import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorUnsubscribeOutput;
+import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.BwmonitorUnsubscribeOutputBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.Speeds;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.SpeedsBuilder;
 import org.opendaylight.yang.gen.v1.urn.alto.bwmonitor.rev150105.bwmonitor.query.output.PortSpeed;
@@ -43,8 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BwmonitorImpl implements AltoBwmonitorService {
-    private DataBroker db;
-    private BwFetchingService bwFetchingService;
+    private final DataBroker db;
+    private final BwFetchingService bwFetchingService;
     private static final Logger LOG = LoggerFactory.getLogger(BwmonitorImpl.class);
     private boolean dataTreeInitialized = false;
 
@@ -72,7 +72,7 @@ public class BwmonitorImpl implements AltoBwmonitorService {
     }
 
     @Override
-    public Future<RpcResult<BwmonitorSubscribeOutput>> bwmonitorSubscribe(BwmonitorSubscribeInput input) {
+    public ListenableFuture<RpcResult<BwmonitorSubscribeOutput>> bwmonitorSubscribe(BwmonitorSubscribeInput input) {
         boolean success = true;
         if(!dataTreeInitialized) {
             success = initializeDataTree();
@@ -101,7 +101,7 @@ public class BwmonitorImpl implements AltoBwmonitorService {
     }
 
     @Override
-    public Future<RpcResult<BwmonitorQueryOutput>> bwmonitorQuery(BwmonitorQueryInput input) {
+    public ListenableFuture<RpcResult<BwmonitorQueryOutput>> bwmonitorQuery(BwmonitorQueryInput input) {
         ReadTransaction transaction = db.newReadOnlyTransaction();
         InstanceIdentifier<Speeds> iid = InstanceIdentifier.create(Speeds.class);
         BwmonitorQueryOutputBuilder builder = new BwmonitorQueryOutputBuilder();
@@ -140,7 +140,8 @@ public class BwmonitorImpl implements AltoBwmonitorService {
     }
 
     @Override
-    public Future<RpcResult<BwmonitorUnsubscribeOutput>> bwmonitorUnsubscribe(BwmonitorUnsubscribeInput input) {
+    public ListenableFuture<RpcResult<BwmonitorUnsubscribeOutput>> bwmonitorUnsubscribe(
+            BwmonitorUnsubscribeInput input) {
         List<String> ports = input.getPortId();
         BwmonitorUnsubscribeOutputBuilder builder = new BwmonitorUnsubscribeOutputBuilder()
                 .setResult(true);

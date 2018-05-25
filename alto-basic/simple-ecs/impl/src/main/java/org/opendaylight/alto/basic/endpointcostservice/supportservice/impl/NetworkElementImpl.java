@@ -76,7 +76,7 @@ public class NetworkElementImpl implements NetworkElementService, AutoCloseable 
         if (topology != null && nodeList != null) {
             for (int i = 0; i < nodeList.size(); ++i) {
                 Node node = nodeList.get(i);
-                HostNode hostNode = node.getAugmentation(HostNode.class);
+                HostNode hostNode = node.augmentation(HostNode.class);
                 log.info("Processing node " + i + ", " + hostNode);
                 hostNodeService.addHostNode(hostNode);
             }

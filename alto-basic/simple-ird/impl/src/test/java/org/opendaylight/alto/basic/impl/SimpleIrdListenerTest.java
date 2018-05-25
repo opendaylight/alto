@@ -80,7 +80,7 @@ public class SimpleIrdListenerTest {
         doReturn(mockModification).when(mockDataTreeModification).getRootNode();
 
         IrdInstanceConfiguration iicb = new IrdInstanceConfigurationBuilder()
-                .setKey(new IrdInstanceConfigurationKey(new ResourceId("ORIGINAL_CONFIG"))).build();
+                .withKey(new IrdInstanceConfigurationKey(new ResourceId("ORIGINAL_CONFIG"))).build();
         doReturn(iicb).when(mockModification).getDataAfter();
         doReturn(DataObjectModification.ModificationType.WRITE).when(mockModification).getModificationType();
 

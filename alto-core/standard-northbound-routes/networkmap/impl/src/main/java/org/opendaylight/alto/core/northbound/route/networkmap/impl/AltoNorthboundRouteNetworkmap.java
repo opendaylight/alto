@@ -329,10 +329,10 @@ public class AltoNorthboundRouteNetworkmap implements AltoNorthboundRoute {
             AddressGroup addressGroup = new AddressGroup();
             String pidName = partition.get(i).getPid().getValue();
 
-            Ipv6PrefixList ipv6List = partition.get(i).getAugmentation(Ipv6PrefixList.class);
+            Ipv6PrefixList ipv6List = partition.get(i).augmentation(Ipv6PrefixList.class);
             List<String> ipv6ListString = new ArrayList<String>();
 
-            Ipv4PrefixList ipv4List = partition.get(i).getAugmentation(Ipv4PrefixList.class);
+            Ipv4PrefixList ipv4List = partition.get(i).augmentation(Ipv4PrefixList.class);
             List<String> ipv4ListString = new ArrayList<String>();
 
             if(ipv6List != null) {

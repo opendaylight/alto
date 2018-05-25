@@ -53,7 +53,7 @@ public class InventoryReader {
             dataObjectOptional = readOnlyTransaction.read(LogicalDatastoreType.OPERATIONAL, hostId).get();
             if (dataObjectOptional.isPresent()) {
                 HostNode hostNode = dataObjectOptional.get();
-                String attPoint = hostNode.getAttachmentPoints().get(0).getKey().getTpId().getValue();
+                String attPoint = hostNode.getAttachmentPoints().get(0).key().getTpId().getValue();
                 tpId = new TpId(attPoint);
             }
         } catch (InterruptedException | ExecutionException e) {

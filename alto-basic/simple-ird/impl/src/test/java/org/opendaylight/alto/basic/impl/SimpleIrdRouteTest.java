@@ -94,7 +94,7 @@ public class SimpleIrdRouteTest {
 
         irdEntryList.add(irdEntryBuilder.build());
 
-        when(mockIrdInstance.getAugmentation(Rfc7285IrdMetadata.class)).thenReturn(meta);
+        when(mockIrdInstance.augmentation(Rfc7285IrdMetadata.class)).thenReturn(meta);
         when(mockIrdInstance.getIrdEntry()).thenReturn(irdEntryList);
         when(mockHttpServletRequest.getScheme()).thenReturn("http");
         when(mockHttpServletRequest.getLocalName()).thenReturn("alto.example.com");
