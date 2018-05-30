@@ -52,6 +52,16 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
         <module>alto-basic</module>
         <module>alto-extensions</module>
         <module>alto-release-features</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>karaf</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <modules>
         <module>alto-karaf</module>
       </modules>
     </profile>
