@@ -17,7 +17,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-simpleird</artifactId>
-  <version>0.6.2-SNAPSHOT</version>
+  <version>0.6.2</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Simple IRD</name>
@@ -25,8 +25,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <properties>
     <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
     <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
-    <mdsal.model.version>0.12.2-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.7.2-SNAPSHOT</mdsal.version>
+    <mdsal.model.version>0.12.2</mdsal.model.version>
+    <mdsal.version>1.7.2</mdsal.version>
     <configfile.directory>etc/opendaylight/karaf</configfile.directory>
   </properties>
 
