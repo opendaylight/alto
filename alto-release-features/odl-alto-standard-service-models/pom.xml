@@ -17,14 +17,14 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-standard-service-models</artifactId>
-  <version>0.6.2-SNAPSHOT</version>
+  <version>0.6.3-SNAPSHOT</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Standard Service Model</name>
 
   <properties>
     <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
-    <mdsal.model.version>0.12.2-SNAPSHOT</mdsal.model.version>
+    <mdsal.model.version>0.12.3-SNAPSHOT</mdsal.model.version>
   </properties>
 
   <dependencies>
