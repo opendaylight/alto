@@ -10,7 +10,7 @@ module alto-model-ird {
     }
 
     import "alto-resourcepool" {
-        prefix "alto-resourcpool";
+        prefix "alto-resourcepool";
     }
 
     import "alto-model-base" {
