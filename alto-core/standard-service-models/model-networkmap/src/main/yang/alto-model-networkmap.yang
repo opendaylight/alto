@@ -11,7 +11,7 @@ module alto-model-networkmap {
     }
 
     import "alto-resourcepool" {
-        prefix "alto-resourcpool";
+        prefix "alto-resourcepool";
     }
 
     import "alto-model-base" {
