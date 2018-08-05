@@ -17,7 +17,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-spce</artifactId>
-  <version>0.6.3-SNAPSHOT</version>
+  <version>0.6.3</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Simple Path Computation Engine</name>
@@ -27,10 +27,10 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
     <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
     <l2switch.groupId>org.opendaylight.l2switch</l2switch.groupId>
     <openflow.plugin.groupId>org.opendaylight.openflowplugin</openflow.plugin.groupId>
-    <mdsal.model.version>0.12.3-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.7.3-SNAPSHOT</mdsal.version>
-    <l2switch.version>0.7.3-SNAPSHOT</l2switch.version>
-    <openflow.plugin.version>0.6.3-SNAPSHOT</openflow.plugin.version>
+    <mdsal.model.version>0.12.3</mdsal.model.version>
+    <mdsal.version>1.7.3</mdsal.version>
+    <l2switch.version>0.7.3</l2switch.version>
+    <openflow.plugin.version>0.6.3</openflow.plugin.version>
   </properties>
 
   <dependencies>
