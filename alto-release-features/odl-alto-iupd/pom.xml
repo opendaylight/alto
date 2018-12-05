@@ -17,7 +17,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>odl-alto-iupd</artifactId>
-  <version>0.6.4-SNAPSHOT</version>
+  <version>0.6.4</version>
   <packaging>feature</packaging>
 
   <name>OpenDaylight :: alto :: Incremental update</name>
@@ -25,8 +25,8 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
   <properties>
     <mdsal.model.groupId>org.opendaylight.mdsal.model</mdsal.model.groupId>
     <mdsal.groupId>org.opendaylight.controller</mdsal.groupId>
-    <mdsal.model.version>0.12.4-SNAPSHOT</mdsal.model.version>
-    <mdsal.version>1.7.4-SNAPSHOT</mdsal.version>
+    <mdsal.model.version>0.12.4</mdsal.model.version>
+    <mdsal.version>1.7.4</mdsal.version>
   </properties>
 
   <dependencies>

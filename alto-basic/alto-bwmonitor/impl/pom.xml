@@ -12,19 +12,19 @@ and is available at http://www.eclipse.org/legal/epl-v10.html
 
 
   <properties>
-    <openflowplugin.version>0.6.4-SNAPSHOT</openflowplugin.version>
-    <l2switch.version>0.7.4-SNAPSHOT</l2switch.version>
+    <openflowplugin.version>0.6.4</openflowplugin.version>
+    <l2switch.version>0.7.4</l2switch.version>
   </properties>
   <parent>
     <groupId>org.opendaylight.mdsal</groupId>
     <artifactId>binding-parent</artifactId>
-    <version>0.12.4-SNAPSHOT</version>
+    <version>0.12.4</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opendaylight.alto.basic</groupId>
   <artifactId>alto-bwmonitor-impl</artifactId>
-  <version>0.1.4-SNAPSHOT</version>
+  <version>0.1.4</version>
   <!-- <name> formatting is used by autorelease to parse and notify projects on
        build failure. Please do not modify this unless you have a good reason. -->
   <name>ODL :: org.opendaylight.alto.basic :: ${project.artifactId}</name>
