@@ -20,7 +20,7 @@ and is available at http://www.eclipse.org/legal/epl-v10.html INTERNAL
 
   <groupId>org.opendaylight.alto</groupId>
   <artifactId>alto-parent</artifactId>
-  <version>0.6.4-SNAPSHOT</version>
+  <version>0.6.5-SNAPSHOT</version>
   <name>alto</name> <!-- Used by Sonar to set project name -->
   <packaging>pom</packaging>
 
